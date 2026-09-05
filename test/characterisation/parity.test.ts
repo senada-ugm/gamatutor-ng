@@ -12,12 +12,24 @@ import {
   quizWalkthrough,
 } from './walkthroughs.js';
 
+/**
+ * The extracted player adds keyboard and screen-reader affordances the original
+ * lacked (Task 16). Those attributes are the ONLY sanctioned difference, so
+ * parity strips them from both sides and compares everything else strictly.
+ * If a diff survives this strip, the extraction is wrong.
+ */
+const A11Y_ATTRS = /\s(tabindex|role|aria-[a-z-]+)="[^"]*"/g;
+const strip = (html: string) => html.replace(A11Y_ATTRS, '');
+
 async function parity(steps: Step[]) {
   const legacy = runWalkthrough(await loadLegacy(), steps);
   const player = runWalkthrough(await loadPlayer(), steps);
   expect(player).toHaveLength(legacy.length);
   legacy.forEach((snap, i) => {
-    expect({ at: snap.label, card: player[i]!.card }).toEqual({ at: snap.label, card: snap.card });
+    expect({ at: snap.label, card: strip(player[i]!.card) }).toEqual({
+      at: snap.label,
+      card: strip(snap.card),
+    });
   });
 }
 

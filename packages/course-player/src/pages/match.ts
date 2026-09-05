@@ -46,7 +46,7 @@ export function renderMatch(ctx: RenderContext, page: PageOfType<'match'>): void
       let cls = 'match-chip';
       if (isMatched) cls += ' matched';
       else if (ms.selected === id) cls += ' selected';
-      return `<div class="${cls}" draggable="${!isMatched}" data-id="${id}">${esc(p.left)}</div>`;
+      return `<div class="${cls}" draggable="${!isMatched}" data-id="${id}" tabindex="0" role="button" aria-grabbed="${ms.selected === id}" aria-label="${esc(p.left)}">${esc(p.left)}</div>`;
     })
     .join('');
 
@@ -56,7 +56,7 @@ export function renderMatch(ctx: RenderContext, page: PageOfType<'match'>): void
       const isMatched = !!ms.matched[id];
       let cls = 'match-zone';
       if (isMatched) cls += ' matched';
-      return `<div class="${cls}" data-id="${id}">${esc(p.right)}</div>`;
+      return `<div class="${cls}" data-id="${id}" tabindex="0" role="button" aria-dropeffect="move">${esc(p.right)}</div>`;
     })
     .join('');
 
@@ -107,6 +107,11 @@ export function renderMatch(ctx: RenderContext, page: PageOfType<'match'>): void
       ms.selected = ms.selected === chip.dataset['id'] ? null : chip.dataset['id']!;
       ctx.rerender();
     };
+    chip.onkeydown = (e: KeyboardEvent) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault();
+      chip.click();
+    };
     chip.addEventListener('dragstart', (e) => {
       (e as DragEvent).dataTransfer?.setData('text/plain', chip.dataset['id']!);
     });
@@ -116,6 +121,11 @@ export function renderMatch(ctx: RenderContext, page: PageOfType<'match'>): void
     if (zone.classList.contains('matched')) return;
     zone.onclick = () => {
       tryMatch(ms.selected, zone);
+    };
+    zone.onkeydown = (e: KeyboardEvent) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault();
+      zone.click();
     };
     zone.addEventListener('dragover', (e) => {
       e.preventDefault();

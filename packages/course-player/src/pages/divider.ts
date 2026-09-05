@@ -19,7 +19,7 @@ export function renderDivider(ctx: RenderContext, page: PageOfType<'divider'>): 
       <div class="divider-title">${esc(page.title || '')}</div>
     </div>
     <div class="card-footer">
-      <div class="footer-links"><span>📄 Transkrip</span><span>❓ Bantuan</span><span>🔗 Referensi</span></div>
+      <div class="footer-links" aria-hidden="true"><span>📄 Transkrip</span><span>❓ Bantuan</span><span>🔗 Referensi</span></div>
       <div class="nav-arrows">
         <button id="prevBtn"></button>
         <span class="page-indicator">${globalPageNumber(course, state)} / ${totalPages(course)}</span>

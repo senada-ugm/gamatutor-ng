@@ -25,7 +25,8 @@ export function renderHotspot(ctx: RenderContext, page: PageOfType<'hotspot'>): 
       let cls = 'hotspot-pin';
       if (visited[i]) cls += ' visited';
       if (activeIdx === i) cls += ' active';
-      return `<div class="${cls}" data-i="${i}" style="left:${p.x}%;top:${p.y}%">${i + 1}</div>`;
+      const expanded = activeIdx === i ? 'true' : 'false';
+      return `<div class="${cls}" data-i="${i}" style="left:${p.x}%;top:${p.y}%" tabindex="0" role="button" aria-label="${esc(p.label)}" aria-expanded="${expanded}">${i + 1}</div>`;
     })
     .join('');
 
@@ -67,6 +68,11 @@ export function renderHotspot(ctx: RenderContext, page: PageOfType<'hotspot'>): 
   }
 
   ctx.document.querySelectorAll<HTMLElement>('#hotspotStage .hotspot-pin').forEach((pinEl) => {
+    pinEl.onkeydown = (e: KeyboardEvent) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault();
+      pinEl.click();
+    };
     pinEl.onclick = () => {
       const i = parseInt(pinEl.dataset['i']!, 10);
       visited[i] = true;

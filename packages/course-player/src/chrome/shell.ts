@@ -19,7 +19,7 @@ export function cardShell(ctx: RenderContext, innerBody: string, opts: { pageLab
     </div>
     <div class="card-body">${innerBody}</div>
     <div class="card-footer">
-      <div class="footer-links"><span>📄 Transkrip</span><span>❓ Bantuan</span><span>🔗 Referensi</span></div>
+      <div class="footer-links" aria-hidden="true"><span>📄 Transkrip</span><span>❓ Bantuan</span><span>🔗 Referensi</span></div>
       <div class="nav-arrows">
         <button id="prevBtn" ${atFirst ? 'disabled' : ''}>&#8592;</button>
         <span class="page-indicator">${pageLabel}</span>
