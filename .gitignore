@@ -1,1 +1,5 @@
 drive_scorm.zip
+node_modules/
+out/
+dist/
+*.tsbuildinfo
