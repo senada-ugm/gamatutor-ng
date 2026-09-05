@@ -42,6 +42,12 @@
     transform:translateY(-1px);
   }
   .course h3{margin:0 0 5px; font-size:17px; color:var(--navy)}
+  .course.imported{border-left:3px solid var(--teal)}
+  .origin{
+    font-size:12px; color:var(--muted); margin:0 0 8px;
+    display:flex; align-items:center; gap:6px;
+  }
+  .origin b{font-weight:600; color:#456}
   .course p{margin:0; color:var(--muted); font-size:14px}
   .meta{margin-top:11px; display:flex; gap:7px; flex-wrap:wrap}
   .tag{
@@ -53,6 +59,12 @@
     color:var(--muted); font-size:13px;
   }
   footer a{color:var(--blue-mid)}
+  .companion{
+    background:#fff; border:1px solid var(--line); border-radius:12px;
+    padding:16px 20px; margin-top:14px; font-size:14px; color:var(--muted);
+  }
+  .companion b{color:var(--ink)}
+  .companion a{color:var(--blue-mid); font-weight:600}
   @media (prefers-color-scheme:dark){
     :root{--ink:#e8edf3; --muted:#93a3b4; --line:#2a3440; --bg:#141a21}
     body{background:var(--bg)}
@@ -61,6 +73,9 @@
     .tag{background:#222c37; color:#9fb0c2; border-color:#2e3a47}
     .status{background:#2a2413; border-color:#4a3f1c; color:#d8c790}
     .status b{color:#efe2b4}
+    .companion{background:#1b232c}
+    .companion b{color:#e8edf3}
+    .origin b{color:#9fb0c2}
   }
 </style>
 </head>
@@ -78,7 +93,8 @@
   <p class="status">
     <b>Pratinjau tahap S0.</b> Platformnya sendiri — katalog, akun, kohor,
     pelacakan, dan rapor nilai — belum dibangun. Yang tersedia di sini adalah
-    kursus yang sudah dibuild dan dapat dijalankan langsung di peramban.
+    kursus yang sudah dibuild dan dapat dijalankan langsung di peramban, tanpa
+    login dan tanpa pencatatan nilai.
   </p>
 
   <h2>Kursus tersedia</h2>
@@ -97,9 +113,34 @@
     </div>
   </a>
 
+  <a class="course imported" href="/courses/dasar-algoritma/">
+    <p class="origin">Diterbitkan dari PowerPoint dengan <b>SlideForge</b> &middot; paket SCORM 1.2</p>
+    <h3>Dasar Algoritma</h3>
+    <p>Pertemuan pertama: definisi algoritma dan tiga struktur dasar.</p>
+    <div class="meta">
+      <span class="tag">4 slide</span>
+      <span class="tag">Kuis bernilai</span>
+      <span class="tag">SCORM 1.2</span>
+      <span class="tag">Bahasa Indonesia</span>
+    </div>
+  </a>
+
+  <h2>Alat penyusun</h2>
+
+  <div class="companion">
+    <p style="margin:0 0 8px"><b>SlideForge</b> mengubah presentasi PowerPoint
+    menjadi kursus HTML5 yang sesuai standar — SCORM 1.2/2004, xAPI, cmi5 —
+    lengkap dengan kuis bernilai yang terlapor ke gradebook LMS mana pun.</p>
+    <p style="margin:0">GamaTutor menayangkan hasilnya. Kursus
+    <i>Dasar Algoritma</i> di atas adalah paket SCORM yang dibuat SlideForge,
+    dijalankan apa adanya. &rarr;
+    <a href="https://slideforge.komunitech.id/">slideforge.komunitech.id</a></p>
+  </div>
+
   <footer>
-    Kursus ini juga tersedia sebagai paket SCORM 1.2 yang dapat diunggah ke LMS
-    mana pun. Kode sumber:
+    Setiap kursus di sini juga tersedia sebagai paket SCORM 1.2 yang dapat
+    diunggah ke LMS mana pun — tidak ada penguncian ke platform ini.
+    Kode sumber:
     <a href="https://github.com/senada-ugm/gamatutor-ng">senada-ugm/gamatutor-ng</a>.
   </footer>
 

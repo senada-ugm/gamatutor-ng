@@ -5,7 +5,8 @@
 #   ./tools/deploy.sh              # build, ship, reload
 #   ./tools/deploy.sh --no-build   # ship what is already in out/
 #
-# What it does, in order: builds every course under content/, ships each one to
+# What it does, in order: builds every native course under content/, unpacks
+# every imported SCORM package under imported/, ships each one to
 # /var/www/gamatutor/courses/<id>/, installs the landing page and the nginx
 # vhost from deploy/, obtains a certificate on first run, and reloads nginx
 # only after `nginx -t` passes.
@@ -32,11 +33,24 @@ say() { printf '\n\033[1m==> %s\033[0m\n' "$1"; }
 # ---------------------------------------------------------------- build
 
 if [[ ${1:-} != "--no-build" ]]; then
-  say "Building courses"
+  say "Building native courses"
   for dir in content/*/; do
     id=$(basename "$dir")
     [[ -f "$dir/course.json" ]] || continue
     pnpm tsx tools/build-standalone.ts "content/$id" "out/$id"
+  done
+
+  # Imported packages are build outputs of other tools. They are unpacked
+  # verbatim — never rewritten — so the hosted copy is byte-for-byte what the
+  # authoring tool emitted and can be diffed against it.
+  say "Unpacking imported packages"
+  for dir in imported/*/; do
+    id=$(basename "$dir")
+    [[ -f "$dir/package.zip" ]] || continue
+    rm -rf "out/$id"
+    mkdir -p "out/$id"
+    unzip -q "$dir/package.zip" -d "out/$id"
+    echo "  $id  <- $(basename "$dir")package.zip"
   done
 fi
 

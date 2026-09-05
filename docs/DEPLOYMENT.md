@@ -12,7 +12,23 @@ document needs a second half.
 | URL | Serves |
 |---|---|
 | `/` | Placeholder landing page listing the available courses |
-| `/courses/drive-retinopati/` | The DRIVE course, built from `content/drive-retinopati/` |
+| `/courses/drive-retinopati/` | DRIVE, built natively from `content/drive-retinopati/` |
+| `/courses/dasar-algoritma/` | Dasar Algoritma, a SlideForge SCORM package from `imported/` |
+
+Two kinds of course are hosted, and the distinction matters:
+
+- **Native** — built here by `tools/build-standalone.ts` from a `course.json`
+  and this repo's player.
+- **Imported** — a SCORM package another tool produced, unpacked and served
+  verbatim. `dasar-algoritma` came out of SlideForge from
+  `demo-algoritma.pptx`; it is committed exactly as SlideForge emitted it and
+  is never edited here. It runs its own player, finds no LMS API, and says so
+  in a banner before falling back to browser-local progress.
+
+That is the crude version of slice S4, which adds real import: manifest
+validation, immutable course versions, a separate content origin, and a
+`postMessage` bridge so an imported package's SCORM calls land in GamaTutor's
+own event spine. Today there is no tracking for either kind.
 
 The root is deliberately **not** the course. Slice S1 puts the platform at `/`,
 and a course squatting the root would have to move later, breaking any links
@@ -45,7 +61,8 @@ reloads without a passing `nginx -t`.
 Overridable via environment: `GAMATUTOR_HOST`, `GAMATUTOR_SSH_KEY`,
 `GAMATUTOR_DOMAIN`, `GAMATUTOR_CERT_EMAIL`.
 
-The script builds each course under `content/`, ships it with `tar` over ssh
+The script builds each native course under `content/`, unpacks each SCORM
+package under `imported/`, ships them with `tar` over ssh
 (the dev host is Git Bash on Windows, which has no `rsync`), installs the
 landing page and the vhost from `deploy/`, obtains a certificate on first run,
 then tests and reloads nginx.
@@ -58,6 +75,8 @@ never sees a half-written directory. The previous copy is kept:
 ```
 /var/www/gamatutor/courses/drive-retinopati        # live
 /var/www/gamatutor/courses/drive-retinopati.prev   # previous deploy
+/var/www/gamatutor/courses/dasar-algoritma
+/var/www/gamatutor/courses/dasar-algoritma.prev
 ```
 
 To roll back one course without a rebuild:
@@ -121,7 +140,12 @@ certificate, and only then installs the TLS vhost.
 
 ## Verifying a deploy
 
-The script checks status codes at the end. A fuller manual pass:
+The script checks status codes at the end. **Status codes are not enough for
+the imported package**: it is a JavaScript app that `fetch`es `course.json`
+after load, so a 200 on `index.html` says nothing about whether it renders.
+Open it in a browser and confirm the outline and the quiz appear.
+
+A fuller manual pass:
 
 ```bash
 D=gamatutor.komunitech.id
@@ -149,6 +173,15 @@ done
   `/var/www/gamatutor` and a reload sudoers rule would be better.
 - **One rollback generation**, and no rollback for the vhost — reverting that
   means checking out the old config and redeploying.
-- **The course is public and unauthenticated.** Anyone with the URL can take
-  it, and the quiz answers are in the page source, as they were in the original.
-  Real access control and secured grading arrive with slices S2 and S3.
+- **The courses are public and unauthenticated.** Anyone with the URL can take
+  them, and the quiz answers are in the page source, as they were in the
+  original. Real access control and secured grading arrive with slices S2
+  and S3.
+- **No tracking at all.** Neither course reports anywhere. The native one has
+  a SCORM adapter that finds no LMS and no-ops; the imported one shows its own
+  "not connected to an LMS" banner. Completion and scores are lost on refresh.
+- **The imported package is a build artifact of Aug 2026.** SlideForge could
+  not be rebuilt at deploy time — its `node_modules` was incomplete and
+  restoring it wanted a full wipe-and-reinstall of that workspace, which was
+  out of scope for a GamaTutor deploy. Rebuild it there and replace
+  `imported/dasar-algoritma/package.zip` when convenient.

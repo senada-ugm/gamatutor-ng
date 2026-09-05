@@ -1,0 +1,16 @@
+{
+  "id": "dasar-algoritma",
+  "title": "Dasar Algoritma",
+  "description": "Pertemuan pertama: definisi algoritma dan tiga struktur dasar.",
+  "language": "id-ID",
+  "kind": "scorm",
+  "scormVersion": "1.2",
+  "source": {
+    "tool": "SlideForge 0.1.0",
+    "deck": "fixtures/decks/demo-algoritma.pptx",
+    "course": "fixtures/courses/demo-algoritma.course.json",
+    "artifact": "SLIDEFORGE/out/demo-scorm12.zip",
+    "builtAt": "2026-08-20",
+    "note": "Committed exactly as SlideForge emitted it. Never edit in place — rebuild from the deck and replace the zip."
+  }
+}

@@ -39,9 +39,15 @@ for how this slice was built.
 
 ## Try it
 
-The DRIVE course is deployed at
-<https://gamatutor.komunitech.id/courses/drive-retinopati/>. To build it
-yourself:
+Two courses are live:
+
+- [DRIVE — Skrining Retinopati Diabetika](https://gamatutor.komunitech.id/courses/drive-retinopati/)
+  — native, built from `content/`.
+- [Dasar Algoritma](https://gamatutor.komunitech.id/courses/dasar-algoritma/)
+  — a SCORM 1.2 package [SlideForge](https://slideforge.komunitech.id/) built
+  from a PowerPoint deck, hosted verbatim.
+
+To build the native one yourself:
 
 ```bash
 pnpm install
@@ -76,6 +82,7 @@ its assets moved to `content/drive-retinopati/assets/`. Use the built package.
 | `packages/tracking` | Statement types, `TrackingAdapter`, `NullAdapter`, `Scorm12Adapter`. No DOM. |
 | `packages/course-player` | The runtime. Framework-free, zero third-party runtime dependencies. |
 | `content/drive-retinopati` | The DRIVE course as `course.json` + assets. |
+| `imported/` | SCORM packages from other tools, hosted verbatim. |
 | `fixtures/legacy` | The frozen original, kept as the golden reference. |
 | `tools/` | `migrate-drive.ts`, `build-standalone.ts`. |
 | `test/characterisation` | The parity harness and walkthroughs. |
