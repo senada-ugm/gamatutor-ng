@@ -10,26 +10,32 @@ export interface Scorm12Api {
   LMSGetLastError(): string;
 }
 
-type ApiWindow = Window & {
+/**
+ * The minimum shape of a browser window this adapter needs. Declared
+ * structurally rather than as the DOM `Window` so that @gamatutor/tracking
+ * stays free of DOM types and runs in plain Node — see the package README.
+ */
+export interface ApiHost {
   API?: Scorm12Api;
-};
+  parent?: ApiHost | null;
+  opener?: ApiHost | null;
+}
 
 /**
  * Walks up at most ten parent frames looking for the LMS-provided `API`
  * object, then tries the opener. This is the SCORM 1.2 discovery algorithm and
  * it only works same-origin.
  */
-export function findScormApi(win: Window): Scorm12Api | null {
-  let w = win as ApiWindow;
+export function findScormApi(win: ApiHost): Scorm12Api | null {
+  let w = win;
   let attempts = 0;
-  while (w.API == null && w.parent != null && w.parent !== (w as Window)) {
+  while (w.API == null && w.parent != null && w.parent !== w) {
     attempts++;
     if (attempts > 10) return null;
-    w = w.parent as ApiWindow;
+    w = w.parent;
   }
   if (w.API) return w.API;
-  const opener = (win as Window).opener as Window | null | undefined;
-  if (opener) return findScormApi(opener);
+  if (win.opener) return findScormApi(win.opener);
   return null;
 }
 
@@ -43,7 +49,7 @@ export class Scorm12Adapter implements TrackingAdapter {
   private api: Scorm12Api | null = null;
   private resolved = false;
 
-  constructor(private readonly win: Window) {}
+  constructor(private readonly win: ApiHost) {}
 
   private getApi(): Scorm12Api | null {
     if (!this.resolved) {
