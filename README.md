@@ -1,5 +1,7 @@
 # GamaTutor
 
+**Live: <https://gamatutor.komunitech.id>**
+
 An e-learning **delivery** platform for one organisation running many courses.
 It hosts two kinds of content — a rich native interactive format, and imported
 SCORM 1.2 / 2004 packages — then enrols learners, tracks them, grades them and
@@ -37,6 +39,10 @@ for how this slice was built.
 
 ## Try it
 
+The DRIVE course is deployed at
+<https://gamatutor.komunitech.id/courses/drive-retinopati/>. To build it
+yourself:
+
 ```bash
 pnpm install
 pnpm build:standalone          # -> out/drive-retinopati/
@@ -73,6 +79,7 @@ its assets moved to `content/drive-retinopati/assets/`. Use the built package.
 | `fixtures/legacy` | The frozen original, kept as the golden reference. |
 | `tools/` | `migrate-drive.ts`, `build-standalone.ts`. |
 | `test/characterisation` | The parity harness and walkthroughs. |
+| `deploy/` | nginx vhost and landing page for the live host. |
 
 ## Development
 
@@ -81,7 +88,11 @@ pnpm verify     # lint + typecheck + 67 tests
 pnpm test       # tests only
 pnpm migrate:drive       # regenerate content/drive-retinopati/course.json
 pnpm build:standalone    # regenerate out/drive-retinopati/
+./tools/deploy.sh        # build and ship to gamatutor.komunitech.id
 ```
+
+Deployment is documented in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) — read the
+shared-host warning there before changing anything nginx-related.
 
 ## Provenance
 
