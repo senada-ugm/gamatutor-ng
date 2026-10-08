@@ -53,9 +53,19 @@ describe('keyboard access', () => {
     zones.forEach((z) => expect(z.getAttribute('role')).toBe('button'));
   });
 
-  it('hides the decorative footer links from assistive tech', () => {
+  it('makes the footer links operable from the keyboard', () => {
     const doc = mountAt('modul2', pageIndexOf('modul2', 'hotspot'));
-    expect(doc.querySelector('.footer-links')?.getAttribute('aria-hidden')).toBe('true');
+    const links = doc.querySelectorAll('.footer-links span');
+    expect(links).toHaveLength(3);
+    links.forEach((l) => {
+      expect(l.getAttribute('role')).toBe('button');
+      expect(l.getAttribute('tabindex')).toBe('0');
+    });
+    const ev = new (doc.defaultView as Window & typeof globalThis).KeyboardEvent('keydown', {
+      key: 'Enter',
+    });
+    links[1]!.dispatchEvent(ev);
+    expect(doc.getElementById('gtPanel')!.querySelector('h2')!.textContent).toBe('Bantuan');
   });
 
   it('opens a hotspot point with the keyboard', () => {
@@ -67,5 +77,40 @@ describe('keyboard access', () => {
     });
     pin.dispatchEvent(ev);
     expect(doc.querySelector('#hotspotDetail')?.innerHTML).not.toContain('placeholder');
+  });
+});
+
+describe('embed page', () => {
+  it('frames the 3D atlas with a title and keeps the footer arrows', () => {
+    const doc = mountAt('modul2', pageIndexOf('modul2', 'embed'));
+    const frame = doc.querySelector('.embed-frame iframe')!;
+    expect(frame.getAttribute('src')).toBe('assets/anatomi-mata/index.html?embed');
+    expect(frame.getAttribute('title')).toBe('Anatomi mata dalam 3D');
+    expect(doc.querySelector('.embed-foot a')!.getAttribute('href')).toBe(
+      'assets/anatomi-mata/index.html',
+    );
+    expect(doc.getElementById('nextBtn')).not.toBeNull();
+  });
+});
+
+describe('footer links', () => {
+  it('open a transcript panel outside the card, and Escape closes it', () => {
+    const doc = mountAt('modul1', 1);
+    const card = doc.getElementById('contentCard')!.innerHTML;
+    const [transcript] = Array.from(doc.querySelectorAll<HTMLElement>('.footer-links span'));
+    expect(transcript!.getAttribute('role')).toBe('button');
+    transcript!.click();
+    const panel = doc.getElementById('gtPanel')!;
+    expect(panel.querySelector('h2')!.textContent).toBe('Transkrip');
+    expect(panel.textContent).toContain('Diabetes mellitus merupakan sekelompok penyakit metabolik');
+    expect(doc.getElementById('contentCard')!.innerHTML).toBe(card);
+    doc.dispatchEvent(new doc.defaultView!.KeyboardEvent('keydown', { key: 'Escape' }));
+    expect(doc.getElementById('gtPanel')).toBeNull();
+  });
+
+  it('say so when a page has no narration', () => {
+    const doc = mountAt('modul4', 1);
+    doc.querySelector<HTMLElement>('.footer-links span')!.click();
+    expect(doc.getElementById('gtPanel')!.textContent).toContain('tidak memiliki narasi');
   });
 });

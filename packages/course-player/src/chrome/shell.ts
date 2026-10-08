@@ -1,5 +1,6 @@
 import type { RenderContext } from '../context.js';
 import { globalPageNumber, progressFillPct, totalPages } from '../nav.js';
+import { FOOTER_LINKS, wireFooterLinks } from './panels.js';
 
 /**
  * The card frame every non-hero page renders inside: progress bar, brand
@@ -19,7 +20,7 @@ export function cardShell(ctx: RenderContext, innerBody: string, opts: { pageLab
     </div>
     <div class="card-body">${innerBody}</div>
     <div class="card-footer">
-      <div class="footer-links" aria-hidden="true"><span>📄 Transkrip</span><span>❓ Bantuan</span><span>🔗 Referensi</span></div>
+      ${FOOTER_LINKS}
       <div class="nav-arrows">
         <button id="prevBtn" ${atFirst ? 'disabled' : ''}>&#8592;</button>
         <span class="page-indicator">${pageLabel}</span>
@@ -34,6 +35,7 @@ export function wireFooterNav(ctx: RenderContext): void {
   const nextBtn = ctx.document.getElementById('nextBtn');
   if (prevBtn) prevBtn.onclick = ctx.goPrev;
   if (nextBtn) nextBtn.onclick = ctx.goNext;
+  wireFooterLinks(ctx);
 }
 
 export function setCard(ctx: RenderContext, html: string): void {

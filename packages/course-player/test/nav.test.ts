@@ -9,7 +9,7 @@ const course = parseCourse(
 
 describe('totalPages', () => {
   it('counts an empty completion module as one slot', () => {
-    expect(totalPages(course)).toBe(33);
+    expect(totalPages(course)).toBe(34);
   });
 });
 

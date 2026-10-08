@@ -108,6 +108,24 @@ const VideoSchema = z.object({
   captions: z.string().optional(),
 });
 
+/**
+ * A self-contained interactive (an HTML page shipped inside the course's
+ * assets) shown in a frame. Added after S0, so the frozen original has none;
+ * `src` is relative to the course page and must stay inside the package so the
+ * SCORM build keeps working offline in any LMS.
+ */
+const EmbedSchema = z.object({
+  ...base,
+  type: z.literal('embed'),
+  kicker: z.string().optional(),
+  title: z.string(),
+  intro: z.string().optional(),
+  src: z.string(),
+  fullPage: z.string().optional(),
+  height: z.number().int().positive().optional(),
+  caption: z.string().optional(),
+});
+
 export const PageSchema = z.discriminatedUnion('type', [
   HeroSchema,
   DividerSchema,
@@ -118,6 +136,7 @@ export const PageSchema = z.discriminatedUnion('type', [
   ImageGradingSchema,
   QuizSchema,
   VideoSchema,
+  EmbedSchema,
 ]);
 
 export const ModuleSchema = z.object({

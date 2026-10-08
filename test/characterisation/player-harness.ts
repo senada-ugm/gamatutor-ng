@@ -3,6 +3,7 @@ import { JSDOM } from 'jsdom';
 import { parseCourse } from '@gamatutor/course-schema';
 import { createPlayer, Scorm12Adapter } from '@gamatutor/course-player';
 import { installDeterminism, type Harness, type ScormCall } from './harness.js';
+import { legacyEquivalent } from './legacy-equivalent.js';
 
 const SHELL = `<!doctype html><html><body>
 <div class="app">
@@ -21,8 +22,8 @@ export async function loadPlayer(opts: { scorm?: boolean } = {}): Promise<Harnes
     },
   });
   const window = dom.window as unknown as Window & typeof globalThis;
-  const course = parseCourse(
-    JSON.parse(readFileSync('content/drive-retinopati/course.json', 'utf8')),
+  const course = legacyEquivalent(
+    parseCourse(JSON.parse(readFileSync('content/drive-retinopati/course.json', 'utf8'))),
   );
   const adapter = opts.scorm ? new Scorm12Adapter(window) : undefined;
   if (adapter) await adapter.init();

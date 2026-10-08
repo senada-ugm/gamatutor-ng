@@ -24,6 +24,7 @@ import { renderImageGrading } from './pages/image-grading.js';
 import { renderMatch } from './pages/match.js';
 import { renderQuiz } from './pages/quiz.js';
 import { renderVideo } from './pages/video.js';
+import { renderEmbed } from './pages/embed.js';
 
 export * from './context.js';
 export * from './nav.js';
@@ -128,6 +129,8 @@ export function createPlayer(opts: PlayerOptions): Player {
         return renderVideo(ctx, page);
       case 'content':
         return renderContent(ctx, page);
+      case 'embed':
+        return renderEmbed(ctx, page);
     }
   }
 
