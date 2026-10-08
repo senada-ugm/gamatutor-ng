@@ -2,6 +2,7 @@ import type { PageOfType } from '@gamatutor/course-schema';
 import type { RenderContext } from '../context.js';
 import { setCard, wireFooterNav } from '../chrome/shell.js';
 import { esc } from '../dom.js';
+import { FOOTER_LINKS } from '../chrome/panels.js';
 import { progressFillPct, globalPageNumber, totalPages } from '../nav.js';
 
 /**
@@ -19,7 +20,7 @@ export function renderDivider(ctx: RenderContext, page: PageOfType<'divider'>): 
       <div class="divider-title">${esc(page.title || '')}</div>
     </div>
     <div class="card-footer">
-      <div class="footer-links" aria-hidden="true"><span>📄 Transkrip</span><span>❓ Bantuan</span><span>🔗 Referensi</span></div>
+      ${FOOTER_LINKS}
       <div class="nav-arrows">
         <button id="prevBtn"></button>
         <span class="page-indicator">${globalPageNumber(course, state)} / ${totalPages(course)}</span>

@@ -8,6 +8,8 @@ import { scorm12Manifest } from './scorm12-manifest.js';
 export interface BuildOptions {
   courseDir: string;
   outDir: string;
+  /** Applied to the parsed course before it is embedded; tests use it. */
+  transform?: (course: Course) => Course;
 }
 
 export interface BuildResult {
@@ -56,7 +58,7 @@ ${css}
 
   <div class="sidebar">
     <div class="sidebar-head">
-      <div class="top-icons"><span>&laquo; Semua Modul</span><span>&times;</span></div>
+      <div class="top-icons"><span id="toAll">&laquo; Semua Modul</span><span id="toClose">&times;</span></div>
       <div class="brand"><div class="brand-mark">${course.brand.mark}</div></div>
       <div class="course-title">${course.title}</div>
     </div>
@@ -85,6 +87,21 @@ ${css}
   adapter.init();
   player.render();
   window.addEventListener('beforeunload', function () { adapter.terminate(); });
+
+  // On GamaTutor itself (courses live under /courses/<id>/) the two sidebar
+  // controls lead back to the learner's course list. Inside another LMS
+  // there is nowhere to lead, so they stay inert text, as they always were.
+  if (location.pathname.indexOf('/courses/') === 0) {
+    [['toAll', 'Kembali ke daftar kursus'], ['toClose', 'Tutup kursus']].forEach(function (x) {
+      var el = document.getElementById(x[0]);
+      var a = document.createElement('a');
+      a.href = '/app/#/';
+      a.className = 'top-link';
+      a.setAttribute('aria-label', x[1]);
+      a.innerHTML = el.innerHTML;
+      el.parentNode.replaceChild(a, el);
+    });
+  }
 })();
 </script>
 </body>
@@ -95,7 +112,8 @@ ${css}
 export async function buildStandalone(opts: BuildOptions): Promise<BuildResult> {
   const courseJsonPath = join(opts.courseDir, 'course.json');
   const raw = readFileSync(courseJsonPath, 'utf8');
-  const course = parseCourse(JSON.parse(raw));
+  const parsed = parseCourse(JSON.parse(raw));
+  const course = opts.transform ? opts.transform(parsed) : parsed;
 
   const [playerJs, css] = [await bundlePlayer(), readFileSync(PLAYER_CSS, 'utf8')];
   const html = shell(course, css, playerJs, JSON.stringify(course));

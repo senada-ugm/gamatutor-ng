@@ -90,6 +90,10 @@ done
 say "Installing landing page"
 "${SSH[@]}" "cat > $WEBROOT/index.html" < deploy/landing/index.html
 
+# The platform mockup: a picture of slices S1 to S5, until S1 replaces it.
+say "Installing platform preview"
+"${SSH[@]}" "mkdir -p $WEBROOT/app && cat > $WEBROOT/app/index.html" < deploy/app/index.html
+
 "${SSH[@]}" "chown -R www-data:www-data $WEBROOT && find $WEBROOT -type d -exec chmod 755 {} + && find $WEBROOT -type f -exec chmod 644 {} +"
 
 # ---------------------------------------------------------------- tls
@@ -138,5 +142,6 @@ for id in "${COURSES[@]}"; do
   echo "  /courses/$id/  -> $code"
 done
 echo "  /              -> $(curl -s -o /dev/null -w '%{http_code}' "https://$DOMAIN/")"
+echo "  /app/          -> $(curl -s -o /dev/null -w '%{http_code}' "https://$DOMAIN/app/")"
 
 say "Deployed to https://$DOMAIN"

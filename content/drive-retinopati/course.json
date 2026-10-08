@@ -431,6 +431,17 @@
           ]
         },
         {
+          "id": "modul2-anatomi-3d",
+          "type": "embed",
+          "kicker": "MODEL 3D",
+          "title": "Anatomi mata dalam 3D",
+          "intro": "Putar bola mata, buka potongannya, lalu pilih strukturnya satu per satu. Perhatikan retina, makula, fovea, dan diskus optik (bintik buta): keempatnya tampak lagi pada foto fundus di Modul 4.",
+          "src": "assets/anatomi-mata/index.html?embed",
+          "fullPage": "assets/anatomi-mata/index.html",
+          "height": 620,
+          "caption": "Model edukasi; proporsi dan warna disederhanakan."
+        },
+        {
           "id": "modul2-p3",
           "slide": 13,
           "type": "cards",

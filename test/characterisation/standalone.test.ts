@@ -10,19 +10,27 @@ import {
   type ScormCall,
 } from './harness.js';
 import { fullWalkthrough } from './walkthroughs.js';
+import { legacyEquivalent } from './legacy-equivalent.js';
 
 /** Same sanctioned a11y-attribute allowance as parity.test.ts. */
 const A11Y_ATTRS = /\s(tabindex|role|aria-[a-z-]+)="[^"]*"/g;
 const strip = (html: string) => html.replace(A11Y_ATTRS, '');
 
 const OUT = 'out/drive-retinopati';
+/** The same build minus post-S0 pages, for the walk against the original. */
+const OUT_PARITY = 'out/.parity-drive-retinopati';
 
 beforeAll(async () => {
   await buildStandalone({ courseDir: 'content/drive-retinopati', outDir: OUT });
+  await buildStandalone({
+    courseDir: 'content/drive-retinopati',
+    outDir: OUT_PARITY,
+    transform: legacyEquivalent,
+  });
 }, 120_000);
 
 function loadBuilt(): Harness {
-  const html = readFileSync(`${OUT}/index.html`, 'utf8');
+  const html = readFileSync(`${OUT_PARITY}/index.html`, 'utf8');
   const scorm: ScormCall[] = [];
   const dom = new JSDOM(html, {
     runScripts: 'dangerously',
@@ -45,6 +53,15 @@ describe('standalone build', () => {
   it('copies the course assets beside the page', () => {
     expect(() => readFileSync(`${OUT}/assets/visus.mp4`)).not.toThrow();
     expect(() => readFileSync(`${OUT}/assets/hero-illustration.svg`)).not.toThrow();
+  });
+
+  it('ships the 3D atlas inside the package, so the embed page works offline', () => {
+    const html = readFileSync(`${OUT}/index.html`, 'utf8');
+    expect(html).toContain('assets/anatomi-mata/index.html?embed');
+    const atlas = readFileSync(`${OUT}/assets/anatomi-mata/index.html`, 'utf8');
+    for (const ref of atlas.match(/\.\/assets\/[^"]+/g) ?? []) {
+      expect(() => readFileSync(`${OUT}/assets/anatomi-mata/${ref.slice(2)}`)).not.toThrow();
+    }
   });
 
   it('walks the whole course identically to the frozen original', async () => {
