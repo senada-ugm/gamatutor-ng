@@ -54,7 +54,7 @@ export function renderHotspot(ctx: RenderContext, page: PageOfType<'hotspot'>): 
     ${page.intro ? `<p class="page-instruction">${esc(page.intro)}</p>` : ''}
     <div class="hotspot-layout">
       <div class="hotspot-stage" id="hotspotStage">
-        <img src="${page.image}" alt="Ilustrasi slide ${page.slide}">
+        <img src="${ctx.asset(page.image)}" alt="Ilustrasi slide ${page.slide}">
         ${masksHtml}
         ${pinsHtml}
       </div>

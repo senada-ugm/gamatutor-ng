@@ -242,7 +242,7 @@ export class NarrationSession implements NarrationControl {
   private playAudio(src: string, segIdx: number): void {
     const gen = this.gen;
     const w = this.ctx.window as SpeechCapableWindow;
-    const audio = new w.Audio!(src);
+    const audio = new w.Audio!(this.ctx.asset(src));
     this.audio = audio;
     this.voice = true;
     const cueOf = this.segments[segIdx]?.cue;

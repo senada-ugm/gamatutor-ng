@@ -9,7 +9,7 @@ export function renderHero(ctx: RenderContext, page: PageOfType<'hero'>): void {
     ctx,
     `
     <div class="hero">
-      <img class="hero-bg-img" src="assets/hero-illustration.svg" alt="">
+      <img class="hero-bg-img" src="${ctx.asset('assets/hero-illustration.svg')}" alt="">
       <div class="hero-content">
         <h1>${esc(page.title)}</h1>
         <p>${esc(page.body)}</p>

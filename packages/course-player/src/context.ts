@@ -28,6 +28,8 @@ export interface RenderContext {
   adapter: TrackingAdapter;
   capabilities: PlayerCapabilities;
   random: () => number;
+  /** Resolves a course-relative asset path against the course's asset base. */
+  asset: (src: string) => string;
   /** The current page's narration; inert on pages without one. */
   narration: NarrationControl;
   rerender: () => void;

@@ -21,7 +21,7 @@ export function renderContent(ctx: RenderContext, page: ContentPage): void {
         ${speakButtonHtml(ctx)}
         <div class="body-block">${renderBodyBlock(page.body)}</div>
       </div>
-      ${page.image ? `<div class="content-image"><img src="${page.image}" alt="Ilustrasi slide ${page.slide}">${page.imageCaption ? `<div class="cap">${esc(page.imageCaption)}</div>` : ''}</div>` : ''}
+      ${page.image ? `<div class="content-image"><img src="${ctx.asset(page.image)}" alt="Ilustrasi slide ${page.slide}">${page.imageCaption ? `<div class="cap">${esc(page.imageCaption)}</div>` : ''}</div>` : ''}
     </div>
   `;
   setCard(ctx, cardShell(ctx, body));
@@ -29,16 +29,16 @@ export function renderContent(ctx: RenderContext, page: ContentPage): void {
   wireSpeakButton(ctx);
 }
 
-function stepHtml(step: RevealStep, cls: string, page: ContentPage): string {
+function stepHtml(ctx: RenderContext, step: RevealStep, cls: string, page: ContentPage): string {
   if ('video' in step) {
-    const poster = step.video.poster ? ` poster="${step.video.poster}"` : '';
-    return `<div class="${cls}"><video class="anim-video" controls preload="metadata"${poster} src="${step.video.src}"></video></div>`;
+    const poster = step.video.poster ? ` poster="${ctx.asset(step.video.poster)}"` : '';
+    return `<div class="${cls}"><video class="anim-video" controls preload="metadata"${poster} src="${ctx.asset(step.video.src)}"></video></div>`;
   }
   if ('image' in step && (step.title || step.body)) {
-    return `<div class="${cls} icon-row"><img src="${step.image}" alt=""><div><h3>${esc(step.title || '')}</h3><p>${esc(step.body || '')}</p></div></div>`;
+    return `<div class="${cls} icon-row"><img src="${ctx.asset(step.image)}" alt=""><div><h3>${esc(step.title || '')}</h3><p>${esc(step.body || '')}</p></div></div>`;
   }
   if ('image' in step) {
-    return `<div class="${cls}"><img src="${step.image}" alt="Bagian slide ${page.slide}"></div>`;
+    return `<div class="${cls}"><img src="${ctx.asset(step.image)}" alt="Bagian slide ${page.slide}"></div>`;
   }
   if (step.texts.length > 1) {
     return `<div class="${cls}"><ul>${step.texts.map((t) => `<li>${esc(t)}</li>`).join('')}</ul></div>`;
@@ -79,7 +79,7 @@ function renderAnimatedContent(
       let cls = 'anim-step';
       if (i >= revealed) cls += ' anim-pending';
       else if (i >= already) cls += ' anim-in';
-      return stepHtml(s, cls, page);
+      return stepHtml(ctx, s, cls, page);
     })
     .join('');
 

@@ -10,6 +10,13 @@ export interface TrackingAdapter {
    * course. Null when nobody is signed in; certificates need it.
    */
   learnerName?(): string | null;
+  /** Persists the player's state so a learner resumes where they left off. */
+  saveState?(state: unknown): void;
+  /**
+   * Asks the platform to issue (or return) the certificate for the latest
+   * passing result; resolves to the URL to open. SCORM has no such thing.
+   */
+  issueCertificate?(): Promise<string>;
 }
 
 /** Records nothing anywhere. Used for instructor preview and in tests. */

@@ -118,8 +118,24 @@ export function renderCompletion(ctx: RenderContext): void {
     ctx.rerender();
   });
   on('certBtn', () => {
-    state.showCertificate = true;
-    ctx.rerender();
+    const issue = ctx.adapter.issueCertificate?.bind(ctx.adapter);
+    if (!issue) {
+      state.showCertificate = true;
+      ctx.rerender();
+      return;
+    }
+    // On the platform the certificate is issued and kept by the server.
+    const btn = ctx.document.getElementById('certBtn') as HTMLButtonElement;
+    btn.disabled = true;
+    btn.textContent = 'Menerbitkan sertifikat…';
+    issue().then(
+      (url) => ctx.window.location.assign(url),
+      () => {
+        btn.disabled = false;
+        btn.textContent = '📜 Lihat sertifikat';
+        ctx.window.alert('Sertifikat belum bisa diterbitkan. Coba lagi sebentar.');
+      },
+    );
   });
 }
 

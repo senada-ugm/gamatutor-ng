@@ -8,13 +8,13 @@ import { esc } from '../dom.js';
  * reveal step inside a content page — but the type exists for future courses.
  */
 export function renderVideo(ctx: RenderContext, page: PageOfType<'video'>): void {
-  const poster = page.poster ? ` poster="${page.poster}"` : '';
+  const poster = page.poster ? ` poster="${ctx.asset(page.poster)}"` : '';
   const captions = page.captions
-    ? `<track kind="captions" srclang="${ctx.course.language}" src="${page.captions}" default>`
+    ? `<track kind="captions" srclang="${ctx.course.language}" src="${ctx.asset(page.captions)}" default>`
     : '';
   const body = `
     ${page.title ? `<h2>${esc(page.title)}</h2><div class="title-underline"></div>` : '<div style="height:14px"></div>'}
-    <div class="anim-stack"><div class="anim-step"><video class="anim-video" controls${poster} src="${page.src}">${captions}</video></div></div>
+    <div class="anim-stack"><div class="anim-step"><video class="anim-video" controls${poster} src="${ctx.asset(page.src)}">${captions}</video></div></div>
   `;
   setCard(ctx, cardShell(ctx, body));
   wireFooterNav(ctx);

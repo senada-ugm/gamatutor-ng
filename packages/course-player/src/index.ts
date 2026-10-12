@@ -33,6 +33,13 @@ export interface PlayerOptions {
   adapter?: TrackingAdapter;
   capabilities?: Partial<PlayerCapabilities>;
   random?: () => number;
+  /**
+   * Prefix for course-relative asset paths ("assets/x.png"). Empty in the
+   * standalone package, where assets sit beside the page.
+   */
+  assetBase?: string;
+  /** State to resume from, as last passed to `adapter.saveState`. */
+  initialState?: Partial<PlayerState>;
 }
 
 export interface Player {
@@ -46,8 +53,9 @@ export function createPlayer(opts: PlayerOptions): Player {
   const win = doc.defaultView;
   if (!win) throw new Error('course-player: mount element has no window');
 
-  const state = createState();
-  const adapter = opts.adapter ?? new NullAdapter();
+  const state: PlayerState = { ...createState(), ...opts.initialState };
+  const assetBase = opts.assetBase ?? '';
+  const adapter: TrackingAdapter = opts.adapter ?? new NullAdapter();
   let launched = false;
   let session: NarrationSession | null = null;
   let sessionPageId: string | null = null;
@@ -60,6 +68,7 @@ export function createPlayer(opts: PlayerOptions): Player {
     adapter,
     capabilities: { ...DEFAULT_CAPABILITIES, ...opts.capabilities },
     random: opts.random ?? (() => Math.random()),
+    asset: (src) => (assetBase && !/^([a-z]+:|\/)/i.test(src) ? assetBase + src : src),
     narration: {
       get available() {
         return session?.available ?? false;
@@ -117,6 +126,11 @@ export function createPlayer(opts: PlayerOptions): Player {
   }
 
   function render(): void {
+    renderView();
+    adapter.saveState?.(state);
+  }
+
+  function renderView(): void {
     renderSidebar(ctx);
     const module = ctx.course.modules[state.moduleIdx];
     if (!module) return;

@@ -137,7 +137,7 @@ export function renderImageGrading(ctx: RenderContext, page: GradingPage): void 
     <div class="title-underline"></div>
     <div class="fundus-layout">
       <div class="fundus-stage" id="fundusStage">
-        <img src="${page.image}" alt="Foto fundus untuk dinilai">
+        <img src="${ctx.asset(page.image)}" alt="Foto fundus untuk dinilai">
         ${arrowsHtml}
         ${badgesHtml}
       </div>

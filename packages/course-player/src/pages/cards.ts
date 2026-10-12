@@ -18,7 +18,7 @@ export function renderCards(ctx: RenderContext, page: PageOfType<'cards'>): void
   const trailing = page.trailingImage
     ? `
     <div class="cards-trailing">
-      <div><img src="${page.trailingImage}" alt="Ilustrasi slide ${page.slide}">${page.trailingCaption ? `<div class="cap">${esc(page.trailingCaption)}</div>` : ''}</div>
+      <div><img src="${ctx.asset(page.trailingImage)}" alt="Ilustrasi slide ${page.slide}">${page.trailingCaption ? `<div class="cap">${esc(page.trailingCaption)}</div>` : ''}</div>
       ${page.trailingNote ? `<div class="cards-note">${esc(page.trailingNote)}</div>` : ''}
     </div>`
     : '';

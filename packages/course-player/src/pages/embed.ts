@@ -13,7 +13,7 @@ const attr = (s: string) => esc(s).replace(/"/g, '&quot;');
  */
 export function renderEmbed(ctx: RenderContext, page: PageOfType<'embed'>): void {
   const open = page.fullPage
-    ? `<a href="${attr(page.fullPage)}" target="_blank" rel="noopener">Buka di jendela baru</a>`
+    ? `<a href="${attr(ctx.asset(page.fullPage))}" target="_blank" rel="noopener">Buka di jendela baru</a>`
     : '';
   const foot =
     page.caption || open
@@ -25,7 +25,7 @@ export function renderEmbed(ctx: RenderContext, page: PageOfType<'embed'>): void
     <div class="title-underline"></div>
     ${page.intro ? `<p class="embed-intro">${esc(page.intro)}</p>` : ''}
     <div class="embed-frame" style="--embed-h:${page.height ?? 600}px">
-      <iframe src="${attr(page.src)}" title="${attr(page.title)}" allow="fullscreen" allowfullscreen></iframe>
+      <iframe src="${attr(ctx.asset(page.src))}" title="${attr(page.title)}" allow="fullscreen" allowfullscreen></iframe>
     </div>
     ${foot}
   `;

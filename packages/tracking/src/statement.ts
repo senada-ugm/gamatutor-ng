@@ -6,7 +6,9 @@ export type Verb =
   | 'completed'
   | 'passed'
   | 'failed'
-  | 'terminated';
+  | 'terminated'
+  /** Sent periodically while the course is open and visible; measures reading time. */
+  | 'heartbeat';
 
 export interface Score {
   raw: number;
