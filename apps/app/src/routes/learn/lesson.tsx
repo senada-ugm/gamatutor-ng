@@ -111,6 +111,9 @@ export function LessonPage() {
                 completeAndAdvance.mutate()
               }
             }}
+            onClaimCertificate={() => {
+              navigate({ to: "/certificates/verify" })
+            }}
           />
         ) : lesson.contentType === "text" && lesson.textContent ? (
           <div className="max-w-prose text-sm leading-relaxed whitespace-pre-line">{lesson.textContent}</div>

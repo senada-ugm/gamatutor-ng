@@ -44,6 +44,7 @@ tags:
   - name: Platform Settings
   - name: Notifications
   - name: Reports
+  - name: Telemetry
   - name: Institutions
     description: "Institution registration (admin-direct) and profile management."
   - name: Institution Requests
@@ -5396,6 +5397,48 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/QuizQuestionCreate'
+  /telemetry/events:
+    post:
+      operationId: TelemetryApi_create
+      description: Logs a slide interaction or dwell-time heartbeat event.
+      parameters: []
+      responses:
+        '201':
+          description: The request has succeeded and a new resource has been created as a result.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                  - meta
+                properties:
+                  data:
+                    $ref: '#/components/schemas/TelemetryEvent'
+                    description: The raw payload representation.
+                  meta:
+                    $ref: '#/components/schemas/Common.ResponseMeta'
+                    description: Trace metadata.
+                  warnings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Common.Warning'
+                    description: Minor warning list.
+                description: Standard single resource response envelope.
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Common.ErrorResponse'
+      tags:
+        - Telemetry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TelemetryEventCreate'
   /uploads:
     post:
       operationId: UploadsApi_create
@@ -9181,6 +9224,58 @@ components:
         email:
           type: string
       description: Display copy of the requesting account, denormalized.
+    TelemetryEvent:
+      type: object
+      required:
+        - id
+        - userId
+        - courseId
+        - moduleId
+        - slideId
+        - eventType
+        - dwellTimeSeconds
+        - createdAt
+      properties:
+        id:
+          $ref: '#/components/schemas/Common.ResourceId'
+        userId:
+          $ref: '#/components/schemas/Common.ResourceId'
+        courseId:
+          $ref: '#/components/schemas/Common.ResourceId'
+        moduleId:
+          type: string
+        slideId:
+          type: string
+        eventType:
+          type: string
+        dwellTimeSeconds:
+          type: integer
+          format: int32
+        createdAt:
+          type: string
+          format: date-time
+    TelemetryEventCreate:
+      type: object
+      required:
+        - courseId
+        - moduleId
+        - slideId
+        - eventType
+      properties:
+        courseId:
+          $ref: '#/components/schemas/Common.ResourceId'
+        moduleId:
+          type: string
+        slideId:
+          type: string
+        eventType:
+          type: string
+        dwellTimeSeconds:
+          type: integer
+          format: int32
+        interactionData:
+          type: object
+          unevaluatedProperties: {}
     TrainingType:
       type: string
       enum:

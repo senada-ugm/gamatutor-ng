@@ -28,6 +28,7 @@ import { wishlistModule } from "./modules/wishlist/index.js"
 import { announcementsModule } from "./modules/announcements/index.js"
 import { platformSettingsModule } from "./modules/platform-settings/index.js"
 import { quizzesModule } from "./modules/quizzes/index.js"
+import { telemetryModule } from "./modules/telemetry/index.js"
 import { uploadsModule } from "./modules/uploads/index.js"
 import { startUploadSweep, stopUploadSweep } from "./modules/uploads/services/uploads.service.js"
 import { usersModule } from "./modules/users/index.js"
@@ -125,6 +126,7 @@ export async function buildApp() {
   await app.register(platformSettingsModule, { prefix: "/v1" })
   await app.register(usersModule, { prefix: "/v1" })
   await app.register(auditModule, { prefix: "/v1" })
+  await app.register(telemetryModule, { prefix: "/v1" })
 
   // Orphaned-upload sweep: started once the app is ready, stopped on
   // shutdown — not a bare module-scope setInterval, which would leak

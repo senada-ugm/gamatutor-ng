@@ -1795,6 +1795,28 @@ export type RequesterInfo = {
     email: string;
 };
 
+export type TelemetryEvent = {
+    id: CommonResourceId;
+    userId: CommonResourceId;
+    courseId: CommonResourceId;
+    moduleId: string;
+    slideId: string;
+    eventType: string;
+    dwellTimeSeconds: number;
+    createdAt: string;
+};
+
+export type TelemetryEventCreate = {
+    courseId: CommonResourceId;
+    moduleId: string;
+    slideId: string;
+    eventType: string;
+    dwellTimeSeconds?: number;
+    interactionData?: {
+        [key: string]: unknown;
+    };
+};
+
 export const TrainingType = {
     PBK: 'pbk',
     WIRAUSAHA: 'wirausaha',
@@ -7398,6 +7420,44 @@ export type QuizQuestionsApiCreateResponses = {
 };
 
 export type QuizQuestionsApiCreateResponse = QuizQuestionsApiCreateResponses[keyof QuizQuestionsApiCreateResponses];
+
+export type TelemetryApiCreateData = {
+    body: TelemetryEventCreate;
+    path?: never;
+    query?: never;
+    url: '/telemetry/events';
+};
+
+export type TelemetryApiCreateErrors = {
+    /**
+     * An unexpected error response.
+     */
+    default: CommonErrorResponse;
+};
+
+export type TelemetryApiCreateError = TelemetryApiCreateErrors[keyof TelemetryApiCreateErrors];
+
+export type TelemetryApiCreateResponses = {
+    /**
+     * Standard single resource response envelope.
+     */
+    201: {
+        /**
+         * The raw payload representation.
+         */
+        data: TelemetryEvent;
+        /**
+         * Trace metadata.
+         */
+        meta: CommonResponseMeta;
+        /**
+         * Minor warning list.
+         */
+        warnings?: Array<CommonWarning>;
+    };
+};
+
+export type TelemetryApiCreateResponse = TelemetryApiCreateResponses[keyof TelemetryApiCreateResponses];
 
 export type UploadsApiCreateData = {
     body: {

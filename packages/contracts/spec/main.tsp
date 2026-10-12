@@ -20,6 +20,7 @@ import "./announcements.tsp";
 import "./platform-settings.tsp";
 import "./notifications.tsp";
 import "./reports.tsp";
+import "./telemetry.tsp";
 import "./institutions.tsp";
 import "./users.tsp";
 import "./audit.tsp";

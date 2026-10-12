@@ -2,7 +2,6 @@ import { useState } from "react"
 import {
   ArrowLeft,
   ArrowRight,
-  CheckCircle2,
   GraduationCap,
 } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
@@ -25,12 +24,17 @@ import { EyeAnatomyViewer } from "./eye-anatomy-viewer"
 import { SequentialHotspotViewer } from "./sequential-hotspot-viewer"
 import { AnimatedRevealList } from "./animated-reveal-list"
 import { MatchingPairGame } from "./matching-pair-game"
+import { ClinicalFundusGrading } from "./clinical-fundus-grading"
+import { ClinicalQuizRunner } from "./clinical-quiz-runner"
+
+import { useSlideTelemetry } from "@/lib/use-slide-telemetry"
 
 interface InteractiveSlideViewerProps {
   course: CourseDefinition
   initialSlideIndex?: number
   onSlideChange?: (index: number, page: SlidePage) => void
   onCompleteModule?: (moduleId: string) => void
+  onClaimCertificate?: () => void
   className?: string
 }
 
@@ -39,6 +43,7 @@ export function InteractiveSlideViewer({
   initialSlideIndex = 0,
   onSlideChange,
   onCompleteModule,
+  onClaimCertificate,
   className = "",
 }: InteractiveSlideViewerProps) {
   // Flatten all pages across all modules into a linear slide sequence
@@ -53,6 +58,12 @@ export function InteractiveSlideViewer({
   const [currentIndex, setCurrentIndex] = useState<number>(initialSlideIndex)
   const currentItem = allSlides[currentIndex] || allSlides[0]
   const totalSlides = allSlides.length
+
+  useSlideTelemetry({
+    courseId: course.id,
+    moduleId: currentItem?.moduleId || "",
+    slideId: currentItem?.page.id || "",
+  })
 
   function goToSlide(index: number) {
     if (index >= 0 && index < totalSlides) {
@@ -141,8 +152,30 @@ export function InteractiveSlideViewer({
           <HotspotSlide page={page as HotspotPage} onAllCompleted={handleNext} />
         )}
         {page.type === "match" && <MatchSlide page={page as MatchPage} onDone={handleNext} />}
-        {page.type === "image-grading" && <ImageGradingSlide page={page as ImageGradingPage} onNext={handleNext} />}
-        {page.type === "quiz" && <QuizSlide page={page as QuizPage} onNext={handleNext} />}
+        {page.type === "image-grading" && (
+          <ClinicalFundusGrading page={page as ImageGradingPage} onNext={handleNext} />
+        )}
+        {page.type === "quiz" && (
+          <ClinicalQuizRunner
+            questions={
+              (course.modules.find((m) => m.id === "evaluasi")?.pages.filter((p) => p.type === "quiz") as QuizPage[]) || [
+                page as QuizPage,
+              ]
+            }
+            onRetake={() => {
+              const evalStartIdx = allSlides.findIndex((s) => s.moduleId === "evaluasi")
+              if (evalStartIdx !== -1) {
+                goToSlide(evalStartIdx)
+              }
+            }}
+            onClaimCertificate={onClaimCertificate}
+            onComplete={(_score, passed) => {
+              if (passed) {
+                onCompleteModule?.(currentItem.moduleId)
+              }
+            }}
+          />
+        )}
       </div>
 
       {/* Optional Persistent Narration Bar on Content & Cards with Audio */}
@@ -325,144 +358,6 @@ function MatchSlide({ page, onDone }: { page: MatchPage; onDone: () => void }) {
         intro={page.intro}
         onComplete={() => onDone()}
       />
-    </div>
-  )
-}
-
-function ImageGradingSlide({ page, onNext }: { page: ImageGradingPage; onNext: () => void }) {
-  // Temporary interactive fallback for Phase 2 before full Phase 3 grading component lands
-  const [selected, setSelected] = useState<string | null>(null)
-  const isSubmitted = selected !== null
-  const isCorrect = selected === page.correct
-
-  return (
-    <div className="space-y-6 animate-in fade-in">
-      <div className="flex items-center justify-between">
-        <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20">
-          FUNDUS GRADING SIMULATION
-        </Badge>
-        {page.level && <span className="text-xs font-mono text-muted-foreground">{page.level}</span>}
-      </div>
-
-      <div className="grid gap-6 md:grid-cols-12 items-start">
-        <div className="md:col-span-8 overflow-hidden rounded-xl border bg-black shadow-inner">
-          <img src={page.image} alt="Fundus Examination" className="w-full h-auto object-contain max-h-[460px]" />
-        </div>
-
-        <div className="md:col-span-4 space-y-4">
-          <h3 className="text-sm font-semibold">Diagnosis & Classification:</h3>
-          <div className="space-y-2">
-            {page.options.map((opt, idx) => {
-              const isOptionSelected = selected === opt
-              let btnClass = "w-full justify-start text-xs h-auto py-3 px-3 text-left whitespace-normal"
-              if (isSubmitted) {
-                if (opt === page.correct) {
-                  btnClass += " bg-emerald-600 text-white hover:bg-emerald-700"
-                } else if (isOptionSelected) {
-                  btnClass += " bg-red-600 text-white hover:bg-red-700"
-                }
-              }
-
-              return (
-                <Button
-                  key={idx}
-                  variant={isOptionSelected && !isSubmitted ? "default" : "outline"}
-                  className={btnClass}
-                  onClick={() => setSelected(opt)}
-                  disabled={isSubmitted}
-                >
-                  {opt}
-                </Button>
-              )
-            })}
-          </div>
-
-          {isSubmitted && (
-            <div className="space-y-3">
-              <div
-                className={`rounded-xl border p-4 text-xs leading-relaxed space-y-1.5 ${
-                  isCorrect
-                    ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-900 dark:text-emerald-300"
-                    : "bg-red-500/10 border-red-500/30 text-red-900 dark:text-red-300"
-                }`}
-              >
-                <div className="font-bold flex items-center gap-1.5">
-                  {isCorrect ? <CheckCircle2 className="h-4 w-4 text-emerald-600" /> : null}
-                  <span>{isCorrect ? "Correct Evaluation" : "Clinical Correction"}</span>
-                </div>
-                <p>{page.reasoning}</p>
-              </div>
-              <Button size="sm" onClick={onNext} className="w-full gap-1.5">
-                <span>Continue</span>
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function QuizSlide({ page, onNext }: { page: QuizPage; onNext: () => void }) {
-  const [selected, setSelected] = useState<string | null>(null)
-  const isSubmitted = selected !== null
-  const isCorrect = selected === page.correct
-
-  return (
-    <div className="space-y-6 animate-in fade-in max-w-2xl mx-auto">
-      <div className="space-y-2">
-        <Badge variant="outline" className="text-xs uppercase font-mono text-primary border-primary/20 bg-primary/5">
-          EVALUATION QUIZ
-        </Badge>
-        <h3 className="text-lg font-bold leading-snug">{page.question}</h3>
-      </div>
-
-      <div className="space-y-2.5">
-        {page.options.map((opt) => {
-          const isSelected = selected === opt.letter
-          let btnClass = "w-full justify-start text-xs h-auto py-3.5 px-4 text-left whitespace-normal gap-3"
-          if (isSubmitted) {
-            if (opt.letter === page.correct) {
-              btnClass += " bg-emerald-600 text-white hover:bg-emerald-700"
-            } else if (isSelected) {
-              btnClass += " bg-red-600 text-white hover:bg-red-700"
-            }
-          }
-
-          return (
-            <Button
-              key={opt.letter}
-              variant={isSelected && !isSubmitted ? "default" : "outline"}
-              className={btnClass}
-              onClick={() => setSelected(opt.letter)}
-              disabled={isSubmitted}
-            >
-              <span className="font-mono font-bold">{opt.letter}.</span>
-              <span className="flex-1">{opt.text}</span>
-            </Button>
-          )
-        })}
-      </div>
-
-      {isSubmitted && (
-        <div className="space-y-3">
-          <div
-            className={`rounded-xl border p-4 text-xs leading-relaxed space-y-1.5 ${
-              isCorrect
-                ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-900 dark:text-emerald-300"
-                : "bg-red-500/10 border-red-500/30 text-red-900 dark:text-red-300"
-            }`}
-          >
-            <span className="font-bold">{isCorrect ? "Correct Answer" : "Explanation"}</span>
-            <p>{page.explanation}</p>
-          </div>
-          <Button size="sm" onClick={onNext} className="w-full gap-1.5">
-            <span>Continue to Next Slide</span>
-            <ArrowRight className="h-4 w-4" />
-          </Button>
-        </div>
-      )}
     </div>
   )
 }

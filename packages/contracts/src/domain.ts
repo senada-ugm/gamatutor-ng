@@ -146,6 +146,8 @@ import type {
   WishlistCourseSummary,
   PlatformSettings,
   PlatformSettingsUpdate,
+  TelemetryEvent,
+  TelemetryEventCreate,
 } from "../gen/types.gen.js"
 
 /** Global account role — ownership is a join, not a role (see institutions.tsp). */
@@ -388,6 +390,8 @@ export type ContractWishlistItem = WishlistItem
 export type ContractWishlistCourseSummary = WishlistCourseSummary
 export type ContractPlatformSettings = PlatformSettings
 export type ContractPlatformSettingsUpdate = PlatformSettingsUpdate
+export type ContractTelemetryEvent = TelemetryEvent
+export type ContractTelemetryEventCreate = TelemetryEventCreate
 export { AttendanceSessionStatus, AttendanceVerificationMethod, AttendanceRecordStatus } from "../gen/types.gen.js"
 export { CertificateSignaturePlacement } from "../gen/types.gen.js"
 export { QuizQuestionType, QuizAttemptStatus } from "../gen/types.gen.js"

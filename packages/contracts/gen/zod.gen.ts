@@ -1356,6 +1356,26 @@ export const zInstitutionRequest = z.object({
     rejectionReason: z.string().readonly().optional()
 });
 
+export const zTelemetryEvent = z.object({
+    id: zCommonResourceId,
+    userId: zCommonResourceId,
+    courseId: zCommonResourceId,
+    moduleId: z.string(),
+    slideId: z.string(),
+    eventType: z.string(),
+    dwellTimeSeconds: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    createdAt: z.iso.datetime()
+});
+
+export const zTelemetryEventCreate = z.object({
+    courseId: zCommonResourceId,
+    moduleId: z.string(),
+    slideId: z.string(),
+    eventType: z.string(),
+    dwellTimeSeconds: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
+    interactionData: z.record(z.string(), z.unknown()).optional()
+});
+
 export const zTrainingType = z.enum([
     'pbk',
     'wirausaha',
@@ -3621,6 +3641,17 @@ export const zQuizQuestionsApiCreatePath = z.object({
  */
 export const zQuizQuestionsApiCreateResponse = z.object({
     data: zQuizQuestion,
+    meta: zCommonResponseMeta,
+    warnings: z.array(zCommonWarning).optional()
+});
+
+export const zTelemetryApiCreateBody = zTelemetryEventCreate;
+
+/**
+ * Standard single resource response envelope.
+ */
+export const zTelemetryApiCreateResponse = z.object({
+    data: zTelemetryEvent,
     meta: zCommonResponseMeta,
     warnings: z.array(zCommonWarning).optional()
 });

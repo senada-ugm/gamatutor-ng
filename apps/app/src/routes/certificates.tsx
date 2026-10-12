@@ -35,11 +35,11 @@ export function CertificateViewPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
-        <PageHeader backTo="/dashboard" backLabel="Dasbor" />
+        <PageHeader backTo="/dashboard" backLabel="Dashboard" />
         {certificate.data ? (
           <Button onClick={() => window.print()} variant="outline" className="gap-2">
             <Printer className="size-4" />
-            Cetak / Simpan PDF
+            Print / Save PDF
           </Button>
         ) : null}
       </div>
@@ -50,7 +50,7 @@ export function CertificateViewPage() {
       ) : certificate.data ? (
         <CertificateCard certificate={certificate.data} />
       ) : (
-        <EmptyState title="Sertifikat tidak ditemukan" />
+        <EmptyState title="Certificate not found" />
       )}
     </div>
   )
@@ -68,27 +68,33 @@ export function CertificateVerifyPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Verifikasi Sertifikat" description="Masukkan nomor sertifikat atau kode verifikasi." />
+      <PageHeader
+        title="Certificate Verification"
+        description="Enter the certificate number or anti-tamper verification code to validate authenticity."
+      />
 
       <form method="get" className="flex max-w-md gap-2">
         <Input
           name="code"
           defaultValue={code}
-          aria-label="Nomor atau kode verifikasi"
-          placeholder="Nomor / kode verifikasi"
+          aria-label="Certificate number or verification code"
+          placeholder="e.g. CRT-2026-XXXX or verification code"
         />
-        <Button type="submit">Periksa</Button>
+        <Button type="submit">Verify</Button>
       </form>
 
       {!code ? null : certificate.isLoading ? (
         <Skeleton className="h-64 w-full" />
       ) : certificate.data ? (
         <div className="space-y-3">
-          <Badge>Sah</Badge>
+          <Badge className="bg-emerald-600 hover:bg-emerald-700">Authentic & Verified</Badge>
           <CertificateCard certificate={certificate.data} />
         </div>
       ) : (
-        <EmptyState title="Tidak ditemukan" description="Kode tersebut tidak cocok dengan sertifikat apa pun." />
+        <EmptyState
+          title="Certificate Record Not Found"
+          description="The provided verification code does not match any issued certificate in the system."
+        />
       )}
     </div>
   )
@@ -99,40 +105,40 @@ function CertificateCard({ certificate }: { certificate: ContractCertificate }) 
     <Card className="print:border-0 print:shadow-none">
       <CardContent className="space-y-6 text-center">
         <div>
-          <p className="text-xs tracking-widest text-muted-foreground uppercase">Sertifikat Kelulusan</p>
+          <p className="text-xs tracking-widest text-muted-foreground uppercase">Certificate of Completion</p>
           <p className="mt-2 text-2xl font-semibold tracking-tight">{certificate.title}</p>
         </div>
-        <p className="text-lg">Diberikan kepada</p>
+        <p className="text-lg">Presented to</p>
         <p className="text-2xl font-semibold">{certificate.user.name}</p>
         <p className="text-sm text-muted-foreground">
-          atas keberhasilan menyelesaikan pelatihan{" "}
-          <span className="font-medium text-foreground">{certificate.course.title}</span> yang diselenggarakan oleh{" "}
+          for successfully completing the clinical training program{" "}
+          <span className="font-medium text-foreground">{certificate.course.title}</span> accredited by{" "}
           {certificate.institution.name}
         </p>
         <div className="grid gap-4 text-sm sm:grid-cols-3">
           <div>
-            <p className="text-xs text-muted-foreground">Nomor Sertifikat</p>
+            <p className="text-xs text-muted-foreground">Certificate Number</p>
             <p className="font-mono">{certificate.certificateNumber}</p>
           </div>
           <div>
-            <p className="text-xs text-muted-foreground">Kode Verifikasi</p>
+            <p className="text-xs text-muted-foreground">Verification Code</p>
             <p className="font-mono">{certificate.verificationCode}</p>
           </div>
           <div>
-            <p className="text-xs text-muted-foreground">Tanggal Terbit</p>
+            <p className="text-xs text-muted-foreground">Issue Date</p>
             <p>{formatCourseDate(certificate.issuedAt, { dateOnly: true })}</p>
           </div>
         </div>
         <div className="flex justify-center gap-2 print:hidden">
           <Button variant="outline" onClick={() => window.print()}>
-            Cetak / Simpan PDF
+            Print / Save PDF
           </Button>
           <Button
             variant="ghost"
             nativeButton={false}
             render={<Link to="/certificates/verify" search={{ code: certificate.verificationCode }} />}
           >
-            Halaman Verifikasi
+            Public Verification Portal
           </Button>
         </div>
       </CardContent>
