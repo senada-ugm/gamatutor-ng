@@ -19,8 +19,19 @@ export interface PlayerState {
   hotspotVisited: Record<string, boolean[]>;
   hotspotActive: Record<string, number | null>;
   matchState: Record<string, MatchState>;
-  learnerName: string;
   showCertificate: boolean;
+  /** Earlier attempts at the evaluation, oldest first. */
+  attempts: Attempt[];
+  /** The learner answered "yes, satisfied" on the completion screen. */
+  satisfied: boolean;
+  /** attempts.length when the outcome was last reported, so it is sent once. */
+  reportedAttempt: number;
+}
+
+export interface Attempt {
+  raw: number;
+  max: number;
+  at: string;
 }
 
 export type NavResult =
@@ -40,8 +51,10 @@ export function createState(): PlayerState {
     hotspotVisited: {},
     hotspotActive: {},
     matchState: {},
-    learnerName: '',
     showCertificate: false,
+    attempts: [],
+    satisfied: false,
+    reportedAttempt: -1,
   };
 }
 
@@ -107,4 +120,29 @@ export function prevTarget(course: Course, state: PlayerState): NavResult {
     };
   }
   return { kind: 'blocked' };
+}
+
+/** Where a retake starts: the first module that is not just the opener. */
+export function retakeModuleIdx(course: Course): number {
+  const first = course.modules[0];
+  return first && first.pages[0]?.type === 'hero' && course.modules.length > 1 ? 1 : 0;
+}
+
+/**
+ * Starts a fresh attempt: every answer and discovery is cleared, but modules
+ * already reached stay open in the sidebar.
+ */
+export function startRetake(course: Course, state: PlayerState, attempt: Attempt | null): void {
+  if (attempt) state.attempts.push(attempt);
+  state.revealCounts = {};
+  state.quizAnswers = {};
+  state.gradingChoice = {};
+  state.gradingPins = {};
+  state.hotspotVisited = {};
+  state.hotspotActive = {};
+  state.matchState = {};
+  state.showCertificate = false;
+  state.satisfied = false;
+  state.moduleIdx = retakeModuleIdx(course);
+  state.pageIdx = 0;
 }

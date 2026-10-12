@@ -1,13 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { Scorm12Adapter } from '../src/scorm12.js';
+import { parseScormName, Scorm12Adapter, scormTimespan } from '../src/scorm12.js';
 
-function fakeWindow() {
+function fakeWindow(studentName = '') {
   const calls: { method: string; args: string[] }[] = [];
   const API = {
     LMSInitialize: (...a: string[]) => (calls.push({ method: 'LMSInitialize', args: a }), 'true'),
     LMSGetValue: (n: string) => (
       calls.push({ method: 'LMSGetValue', args: [n] }),
-      n === 'cmi.core.lesson_status' ? 'not attempted' : ''
+      n === 'cmi.core.lesson_status'
+        ? 'not attempted'
+        : n === 'cmi.core.student_name'
+          ? studentName
+          : ''
     ),
     LMSSetValue: (...a: string[]) => (calls.push({ method: 'LMSSetValue', args: a }), 'true'),
     LMSCommit: (...a: string[]) => (calls.push({ method: 'LMSCommit', args: a }), 'true'),
@@ -68,5 +72,63 @@ describe('Scorm12Adapter', () => {
     } as unknown as Window;
     (win as unknown as { parent: unknown }).parent = win;
     await expect(new Scorm12Adapter(win).init()).resolves.toBeNull();
+  });
+});
+
+describe('learner name', () => {
+  it('turns "Last, First" into "First Last"', () => {
+    expect(parseScormName('Herwanto, Guntur Budi')).toBe('Guntur Budi Herwanto');
+    expect(parseScormName('Guntur')).toBe('Guntur');
+    expect(parseScormName('  ')).toBeNull();
+    expect(parseScormName(', ')).toBeNull();
+  });
+
+  it('reads the name from the LMS', async () => {
+    const { win } = fakeWindow('Putri, Ayu');
+    const a = new Scorm12Adapter(win);
+    await a.init();
+    expect(a.learnerName()).toBe('Ayu Putri');
+  });
+
+  it('is null when the LMS has no name or there is no LMS', async () => {
+    const { win } = fakeWindow('');
+    expect(new Scorm12Adapter(win).learnerName()).toBeNull();
+    const bare = {} as unknown as Window;
+    (bare as unknown as { parent: unknown }).parent = bare;
+    expect(new Scorm12Adapter(bare).learnerName()).toBeNull();
+  });
+});
+
+describe('outcome and time', () => {
+  it('reports passed or failed when the outcome says so', async () => {
+    const { win, calls } = fakeWindow();
+    const a = new Scorm12Adapter(win);
+    await a.init();
+    calls.length = 0;
+    await a.finish({ completed: true, success: false });
+    expect(calls[0]!.args).toEqual(['cmi.core.lesson_status', 'failed']);
+    calls.length = 0;
+    await a.finish({ completed: true, success: true });
+    expect(calls[0]!.args).toEqual(['cmi.core.lesson_status', 'passed']);
+  });
+
+  it('writes the session time before finishing', async () => {
+    const { win, calls } = fakeWindow();
+    let t = 1_000_000;
+    const a = new Scorm12Adapter(win, () => t);
+    await a.init();
+    t += (2 * 3600 + 5 * 60 + 9) * 1000;
+    calls.length = 0;
+    a.terminate();
+    expect(calls.map((c) => [c.method, ...c.args])).toEqual([
+      ['LMSSetValue', 'cmi.core.session_time', '0002:05:09'],
+      ['LMSCommit', ''],
+      ['LMSFinish', ''],
+    ]);
+  });
+
+  it('formats timespans', () => {
+    expect(scormTimespan(0)).toBe('0000:00:00');
+    expect(scormTimespan(61_500)).toBe('0000:01:01');
   });
 });

@@ -68,7 +68,8 @@ function renderAnimatedContent(
   const revealed = revealCount(ctx.state, page.id);
   const seen = animated.get(ctx.state) ?? {};
   animated.set(ctx.state, seen);
-  const already = seen[page.id] ?? 0;
+  // A retake clears the reveal counts, so the entrance plays again.
+  const already = Math.min(seen[page.id] ?? 0, Math.max(revealed - 1, 0));
   seen[page.id] = Math.max(already, revealed);
 
   // Every step is drawn from the start so the layout never jumps; the ones

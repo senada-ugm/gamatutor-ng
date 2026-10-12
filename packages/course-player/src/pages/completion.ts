@@ -1,82 +1,156 @@
+import type { Score } from '@gamatutor/tracking';
+import { statement } from '@gamatutor/tracking';
 import type { RenderContext } from '../context.js';
 import { setCard } from '../chrome/shell.js';
 import { esc } from '../dom.js';
-import { createState } from '../nav.js';
-import { stopSpeech } from '../narration.js';
+import { startRetake } from '../nav.js';
 import { scoreCourse } from '../scoring.js';
+
+const pct = (s: { raw: number; max: number }) => (s.max ? Math.round((s.raw / s.max) * 100) : 0);
+
+export function isPassed(ctx: RenderContext, score: Score | null): boolean {
+  return !score || (score.max > 0 && score.raw / score.max >= ctx.course.passingScore);
+}
+
+function learnerName(ctx: RenderContext): string | null {
+  try {
+    return ctx.adapter.learnerName?.() ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/** Reports the outcome once per attempt; the LMS keeps the latest. */
+function report(ctx: RenderContext, score: Score | null, passed: boolean): void {
+  const { state } = ctx;
+  if (state.reportedAttempt === state.attempts.length) return;
+  state.reportedAttempt = state.attempts.length;
+  ctx.adapter.emit(
+    statement(passed ? 'passed' : 'failed', ctx.course.id, {
+      result: { success: passed, ...(score ? { score } : {}) },
+      context: { attempt: state.attempts.length + 1 },
+    }),
+  );
+  void ctx.adapter.finish({
+    completed: true,
+    ...(score ? { success: passed, score } : {}),
+  });
+}
+
+function historyHtml(ctx: RenderContext): string {
+  const { attempts } = ctx.state;
+  if (!attempts.length) return '';
+  const rows = attempts
+    .map((a, i) => `<li>Percobaan ${i + 1}: ${a.raw} / ${a.max} (${pct(a)}%)</li>`)
+    .join('');
+  return `<div class="attempt-history"><b>Percobaan sebelumnya</b><ul>${rows}</ul></div>`;
+}
 
 export function renderCompletion(ctx: RenderContext): void {
   if (ctx.state.showCertificate) {
     renderCertificate(ctx);
     return;
   }
-  const score = scoreCourse(ctx.course, ctx.state);
+  const { course, state } = ctx;
+  const score = scoreCourse(course, state);
+  const passed = isPassed(ctx, score);
+  report(ctx, score, passed);
 
-  // Completion reporting is the adapter's job now — the original wrote the
-  // SCORM CMI values inline here.
-  void ctx.adapter.finish({
-    completed: true,
-    ...(score ? { score } : {}),
-  });
+  const limit = Math.round(course.passingScore * 100);
+  const scoreHtml = score
+    ? `<div class="score">Skor evaluasi: ${score.raw} / ${score.max} (${pct(score)}%)</div>
+       <div class="pass-badge ${passed ? 'pass' : 'fail'}">${passed ? 'Lulus' : 'Belum lulus'} &middot; batas kelulusan ${limit}%</div>`
+    : '';
+
+  const name = learnerName(ctx);
+  let decision: string;
+  if (score && !state.satisfied) {
+    decision = `
+      <p class="satisfaction-q" id="satisfactionQ">Apakah Anda sudah puas dengan nilai Anda?</p>
+      <div class="done-actions" role="group" aria-labelledby="satisfactionQ">
+        <button class="done-primary" id="satisfiedBtn">Ya, sudah puas</button>
+        <button class="done-secondary" id="retakeBtn">Belum, ulangi pelatihan</button>
+      </div>`;
+  } else if (!passed) {
+    decision = `
+      <p class="done-note">Nilai Anda belum mencapai batas kelulusan (${limit}%). Sertifikat diterbitkan setelah Anda lulus.</p>
+      <div class="done-actions"><button class="done-primary" id="retakeBtn">Ulangi pelatihan</button></div>`;
+  } else if (name && ctx.capabilities.certificate) {
+    decision = `
+      <p class="done-note">Sertifikat diterbitkan atas nama <b>${esc(name)}</b>, sesuai akun Anda.</p>
+      <div class="done-actions">
+        <button class="done-primary" id="certBtn">📜 Lihat sertifikat</button>
+        <button class="done-secondary" id="retakeBtn">Ulangi pelatihan</button>
+      </div>`;
+  } else {
+    decision = `
+      <p class="done-note">Sertifikat diterbitkan atas nama akun Anda, jadi hanya tersedia setelah Anda masuk (login) ke platform pelatihan.</p>
+      <div class="done-actions"><button class="done-secondary" id="retakeBtn">Ulangi pelatihan</button></div>`;
+  }
 
   setCard(
     ctx,
     `
     <div class="done-screen">
       <h1>TERIMA KASIH</h1>
-      <p>Anda telah menyelesaikan Modul 1&ndash;4 (Bab 1&ndash;3, simulasi grading) dan evaluasi &mdash; Pelatihan Skrining Retinopati Diabetika.</p>
-      ${score ? `<div class="score">Skor evaluasi: ${score.raw} / ${score.max}</div>` : ''}
-      <p style="font-size:12px;opacity:.75;">Seluruh teks, gambar, narasi, titik lesi, dan soal pada kursus ini diekstrak dari file PPTX "SAMPLE MIPA_Modul_DRIVE.pptx".</p>
-      <div class="cert-form">
-        <input type="text" id="learnerNameInput" placeholder="Masukkan nama lengkap Anda" value="${esc(ctx.state.learnerName)}">
-        <button id="certBtn">📜 Buat Sertifikat</button>
-      </div>
-      <button class="restart-btn" id="restartBtn">Ulangi Kursus</button>
+      <p>${esc(course.completion?.body ?? 'Anda telah menyelesaikan seluruh modul dan evaluasi pelatihan ini.')}</p>
+      ${scoreHtml}
+      ${historyHtml(ctx)}
+      ${decision}
     </div>
   `,
   );
 
-  const certBtn = ctx.document.getElementById('certBtn')!;
-  const nameInput = ctx.document.getElementById('learnerNameInput') as HTMLInputElement;
-
-  certBtn.onclick = () => {
-    const val = nameInput.value.trim();
-    if (!val) {
-      ctx.window.alert('Mohon isi nama Anda terlebih dahulu.');
-      return;
-    }
-    ctx.state.learnerName = val;
-    ctx.state.showCertificate = true;
+  const on = (id: string, fn: () => void) => {
+    const el = ctx.document.getElementById(id);
+    if (el) el.onclick = fn;
+  };
+  on('satisfiedBtn', () => {
+    state.satisfied = true;
     ctx.rerender();
-  };
-  nameInput.onkeydown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter') certBtn.click();
-  };
-  ctx.document.getElementById('restartBtn')!.onclick = () => {
-    stopSpeech(ctx);
-    Object.assign(ctx.state, createState());
+  });
+  on('retakeBtn', () => {
+    startRetake(
+      course,
+      state,
+      score ? { raw: score.raw, max: score.max, at: new Date().toISOString() } : null,
+    );
     ctx.rerender();
-  };
+  });
+  on('certBtn', () => {
+    state.showCertificate = true;
+    ctx.rerender();
+  });
 }
 
 export function renderCertificate(ctx: RenderContext): void {
+  const name = learnerName(ctx);
   const score = scoreCourse(ctx.course, ctx.state);
+  if (!name || !isPassed(ctx, score)) {
+    // Never print a certificate without a signed-in name and a pass.
+    ctx.state.showCertificate = false;
+    renderCompletion(ctx);
+    return;
+  }
   const WindowDate = (ctx.window as unknown as { Date: DateConstructor }).Date;
   const dateStr = new WindowDate().toLocaleDateString(ctx.course.language, {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   });
+  const desc =
+    ctx.course.completion?.certificateText ??
+    `telah menyelesaikan pelatihan “${ctx.course.title}”.`;
   setCard(
     ctx,
     `
     <div class="certificate-wrap">
       <div class="certificate">
         <div class="cert-eyebrow">SERTIFIKAT PENYELESAIAN</div>
-        <h1>${ctx.course.brand.name}</h1>
+        <h1>${esc(ctx.course.brand.name)}</h1>
         <div class="cert-given">Dengan ini menyatakan bahwa</div>
-        <div class="cert-name">${esc(ctx.state.learnerName)}</div>
-        <div class="cert-desc">telah menyelesaikan pelatihan <b>&ldquo;Skrining Retinopati Diabetika untuk Dokter Layanan Primer&rdquo;</b>, mencakup Modul 1&ndash;4 (Diabetes Mellitus, Retinopati Diabetika, Skrining &amp; Tatalaksana, Simulasi Grading) beserta evaluasi pre/post-test.</div>
+        <div class="cert-name">${esc(name)}</div>
+        <div class="cert-desc">${esc(desc)}</div>
         <div class="cert-meta">
           <div><b>${dateStr}</b>Tanggal selesai</div>
           ${score ? `<div><b>${score.raw} / ${score.max}</b>Skor evaluasi</div>` : ''}
