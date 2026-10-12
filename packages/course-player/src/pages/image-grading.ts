@@ -2,7 +2,7 @@ import type { PageOfType } from '@gamatutor/course-schema';
 import { statement } from '@gamatutor/tracking';
 import type { RenderContext } from '../context.js';
 import { cardShell, setCard, wireFooterNav } from '../chrome/shell.js';
-import { esc } from '../dom.js';
+import { attr, esc } from '../dom.js';
 
 type GradingPage = PageOfType<'image-grading'>;
 type Lesion = GradingPage['lesions'][number];
@@ -15,6 +15,8 @@ const GAP = 2.2;
 const BADGE_R = 3.4;
 
 const clamp = (v: number) => Math.min(94, Math.max(6, v));
+/** Closer than this and the badge would sit on the lesion it marks. */
+const MIN_DIST = 8;
 
 /**
  * Where a lesion's numbered badge goes: at `dx/dy` from the lesion when the
@@ -23,7 +25,8 @@ const clamp = (v: number) => Math.min(94, Math.max(6, v));
  */
 export function badgePosition(l: Lesion): { x: number; y: number } {
   if (l.dx !== undefined || l.dy !== undefined) {
-    return { x: clamp(l.x + (l.dx ?? 0)), y: clamp(l.y + (l.dy ?? 0)) };
+    const b = { x: clamp(l.x + (l.dx ?? 0)), y: clamp(l.y + (l.dy ?? 0)) };
+    if (Math.hypot(b.x - l.x, b.y - l.y) >= MIN_DIST) return b;
   }
   let vx = l.x - 50;
   let vy = l.y - 50;
@@ -33,7 +36,10 @@ export function badgePosition(l: Lesion): { x: number; y: number } {
     vy = -1;
   }
   const n = Math.hypot(vx, vy);
-  return { x: clamp(l.x + (vx / n) * OFFSET), y: clamp(l.y + (vy / n) * OFFSET) };
+  const out = { x: clamp(l.x + (vx / n) * OFFSET), y: clamp(l.y + (vy / n) * OFFSET) };
+  if (Math.hypot(out.x - l.x, out.y - l.y) >= MIN_DIST) return out;
+  // Clamped back onto the lesion at the image's edge: point inward instead.
+  return { x: clamp(l.x - (vx / n) * OFFSET), y: clamp(l.y - (vy / n) * OFFSET) };
 }
 
 const r2 = (v: number) => Math.round(v * 100) / 100;
@@ -88,7 +94,7 @@ export function renderImageGrading(ctx: RenderContext, page: GradingPage): void 
         if (o === page.correct) cls += ' correct';
         else if (o === chosen) cls += ' wrong';
       }
-      return `<label class="${cls}"><input type="radio" name="fopt" ${answered ? 'disabled' : ''} ${o === chosen ? 'checked' : ''} data-val="${esc(o)}"> ${esc(o)}</label>`;
+      return `<label class="${cls}"><input type="radio" name="fopt" ${answered ? 'disabled' : ''} ${o === chosen ? 'checked' : ''} data-val="${attr(o)}"> ${esc(o)}</label>`;
     })
     .join('');
 
@@ -102,7 +108,7 @@ export function renderImageGrading(ctx: RenderContext, page: GradingPage): void 
       const revealed = pins[li];
       const pos = `left:${r2(b.x)}%;top:${r2(b.y)}%`;
       return (
-        `<button type="button" class="pin ${revealed ? 'revealed' : ''}" data-li="${li}" style="${pos}" aria-label="Lesi ${li + 1}${revealed ? ': ' + esc(l.label) : ''}">${li + 1}</button>` +
+        `<button type="button" class="pin ${revealed ? 'revealed' : ''}" data-li="${li}" style="${pos}" aria-label="Lesi ${li + 1}${revealed ? ': ' + attr(l.label) : ''}">${li + 1}</button>` +
         // The name goes on the far side of the badge, never over the lesion.
         (revealed
           ? `<div class="pin-label${b.y > l.y ? ' below' : ''}${edgeClass(b.x)}" style="${pos}">${esc(l.label)}</div>`

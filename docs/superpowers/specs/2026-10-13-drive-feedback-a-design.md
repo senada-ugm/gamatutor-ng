@@ -109,7 +109,8 @@ Leaving the page, the sidebar, or the completion screen stops the session.
   option, so the wrong option gets `.wrong` and the feedback box `.is-wrong`
   (red, `✗ Kurang tepat.`). Lesion markers become an SVG overlay with one arrow
   per lesion and a numbered badge placed at the lesion plus `(dx, dy)`. The
-  default is 14% outward from the image centre, clamped to 6–94%. Clicking the
+  default is 16% outward from the image centre, clamped to 6–94%, and turned
+  inward when the clamp would leave it within 8% of the lesion. Clicking the
   badge reveals the label next to the badge, never on the lesion.
 - **Quiz (8).** The feedback box uses `.is-wrong` when the answer is wrong.
 - **Transcript panel (1).** Rendered with the same body formatter as page text.

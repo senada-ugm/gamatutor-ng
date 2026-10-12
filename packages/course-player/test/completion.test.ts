@@ -104,3 +104,25 @@ describe('completion', () => {
     expect(adapter.sent.filter((s) => s.verb === 'passed' || s.verb === 'failed')).toHaveLength(2);
   });
 });
+
+describe('completion before the evaluation is finished', () => {
+  it('neither scores nor reports, and sends the learner back to the first open question', () => {
+    const adapter = new NullAdapter('Ayu');
+    const m = mount(course, { adapter });
+    finishWith(m, 5);
+    click(m, 'retakeBtn');
+    // Straight to the still-open completion module via the sidebar.
+    m.player.state.moduleIdx = completionIdx;
+    m.player.state.pageIdx = 0;
+    m.player.render();
+    expect(m.doc.querySelector('.done-screen h1')!.textContent).toContain('BELUM SELESAI');
+    expect(adapter.outcomes).toHaveLength(1);
+    click(m, 'toQuizBtn');
+    expect(course.modules[m.player.state.moduleIdx]!.pages[m.player.state.pageIdx]!.type).toBe(
+      'quiz',
+    );
+    finishWith(m, 5);
+    expect(adapter.outcomes.map((o) => o.success)).toEqual([true, true]);
+    expect(adapter.outcomes[1]!.score).toMatchObject({ raw: 5, max: 5 });
+  });
+});

@@ -22,6 +22,8 @@ export interface NarrationControl {
 }
 
 const AUTO_KEY = 'gamatutor.autoNarration';
+/** How long speech may take to begin before the steps go on without it. */
+const START_TIMEOUT_MS = 2500;
 
 /** Learner preference; on unless they switched it off. Storage may be blocked. */
 export function autoNarrationEnabled(win: Window): boolean {
@@ -54,12 +56,37 @@ export function spokenText(text: string): string {
     .join(' ');
 }
 
+const MAX_WORDS = 20;
+
+/**
+ * Sentences, with long ones broken at commas: some engines (Chrome's online
+ * voices) stop a single utterance after about 15 seconds.
+ */
 export function splitSentences(text: string): string[] {
   const spoken = spokenText(text);
   if (!spoken) return [];
-  return (spoken.match(/[^.!?]+(?:[.!?]+(?=\s|$)|$)/g) ?? [spoken])
+  const sentences = (spoken.match(/[^.!?]+(?:[.!?]+(?=\s|$)|$)/g) ?? [spoken])
     .map((s) => s.trim())
     .filter(Boolean);
+  return sentences.flatMap(breakAtCommas);
+}
+
+function breakAtCommas(sentence: string): string[] {
+  if (sentence.split(/\s+/).length <= MAX_WORDS) return [sentence];
+  const parts = sentence.split(/(?<=,)\s+/);
+  const out: string[] = [];
+  let cur = '';
+  for (const part of parts) {
+    const joined = cur ? `${cur} ${part}` : part;
+    if (cur && joined.split(/\s+/).length > MAX_WORDS) {
+      out.push(cur);
+      cur = part;
+    } else {
+      cur = joined;
+    }
+  }
+  if (cur) out.push(cur);
+  return out;
 }
 
 /** How long a step stays the newest one when there is no voice to follow. */
@@ -139,6 +166,8 @@ export class NarrationSession implements NarrationControl {
   private audio: HTMLAudioElement | null = null;
   private segIdx = 0;
   private voice = false;
+  /** The learner paused; nothing appears on its own until they resume. */
+  private paused = false;
   readonly segments: Segment[];
   readonly steps: number;
 
@@ -193,17 +222,23 @@ export class NarrationSession implements NarrationControl {
         return;
       }
     }
-    if (!this.voice) this.runTimer();
+    if (!this.voice && !this.paused) this.runTimer();
   }
 
   toggle(): void {
     if (this.voice) {
       this.halt();
+      this.paused = true;
       this.onChange();
       return;
     }
+    this.paused = false;
+    // Resume at the newest step; with nothing or everything shown, replay all.
     const shown = this.ctx.state.revealCounts[this.page.id];
-    const from = shown ? this.segments.findIndex((s) => s.step === shown - 1) : 0;
+    const from =
+      shown === undefined || shown <= 0 || shown >= this.steps
+        ? 0
+        : this.segments.findIndex((s) => s.step === shown - 1);
     this.playFrom(Math.max(from, 0));
   }
 
@@ -315,6 +350,17 @@ export class NarrationSession implements NarrationControl {
         const u = new w.SpeechSynthesisUtterance!(chunk.text);
         u.lang = this.ctx.course.language;
         u.onend = advance;
+        if (i === 0) {
+          // Some browsers accept speak() and then never start (no user
+          // gesture on iOS, a hung engine). Do not leave the page silent.
+          let started = false;
+          u.onstart = () => {
+            started = true;
+          };
+          setTimeout(() => {
+            if (!started && !done) this.fallBack(gen);
+          }, START_TIMEOUT_MS);
+        }
         u.onerror = (e: SpeechSynthesisErrorEvent) => {
           if (gen !== this.gen) return;
           // Interrupted means someone else cancelled us; anything else means

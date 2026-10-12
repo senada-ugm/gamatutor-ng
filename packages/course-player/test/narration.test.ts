@@ -46,6 +46,7 @@ const course: Course = parseCourse({
 
 class FakeUtterance {
   lang = '';
+  onstart: (() => void) | null = null;
   onend: (() => void) | null = null;
   onerror: ((e: { error: string }) => void) | null = null;
   constructor(public text: string) {}
@@ -214,5 +215,57 @@ describe('with recorded audio', () => {
     a.currentTime = 5.5;
     a.dispatchEvent(new m.dom.window.Event('timeupdate'));
     expect(m.player.state.revealCounts['rec']).toBe(2);
+  });
+});
+
+describe('review fixes', () => {
+  it('goes on without a voice when speech is accepted but never starts', () => {
+    const m = mount(course, { capabilities: { narration: 'webspeech' } });
+    installSpeech(m);
+    goTo(m, course, 'list');
+    expect(shown(m)).toBe(0);
+    vi.advanceTimersByTime(2500);
+    vi.advanceTimersByTime(30000);
+    expect(shown(m)).toBe(3);
+  });
+
+  it('keeps waiting while speech has started, even past the watchdog', () => {
+    const m = mount(course, { capabilities: { narration: 'webspeech' } });
+    const spoken = installSpeech(m);
+    goTo(m, course, 'list');
+    spoken[0]!.onstart!();
+    vi.advanceTimersByTime(3000);
+    expect(shown(m)).toBe(0);
+  });
+
+  it('replays from the start once every step is shown', () => {
+    const m = mount(course, { capabilities: { narration: 'webspeech' } });
+    const spoken = installSpeech(m);
+    m.player.state.revealCounts['list'] = 3;
+    goTo(m, course, 'list');
+    const btn = () => m.doc.getElementById('speakBtn') as HTMLButtonElement;
+    btn().click(); // pause
+    btn().click(); // play again
+    expect(spoken.at(-1)!.text).toBe('Berikut faktornya.');
+  });
+
+  it('does not bring steps in on its own after the learner paused', () => {
+    const m = mount(course, { capabilities: { narration: 'webspeech' } });
+    installSpeech(m);
+    goTo(m, course, 'list');
+    (m.doc.getElementById('speakBtn') as HTMLButtonElement).click(); // pause
+    (m.doc.getElementById('nextBtn') as HTMLButtonElement).click(); // reveal one by hand
+    expect(shown(m)).toBe(1);
+    vi.advanceTimersByTime(60000);
+    expect(shown(m)).toBe(1);
+  });
+
+  it('breaks very long sentences at commas', () => {
+    const long = Array.from({ length: 30 }, (_, i) => `kata${i}`)
+      .join(' ')
+      .replace('kata12', 'kata12,');
+    const parts = splitSentences(long);
+    expect(parts.length).toBe(2);
+    expect(parts[0]!.endsWith('kata12,')).toBe(true);
   });
 });

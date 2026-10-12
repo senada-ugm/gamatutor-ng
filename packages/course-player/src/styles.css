@@ -311,13 +311,13 @@ button.pin{border:2px solid #fff;padding:0;font-family:inherit;}
 .content-layout.stacked{align-items:center;}
 .content-layout.stacked .content-text{width:100%;}
 .content-layout.stacked .content-image{max-width:none;flex:none;width:auto;}
-.content-layout.stacked .content-image img{max-height:calc(var(--media-h) - 6vh);}
+.content-layout.stacked .content-image img{max-height:calc(var(--media-h) - 12vh);}
 .anim-stack{margin:0 auto;}
 .anim-stack.two-col{gap:clamp(6px,1vh,10px) 16px;}
 .anim-stack.two-col .anim-step p{padding:clamp(7px,1.1vh,12px) 14px;}
 .anim-step.icon-row{padding:clamp(6px,1vh,12px) 16px;}
 .anim-step.icon-row img{width:clamp(36px,5vh,56px);height:clamp(36px,5vh,56px);flex-basis:clamp(36px,5vh,56px);}
-.anim-video{display:block;max-height:calc(var(--media-h) - 4vh);margin:0 auto;}
+.anim-video{display:block;max-height:calc(var(--media-h) - 9vh);margin:0 auto;}
 .cards-trailing img{max-height:calc(var(--media-h) - 10vh);width:auto;}
 .feature-card{padding:clamp(10px,1.6vh,16px) 18px;}
 .feature-card.stat{min-height:clamp(80px,11vh,104px);}
@@ -356,6 +356,10 @@ button.pin{border:2px solid #fff;padding:0;font-family:inherit;}
 .certificate h1{margin-bottom:clamp(12px,2.6vh,26px);}
 .cert-meta{margin-top:clamp(16px,3.6vh,36px);}
 .certificate-wrap{padding:clamp(12px,3vh,34px);}
+
+/* The completion screens grow with the attempt history; let them scroll
+   rather than clip, and keep their top reachable when they do. */
+.done-screen,.certificate-wrap{overflow-y:auto;justify-content:safe center;}
 
 @media(max-width:760px){
   .app{flex-direction:column;height:auto;min-height:100dvh;}

@@ -61,7 +61,7 @@ describe('badge placement', () => {
   });
 
   it('honours an explicit offset and keeps the badge inside the image', () => {
-    expect(badgePosition({ x: 10, y: 50, label: '', dx: -20, dy: 5 })).toEqual({ x: 6, y: 55 });
+    expect(badgePosition({ x: 20, y: 50, label: '', dx: -20, dy: 5 })).toEqual({ x: 6, y: 55 });
   });
 
   it('picks a direction even for a lesion at the centre', () => {
@@ -75,6 +75,33 @@ describe('badge placement', () => {
     const tip = svg.match(/points="([\d.]+),([\d.]+)/)!;
     expect(Number(tip[2])).toBeLessThan(30);
     expect(30 - Number(tip[2])).toBeCloseTo(2.2, 1);
+  });
+});
+
+describe('review fixes', () => {
+  it('turns a badge inward when the edge would clamp it onto its lesion', () => {
+    const l = { x: 92, y: 50, label: '' };
+    const b = badgePosition(l);
+    expect(Math.hypot(b.x - l.x, b.y - l.y)).toBeGreaterThanOrEqual(8);
+    expect(b.x).toBeLessThan(l.x);
+  });
+
+  it('ignores a zero offset that would put the badge on the lesion', () => {
+    const l = { x: 30, y: 30, label: '', dx: 0, dy: 0 };
+    const b = badgePosition(l);
+    expect(Math.hypot(b.x - l.x, b.y - l.y)).toBeGreaterThanOrEqual(8);
+  });
+
+  it('matches an option whose text contains a double quote', () => {
+    const quoted = structuredClone(course);
+    const page = quoted.modules[4]!.pages[2]!;
+    if (page.type !== 'image-grading') throw new Error('fixture moved');
+    page.options = ['Tidak ada "RD"', 'Ada "RD"'];
+    page.correct = 'Ada "RD"';
+    const m = mount(quoted);
+    goTo(m, quoted, page.id);
+    choose(m.doc, 'Ada "RD"');
+    expect(m.doc.querySelector('.reasoning-box')!.classList.contains('is-wrong')).toBe(false);
   });
 });
 
