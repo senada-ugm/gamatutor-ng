@@ -111,6 +111,9 @@ namespace Lms {
     name: string;
     email: string;
     phone?: string;
+    profession?: string;
+    institutionName?: string;
+    strNumber?: string;
     about?: string;
     educationLevel?: string;
     address?: string;
@@ -132,6 +135,9 @@ namespace Lms {
    *  field; omitted fields stay as they are. */
   model ParticipantProfileUpdate {
     phone?: string | null;
+    profession?: string | null;
+    institutionName?: string | null;
+    strNumber?: string | null;
     about?: string | null;
     educationLevel?: string | null;
     address?: string | null;

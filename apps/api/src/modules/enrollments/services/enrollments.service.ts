@@ -506,6 +506,9 @@ function toParticipantProfile(
     name: account.name,
     email: account.email,
     phone: row.phone ?? undefined,
+    profession: row.profession ?? undefined,
+    institutionName: row.institutionName ?? undefined,
+    strNumber: row.strNumber ?? undefined,
     about: row.about ?? undefined,
     educationLevel: row.educationLevel ?? undefined,
     address: row.address ?? undefined,
@@ -586,6 +589,9 @@ function emptyProfileRow(userId: string): typeof participantProfiles.$inferSelec
   return {
     id: userId,
     phone: null,
+    profession: null,
+    institutionName: null,
+    strNumber: null,
     about: null,
     educationLevel: null,
     address: null,
@@ -627,6 +633,9 @@ export async function updateParticipantProfile(
   const patch: Record<string, unknown> = {}
   const textFields = [
     "phone",
+    "profession",
+    "institutionName",
+    "strNumber",
     "about",
     "educationLevel",
     "address",

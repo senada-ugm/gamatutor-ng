@@ -232,6 +232,33 @@ export const lessonProgress = pgTable(
   ]
 )
 
+/** Detailed dwell time and interaction telemetry for clinical learning research.
+ *  Records per-slide entry/exit timestamps, active dwell duration, voiceover audio
+ *  listen time, and element interactions. Backs CSV research exports for FK-KMK UGM. */
+export const learningTelemetryLogs = pgTable(
+  "learning_telemetry_logs",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id").notNull(),
+    courseId: text("course_id").notNull(),
+    moduleId: text("module_id"),
+    slideId: text("slide_id").notNull(),
+    sessionId: text("session_id"),
+    enteredAt: timestamp("entered_at").notNull(),
+    exitedAt: timestamp("exited_at"),
+    durationSeconds: integer("duration_seconds").notNull().default(0),
+    audioListenedSeconds: integer("audio_listened_seconds").notNull().default(0),
+    interactedElements: jsonb("interacted_elements").$type<Record<string, unknown>>().default({}),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("learning_telemetry_user_idx").on(table.userId),
+    index("learning_telemetry_course_idx").on(table.courseId),
+    index("learning_telemetry_slide_idx").on(table.slideId),
+    index("learning_telemetry_created_at_idx").on(table.createdAt),
+  ]
+)
+
 /** A per-course instructor assignment/invite. userId is resolved by email
  *  lookup against `user` at invite time and re-checked on each read (an
  *  invite accepted before the invitee had an account backfills once they
@@ -303,6 +330,9 @@ export const enrollments = pgTable(
 export const participantProfiles = pgTable("participant_profiles", {
   id: text("id").primaryKey(),
   phone: text("phone"),
+  profession: text("profession"),
+  institutionName: text("institution_name"),
+  strNumber: text("str_number"),
   about: text("about"),
   educationLevel: text("education_level"),
   address: text("address"),

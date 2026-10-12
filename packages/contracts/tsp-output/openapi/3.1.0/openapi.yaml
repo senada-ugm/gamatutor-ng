@@ -8571,6 +8571,12 @@ components:
           type: string
         phone:
           type: string
+        profession:
+          type: string
+        institutionName:
+          type: string
+        strNumber:
+          type: string
         about:
           type: string
         educationLevel:
@@ -8617,6 +8623,18 @@ components:
       type: object
       properties:
         phone:
+          anyOf:
+            - type: string
+            - type: 'null'
+        profession:
+          anyOf:
+            - type: string
+            - type: 'null'
+        institutionName:
+          anyOf:
+            - type: string
+            - type: 'null'
+        strNumber:
           anyOf:
             - type: string
             - type: 'null'

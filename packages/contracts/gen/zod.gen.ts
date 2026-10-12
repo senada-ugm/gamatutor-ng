@@ -1073,6 +1073,9 @@ export const zParticipantProfile = z.object({
     name: z.string(),
     email: z.string(),
     phone: z.string().optional(),
+    profession: z.string().optional(),
+    institutionName: z.string().optional(),
+    strNumber: z.string().optional(),
     about: z.string().optional(),
     educationLevel: z.string().optional(),
     address: z.string().optional(),
@@ -1096,6 +1099,9 @@ export const zParticipantProfile = z.object({
  */
 export const zParticipantProfileUpdate = z.object({
     phone: z.string().nullish(),
+    profession: z.string().nullish(),
+    institutionName: z.string().nullish(),
+    strNumber: z.string().nullish(),
     about: z.string().nullish(),
     educationLevel: z.string().nullish(),
     address: z.string().nullish(),

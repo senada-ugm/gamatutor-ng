@@ -1500,6 +1500,9 @@ export type ParticipantProfile = {
     name: string;
     email: string;
     phone?: string;
+    profession?: string;
+    institutionName?: string;
+    strNumber?: string;
     about?: string;
     educationLevel?: string;
     address?: string;
@@ -1523,6 +1526,9 @@ export type ParticipantProfile = {
  */
 export type ParticipantProfileUpdate = {
     phone?: string | null;
+    profession?: string | null;
+    institutionName?: string | null;
+    strNumber?: string | null;
     about?: string | null;
     educationLevel?: string | null;
     address?: string | null;
