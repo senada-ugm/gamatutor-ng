@@ -3,7 +3,7 @@ import type { RenderContext } from '../context.js';
 import { cardShell, setCard, wireFooterNav } from '../chrome/shell.js';
 import { esc, kickerHtml, renderBodyBlock } from '../dom.js';
 import { revealCount } from '../nav.js';
-import { wireSpeakButton } from '../narration.js';
+import { speakButtonHtml, wireSpeakButton } from '../narration.js';
 
 type ContentPage = PageOfType<'content'>;
 type RevealStep = NonNullable<ContentPage['reveal_steps']>[number];
@@ -18,7 +18,7 @@ export function renderContent(ctx: RenderContext, page: ContentPage): void {
     ${page.title ? `<h2>${esc(page.title)}</h2><div class="title-underline"></div>` : '<div style="height:14px"></div>'}
     <div class="content-layout${page.imageLayout === 'below' ? ' stacked' : ''}">
       <div class="content-text">
-        ${page.transcript ? `<div class="speak-row"><button class="speak-btn" id="speakBtn">🔊 Dengarkan Narasi</button></div>` : ''}
+        ${speakButtonHtml(ctx)}
         <div class="body-block">${renderBodyBlock(page.body)}</div>
       </div>
       ${page.image ? `<div class="content-image"><img src="${page.image}" alt="Ilustrasi slide ${page.slide}">${page.imageCaption ? `<div class="cap">${esc(page.imageCaption)}</div>` : ''}</div>` : ''}
@@ -26,7 +26,7 @@ export function renderContent(ctx: RenderContext, page: ContentPage): void {
   `;
   setCard(ctx, cardShell(ctx, body));
   wireFooterNav(ctx);
-  wireSpeakButton(ctx, page.transcript);
+  wireSpeakButton(ctx);
 }
 
 function stepHtml(step: RevealStep, cls: string, page: ContentPage): string {
@@ -60,12 +60,12 @@ function renderAnimatedContent(
   const body = `
     ${kickerHtml(page)}
     ${page.title ? `<h2>${esc(page.title)}</h2><div class="title-underline"></div>` : '<div style="height:14px"></div>'}
-    ${page.transcript ? `<div class="speak-row"><button class="speak-btn" id="speakBtn">🔊 Dengarkan Narasi</button></div>` : ''}
+    ${speakButtonHtml(ctx)}
     ${page.body ? `<div class="body-block">${renderBodyBlock(page.body)}</div>` : ''}
     <div class="anim-stack">${stepsHtml}</div>
     <div class="anim-hint">${notYetDone ? `Klik &#8594; untuk melanjutkan (${revealed}/${total})` : `&#10003; Semua bagian slide ini sudah ditampilkan.`}</div>
   `;
   setCard(ctx, cardShell(ctx, body));
   wireFooterNav(ctx);
-  wireSpeakButton(ctx, page.transcript);
+  wireSpeakButton(ctx);
 }

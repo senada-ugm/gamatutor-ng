@@ -1,6 +1,7 @@
 import type { Course } from '@gamatutor/course-schema';
 import type { TrackingAdapter } from '@gamatutor/tracking';
 import type { PlayerState } from './nav.js';
+import type { NarrationControl } from './narration.js';
 
 export interface PlayerCapabilities {
   narration: 'webspeech' | 'audio' | 'off';
@@ -27,6 +28,8 @@ export interface RenderContext {
   adapter: TrackingAdapter;
   capabilities: PlayerCapabilities;
   random: () => number;
+  /** The current page's narration; inert on pages without one. */
+  narration: NarrationControl;
   rerender: () => void;
   goNext: () => void;
   goPrev: () => void;

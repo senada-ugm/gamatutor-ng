@@ -2,7 +2,7 @@ import type { PageOfType } from '@gamatutor/course-schema';
 import type { RenderContext } from '../context.js';
 import { cardShell, setCard, wireFooterNav } from '../chrome/shell.js';
 import { esc, kickerHtml } from '../dom.js';
-import { wireSpeakButton } from '../narration.js';
+import { speakButtonHtml, wireSpeakButton } from '../narration.js';
 
 export function renderCards(ctx: RenderContext, page: PageOfType<'cards'>): void {
   const cols = page.columns || (page.cards.length >= 3 ? 3 : 2);
@@ -28,11 +28,11 @@ export function renderCards(ctx: RenderContext, page: PageOfType<'cards'>): void
     <h2>${esc(page.title)}</h2>
     <div class="title-underline"></div>
     ${page.intro ? `<p style="font-size:14px;color:#334;margin:0 0 14px;line-height:1.6;">${esc(page.intro)}</p>` : ''}
-    ${page.transcript ? `<div class="speak-row"><button class="speak-btn" id="speakBtn">🔊 Dengarkan Narasi</button></div>` : ''}
+    ${speakButtonHtml(ctx)}
     <div class="cards-grid cols-${cols}">${cardsHtml}</div>
     ${trailing}
   `;
   setCard(ctx, cardShell(ctx, body));
   wireFooterNav(ctx);
-  wireSpeakButton(ctx, page.transcript);
+  wireSpeakButton(ctx);
 }

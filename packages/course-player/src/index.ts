@@ -1,19 +1,9 @@
-import type { Course } from '@gamatutor/course-schema';
+import type { Course, Page } from '@gamatutor/course-schema';
 import { NullAdapter, statement, type TrackingAdapter } from '@gamatutor/tracking';
-import {
-  DEFAULT_CAPABILITIES,
-  type PlayerCapabilities,
-  type RenderContext,
-} from './context.js';
+import { DEFAULT_CAPABILITIES, type PlayerCapabilities, type RenderContext } from './context.js';
 import { renderSidebar } from './chrome/sidebar.js';
-import { stopSpeech } from './narration.js';
-import {
-  createState,
-  nextTarget,
-  prevTarget,
-  revealCount,
-  type PlayerState,
-} from './nav.js';
+import { autoNarrationEnabled, NarrationSession, stopSpeech } from './narration.js';
+import { createState, nextTarget, prevTarget, revealCount, type PlayerState } from './nav.js';
 import { renderCards } from './pages/cards.js';
 import { renderCompletion } from './pages/completion.js';
 import { renderContent } from './pages/content.js';
@@ -54,6 +44,8 @@ export function createPlayer(opts: PlayerOptions): Player {
   const state = createState();
   const adapter = opts.adapter ?? new NullAdapter();
   let launched = false;
+  let session: NarrationSession | null = null;
+  let sessionPageId: string | null = null;
 
   const ctx: RenderContext = {
     document: doc,
@@ -63,13 +55,37 @@ export function createPlayer(opts: PlayerOptions): Player {
     adapter,
     capabilities: { ...DEFAULT_CAPABILITIES, ...opts.capabilities },
     random: opts.random ?? (() => Math.random()),
+    narration: {
+      get available() {
+        return session?.available ?? false;
+      },
+      get playing() {
+        return session?.playing ?? false;
+      },
+      toggle: () => session?.toggle(),
+    },
     rerender: () => render(),
     goNext: () => goNext(),
     goPrev: () => goPrev(),
   };
 
-  function goPrev(): void {
+  function endSession(): void {
+    session?.stop();
+    session = null;
+    sessionPageId = null;
     stopSpeech(ctx);
+  }
+
+  /** Reveals up to and including `stepIdx`; never hides what was shown. */
+  function revealTo(pageId: string, stepIdx: number): void {
+    const shown = state.revealCounts[pageId] ?? 1;
+    if (stepIdx + 1 <= shown) return;
+    state.revealCounts[pageId] = stepIdx + 1;
+    render();
+  }
+
+  function goPrev(): void {
+    endSession();
     const target = prevTarget(ctx.course, state);
     if (target.kind !== 'move') return;
     state.moduleIdx = target.moduleIdx;
@@ -81,12 +97,12 @@ export function createPlayer(opts: PlayerOptions): Player {
     const target = nextTarget(ctx.course, state);
     if (target.kind === 'blocked') return;
     if (target.kind === 'reveal') {
-      stopSpeech(ctx);
       state.revealCounts[target.pageId] = target.to;
       render();
+      session?.seekToStep(target.to - 1);
       return;
     }
-    stopSpeech(ctx);
+    endSession();
     state.moduleIdx = target.moduleIdx;
     state.pageIdx = target.pageIdx;
     if (target.pageIdx === 0) {
@@ -101,6 +117,7 @@ export function createPlayer(opts: PlayerOptions): Player {
     if (!module) return;
 
     if (module.completion) {
+      endSession();
       renderCompletion(ctx);
       return;
     }
@@ -108,8 +125,34 @@ export function createPlayer(opts: PlayerOptions): Player {
     const page = module.pages[state.pageIdx];
     if (!page) return;
 
-    adapter.emit(statement('experienced', page.id));
+    // A session belongs to one page visit; re-rendering the same page (a
+    // revealed step, a clicked hotspot) must not restart the voice.
+    if (sessionPageId !== page.id) {
+      endSession();
+      adapter.emit(statement('experienced', page.id));
+      const pageId = page.id;
+      const s = new NarrationSession(
+        ctx,
+        page,
+        (i) => revealTo(pageId, i),
+        () => {
+          if (session === s) render();
+        },
+      );
+      session = s;
+      sessionPageId = page.id;
+      const autoplay = autoNarrationEnabled(ctx.window);
+      if (state.revealCounts[page.id] === undefined && s.holdsFirstStep(autoplay)) {
+        state.revealCounts[page.id] = 0;
+      }
+      renderPage(page);
+      s.start(autoplay);
+      return;
+    }
+    renderPage(page);
+  }
 
+  function renderPage(page: Page): void {
     switch (page.type) {
       case 'hero':
         return renderHero(ctx, page);
@@ -144,7 +187,7 @@ export function createPlayer(opts: PlayerOptions): Player {
       render();
     },
     destroy() {
-      stopSpeech(ctx);
+      endSession();
       const card = doc.getElementById('contentCard');
       if (card) card.innerHTML = '';
     },
