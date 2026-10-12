@@ -48,12 +48,12 @@ export function PlayerShell({
         <header className="flex items-center gap-2 border-b px-4 lg:px-6">
           <Sheet open={outlineOpen} onOpenChange={setOutlineOpen}>
             <SheetTrigger
-              render={<Button variant="ghost" size="icon-sm" aria-label="Daftar Materi" className="lg:hidden" />}
+              render={<Button variant="ghost" size="icon-sm" aria-label="Course Outline" className="lg:hidden" />}
             >
               <Menu />
             </SheetTrigger>
             <SheetContent side="left" className="w-80 p-0">
-              <SheetTitle className="sr-only">Daftar Materi</SheetTitle>
+              <SheetTitle className="sr-only">Course Outline</SheetTitle>
               <div className="flex h-full flex-col overflow-hidden">
                 <CourseOutline course={course} completedLessonIds={completedLessonIds} />
               </div>
@@ -66,7 +66,7 @@ export function PlayerShell({
               params={params}
               {...tabNavItemProps(!!matchRoute({ to: "/learn/$courseId", params, fuzzy: false }))}
             >
-              Materi
+              Lessons
             </Link>
             <Link
               to="/learn/$courseId/quizzes"
@@ -79,7 +79,7 @@ export function PlayerShell({
                 })
               )}
             >
-              Kuis
+              Quizzes
             </Link>
             <Link
               to="/learn/$courseId/assignments"
@@ -92,7 +92,7 @@ export function PlayerShell({
                 })
               )}
             >
-              Tugas
+              Assignments
             </Link>
             <Link
               to="/learn/$courseId/attendance"
@@ -105,7 +105,7 @@ export function PlayerShell({
                 })
               )}
             >
-              Presensi
+              Attendance
             </Link>
             <Link
               to="/learn/$courseId/discussions"
@@ -118,7 +118,7 @@ export function PlayerShell({
                 })
               )}
             >
-              Diskusi
+              Discussions
             </Link>
             <Link
               to="/learn/$courseId/pengumuman"
@@ -131,7 +131,7 @@ export function PlayerShell({
                 })
               )}
             >
-              Pengumuman
+              Announcements
             </Link>
           </TabNav>
         </header>
@@ -152,13 +152,13 @@ function CourseOutline({ course, completedLessonIds }: { course: ContractCourse;
   return (
     <>
       <div className="space-y-2 p-4 pe-12 lg:pe-4">
-        <BackLink to="/dashboard" label="Kembali ke Dasbor" />
+        <BackLink to="/dashboard" label="Back to Dashboard" />
         <h2 className="line-clamp-2 leading-snug font-semibold">{course.title}</h2>
         {totalLessons > 0 ? (
           <div className="space-y-1.5">
-            <Progress value={percent} aria-label="Progres pelatihan" />
+            <Progress value={percent} aria-label="Course progress" />
             <p className="text-xs text-muted-foreground">
-              {completed.size} dari {totalLessons} pelajaran selesai
+              {completed.size} of {totalLessons} lessons completed
             </p>
           </div>
         ) : null}

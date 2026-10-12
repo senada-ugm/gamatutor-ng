@@ -11,12 +11,7 @@ interface ClinicalFundusGradingProps {
   className?: string
 }
 
-export function ClinicalFundusGrading({
-  page,
-  onGraded,
-  onNext,
-  className = "",
-}: ClinicalFundusGradingProps) {
+export function ClinicalFundusGrading({ page, onGraded, onNext, className = "" }: ClinicalFundusGradingProps) {
   const [selectedOption, setSelectedOption] = useState<string | null>(null)
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
   const [showLesions, setShowLesions] = useState<boolean>(true)
@@ -40,19 +35,14 @@ export function ClinicalFundusGrading({
       {/* Header Banner */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3">
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20">
+          <Badge variant="outline" className="border-primary/20 bg-primary/5 text-primary">
             SIMULATION • {page.level || "CLINICAL GRADING"}
           </Badge>
           <h2 className="text-xl font-bold tracking-tight">Fundus Photography Clinical Evaluation</h2>
         </div>
 
         <div className="flex items-center gap-2">
-          <Button
-            size="sm"
-            variant="outline"
-            className="h-8 text-xs gap-1.5"
-            onClick={() => setIsZoomed(!isZoomed)}
-          >
+          <Button size="sm" variant="outline" className="h-8 gap-1.5 text-xs" onClick={() => setIsZoomed(!isZoomed)}>
             {isZoomed ? <ZoomOut className="h-3.5 w-3.5" /> : <ZoomIn className="h-3.5 w-3.5" />}
             {isZoomed ? "Reset Scale" : "Zoom 1.5x"}
           </Button>
@@ -61,7 +51,7 @@ export function ClinicalFundusGrading({
             <Button
               size="sm"
               variant={showLesions ? "secondary" : "outline"}
-              className="h-8 text-xs gap-1.5"
+              className="h-8 gap-1.5 text-xs"
               onClick={() => setShowLesions(!showLesions)}
             >
               <Eye className="h-3.5 w-3.5" />
@@ -71,24 +61,24 @@ export function ClinicalFundusGrading({
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-12 items-start">
+      <div className="grid items-start gap-6 lg:grid-cols-12">
         {/* Fundus Examination Stage */}
-        <div className="lg:col-span-8 flex flex-col items-center">
+        <div className="flex flex-col items-center lg:col-span-8">
           <div
-            className={`relative w-full max-w-2xl overflow-hidden rounded-2xl border bg-black shadow-lg select-none transition-transform duration-300 ${
-              isZoomed ? "scale-125 z-20 cursor-move" : ""
+            className={`relative w-full max-w-2xl overflow-hidden rounded-2xl border bg-black shadow-lg transition-transform duration-300 select-none ${
+              isZoomed ? "z-20 scale-125 cursor-move" : ""
             }`}
           >
             <img
               src={page.image}
               alt="High-resolution retinal fundus photograph"
-              className="w-full h-auto object-contain block max-h-[500px]"
+              className="block h-auto max-h-[500px] w-full object-contain"
               loading="eager"
             />
 
             {/* Non-Obscuring SVG Lesion Pointer Arrows (Review #7) */}
             {isSubmitted && showLesions && page.lesions.length > 0 && (
-              <div className="absolute inset-0 pointer-events-none">
+              <div className="pointer-events-none absolute inset-0">
                 {page.lesions.map((lesion, idx) => {
                   // Determine offset positioning so label doesn't cover lesion
                   const isUpperHalf = lesion.y < 50
@@ -109,7 +99,7 @@ export function ClinicalFundusGrading({
                     >
                       {/* SVG Target Reticle and Pointer Arrow */}
                       <svg
-                        className="overflow-visible absolute"
+                        className="absolute overflow-visible"
                         style={{
                           left: 0,
                           top: 0,
@@ -157,7 +147,7 @@ export function ClinicalFundusGrading({
 
                       {/* Offset Label Badge */}
                       <div
-                        className="pointer-events-auto absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-md bg-slate-900/95 text-white px-2 py-0.5 text-[11px] font-semibold tracking-wide border border-red-500 shadow-md backdrop-blur-xs"
+                        className="pointer-events-auto absolute -translate-x-1/2 -translate-y-1/2 rounded-md border border-red-500 bg-slate-900/95 px-2 py-0.5 text-[11px] font-semibold tracking-wide whitespace-nowrap text-white shadow-md backdrop-blur-xs"
                         style={{
                           left: `${labelOffsetX}px`,
                           top: `${labelOffsetY}px`,
@@ -172,10 +162,10 @@ export function ClinicalFundusGrading({
             )}
           </div>
 
-          <div className="w-full flex items-center justify-between text-xs text-muted-foreground mt-2 px-1">
+          <div className="mt-2 flex w-full items-center justify-between px-1 text-xs text-muted-foreground">
             <span>Standard 45° macular-centered fundus view</span>
             {isSubmitted && page.lesions.length > 0 && (
-              <span className="text-red-500 font-medium">
+              <span className="font-medium text-red-500">
                 {page.lesions.length} verified lesion landmarks indicated
               </span>
             )}
@@ -183,7 +173,7 @@ export function ClinicalFundusGrading({
         </div>
 
         {/* Diagnostic Options & Rationale Panel */}
-        <div className="lg:col-span-4 space-y-4">
+        <div className="space-y-4 lg:col-span-4">
           <div className="space-y-1">
             <h3 className="text-sm font-bold text-foreground">Clinical Diagnostic Options:</h3>
             <p className="text-xs text-muted-foreground">
@@ -218,15 +208,13 @@ export function ClinicalFundusGrading({
                   type="button"
                   onClick={() => handleSelect(opt)}
                   disabled={isSubmitted}
-                  className={`w-full text-left rounded-xl border p-3.5 text-xs leading-relaxed transition-all cursor-pointer shadow-xs flex items-center justify-between gap-3 ${btnBorder}`}
+                  className={`flex w-full cursor-pointer items-center justify-between gap-3 rounded-xl border p-3.5 text-left text-xs leading-relaxed shadow-xs transition-all ${btnBorder}`}
                 >
                   <span className="flex-1">{opt}</span>
                   {isSubmitted && opt === page.correct && (
-                    <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
+                    <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-600" />
                   )}
-                  {isSubmitted && isSelected && !isCorrect && (
-                    <XCircle className="h-5 w-5 text-red-600 shrink-0" />
-                  )}
+                  {isSubmitted && isSelected && !isCorrect && <XCircle className="h-5 w-5 shrink-0 text-red-600" />}
                 </button>
               )
             })}
@@ -234,24 +222,20 @@ export function ClinicalFundusGrading({
 
           {/* Submission and Feedback Banner */}
           {!isSubmitted ? (
-            <Button
-              onClick={handleSubmit}
-              disabled={!selectedOption}
-              className="w-full font-semibold shadow-sm"
-            >
+            <Button onClick={handleSubmit} disabled={!selectedOption} className="w-full font-semibold shadow-sm">
               Verify Clinical Diagnosis
             </Button>
           ) : (
-            <div className="space-y-3 animate-in fade-in">
+            <div className="animate-in space-y-3 fade-in">
               {/* Review #8: Vivid Red for incorrect / Vivid Green for correct */}
               <div
-                className={`rounded-xl border p-4 text-xs leading-relaxed space-y-2 ${
+                className={`space-y-2 rounded-xl border p-4 text-xs leading-relaxed ${
                   isCorrect
-                    ? "bg-emerald-500/15 border-emerald-500 text-emerald-950 dark:text-emerald-200"
-                    : "bg-red-500/15 border-red-500 text-red-950 dark:text-red-200"
+                    ? "border-emerald-500 bg-emerald-500/15 text-emerald-950 dark:text-emerald-200"
+                    : "border-red-500 bg-red-500/15 text-red-950 dark:text-red-200"
                 }`}
               >
-                <div className="flex items-center gap-2 font-bold text-sm">
+                <div className="flex items-center gap-2 text-sm font-bold">
                   {isCorrect ? (
                     <>
                       <CheckCircle2 className="h-5 w-5 text-emerald-600" />

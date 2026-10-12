@@ -103,7 +103,7 @@ export function MatchingPairGame({
   return (
     <div className={`space-y-5 ${className}`}>
       {/* Title & Guidance Header */}
-      <div className="rounded-xl border bg-card p-4 space-y-1">
+      <div className="space-y-1 rounded-xl border bg-card p-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-bold text-foreground">{title}</h3>
           <Badge variant="outline" className="font-mono text-xs">
@@ -114,7 +114,8 @@ export function MatchingPairGame({
           <p className="text-xs text-muted-foreground">{intro}</p>
         ) : (
           <p className="text-xs text-muted-foreground">
-            Click a risk factor on the left, then click its corresponding clinical explanation on the right to link them.
+            Click a risk factor on the left, then click its corresponding clinical explanation on the right to link
+            them.
           </p>
         )}
       </div>
@@ -123,9 +124,7 @@ export function MatchingPairGame({
       <div className="grid gap-6 md:grid-cols-2">
         {/* Left Column: Risk Factor Terms */}
         <div className="space-y-3">
-          <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Risk Factor Terms
-          </h4>
+          <h4 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">Risk Factor Terms</h4>
           <div className="space-y-2.5">
             {pairs.map((pair, pIdx) => {
               const isSelected = selectedLeft === pair.id
@@ -148,13 +147,13 @@ export function MatchingPairGame({
                 <div
                   key={pair.id}
                   onClick={() => handleSelectLeft(pair.id)}
-                  className={`flex items-center justify-between rounded-xl border p-3.5 text-sm font-semibold transition-all cursor-pointer shadow-xs ${borderClass}`}
+                  className={`flex cursor-pointer items-center justify-between rounded-xl border p-3.5 text-sm font-semibold shadow-xs transition-all ${borderClass}`}
                   role="button"
                   tabIndex={0}
                   aria-pressed={isSelected}
                 >
                   <div className="flex items-center gap-2">
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-muted text-xs font-mono font-bold">
+                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-muted font-mono text-xs font-bold">
                       {pIdx + 1}
                     </span>
                     <span>{pair.left}</span>
@@ -162,9 +161,9 @@ export function MatchingPairGame({
 
                   {isSubmitted ? (
                     pairedRightId === pair.id ? (
-                      <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
+                      <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-600" />
                     ) : (
-                      <XCircle className="h-5 w-5 text-red-600 shrink-0" />
+                      <XCircle className="h-5 w-5 shrink-0 text-red-600" />
                     )
                   ) : isPaired ? (
                     <Button
@@ -188,7 +187,7 @@ export function MatchingPairGame({
 
         {/* Right Column: Explanations */}
         <div className="space-y-3">
-          <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <h4 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
             Clinical Explanations
           </h4>
           <div className="space-y-2.5">
@@ -215,7 +214,7 @@ export function MatchingPairGame({
                 <div
                   key={pair.id}
                   onClick={() => handleSelectRight(pair.id)}
-                  className={`flex items-start gap-2.5 rounded-xl border p-3.5 text-xs leading-relaxed transition-all shadow-xs ${borderClass}`}
+                  className={`flex items-start gap-2.5 rounded-xl border p-3.5 text-xs leading-relaxed shadow-xs transition-all ${borderClass}`}
                   role="button"
                   tabIndex={0}
                 >
@@ -254,12 +253,7 @@ export function MatchingPairGame({
               Try Again
             </Button>
           ) : (
-            <Button
-              size="sm"
-              disabled={!allPaired}
-              onClick={handleSubmit}
-              className="gap-1.5 font-semibold"
-            >
+            <Button size="sm" disabled={!allPaired} onClick={handleSubmit} className="gap-1.5 font-semibold">
               <CheckCircle2 className="h-4 w-4" />
               Verify Answers
             </Button>

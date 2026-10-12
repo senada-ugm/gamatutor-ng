@@ -163,7 +163,7 @@ export function AudioNarrationBar({
 
   return (
     <div
-      className={`flex items-center gap-3 rounded-lg border bg-card/80 px-4 py-2.5 backdrop-blur-sm shadow-xs ${className}`}
+      className={`flex items-center gap-3 rounded-lg border bg-card/80 px-4 py-2.5 shadow-xs backdrop-blur-sm ${className}`}
     >
       <div className="flex items-center gap-1.5">
         {isPlaying ? (
@@ -186,7 +186,7 @@ export function AudioNarrationBar({
             title="Play narration"
             aria-label="Play narration"
           >
-            <Play className="h-4 w-4 fill-current ml-0.5" />
+            <Play className="ml-0.5 h-4 w-4 fill-current" />
           </Button>
         )}
         <Button
@@ -216,7 +216,7 @@ export function AudioNarrationBar({
           className="flex-1"
           aria-label="Narration progress scrubber"
         />
-        <span className="text-xs font-mono text-muted-foreground w-10 text-right">{Math.round(progress)}%</span>
+        <span className="w-10 text-right font-mono text-xs text-muted-foreground">{Math.round(progress)}%</span>
       </div>
 
       <div className="flex items-center gap-1.5 border-l pl-2">
@@ -224,7 +224,7 @@ export function AudioNarrationBar({
           size="sm"
           variant="outline"
           onClick={cycleRate}
-          className="h-7 px-2 text-xs font-mono font-medium gap-1"
+          className="h-7 gap-1 px-2 font-mono text-xs font-medium"
           title={`Playback speed: ${rate}x`}
         >
           <Gauge className="h-3 w-3" />

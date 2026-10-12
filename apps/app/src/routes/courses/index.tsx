@@ -43,15 +43,15 @@ export function CourseCatalogPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Katalog Pelatihan"
+        title="Course Catalog"
         description={
-          total === undefined ? "Pelatihan yang sedang membuka pendaftaran." : `${total} pelatihan terbuka pendaftaran.`
+          total === undefined ? "Available clinical training programs." : `${total} courses open for enrollment.`
         }
       />
 
       <SearchInput
-        label="Cari pelatihan"
-        placeholder="Cari pelatihan…"
+        label="Search courses"
+        placeholder="Search courses…"
         value={search}
         onChange={(next) => {
           setSearch(next)
@@ -69,11 +69,11 @@ export function CourseCatalogPage() {
         <ErrorState error={courses.error} onRetry={() => void courses.refetch()} />
       ) : rows.length === 0 ? (
         <EmptyState
-          title="Tidak ada pelatihan"
+          title="No courses found"
           description={
             debouncedSearch
-              ? `Tidak ada hasil untuk "${debouncedSearch}". Coba kata kunci lain.`
-              : "Belum ada pelatihan yang membuka pendaftaran."
+              ? `No results found for "${debouncedSearch}". Try another search keyword.`
+              : "No courses are currently open for enrollment."
           }
         />
       ) : (

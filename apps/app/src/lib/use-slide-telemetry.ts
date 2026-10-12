@@ -8,12 +8,7 @@ interface UseSlideTelemetryOptions {
   enabled?: boolean
 }
 
-export function useSlideTelemetry({
-  courseId,
-  moduleId,
-  slideId,
-  enabled = true,
-}: UseSlideTelemetryOptions) {
+export function useSlideTelemetry({ courseId, moduleId, slideId, enabled = true }: UseSlideTelemetryOptions) {
   const enterTimeRef = useRef<number>(Date.now())
 
   useEffect(() => {

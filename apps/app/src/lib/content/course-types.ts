@@ -135,14 +135,7 @@ export interface QuizPage extends BasePage {
 }
 
 export type SlidePage =
-  | HeroPage
-  | DividerPage
-  | ContentPage
-  | CardsPage
-  | HotspotPage
-  | MatchPage
-  | ImageGradingPage
-  | QuizPage
+  HeroPage | DividerPage | ContentPage | CardsPage | HotspotPage | MatchPage | ImageGradingPage | QuizPage
 
 export interface CourseModule {
   id: string

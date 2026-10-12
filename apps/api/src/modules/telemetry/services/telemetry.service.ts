@@ -5,10 +5,7 @@ import { users } from "../../../db/auth-schema.js"
 import { generateId } from "../../../lib/response.js"
 import type { TelemetryEvent, TelemetryEventCreate } from "@workspace/contracts"
 
-export async function recordTelemetryEvent(
-  userId: string,
-  input: TelemetryEventCreate
-): Promise<TelemetryEvent> {
+export async function recordTelemetryEvent(userId: string, input: TelemetryEventCreate): Promise<TelemetryEvent> {
   const id = generateId("tlm")
   const duration = input.dwellTimeSeconds ?? 0
   const now = new Date()
@@ -62,9 +59,7 @@ export async function exportTelemetryCsv(courseId?: string): Promise<string> {
     .leftJoin(participantProfiles, eq(learningTelemetryLogs.userId, participantProfiles.id))
     .orderBy(desc(learningTelemetryLogs.createdAt))
 
-  const rows = courseId
-    ? await query.where(eq(learningTelemetryLogs.courseId, courseId))
-    : await query
+  const rows = courseId ? await query.where(eq(learningTelemetryLogs.courseId, courseId)) : await query
 
   const headers = [
     "Log ID",

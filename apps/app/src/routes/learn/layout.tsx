@@ -77,11 +77,11 @@ export function LearnLayout() {
     return (
       <div className="mx-auto flex min-h-svh max-w-md flex-col justify-center px-4">
         <EmptyState
-          title="Pelatihan tidak ditemukan"
-          description="Pelatihan ini mungkin sudah dihapus atau Anda tidak memiliki akses."
+          title="Course not found"
+          description="This course may have been removed or you do not have permission to view it."
           action={
             <Button nativeButton={false} render={<Link to="/dashboard" />}>
-              Kembali ke Dasbor
+              Back to Dashboard
             </Button>
           }
         />

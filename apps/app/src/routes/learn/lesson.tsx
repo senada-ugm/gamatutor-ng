@@ -112,7 +112,7 @@ export function LessonPage() {
               }
             }}
             onClaimCertificate={() => {
-              navigate({ to: "/certificates/verify" })
+              void navigate({ to: "/dashboard" })
             }}
           />
         ) : lesson.contentType === "text" && lesson.textContent ? (

@@ -35,10 +35,7 @@ const INTENTIONAL_EXCLUSIONS = new Map([
     "GET /institutions/{institutionId}/orders/export",
     "reports.tsp header — operational CSV formatting of institution order book",
   ],
-  [
-    "GET /reports/telemetry/export",
-    "reports.tsp header — operational CSV export of learner slide telemetry",
-  ],
+  ["GET /reports/telemetry/export", "reports.tsp header — operational CSV export of learner slide telemetry"],
 ])
 
 // --- 1. contracted operations from the generated OpenAPI -------------------

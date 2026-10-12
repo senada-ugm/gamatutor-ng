@@ -61,13 +61,13 @@ export function AnimatedRevealList({
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border bg-muted/20 p-3">
         <div>
           {intro ? <p className="text-sm font-semibold text-foreground">{intro}</p> : null}
-          <div className="flex items-center gap-2 mt-0.5">
+          <div className="mt-0.5 flex items-center gap-2">
             <span className="text-xs text-muted-foreground">
               Revealed: {Math.min(revealedCount, totalSteps)} of {totalSteps} items
             </span>
             {isAllRevealed && (
-              <Badge variant="outline" className="text-[10px] bg-teal-500/10 text-teal-800 border-teal-300">
-                <CheckCircle2 className="h-3 w-3 mr-1" />
+              <Badge variant="outline" className="border-teal-300 bg-teal-500/10 text-[10px] text-teal-800">
+                <CheckCircle2 className="mr-1 h-3 w-3" />
                 All Displayed
               </Badge>
             )}
@@ -80,7 +80,7 @@ export function AnimatedRevealList({
               size="sm"
               variant={isAutoPlaying ? "secondary" : "outline"}
               onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-              className="h-8 text-xs gap-1.5"
+              className="h-8 gap-1.5 text-xs"
             >
               {isAutoPlaying ? (
                 <>
@@ -97,12 +97,7 @@ export function AnimatedRevealList({
           )}
 
           {!isAllRevealed ? (
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={handleRevealAll}
-              className="h-8 text-xs gap-1.5"
-            >
+            <Button size="sm" variant="outline" onClick={handleRevealAll} className="h-8 gap-1.5 text-xs">
               <Eye className="h-3.5 w-3.5" />
               Reveal All (Skip)
             </Button>
@@ -111,7 +106,7 @@ export function AnimatedRevealList({
               size="sm"
               variant="ghost"
               onClick={handleReset}
-              className="h-8 text-xs gap-1.5 text-muted-foreground hover:text-foreground"
+              className="h-8 gap-1.5 text-xs text-muted-foreground hover:text-foreground"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               Replay Animation
@@ -121,7 +116,7 @@ export function AnimatedRevealList({
       </div>
 
       {/* 2-Column Responsive Grid (Reviews #5 & #6) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
         {steps.map((step, idx) => {
           const isRevealed = idx < revealedCount
           if (!isRevealed) return null
@@ -130,14 +125,14 @@ export function AnimatedRevealList({
             return (
               <div
                 key={idx}
-                className="group relative flex items-start gap-3 rounded-xl border bg-card p-4 shadow-xs transition-all duration-300 hover:border-primary/40 hover:shadow-sm animate-in fade-in slide-in-from-bottom-2"
+                className="group relative flex animate-in items-start gap-3 rounded-xl border bg-card p-4 shadow-xs transition-all duration-300 fade-in slide-in-from-bottom-2 hover:border-primary/40 hover:shadow-sm"
               >
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-xs font-bold text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-xs font-bold text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                   {String.fromCharCode(97 + idx)}
                 </div>
                 <div className="flex-1 space-y-1">
                   {step.texts.map((t, tIdx) => (
-                    <p key={tIdx} className="text-sm font-medium leading-snug text-foreground">
+                    <p key={tIdx} className="text-sm leading-snug font-medium text-foreground">
                       {t.replace(/^[a-z]\.\s*/, "")}
                     </p>
                   ))}
@@ -150,13 +145,13 @@ export function AnimatedRevealList({
             return (
               <div
                 key={idx}
-                className="rounded-xl border bg-card overflow-hidden shadow-xs animate-in fade-in slide-in-from-bottom-2"
+                className="animate-in overflow-hidden rounded-xl border bg-card shadow-xs fade-in slide-in-from-bottom-2"
               >
-                <img src={step.image} alt={step.title || ""} className="w-full h-auto object-cover" />
+                <img src={step.image} alt={step.title || ""} className="h-auto w-full object-cover" />
                 {step.title || step.body ? (
                   <div className="p-3">
-                    {step.title && <h4 className="font-semibold text-sm">{step.title}</h4>}
-                    {step.body && <p className="text-xs text-muted-foreground mt-1">{step.body}</p>}
+                    {step.title && <h4 className="text-sm font-semibold">{step.title}</h4>}
+                    {step.body && <p className="mt-1 text-xs text-muted-foreground">{step.body}</p>}
                   </div>
                 ) : null}
               </div>

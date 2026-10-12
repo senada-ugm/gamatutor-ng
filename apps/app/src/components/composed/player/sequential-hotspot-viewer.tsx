@@ -55,32 +55,32 @@ export function SequentialHotspotViewer({
       {/* Explicit Guidance Banner (Review #4) */}
       <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
         <div className="flex items-start gap-3">
-          <div className="rounded-full bg-primary/10 p-2 text-primary shrink-0 mt-0.5">
+          <div className="mt-0.5 shrink-0 rounded-full bg-primary/10 p-2 text-primary">
             <Info className="h-5 w-5" />
           </div>
           <div className="flex-1 space-y-1">
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-sm text-foreground">
+              <span className="text-sm font-semibold text-foreground">
                 Sequential Pathophysiology Flow (Steps 1 → 8)
               </span>
-              <Badge variant="outline" className="text-xs bg-background">
+              <Badge variant="outline" className="bg-background text-xs">
                 Step {currentStep + 1} of {page.points.length}
               </Badge>
               {allCompleted && (
-                <Badge variant="outline" className="text-xs bg-teal-50 text-teal-800 border-teal-300">
+                <Badge variant="outline" className="border-teal-300 bg-teal-50 text-xs text-teal-800">
                   All Steps Explored
                 </Badge>
               )}
             </div>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Please click the numbered hotspots sequentially (1 through 8) to trace the microvascular progression
-              from chronic hyperglycemia to severe proliferative neovascularization.
+            <p className="text-xs leading-relaxed text-muted-foreground">
+              Please click the numbered hotspots sequentially (1 through 8) to trace the microvascular progression from
+              chronic hyperglycemia to severe proliferative neovascularization.
             </p>
           </div>
         </div>
 
         {/* Step Progress Nodes */}
-        <div className="mt-3 flex items-center justify-between gap-1 overflow-x-auto pt-2 border-t border-primary/10">
+        <div className="mt-3 flex items-center justify-between gap-1 overflow-x-auto border-t border-primary/10 pt-2">
           {page.points.map((pt, idx) => {
             const isCompleted = !!visited[idx]
             const isCurrent = currentStep === idx
@@ -91,13 +91,13 @@ export function SequentialHotspotViewer({
                 key={idx}
                 type="button"
                 onClick={() => handleSelectStep(idx)}
-                className={`flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium transition-all ${
+                className={`flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium transition-all ${
                   isCurrent
-                    ? "bg-primary text-primary-foreground shadow-xs scale-105"
+                    ? "scale-105 bg-primary text-primary-foreground shadow-xs"
                     : isCompleted
-                      ? "bg-teal-500/15 text-teal-800 dark:text-teal-300 hover:bg-teal-500/25"
+                      ? "bg-teal-500/15 text-teal-800 hover:bg-teal-500/25 dark:text-teal-300"
                       : isNext
-                        ? "border border-primary/40 text-primary bg-primary/5 animate-pulse"
+                        ? "animate-pulse border border-primary/40 bg-primary/5 text-primary"
                         : "text-muted-foreground hover:bg-muted/50"
                 }`}
                 title={`Step ${idx + 1}: ${pt.label}`}
@@ -109,7 +109,7 @@ export function SequentialHotspotViewer({
                 >
                   {idx + 1}
                 </span>
-                <span className="hidden sm:inline truncate max-w-[80px]">{pt.label}</span>
+                <span className="hidden max-w-[80px] truncate sm:inline">{pt.label}</span>
               </button>
             )
           })}
@@ -117,22 +117,17 @@ export function SequentialHotspotViewer({
       </div>
 
       {/* Main Stage & Detail Panel */}
-      <div className="grid gap-6 lg:grid-cols-12 items-start">
+      <div className="grid items-start gap-6 lg:grid-cols-12">
         {/* Hotspot Image Stage */}
-        <div className="lg:col-span-8 flex flex-col items-center">
+        <div className="flex flex-col items-center lg:col-span-8">
           <div className="relative w-full max-w-2xl overflow-hidden rounded-xl border bg-black/5 shadow-inner select-none">
-            <img
-              src={page.image}
-              alt={page.title}
-              className="w-full h-auto object-contain block"
-              loading="eager"
-            />
+            <img src={page.image} alt={page.title} className="block h-auto w-full object-contain" loading="eager" />
 
             {/* Masks */}
             {page.masks?.map((mask, mIdx) => (
               <div
                 key={`mask-${mIdx}`}
-                className="absolute pointer-events-none rounded-xs border border-white/20 bg-white/10"
+                className="pointer-events-none absolute rounded-xs border border-white/20 bg-white/10"
                 style={{
                   left: `${mask.x}%`,
                   top: `${mask.y}%`,
@@ -153,14 +148,14 @@ export function SequentialHotspotViewer({
                   key={`seq-pin-${pIdx}`}
                   type="button"
                   onClick={() => handleSelectStep(pIdx)}
-                  className={`absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center rounded-full text-xs font-bold transition-all duration-300 cursor-pointer ${
+                  className={`absolute flex -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full text-xs font-bold transition-all duration-300 ${
                     isCurrent
-                      ? "h-8 w-8 bg-primary text-primary-foreground ring-4 ring-primary/40 shadow-xl scale-125 z-30"
+                      ? "z-30 h-8 w-8 scale-125 bg-primary text-primary-foreground shadow-xl ring-4 ring-primary/40"
                       : isNextRecommended
-                        ? "h-7 w-7 bg-amber-500 text-white ring-4 ring-amber-400/60 animate-pulse shadow-md hover:scale-110 z-20"
+                        ? "z-20 h-7 w-7 animate-pulse bg-amber-500 text-white shadow-md ring-4 ring-amber-400/60 hover:scale-110"
                         : isCompleted
-                          ? "h-6 w-6 bg-teal-600 text-white ring-2 ring-white/70 hover:scale-105 z-10"
-                          : "h-6 w-6 bg-slate-700 text-white ring-1 ring-white/50 hover:bg-slate-900 z-10"
+                          ? "z-10 h-6 w-6 bg-teal-600 text-white ring-2 ring-white/70 hover:scale-105"
+                          : "z-10 h-6 w-6 bg-slate-700 text-white ring-1 ring-white/50 hover:bg-slate-900"
                   }`}
                   style={{
                     left: `${point.x}%`,
@@ -177,22 +172,22 @@ export function SequentialHotspotViewer({
         </div>
 
         {/* Clinical Detail Card */}
-        <div className="lg:col-span-4 space-y-3">
+        <div className="space-y-3 lg:col-span-4">
           {activePoint && (
-            <div className="rounded-xl border bg-card p-5 shadow-xs space-y-4">
+            <div className="space-y-4 rounded-xl border bg-card p-5 shadow-xs">
               <div className="flex items-start justify-between gap-2 border-b pb-3">
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-mono font-bold text-primary">
+                    <span className="font-mono text-xs font-bold text-primary">
                       CASCADE STEP #{currentStep + 1} OF {page.points.length}
                     </span>
                     {visited[currentStep] && (
-                      <Badge variant="outline" className="text-[10px] text-teal-700 border-teal-300 bg-teal-50">
+                      <Badge variant="outline" className="border-teal-300 bg-teal-50 text-[10px] text-teal-700">
                         Visited
                       </Badge>
                     )}
                   </div>
-                  <h3 className="text-lg font-bold text-foreground leading-snug mt-0.5">{activePoint.label}</h3>
+                  <h3 className="mt-0.5 text-lg leading-snug font-bold text-foreground">{activePoint.label}</h3>
                 </div>
                 <Button
                   size="sm"
@@ -208,18 +203,15 @@ export function SequentialHotspotViewer({
               <p className="text-sm leading-relaxed text-foreground/85">{activePoint.body}</p>
 
               {/* Advance CTA */}
-              <div className="pt-2 border-t">
+              <div className="border-t pt-2">
                 {!isLastStep ? (
-                  <Button
-                    onClick={handleAdvance}
-                    className="w-full gap-2 shadow-sm"
-                  >
+                  <Button onClick={handleAdvance} className="w-full gap-2 shadow-sm">
                     <span>Proceed to Step {currentStep + 2}</span>
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 ) : (
-                  <div className="rounded-lg bg-teal-500/10 border border-teal-500/20 p-3 text-center text-xs text-teal-800 dark:text-teal-300">
-                    <CheckCircle className="h-4 w-4 mx-auto mb-1 text-teal-600" />
+                  <div className="rounded-lg border border-teal-500/20 bg-teal-500/10 p-3 text-center text-xs text-teal-800 dark:text-teal-300">
+                    <CheckCircle className="mx-auto mb-1 h-4 w-4 text-teal-600" />
                     <strong>Cascade Complete!</strong> You have reviewed the complete microvascular pathophysiology
                     progression.
                   </div>

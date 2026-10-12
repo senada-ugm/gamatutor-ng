@@ -16,15 +16,12 @@ export function telemetryRoutes(app: FastifyInstance) {
    * Operational CSV export of learning telemetry logs across slides and doctors.
    * Listed under INTENTIONAL_EXCLUSIONS in check-api-contract-parity.mjs.
    */
-  app.get<{ Querystring: { courseId?: string } }>(
-    "/reports/telemetry/export",
-    async (request, reply) => {
-      await requireSession(request)
-      const csv = await service.exportTelemetryCsv(request.query.courseId)
-      const filename = `telemetry-report-${new Date().toISOString().slice(0, 10)}.csv`
-      reply.header("Content-Type", "text/csv; charset=utf-8")
-      reply.header("Content-Disposition", `attachment; filename="${encodeURIComponent(filename)}"`)
-      return "\uFEFF" + csv
-    }
-  )
+  app.get<{ Querystring: { courseId?: string } }>("/reports/telemetry/export", async (request, reply) => {
+    await requireSession(request)
+    const csv = await service.exportTelemetryCsv(request.query.courseId)
+    const filename = `telemetry-report-${new Date().toISOString().slice(0, 10)}.csv`
+    reply.header("Content-Type", "text/csv; charset=utf-8")
+    reply.header("Content-Disposition", `attachment; filename="${encodeURIComponent(filename)}"`)
+    return "\uFEFF" + csv
+  })
 }

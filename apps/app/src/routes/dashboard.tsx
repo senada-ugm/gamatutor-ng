@@ -62,24 +62,24 @@ export function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Dasbor" description={<>Selamat datang kembali, {user?.name}.</>} />
+      <PageHeader title="Dashboard" description={<>Welcome back, {user?.name}.</>} />
 
       {isAdmin ? (
         <Card>
           <CardContent className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h2 className="text-base font-medium">Administrasi Platform</h2>
-              <p className="text-sm text-muted-foreground">Statistik, pengguna, institusi, pengaturan, dan audit.</p>
+              <h2 className="text-base font-medium">Platform Administration</h2>
+              <p className="text-sm text-muted-foreground">Analytics, users, institutions, settings, and audit logs.</p>
             </div>
             <div className="flex flex-wrap gap-2">
               <Button size="sm" nativeButton={false} render={<Link to="/admin" />}>
-                Ringkasan
+                Overview
               </Button>
               <Button size="sm" variant="outline" nativeButton={false} render={<Link to="/admin/users" />}>
-                Pengguna
+                Users
               </Button>
               <Button size="sm" variant="outline" nativeButton={false} render={<Link to="/admin/institutions" />}>
-                Institusi
+                Institutions
               </Button>
             </div>
           </CardContent>
@@ -88,9 +88,9 @@ export function DashboardPage() {
 
       <section className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-medium">Pelatihan Saya</h2>
+          <h2 className="text-lg font-medium">My Enrolled Courses</h2>
           <Button size="sm" variant="ghost" nativeButton={false} render={<Link to="/courses" />}>
-            Jelajahi Katalog
+            Browse Catalog
           </Button>
         </div>
         {enrollments.isLoading ? (
@@ -99,12 +99,12 @@ export function DashboardPage() {
           <ErrorState error={enrollments.error} onRetry={() => void enrollments.refetch()} />
         ) : (enrollments.data ?? []).length === 0 ? (
           <EmptyState
-            title="Belum ada pelatihan"
+            title="No courses enrolled"
             description={
               <>
-                Anda belum terdaftar di pelatihan mana pun.{" "}
+                You are not enrolled in any training program yet.{" "}
                 <Link to="/courses" className="text-primary hover:underline">
-                  Cari pelatihan pertama Anda
+                  Browse available courses
                 </Link>
                 .
               </>
@@ -148,7 +148,7 @@ export function DashboardPage() {
                           params={{ certificateId: enrollment.certificateId }}
                           className="relative z-10 text-xs font-medium text-primary hover:underline"
                         >
-                          Lihat Sertifikat &rarr;
+                          View Certificate &rarr;
                         </Link>
                       </div>
                     ) : null}
@@ -162,15 +162,15 @@ export function DashboardPage() {
 
       {!isAdmin || ownedIds.length > 0 ? (
         <section className="space-y-3">
-          <h2 className="text-lg font-medium">Institusi Saya</h2>
+          <h2 className="text-lg font-medium">My Institutions</h2>
           {ownerships.isLoading || (ownedIds.length > 0 && institutions.isLoading) ? (
             <Skeleton className="h-20 w-full" />
           ) : ownedIds.length === 0 ? (
             <Card>
               <CardContent className="flex flex-wrap items-center justify-between gap-3">
-                <p className="text-sm text-muted-foreground">Anda belum memiliki atau mengelola institusi.</p>
+                <p className="text-sm text-muted-foreground">You do not own or manage any institution yet.</p>
                 <Button size="sm" variant="outline" nativeButton={false} render={<Link to="/institution-requests" />}>
-                  Ajukan Institusi
+                  Request Institution
                 </Button>
               </CardContent>
             </Card>
@@ -193,7 +193,7 @@ export function DashboardPage() {
                         onClick={() => authoringScope.select(institution.id)}
                         render={<Link to="/institution" />}
                       >
-                        Ringkasan
+                        Overview
                       </Button>
                       <Button
                         size="sm"
@@ -201,7 +201,7 @@ export function DashboardPage() {
                         onClick={() => authoringScope.select(institution.id)}
                         render={<Link to="/instructor" />}
                       >
-                        Kelola Pelatihan
+                        Manage Courses
                       </Button>
                     </div>
                   </CardContent>

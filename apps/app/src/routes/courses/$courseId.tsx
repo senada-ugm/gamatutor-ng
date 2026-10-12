@@ -47,7 +47,7 @@ export function CourseDetailPage() {
   if (course.isLoading || !course.data) {
     return (
       <div className="space-y-6">
-        <PageHeader backTo="/courses" backLabel="Katalog" />
+        <PageHeader backTo="/courses" backLabel="Catalog" />
         {course.isLoading ? (
           <>
             <Skeleton className="aspect-video w-full rounded-xl sm:aspect-[21/9] sm:max-h-80" />
@@ -59,7 +59,7 @@ export function CourseDetailPage() {
         ) : course.isError ? (
           <ErrorState error={course.error} onRetry={() => void course.refetch()} />
         ) : (
-          <EmptyState title="Pelatihan tidak ditemukan" />
+          <EmptyState title="Course not found" />
         )}
       </div>
     )
@@ -69,7 +69,7 @@ export function CourseDetailPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader backTo="/courses" backLabel="Katalog" title={c.title} description={c.shortDescription ?? undefined} />
+      <PageHeader backTo="/courses" backLabel="Catalog" title={c.title} description={c.shortDescription ?? undefined} />
 
       <CourseThumbnail
         thumbnail={c.thumbnail}
@@ -94,14 +94,14 @@ export function CourseDetailPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Konten Pelatihan</CardTitle>
+              <CardTitle>Course Syllabus</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               {c.modules.length === 0 ? (
                 <EmptyState
                   compact
-                  title="Silabus belum tersedia"
-                  description="Instruktur belum menambahkan modul untuk pelatihan ini."
+                  title="Syllabus not available"
+                  description="The instructor has not added modules for this course yet."
                 />
               ) : (
                 c.modules.map((module, index) => (
@@ -110,7 +110,7 @@ export function CourseDetailPage() {
                       <span className="text-sm font-medium">
                         {index + 1}. {module.title}
                       </span>
-                      <Badge variant="outline">{module.lessons.length} pelajaran</Badge>
+                      <Badge variant="outline">{module.lessons.length} lessons</Badge>
                     </div>
                     <ul className="mt-2 divide-y divide-border">
                       {module.lessons.map((lesson, lessonIndex) => (
@@ -118,7 +118,7 @@ export function CourseDetailPage() {
                           <span className="truncate">
                             {lessonIndex + 1}. {lesson.title}
                           </span>
-                          {lesson.isPreview ? <Badge variant="secondary">Pratinjau</Badge> : null}
+                          {lesson.isPreview ? <Badge variant="secondary">Preview</Badge> : null}
                         </li>
                       ))}
                     </ul>

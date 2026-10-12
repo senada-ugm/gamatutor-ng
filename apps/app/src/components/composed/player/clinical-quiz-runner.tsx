@@ -79,7 +79,9 @@ export function ClinicalQuizRunner({
     const passed = correctCount / totalCount >= passingScore
 
     return (
-      <div className={`max-w-2xl mx-auto rounded-2xl border bg-card p-6 md:p-8 space-y-6 text-center animate-in fade-in ${className}`}>
+      <div
+        className={`mx-auto max-w-2xl animate-in space-y-6 rounded-2xl border bg-card p-6 text-center fade-in md:p-8 ${className}`}
+      >
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
           <Award className="h-8 w-8" />
         </div>
@@ -87,10 +89,10 @@ export function ClinicalQuizRunner({
         <div className="space-y-2">
           <Badge
             variant="outline"
-            className={`text-xs px-3 py-1 font-mono uppercase ${
+            className={`px-3 py-1 font-mono text-xs uppercase ${
               passed
-                ? "bg-emerald-500/10 text-emerald-800 border-emerald-300"
-                : "bg-amber-500/10 text-amber-800 border-amber-300"
+                ? "border-emerald-300 bg-emerald-500/10 text-emerald-800"
+                : "border-amber-300 bg-amber-500/10 text-amber-800"
             }`}
           >
             {passed ? "Evaluation Passed" : "Needs Improvement"}
@@ -99,14 +101,14 @@ export function ClinicalQuizRunner({
             Post-Test Evaluation Results
           </h2>
           <p className="text-sm text-muted-foreground">
-            You scored <strong className="text-foreground">{scorePct}%</strong> ({correctCount} of {totalCount} questions correct).
-            Passing threshold is {Math.round(passingScore * 100)}%.
+            You scored <strong className="text-foreground">{scorePct}%</strong> ({correctCount} of {totalCount}{" "}
+            questions correct). Passing threshold is {Math.round(passingScore * 100)}%.
           </p>
         </div>
 
         {/* Detailed Review Breakdown */}
-        <div className="rounded-xl border bg-muted/20 p-4 text-left space-y-3">
-          <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        <div className="space-y-3 rounded-xl border bg-muted/20 p-4 text-left">
+          <h4 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
             Question Review Breakdown:
           </h4>
           <div className="space-y-2">
@@ -117,23 +119,25 @@ export function ClinicalQuizRunner({
               return (
                 <div
                   key={q.id}
-                  className={`rounded-lg border p-3 text-xs flex items-start gap-2.5 ${
+                  className={`flex items-start gap-2.5 rounded-lg border p-3 text-xs ${
                     isCorrect
-                      ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-900 dark:text-emerald-300"
-                      : "bg-red-500/10 border-red-500/30 text-red-900 dark:text-red-300"
+                      ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-900 dark:text-emerald-300"
+                      : "border-red-500/30 bg-red-500/10 text-red-900 dark:text-red-300"
                   }`}
                 >
                   {isCorrect ? (
-                    <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
                   ) : (
-                    <XCircle className="h-4 w-4 text-red-600 shrink-0 mt-0.5" />
+                    <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-600" />
                   )}
                   <div className="flex-1 space-y-1">
-                    <p className="font-semibold">{idx + 1}. {q.question}</p>
+                    <p className="font-semibold">
+                      {idx + 1}. {q.question}
+                    </p>
                     <p className="opacity-90">
                       Your answer: <strong>{userAns || "Unanswered"}</strong> • Correct: <strong>{q.correct}</strong>
                     </p>
-                    {!isCorrect && <p className="text-[11px] italic mt-1">{q.explanation}</p>}
+                    {!isCorrect && <p className="mt-1 text-[11px] italic">{q.explanation}</p>}
                   </div>
                 </div>
               )
@@ -142,12 +146,10 @@ export function ClinicalQuizRunner({
         </div>
 
         {/* Review #9: Explicit Confirmation Prompt & Unrestricted Retake Option */}
-        <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 space-y-3 text-left">
+        <div className="space-y-3 rounded-xl border border-primary/20 bg-primary/5 p-4 text-left">
           <div className="flex items-center gap-2">
             <HelpCircle className="h-5 w-5 text-primary" />
-            <span className="font-bold text-sm text-foreground">
-              Are you satisfied with your test score?
-            </span>
+            <span className="text-sm font-bold text-foreground">Are you satisfied with your test score?</span>
           </div>
           <p className="text-xs text-muted-foreground">
             You may retake the post-test without any restrictions to reinforce your diagnostic knowledge and improve
@@ -157,21 +159,14 @@ export function ClinicalQuizRunner({
 
         <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
           {/* Unrestricted Retake Button (Review #9) */}
-          <Button
-            variant="outline"
-            onClick={handleRetakeTest}
-            className="gap-2"
-          >
+          <Button variant="outline" onClick={handleRetakeTest} className="gap-2">
             <RotateCcw className="h-4 w-4" />
             Retake Evaluation Module
           </Button>
 
           {/* Certificate Claim if Passed */}
           {passed && onClaimCertificate && (
-            <Button
-              onClick={onClaimCertificate}
-              className="gap-2 shadow-sm font-semibold"
-            >
+            <Button onClick={onClaimCertificate} className="gap-2 font-semibold shadow-sm">
               <ShieldCheck className="h-4 w-4" />
               Claim Official Certificate
             </Button>
@@ -185,14 +180,12 @@ export function ClinicalQuizRunner({
   const isCurrentAnswered = !!selectedLetter
 
   return (
-    <div className={`max-w-2xl mx-auto rounded-2xl border bg-card p-6 md:p-8 space-y-6 shadow-xs ${className}`}>
+    <div className={`mx-auto max-w-2xl space-y-6 rounded-2xl border bg-card p-6 shadow-xs md:p-8 ${className}`}>
       {/* Header and Progress */}
       <div className="flex items-center justify-between border-b pb-4">
         <div>
-          <span className="font-mono text-xs font-bold text-primary">
-            STANDARDIZED CLINICAL QUIZ
-          </span>
-          <h3 className="text-lg font-bold text-foreground mt-0.5">
+          <span className="font-mono text-xs font-bold text-primary">STANDARDIZED CLINICAL QUIZ</span>
+          <h3 className="mt-0.5 text-lg font-bold text-foreground">
             Question {currentIndex + 1} of {totalCount}
           </h3>
         </div>
@@ -204,9 +197,7 @@ export function ClinicalQuizRunner({
 
       {/* Question Text */}
       <div className="space-y-3">
-        <h4 className="text-base font-semibold leading-relaxed text-foreground">
-          {currentQ.question}
-        </h4>
+        <h4 className="text-base leading-relaxed font-semibold text-foreground">{currentQ.question}</h4>
       </div>
 
       {/* Options List */}
@@ -219,20 +210,20 @@ export function ClinicalQuizRunner({
               key={opt.letter}
               type="button"
               onClick={() => handleSelect(opt.letter)}
-              className={`w-full text-left rounded-xl border p-4 text-xs sm:text-sm leading-relaxed transition-all cursor-pointer shadow-xs flex items-start gap-3.5 ${
+              className={`flex w-full cursor-pointer items-start gap-3.5 rounded-xl border p-4 text-left text-xs leading-relaxed shadow-xs transition-all sm:text-sm ${
                 isSelected
-                  ? "border-primary bg-primary/10 ring-2 ring-primary/40 font-semibold"
-                  : "border-border hover:border-primary/50 bg-background"
+                  ? "border-primary bg-primary/10 font-semibold ring-2 ring-primary/40"
+                  : "border-border bg-background hover:border-primary/50"
               }`}
             >
               <span
-                className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-mono font-bold ${
+                className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full font-mono text-xs font-bold ${
                   isSelected ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
                 }`}
               >
                 {opt.letter}
               </span>
-              <span className="flex-1 mt-0.5">{opt.text}</span>
+              <span className="mt-0.5 flex-1">{opt.text}</span>
             </button>
           )
         })}
@@ -240,21 +231,11 @@ export function ClinicalQuizRunner({
 
       {/* Nav Controls */}
       <div className="flex items-center justify-between border-t pt-4">
-        <Button
-          size="sm"
-          variant="outline"
-          disabled={currentIndex === 0}
-          onClick={handlePrev}
-        >
+        <Button size="sm" variant="outline" disabled={currentIndex === 0} onClick={handlePrev}>
           Previous
         </Button>
 
-        <Button
-          size="sm"
-          disabled={!isCurrentAnswered}
-          onClick={handleNext}
-          className="gap-1.5 font-semibold"
-        >
+        <Button size="sm" disabled={!isCurrentAnswered} onClick={handleNext} className="gap-1.5 font-semibold">
           <span>{currentIndex === totalCount - 1 ? "Finish Evaluation" : "Next Question"}</span>
           <ArrowRight className="h-4 w-4" />
         </Button>

@@ -94,29 +94,21 @@ export function RegisterPage() {
           <div className="grid gap-4 sm:grid-cols-2">
             <Field>
               <FieldLabel htmlFor="profession">Medical Profession</FieldLabel>
-              <NativeSelect
-                id="profession"
-                value={profession}
-                onChange={(e) => setProfession(e.target.value)}
-                required
-              >
+              <NativeSelect id="profession" value={profession} onChange={(e) => setProfession(e.target.value)} required>
                 <NativeSelectOption value="Puskesmas / Community Health Physician">
                   Puskesmas / Community Health Physician
                 </NativeSelectOption>
                 <NativeSelectOption value="Primary Clinic Physician">Primary Clinic Physician</NativeSelectOption>
                 <NativeSelectOption value="Specialist Physician">Specialist Physician</NativeSelectOption>
                 <NativeSelectOption value="Resident Physician">Resident Physician</NativeSelectOption>
-                <NativeSelectOption value="Other Healthcare Professional">Other Healthcare Professional</NativeSelectOption>
+                <NativeSelectOption value="Other Healthcare Professional">
+                  Other Healthcare Professional
+                </NativeSelectOption>
               </NativeSelect>
             </Field>
             <Field>
               <FieldLabel htmlFor="institution">Institution / Health Center</FieldLabel>
-              <Input
-                ref={institutionRef}
-                id="institution"
-                placeholder="e.g. Puskesmas Sleman"
-                required
-              />
+              <Input ref={institutionRef} id="institution" placeholder="e.g. Puskesmas Sleman" required />
             </Field>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">

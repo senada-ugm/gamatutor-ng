@@ -26,8 +26,8 @@ export function LearnIndex() {
       <div className="space-y-6">
         <PageHeader title={course.title} />
         <EmptyState
-          title="Materi belum tersedia"
-          description="Instruktur belum menambahkan pelajaran untuk pelatihan ini."
+          title="Content not yet available"
+          description="The instructor has not added any lessons to this course yet."
         />
       </div>
     )
@@ -37,7 +37,7 @@ export function LearnIndex() {
     <div className="space-y-6">
       <PageHeader
         title={course.title}
-        description={`${completed.size} dari ${totalLessons} pelajaran selesai`}
+        description={`${completed.size} of ${totalLessons} lessons completed`}
         actions={
           nextLesson ? (
             <Button
@@ -49,7 +49,7 @@ export function LearnIndex() {
                 />
               }
             >
-              {started ? "Lanjutkan Belajar" : "Mulai Belajar"}
+              {started ? "Continue Learning" : "Start Learning"}
             </Button>
           ) : null
         }
@@ -71,7 +71,7 @@ export function LearnIndex() {
                     <LessonCheck done={completed.has(lesson.id)} className="size-5 shrink-0" />
                     <span className="min-w-0 flex-1">{lesson.title}</span>
                     {lesson.duration ? (
-                      <span className="shrink-0 text-xs text-muted-foreground">{lesson.duration} menit</span>
+                      <span className="shrink-0 text-xs text-muted-foreground">{lesson.duration} min</span>
                     ) : null}
                   </Link>
                 </li>

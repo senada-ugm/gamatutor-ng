@@ -231,7 +231,9 @@ export function ParticipantProfileForm({ profile }: { profile: ContractParticipa
       <Card>
         <CardHeader>
           <CardTitle>Personal Information & Medical Credentials</CardTitle>
-          <CardDescription>Used during clinical screening registration and official certificate generation.</CardDescription>
+          <CardDescription>
+            Used during clinical screening registration and official certificate generation.
+          </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 sm:grid-cols-2">
           <Field id="profile-profession" label="Medical Profession">
@@ -247,7 +249,9 @@ export function ParticipantProfileForm({ profile }: { profile: ContractParticipa
               <NativeSelectOption value="Primary Clinic Physician">Primary Clinic Physician</NativeSelectOption>
               <NativeSelectOption value="Specialist Physician">Specialist Physician</NativeSelectOption>
               <NativeSelectOption value="Resident Physician">Resident Physician</NativeSelectOption>
-              <NativeSelectOption value="Other Healthcare Professional">Other Healthcare Professional</NativeSelectOption>
+              <NativeSelectOption value="Other Healthcare Professional">
+                Other Healthcare Professional
+              </NativeSelectOption>
             </NativeSelect>
           </Field>
           <Field id="profile-institution" label="Institution / Health Center">

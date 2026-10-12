@@ -24,17 +24,17 @@ export function TranscriptViewer({
   const rawParagraphs = transcript.split(/\n\s*\n/).filter((p) => p.trim().length > 0)
 
   return (
-    <div className={`rounded-lg border bg-muted/20 overflow-hidden transition-all ${className}`}>
+    <div className={`overflow-hidden rounded-lg border bg-muted/20 transition-all ${className}`}>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-4 py-2.5 text-left text-sm font-medium hover:bg-muted/40 transition-colors cursor-pointer select-none"
+        className="flex w-full cursor-pointer items-center justify-between px-4 py-2.5 text-left text-sm font-medium transition-colors select-none hover:bg-muted/40"
         aria-expanded={isOpen}
       >
         <div className="flex items-center gap-2 text-muted-foreground">
           <FileText className="h-4 w-4 text-primary" />
           <span className="font-semibold text-foreground/90">{title}</span>
-          <span className="text-xs text-muted-foreground/80 font-normal">
+          <span className="text-xs font-normal text-muted-foreground/80">
             ({rawParagraphs.length} {rawParagraphs.length === 1 ? "paragraph" : "paragraphs"})
           </span>
         </div>
@@ -46,14 +46,17 @@ export function TranscriptViewer({
       </button>
 
       {isOpen && (
-        <div className="border-t bg-background/60 px-4 py-3 text-sm leading-relaxed text-foreground/90 space-y-3">
+        <div className="space-y-3 border-t bg-background/60 px-4 py-3 text-sm leading-relaxed text-foreground/90">
           {rawParagraphs.map((para, pIdx) => {
-            const lines = para.split("\n").map((l) => l.trim()).filter(Boolean)
+            const lines = para
+              .split("\n")
+              .map((l) => l.trim())
+              .filter(Boolean)
             const isBulletList = lines.every((l) => /^[•\-\*]|\d+\.\s/.test(l))
 
             if (isBulletList) {
               return (
-                <ul key={pIdx} className="list-disc pl-5 space-y-1.5 text-foreground/90">
+                <ul key={pIdx} className="list-disc space-y-1.5 pl-5 text-foreground/90">
                   {lines.map((item, lIdx) => (
                     <li key={lIdx} className="pl-1">
                       {item.replace(/^[•\-\*]|\d+\.\s*/, "")}
