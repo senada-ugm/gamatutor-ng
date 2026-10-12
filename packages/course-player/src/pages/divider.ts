@@ -6,8 +6,7 @@ import { FOOTER_LINKS } from '../chrome/panels.js';
 import { progressFillPct, globalPageNumber, totalPages } from '../nav.js';
 
 /**
- * Chapter break. Deliberately does NOT use cardShell — it has no brand header,
- * and its prev button carries no arrow glyph and is never disabled.
+ * Chapter break. Deliberately does NOT use cardShell — it has no brand header.
  */
 export function renderDivider(ctx: RenderContext, page: PageOfType<'divider'>): void {
   const { course, state } = ctx;
@@ -22,9 +21,9 @@ export function renderDivider(ctx: RenderContext, page: PageOfType<'divider'>): 
     <div class="card-footer">
       ${FOOTER_LINKS}
       <div class="nav-arrows">
-        <button id="prevBtn"></button>
+        <button id="prevBtn" aria-label="Halaman sebelumnya">&#8592;</button>
         <span class="page-indicator">${globalPageNumber(course, state)} / ${totalPages(course)}</span>
-        <button id="nextBtn">&#8594;</button>
+        <button id="nextBtn" aria-label="Halaman berikutnya">&#8594;</button>
       </div>
     </div>
   `,

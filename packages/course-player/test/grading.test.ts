@@ -54,10 +54,10 @@ describe('image grading feedback', () => {
 });
 
 describe('badge placement', () => {
-  it('pushes the badge 14% outward from the image centre', () => {
-    const b = badgePosition({ x: 50, y: 20, label: '' });
+  it('pushes the badge 16% outward from the image centre', () => {
+    const b = badgePosition({ x: 50, y: 30, label: '' });
     expect(b.x).toBeCloseTo(50);
-    expect(b.y).toBeCloseTo(6);
+    expect(b.y).toBeCloseTo(14);
   });
 
   it('honours an explicit offset and keeps the badge inside the image', () => {

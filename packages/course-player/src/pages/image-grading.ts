@@ -8,7 +8,7 @@ type GradingPage = PageOfType<'image-grading'>;
 type Lesion = GradingPage['lesions'][number];
 
 /** How far a badge sits from its lesion by default, in % of the image. */
-const OFFSET = 14;
+const OFFSET = 16;
 /** The arrow stops this short of the lesion so its tip never covers it. */
 const GAP = 2.2;
 /** Badge radius in % of the image, so the arrow starts at its edge. */
@@ -49,13 +49,20 @@ export function arrowSvg(l: Lesion): string {
   const tip = { x: l.x - ux * GAP, y: l.y - uy * GAP };
   const start = { x: b.x + ux * BADGE_R, y: b.y + uy * BADGE_R };
   // Arrowhead: a small triangle at the tip.
-  const back = { x: tip.x - ux * 2.4, y: tip.y - uy * 2.4 };
-  const left = { x: back.x - uy * 1.3, y: back.y + ux * 1.3 };
-  const right = { x: back.x + uy * 1.3, y: back.y - ux * 1.3 };
+  const back = { x: tip.x - ux * 3, y: tip.y - uy * 3 };
+  const left = { x: back.x - uy * 1.7, y: back.y + ux * 1.7 };
+  const right = { x: back.x + uy * 1.7, y: back.y - ux * 1.7 };
   return (
     `<line x1="${r2(start.x)}" y1="${r2(start.y)}" x2="${r2(back.x)}" y2="${r2(back.y)}" />` +
     `<polygon points="${r2(tip.x)},${r2(tip.y)} ${r2(left.x)},${r2(left.y)} ${r2(right.x)},${r2(right.y)}" />`
   );
+}
+
+/** Near the image's sides a centred label would be cut off; anchor it instead. */
+function edgeClass(x: number): string {
+  if (x < 25) return ' edge-l';
+  if (x > 75) return ' edge-r';
+  return '';
 }
 
 function pinsFor(ctx: RenderContext, page: GradingPage): boolean[] {
@@ -96,7 +103,10 @@ export function renderImageGrading(ctx: RenderContext, page: GradingPage): void 
       const pos = `left:${r2(b.x)}%;top:${r2(b.y)}%`;
       return (
         `<button type="button" class="pin ${revealed ? 'revealed' : ''}" data-li="${li}" style="${pos}" aria-label="Lesi ${li + 1}${revealed ? ': ' + esc(l.label) : ''}">${li + 1}</button>` +
-        (revealed ? `<div class="pin-label" style="${pos}">${esc(l.label)}</div>` : '')
+        // The name goes on the far side of the badge, never over the lesion.
+        (revealed
+          ? `<div class="pin-label${b.y > l.y ? ' below' : ''}${edgeClass(b.x)}" style="${pos}">${esc(l.label)}</div>`
+          : '')
       );
     })
     .join('');

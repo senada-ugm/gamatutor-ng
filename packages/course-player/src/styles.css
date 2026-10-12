@@ -189,7 +189,7 @@ body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:var(--page-bg);
      background:var(--bad);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;
      cursor:pointer;box-shadow:0 0 0 4px rgba(192,57,43,.3);animation:pulse 1.6s infinite;}
 .lesion-arrows{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;}
-.lesion-arrows line{stroke:#ffd23f;stroke-width:2.2px;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 1px rgba(0,0,0,.8));}
+.lesion-arrows line{stroke:#ffd23f;stroke-width:3px;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 1px rgba(0,0,0,.8));}
 .lesion-arrows polygon{fill:#ffd23f;stroke:rgba(0,0,0,.55);stroke-width:.5px;vector-effect:non-scaling-stroke;}
 button.pin{border:2px solid #fff;padding:0;font-family:inherit;}
 .pin:focus-visible{outline:3px solid #fff;outline-offset:2px;}
@@ -275,3 +275,105 @@ button.pin{border:2px solid #fff;padding:0;font-family:inherit;}
 .gt-panel-body ul{margin:0;padding-left:18px;}
 .gt-panel-body li+li{margin-top:6px;}
 .gt-panel-empty{color:#778;}
+
+/* ---------- FIT ONE SCREEN, CENTERED (Tim DRIVE notes 3 and 12) ----------
+   The app is exactly one viewport tall; only .card-body may scroll, and on a
+   laptop (>= 1366x768) no page should need it. Text and media scale with the
+   viewport height. .page is a centered column that also centers vertically
+   when it is shorter than the card. Below 760px wide the layout stacks and
+   scrolls normally. */
+:root{--fs:clamp(13px,calc(0.64vh + 9px),17px);--fs-sm:calc(var(--fs) - 1px);--media-h:clamp(200px,46vh,560px);}
+.app{height:100vh;height:100dvh;min-height:0;}
+.sidebar{overflow-y:auto;}
+.main{padding:clamp(10px,2vh,26px) clamp(12px,2vw,30px);min-height:0;}
+.content-card{min-height:0;}
+.card-header{padding:clamp(6px,1.2vh,16px) 26px clamp(2px,.6vh,8px);align-items:center;}
+.card-body{display:flex;flex-direction:column;padding:clamp(4px,.8vh,8px) clamp(16px,3vw,40px) clamp(10px,1.8vh,20px);}
+.card-body>.page{width:100%;max-width:1080px;margin:auto;}
+.card-body h2{font-size:calc(var(--fs) + 5px);}
+.title-underline{margin-bottom:clamp(10px,1.8vh,20px);}
+.card-footer{padding:clamp(6px,1vh,10px) 26px;}
+.auto-narration{border:1px solid var(--line-light);background:#fafbfc;color:#556;border-radius:999px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;}
+.auto-narration:hover{background:#eef3f8;}
+.auto-narration b{color:var(--navy);}
+.speak-row{margin:4px 0 clamp(8px,1.4vh,16px);}
+
+.content-text .body-block p,.content-text .body-block li,.anim-step p,.anim-step li,.page-intro,.page-instruction,
+.hotspot-detail p,.opt-row,.quiz-question,.match-zone,.match-chip,.cards-note,.gt-panel-body{font-size:var(--fs);}
+.feature-card p,.reasoning-box,.anim-step.icon-row p{font-size:var(--fs-sm);}
+.feature-card h3,.anim-step.icon-row h3,.hotspot-detail-head h3{font-size:calc(var(--fs) + 1px);}
+.quiz-question{font-size:calc(var(--fs) + 1px);}
+
+/* Content: text beside a height-capped image; stacked images stay short. */
+.content-layout{justify-content:center;}
+.content-image{flex:0 1 clamp(260px,34vw,420px);max-width:clamp(260px,34vw,420px);}
+.content-image img{max-height:var(--media-h);width:auto;max-width:100%;margin:0 auto;}
+.content-layout.stacked{align-items:center;}
+.content-layout.stacked .content-text{width:100%;}
+.content-layout.stacked .content-image{max-width:none;flex:none;width:auto;}
+.content-layout.stacked .content-image img{max-height:calc(var(--media-h) - 6vh);}
+.anim-stack{margin:0 auto;}
+.anim-stack.two-col{gap:clamp(6px,1vh,10px) 16px;}
+.anim-stack.two-col .anim-step p{padding:clamp(7px,1.1vh,12px) 14px;}
+.anim-step.icon-row{padding:clamp(6px,1vh,12px) 16px;}
+.anim-step.icon-row img{width:clamp(36px,5vh,56px);height:clamp(36px,5vh,56px);flex-basis:clamp(36px,5vh,56px);}
+.anim-video{display:block;max-height:calc(var(--media-h) - 4vh);margin:0 auto;}
+.cards-trailing img{max-height:calc(var(--media-h) - 10vh);width:auto;}
+.feature-card{padding:clamp(10px,1.6vh,16px) 18px;}
+.feature-card.stat{min-height:clamp(80px,11vh,104px);}
+
+/* Hotspot: image and explanation side by side; the stage takes the image's
+   own width so the percentage pins stay on their structures. */
+.hotspot-layout{display:grid;grid-template-columns:auto minmax(240px,1fr);grid-template-rows:auto 1fr;grid-template-areas:"stage progress" "stage detail";align-items:start;gap:12px 24px;justify-content:center;}
+.hotspot-stage{grid-area:stage;width:auto;max-width:none;display:inline-block;justify-self:center;}
+.hotspot-stage img{width:auto;max-width:min(100%,640px);max-height:calc(var(--media-h) + 6vh);}
+.hotspot-detail{grid-area:detail;max-width:none;}
+.hotspot-progress{grid-area:progress;}
+
+/* Image grading: the fundus is sized by height; options beside it. */
+.fundus-layout{justify-content:center;}
+.fundus-stage img{width:auto;height:clamp(240px,52vh,520px);}
+.pin-label{z-index:2;}
+.pin-label.below{transform:translate(-50%,60%);}
+.pin-label.edge-l{transform:translate(-14px,-140%);}
+.pin-label.edge-l.below{transform:translate(-14px,60%);}
+.pin-label.edge-r{transform:translate(calc(-100% + 14px),-140%);}
+.pin-label.edge-r.below{transform:translate(calc(-100% + 14px),60%);}
+.opt-row{padding:clamp(8px,1.3vh,12px) 4px;}
+.submit-btn{margin-top:clamp(10px,1.8vh,20px);}
+.reasoning-box{margin-top:clamp(10px,1.6vh,16px);}
+.opt-list,.quiz-question,.reasoning-box{margin-left:auto;margin-right:auto;}
+.quiz-tag{display:table;margin-left:auto;margin-right:auto;}
+.page>.submit-btn{display:block;margin-left:auto;margin-right:auto;}
+.page>.page-instruction{max-width:680px;margin-left:auto;margin-right:auto;}
+
+.match-layout{justify-content:center;}
+.match-chip,.match-zone{padding:clamp(6px,1vh,10px) 14px;}
+.match-zone{min-height:clamp(40px,5.5vh,52px);}
+.match-col{gap:clamp(6px,1vh,10px);}
+
+.certificate{padding:clamp(24px,5vh,50px) clamp(28px,5vw,60px);}
+.certificate h1{margin-bottom:clamp(12px,2.6vh,26px);}
+.cert-meta{margin-top:clamp(16px,3.6vh,36px);}
+.certificate-wrap{padding:clamp(12px,3vh,34px);}
+
+@media(max-width:760px){
+  .app{flex-direction:column;height:auto;min-height:100dvh;}
+  .sidebar{width:auto;flex:none;overflow:visible;}
+  .sidebar-head{padding:10px 14px 12px;}
+  .sidebar-head .top-icons{margin-bottom:6px;}
+  .sidebar-head .brand{display:none;}
+  .steps{display:flex;overflow-x:auto;}
+  .step{flex:0 0 auto;padding:10px 14px;border-bottom:none;border-right:1px solid #cfcfcf;}
+  .main{padding:8px;}
+  .content-card{min-height:calc(100dvh - 140px);}
+  .card-body{overflow:visible;}
+  .hotspot-layout{grid-template-columns:1fr;grid-template-areas:"stage" "progress" "detail";}
+  .hotspot-stage img{max-width:100%;max-height:none;}
+  .fundus-layout{flex-direction:column;align-items:stretch;gap:16px;}
+  .fundus-stage{flex:none;width:100%;}
+  .fundus-stage img{width:100%;height:auto;}
+  .fundus-side{min-width:0;}
+  .content-image{flex:1 1 100%;max-width:100%;}
+  .card-footer{flex-wrap:wrap;gap:8px;}
+}
