@@ -1,0 +1,34 @@
+{
+  "name": "@gamatutor/web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev --port 3100",
+    "build": "next build",
+    "start": "next start --port 3100",
+    "db:generate": "drizzle-kit generate",
+    "course:publish": "tsx scripts/publish-course.ts",
+    "admin:create": "tsx scripts/create-admin.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "0.5.9",
+    "@gamatutor/course-player": "workspace:*",
+    "@gamatutor/course-schema": "workspace:*",
+    "@gamatutor/tracking": "workspace:*",
+    "drizzle-orm": "0.45.4",
+    "next": "16.3.8",
+    "nodemailer": "^8.0.0",
+    "postgres": "3.4.9",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^8.0.2",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "drizzle-kit": "0.31.11"
+  }
+}

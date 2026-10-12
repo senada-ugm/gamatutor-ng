@@ -2,10 +2,17 @@ import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  // content/*/assets holds course media and vendored builds (the 3D atlas),
-  // not source.
+  // content/*/assets holds course media, not source.
   {
-    ignores: ['out/**', 'fixtures/legacy/**', '**/dist/**', 'node_modules/**', 'content/*/assets/**'],
+    ignores: [
+      'out/**',
+      'fixtures/legacy/**',
+      '**/dist/**',
+      '**/node_modules/**',
+      'content/*/assets/**',
+      'apps/web/.next/**',
+      'apps/web/next-env.d.ts',
+    ],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
