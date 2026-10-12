@@ -1,5 +1,4 @@
 import type { RenderContext } from '../context.js';
-import { stopSpeech } from '../narration.js';
 
 /**
  * Module list. Modules beyond the furthest reached are locked; clicking an
@@ -31,7 +30,6 @@ export function renderSidebar(ctx: RenderContext): void {
     const i = parseInt(el.dataset['idx']!, 10);
     if (i > state.furthestModuleIdx) return;
     el.onclick = () => {
-      stopSpeech(ctx);
       state.moduleIdx = i;
       state.pageIdx = 0;
       ctx.rerender();

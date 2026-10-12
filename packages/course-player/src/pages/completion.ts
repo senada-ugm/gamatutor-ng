@@ -52,6 +52,14 @@ export function renderCompletion(ctx: RenderContext): void {
     return;
   }
   const { course, state } = ctx;
+  // The sidebar keeps reached modules open, so a learner on a retake can
+  // arrive here before answering. Nothing is scored or reported until every
+  // graded question of this attempt has an answer.
+  const unanswered = unansweredQuiz(ctx);
+  if (unanswered) {
+    renderUnfinished(ctx, unanswered);
+    return;
+  }
   const score = scoreCourse(course, state);
   const passed = isPassed(ctx, score);
   report(ctx, score, passed);
@@ -121,6 +129,46 @@ export function renderCompletion(ctx: RenderContext): void {
     state.showCertificate = true;
     ctx.rerender();
   });
+}
+
+interface QuizSpot {
+  moduleIdx: number;
+  pageIdx: number;
+  answered: number;
+  total: number;
+}
+
+function unansweredQuiz(ctx: RenderContext): QuizSpot | null {
+  let first: Omit<QuizSpot, 'answered' | 'total'> | null = null;
+  let answered = 0;
+  let total = 0;
+  ctx.course.modules.forEach((m, mi) =>
+    m.pages.forEach((p, pi) => {
+      if (p.type !== 'quiz' || !p.graded) return;
+      total++;
+      if (ctx.state.quizAnswers[p.id]) answered++;
+      else first ??= { moduleIdx: mi, pageIdx: pi };
+    }),
+  );
+  return first ? { ...(first as Omit<QuizSpot, 'answered' | 'total'>), answered, total } : null;
+}
+
+function renderUnfinished(ctx: RenderContext, spot: QuizSpot): void {
+  setCard(
+    ctx,
+    `
+    <div class="done-screen">
+      <h1>EVALUASI BELUM SELESAI</h1>
+      <p>Anda baru menjawab ${spot.answered} dari ${spot.total} soal evaluasi. Nilai dihitung setelah semua soal dijawab.</p>
+      <div class="done-actions"><button class="done-primary" id="toQuizBtn">Lanjutkan evaluasi</button></div>
+    </div>
+  `,
+  );
+  ctx.document.getElementById('toQuizBtn')!.onclick = () => {
+    ctx.state.moduleIdx = spot.moduleIdx;
+    ctx.state.pageIdx = spot.pageIdx;
+    ctx.rerender();
+  };
 }
 
 export function renderCertificate(ctx: RenderContext): void {

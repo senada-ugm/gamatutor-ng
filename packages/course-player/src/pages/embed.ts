@@ -1,10 +1,7 @@
 import type { PageOfType } from '@gamatutor/course-schema';
 import type { RenderContext } from '../context.js';
 import { cardShell, setCard, wireFooterNav } from '../chrome/shell.js';
-import { esc, kickerHtml } from '../dom.js';
-
-/** `esc` is the original's body escaper; attributes also need quotes escaped. */
-const attr = (s: string) => esc(s).replace(/"/g, '&quot;');
+import { attr, esc, kickerHtml } from '../dom.js';
 
 /**
  * An interactive from the course's own assets, in a frame. The frame is capped

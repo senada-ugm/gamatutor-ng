@@ -17,12 +17,13 @@ from playwright.sync_api import sync_playwright
 
 OUT = Path(sys.argv[1] if len(sys.argv) > 1 else 'out/drive-retinopati').resolve()
 SHOTS = Path(sys.argv[2]) if len(sys.argv) > 2 else None
-VIEWPORTS = [(1366, 768, True), (1920, 1080, True), (390, 844, False)]
+# 1366x650 is a 768px laptop screen minus the browser's own toolbars.
+VIEWPORTS = [(1366, 650, True), (1366, 768, True), (1920, 1080, True), (390, 844, False)]
 
 
 def overflow(page) -> int:
     return page.evaluate(
-        """() => { const b = document.querySelector('.card-body');
+        """() => { const b = document.querySelector('.card-body, .done-screen, .certificate-wrap');
                    return b ? b.scrollHeight - b.clientHeight : 0; }"""
     )
 

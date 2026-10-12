@@ -9,6 +9,11 @@ export function esc(s: string | undefined | null): string {
   return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;');
 }
 
+/** For double-quoted attribute values: `esc` plus the quote itself. */
+export function attr(s: string | undefined | null): string {
+  return esc(s).replace(/"/g, '&quot;');
+}
+
 export function kickerHtml(page: Page): string {
   const kicker = 'kicker' in page ? page.kicker : undefined;
   return kicker ? `<div class="kicker-badge">${esc(kicker)}</div>` : '';
