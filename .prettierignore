@@ -1,0 +1,48 @@
+# Patterns here resolve relative to THIS file, not the cwd — which is why
+# every package's format script passes `--ignore-path ../../.prettierignore`.
+# Prettier only auto-discovers an ignore file in the directory it runs
+# from, so without that flag a package-level `prettier --write` sees no
+# ignore list at all and happily rewrites everything below.
+
+# --- Build output and caches ---
+dist/
+build/
+.next/
+.output/
+.turbo/
+.nitro/
+.tanstack/
+coverage/
+node_modules/
+.pnpm-store/
+pnpm-lock.yaml
+
+# --- Generated: never hand-edited, regenerate instead ---
+# TypeSpec -> OpenAPI -> hey-api SDK (`pnpm --filter @workspace/contracts build`;
+# hey-api wipes gen/ on every run, so anything written here is lost)
+packages/contracts/gen/
+packages/contracts/tsp-output/
+# Better Auth CLI output (`npx auth generate`)
+apps/api/src/db/auth-schema.ts
+# drizzle-kit migrations + journal (`pnpm --filter api db:generate`)
+apps/api/drizzle/
+# TanStack Start route tree codegen
+apps/web/src/routeTree.gen.ts
+
+# --- Vendored: shadcn registry output ---
+# Already excluded from lint (packages/ui/eslint.config.ts) and typecheck
+# (packages/ui/tsconfig.json) under the same never-hand-edit rule — an
+# `shadcn add --overwrite` would discard any reformatting anyway.
+packages/ui/src/components/
+
+# --- Runtime data ---
+apps/api/storage/
+
+# --- Prose ---
+# Every config key here (printWidth, semi, singleQuote, trailingComma) is
+# a code concern. Prettier's markdown printer meanwhile de-indents the
+# continuation lines of these hand-wrapped docs — it reads a wrapped
+# `apps/api/src/modules/.../service.ts` path inside a list item as a lazy
+# continuation and flattens it to column 0 — and rewrites *emphasis* as
+# _emphasis_. Formatting prose is not what this config is for.
+*.md

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "globalEnv": ["NODE_ENV", "DATABASE_URL"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$"],
+      "outputs": ["dist/**", "gen/**", "tsp-output/**", ".output/**"]
+    },
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
+    "typecheck": {
+      "dependsOn": ["^typecheck"]
+    },
+    "validate": {
+      "dependsOn": ["lint", "typecheck", "format:check"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "format:check": {
+      "dependsOn": ["^format:check"]
+    }
+  }
+}

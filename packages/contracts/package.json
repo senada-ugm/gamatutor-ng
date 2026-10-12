@@ -1,0 +1,38 @@
+{
+  "name": "@workspace/contracts",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "tsp compile spec/main.tsp && node scripts/enrich-tags.mjs && openapi-ts",
+    "build:tsp": "tsp compile spec/main.tsp && node scripts/enrich-tags.mjs",
+    "contracts:preview": "pnpm dlx @scalar/cli document serve tsp-output/openapi/3.1.0/openapi.yaml -w -p 9000",
+    "format": "prettier --ignore-path ../../.prettierignore --write .",
+    "format:check": "prettier --ignore-path ../../.prettierignore --check .",
+    "generate": "openapi-ts",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@hey-api/openapi-ts": "0.99.0",
+    "@typespec/compiler": "1.16.0",
+    "@typespec/http": "1.16.0",
+    "@typespec/openapi3": "1.16.0",
+    "@typespec/rest": "0.86.0",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "eslint": "^9.39.5",
+    "typescript": "^6.0.3"
+  },
+  "exports": {
+    ".": "./gen/index.ts",
+    "./domain": "./src/domain.ts",
+    "./sdk": "./gen/sdk.gen.ts",
+    "./zod": "./gen/zod.gen.ts",
+    "./client": "./gen/client.gen.ts",
+    "./openapi": "./tsp-output/openapi/3.1.0/openapi.yaml"
+  }
+}

@@ -1,0 +1,171 @@
+import "@typespec/http";
+import "@typespec/rest";
+
+import "./shared/common.tsp";
+
+using TypeSpec.Http;
+using TypeSpec.Rest;
+using Lms.Common;
+
+/**
+ * Read-only aggregates for the manager dashboards: one call per course
+ * with every participant's funnel/progress/attendance row (the data the
+ * ParticipantsPanel and attendance records view currently assemble
+ * client-side), plus the platform-wide money summary for the admin
+ * financial widgets (replacing lib/mock/financial.ts).
+ *
+ * The CSV export of a course's participant table and an institution's
+ * order book live OUTSIDE this contract (GET /v1/courses/{id}/participants/export,
+ * GET /v1/institutions/{id}/orders/export, text/csv) — same operational-endpoint
+ * precedent as POST /uploads/sweep: the data is fully described here; only the
+ * file formatting is operational.
+ */
+namespace Lms {
+  model ReportUser {
+    id: ResourceId;
+    name: string;
+    email: string;
+  }
+
+  model AttendanceSummary {
+    present: int32;
+    late: int32;
+    absent: int32;
+    /** Sessions that existed when the report ran (denominator). */
+    sessionsCount: int32;
+    /** present + late as a percent of sessionsCount, rounded; 0 when no sessions. */
+    attendancePercent: int32;
+  }
+
+  model CourseReportParticipant {
+    user: ReportUser;
+    enrollmentStatus: EnrollmentStatus;
+    progressPercent: int32;
+    completedLessons: int32;
+    attendance: AttendanceSummary;
+    finalGrade?: int32;
+    certificateId?: ResourceId;
+  }
+
+  model CourseReport {
+    courseId: ResourceId;
+    title: string;
+    registrantCount: int32;
+    participantCount: int32;
+    totalLessons: int32;
+    totalSessions: int32;
+    participants: CourseReportParticipant[];
+  }
+
+  model FinancialSummaryCourseRow {
+    courseId: ResourceId;
+    courseTitle: string;
+    institutionId: ResourceId;
+    paidOrders: int32;
+    /** Sum of finalAmount over paid orders, integer Rupiah. */
+    revenue: int32;
+    /** Sum of discountAmount over paid orders. */
+    discountGiven: int32;
+    pendingOrders: int32;
+  }
+
+  model FinancialSummary {
+    totalRevenue: int32;
+    totalDiscountGiven: int32;
+    paidOrders: int32;
+    pendingOrders: int32;
+    refundedOrders: int32;
+    byCourse: FinancialSummaryCourseRow[];
+  }
+
+  @route("/courses/{courseId}/report")
+  @tag("Reports")
+  interface CourseReportsApi {
+    /** Full participant table for a course: funnel status, lesson
+     *  progress, attendance summary, grade, certificate. Course
+     *  managers only. */
+    @get
+    get(@path courseId: ResourceId): DataResponse<CourseReport> | ErrorResponse;
+  }
+
+  model AdminOverview {
+    totalUsers: int32;
+    totalInstitutions: int32;
+    totalCourses: int32;
+    totalEnrollments: int32;
+    /** selected enrollments. */
+    activeParticipants: int32;
+    graduatedParticipants: int32;
+    /** graduated as a percent of selected+graduated, rounded. */
+    completionRate: int32;
+    growth30d: AdminGrowth30d;
+  }
+
+  model AdminGrowth30d {
+    newUsers: int32;
+    newCourses: int32;
+    newEnrollments: int32;
+    newInstitutions: int32;
+  }
+
+  model InstitutionReportCourseRow {
+    courseId: ResourceId;
+    title: string;
+    status: CourseStatus;
+    registrantCount: int32;
+    participantCount: int32;
+    graduatedCount: int32;
+    paidOrders: int32;
+    /** Sum of finalAmount over this course's paid orders. */
+    revenue: int32;
+  }
+
+  /**
+   * One institution's funnel and money in a single call - the owner's
+   * equivalent of AdminOverview, scoped to what they own. Counts follow
+   * the same definitions the course-level report uses: a registrant is
+   * any enrollment that was not canceled or failed, a participant is
+   * selected or graduated.
+   */
+  model InstitutionReport {
+    institutionId: ResourceId;
+    name: string;
+    courseCount: int32;
+    publishedCourseCount: int32;
+    registrantCount: int32;
+    participantCount: int32;
+    graduatedCount: int32;
+    /** graduated as a percent of selected+graduated, rounded; 0 when none. */
+    completionRate: int32;
+    /** Sum of finalAmount over paid orders for this institution's courses. */
+    totalRevenue: int32;
+    paidOrders: int32;
+    pendingOrders: int32;
+    byCourse: InstitutionReportCourseRow[];
+  }
+
+  @route("/institutions/{institutionId}/report")
+  @tag("Reports")
+  interface InstitutionReportsApi {
+    /** Funnel + money for one institution, broken down by course. The
+     *  institution's owners and admins only. */
+    @get
+    get(@path institutionId: ResourceId): DataResponse<InstitutionReport> | ErrorResponse;
+  }
+
+  @route("/admin/overview")
+  @tag("Reports")
+  interface AdminReportsApi {
+    /** Platform totals + 30-day growth for the admin dashboard. Admin only. */
+    @get
+    get(): DataResponse<AdminOverview> | ErrorResponse;
+  }
+
+  @route("/admin/financial-summary")
+  @tag("Reports")
+  interface FinancialReportsApi {
+    /** Platform money summary from paid/pending orders. Admin only. */
+    @get
+    get(): DataResponse<FinancialSummary> | ErrorResponse;
+  }
+}

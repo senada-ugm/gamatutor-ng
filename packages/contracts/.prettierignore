@@ -1,0 +1,3 @@
+# Generated output must regenerate byte-identical — never format it.
+gen/
+tsp-output/

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Next.js",
+  "extends": "./base.json",
+  "compilerOptions": {
+    "plugins": [{ "name": "next" }],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "allowJs": true,
+    "jsx": "preserve",
+    "noEmit": true,
+    // A Next.js app is a leaf, never consumed as a library — declaration
+    // output serves no purpose here, unlike packages/ui or
+    // packages/contracts. Left on (inherited from base.json), `noEmit`
+    // doesn't actually suppress TS's declaration-portability checks
+    // (TS2742) the way the `--noEmit` CLI flag does, so complex inferred
+    // types (e.g. better-auth's client) spuriously fail to typecheck.
+    "declaration": false,
+    "declarationMap": false
+  }
+}
