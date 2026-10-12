@@ -51,3 +51,73 @@ describe('parseCourse', () => {
     expect(parseCourse(ok).modules[0]!.pages).toHaveLength(2);
   });
 });
+
+describe('feedback-A additions', () => {
+  const withPages = (pages: unknown[], extra: Record<string, unknown> = {}) => ({
+    ...structuredClone(minimal),
+    ...extra,
+    modules: [{ id: 'm1', label: 'Modul 1', pages }],
+  });
+
+  it('accepts narration, audio, cues and reveal columns', () => {
+    const c = parseCourse(
+      withPages([
+        {
+          id: 'c',
+          type: 'content',
+          audio: 'assets/c.mp3',
+          revealColumns: 2,
+          transcript: 'Lead-in.',
+          reveal_steps: [{ texts: ['a. Satu'], narration: 'Satu.', cue: 2.5 }],
+        },
+      ]),
+    );
+    const p = c.modules[0]!.pages[0]!;
+    expect(p.type === 'content' && p.reveal_steps?.[0]).toMatchObject({
+      narration: 'Satu.',
+      cue: 2.5,
+    });
+  });
+
+  it('rejects three reveal columns', () => {
+    expect(() =>
+      parseCourse(withPages([{ id: 'c', type: 'content', revealColumns: 3 }])),
+    ).toThrow();
+  });
+
+  it('accepts ordered hotspots, lesion offsets, grading copy, quiz tag, completion copy', () => {
+    const c = parseCourse(
+      withPages(
+        [
+          { id: 'h', type: 'hotspot', title: 'H', image: 'i.png', ordered: true, points: [] },
+          {
+            id: 'g',
+            type: 'image-grading',
+            title: 'Simulasi',
+            instruction: 'Pilih diagnosis.',
+            image: 'f.png',
+            options: ['A', 'B'],
+            correct: 'A',
+            reasoning: 'r',
+            lesions: [{ x: 10, y: 10, label: 'HE', dx: -12, dy: 4 }],
+          },
+          {
+            id: 'q',
+            type: 'quiz',
+            tag: 'Post-test',
+            question: 'Q',
+            options: [
+              { letter: 'A', text: 'a' },
+              { letter: 'B', text: 'b' },
+            ],
+            correct: 'A',
+            explanation: 'e',
+          },
+          { id: 'k', type: 'cards', audio: 'k.mp3', cards: [] },
+        ],
+        { completion: { body: 'Selesai.', certificateText: 'telah menyelesaikan X' } },
+      ),
+    );
+    expect(c.completion?.certificateText).toBe('telah menyelesaikan X');
+  });
+});

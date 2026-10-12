@@ -1,9 +1,24 @@
 import { z } from 'zod';
 
+/**
+ * Every step may carry the narration spoken as it appears, and the second in
+ * the page's recorded `audio` at which it appears. Without either, the step
+ * appears on a timer.
+ */
+const stepNarration = { narration: z.string().optional(), cue: z.number().min(0).optional() };
+
 const RevealStepSchema = z.union([
-  z.object({ texts: z.array(z.string()).min(1) }),
-  z.object({ image: z.string(), title: z.string().optional(), body: z.string().optional() }),
-  z.object({ video: z.object({ src: z.string(), poster: z.string().optional() }) }),
+  z.object({ texts: z.array(z.string()).min(1), ...stepNarration }),
+  z.object({
+    image: z.string(),
+    title: z.string().optional(),
+    body: z.string().optional(),
+    ...stepNarration,
+  }),
+  z.object({
+    video: z.object({ src: z.string(), poster: z.string().optional() }),
+    ...stepNarration,
+  }),
 ]);
 
 const base = { id: z.string().min(1), slide: z.number().int().optional() };
@@ -33,6 +48,9 @@ const ContentSchema = z.object({
   imageLayout: z.literal('below').optional(),
   imageCaption: z.string().optional(),
   reveal_steps: z.array(RevealStepSchema).optional(),
+  /** Recorded voiceover; preferred over speech synthesis when present. */
+  audio: z.string().optional(),
+  revealColumns: z.union([z.literal(1), z.literal(2)]).optional(),
 });
 
 const CardsSchema = z.object({
@@ -42,6 +60,7 @@ const CardsSchema = z.object({
   title: z.string().optional(),
   intro: z.string().optional(),
   transcript: z.string().optional(),
+  audio: z.string().optional(),
   columns: z.number().int().min(1).max(4).optional(),
   cards: z.array(
     z.object({
@@ -63,6 +82,8 @@ const HotspotSchema = z.object({
   title: z.string(),
   intro: z.string().optional(),
   image: z.string(),
+  /** Points are a sequence; the next unvisited one is highlighted. */
+  ordered: z.boolean().optional(),
   points: z.array(z.object({ x: z.number(), y: z.number(), label: z.string(), body: z.string() })),
   masks: z
     .array(z.object({ x: z.number(), y: z.number(), w: z.number(), h: z.number() }))
@@ -82,17 +103,29 @@ const ImageGradingSchema = z.object({
   ...base,
   type: z.literal('image-grading'),
   level: z.string().optional(),
+  title: z.string().optional(),
+  instruction: z.string().optional(),
   image: z.string(),
   options: z.array(z.string()).min(2),
   correct: z.string(),
   reasoning: z.string(),
-  lesions: z.array(z.object({ x: z.number(), y: z.number(), label: z.string() })),
+  /** `dx`/`dy` place the numbered badge away from the lesion, in % of the image. */
+  lesions: z.array(
+    z.object({
+      x: z.number(),
+      y: z.number(),
+      label: z.string(),
+      dx: z.number().optional(),
+      dy: z.number().optional(),
+    }),
+  ),
 });
 
 const QuizSchema = z.object({
   ...base,
   type: z.literal('quiz'),
   graded: z.boolean().default(true),
+  tag: z.string().optional(),
   question: z.string(),
   options: z.array(z.object({ letter: z.string(), text: z.string() })).min(2),
   correct: z.string(),
@@ -154,5 +187,9 @@ export const CourseSchema = z.object({
   brand: z.object({ name: z.string(), mark: z.string() }),
   passingScore: z.number().min(0).max(1),
   assessment: z.object({ mode: z.enum(['formative', 'secured']) }),
+  /** Course-specific copy for the completion screen and the certificate. */
+  completion: z
+    .object({ body: z.string().optional(), certificateText: z.string().optional() })
+    .optional(),
   modules: z.array(ModuleSchema).min(1),
 });
