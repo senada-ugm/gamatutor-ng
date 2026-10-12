@@ -7,6 +7,8 @@ import { Input } from "@workspace/ui/components/input"
 import { AuthPage } from "@/components/composed/_shared/auth-page"
 import { signIn } from "@/lib/auth"
 
+import { apiSend } from "@/lib/api"
+
 export function LoginPage() {
   const navigate = useNavigate()
   const emailRef = useRef<HTMLInputElement>(null)
@@ -19,7 +21,7 @@ export function LoginPage() {
     const email = emailRef.current?.value?.trim() ?? ""
     const password = passwordRef.current?.value ?? ""
     if (!email || !password) {
-      setError("Isi email dan kata sandi")
+      setError("Please enter your email and password")
       return
     }
 
@@ -28,19 +30,32 @@ export function LoginPage() {
     try {
       const user = await signIn(email, password)
       if (!user) {
-        setError("Email atau kata sandi salah")
+        setError("Invalid email or password")
         return
       }
+
+      // Sync pending doctor profile from registration if present
+      const pendingProfile = localStorage.getItem("pending_doctor_profile")
+      if (pendingProfile && user.id) {
+        try {
+          const parsed = JSON.parse(pendingProfile)
+          await apiSend("PATCH", `/participant-profiles/${user.id}`, parsed)
+          localStorage.removeItem("pending_doctor_profile")
+        } catch {
+          // Non-blocking sync failure
+        }
+      }
+
       navigate({ to: "/dashboard" })
     } catch {
-      setError("Terjadi kesalahan jaringan")
+      setError("A network error occurred. Please try again.")
     } finally {
       setSubmitting(false)
     }
   }
 
   return (
-    <AuthPage title="Masuk" description="Masuk untuk melanjutkan pelatihan Anda.">
+    <AuthPage title="Sign In" description="Sign in to continue your clinical training.">
       <form
         onSubmit={(e) => {
           e.preventDefault()
@@ -60,22 +75,22 @@ export function LoginPage() {
           </Field>
           <Field>
             <div className="flex items-center">
-              <FieldLabel htmlFor="password">Kata Sandi</FieldLabel>
+              <FieldLabel htmlFor="password">Password</FieldLabel>
               <Link to="/forgot-password" className="ms-auto text-sm underline-offset-4 hover:underline">
-                Lupa kata sandi?
+                Forgot password?
               </Link>
             </div>
             <Input ref={passwordRef} id="password" type="password" autoComplete="current-password" required />
           </Field>
           <Field>
             <Button type="submit" disabled={submitting}>
-              {submitting ? "Memproses..." : "Masuk"}
+              {submitting ? "Signing in..." : "Sign In"}
             </Button>
           </Field>
           <FieldDescription className="text-center">
-            Belum punya akun?{" "}
+            Don't have an account?{" "}
             <Link to="/register" className="underline underline-offset-4">
-              Daftar
+              Register
             </Link>
           </FieldDescription>
         </FieldGroup>

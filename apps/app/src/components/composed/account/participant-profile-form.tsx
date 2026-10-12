@@ -44,6 +44,9 @@ const yearOrUndefined = (value: string) => {
 
 interface ScalarValues {
   phone: string
+  profession: string
+  institutionName: string
+  strNumber: string
   about: string
   educationLevel: string
   address: string
@@ -85,6 +88,9 @@ interface CertificationRow {
 function scalarsFromProfile(profile: ContractParticipantProfile): ScalarValues {
   return {
     phone: profile.phone ?? "",
+    profession: profile.profession ?? "",
+    institutionName: profile.institutionName ?? "",
+    strNumber: profile.strNumber ?? "",
     about: profile.about ?? "",
     educationLevel: profile.educationLevel ?? "",
     address: profile.address ?? "",
@@ -181,6 +187,9 @@ export function ParticipantProfileForm({ profile }: { profile: ContractParticipa
 
     save.mutate({
       phone: orNull(values.phone),
+      profession: orNull(values.profession),
+      institutionName: orNull(values.institutionName),
+      strNumber: orNull(values.strNumber),
       about: orNull(values.about),
       educationLevel: orNull(values.educationLevel),
       address: orNull(values.address),
@@ -221,11 +230,43 @@ export function ParticipantProfileForm({ profile }: { profile: ContractParticipa
     <form onSubmit={handleSubmit} className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Data Diri</CardTitle>
-          <CardDescription>Dipakai saat mendaftar pelatihan dan mencetak sertifikat.</CardDescription>
+          <CardTitle>Personal Information & Medical Credentials</CardTitle>
+          <CardDescription>Used during clinical screening registration and official certificate generation.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 sm:grid-cols-2">
-          <Field id="profile-phone" label="No. HP">
+          <Field id="profile-profession" label="Medical Profession">
+            <NativeSelect
+              id="profile-profession"
+              value={values.profession}
+              onChange={(e) => update("profession", e.target.value)}
+            >
+              <NativeSelectOption value="">Select profession</NativeSelectOption>
+              <NativeSelectOption value="Puskesmas / Community Health Physician">
+                Puskesmas / Community Health Physician
+              </NativeSelectOption>
+              <NativeSelectOption value="Primary Clinic Physician">Primary Clinic Physician</NativeSelectOption>
+              <NativeSelectOption value="Specialist Physician">Specialist Physician</NativeSelectOption>
+              <NativeSelectOption value="Resident Physician">Resident Physician</NativeSelectOption>
+              <NativeSelectOption value="Other Healthcare Professional">Other Healthcare Professional</NativeSelectOption>
+            </NativeSelect>
+          </Field>
+          <Field id="profile-institution" label="Institution / Health Center">
+            <Input
+              id="profile-institution"
+              value={values.institutionName}
+              onChange={(e) => update("institutionName", e.target.value)}
+              placeholder="e.g. Puskesmas Sleman"
+            />
+          </Field>
+          <Field id="profile-str" label="Doctor Registration Number (STR)">
+            <Input
+              id="profile-str"
+              value={values.strNumber}
+              onChange={(e) => update("strNumber", e.target.value)}
+              placeholder="Active STR number (optional)"
+            />
+          </Field>
+          <Field id="profile-phone" label="Phone / WhatsApp">
             <Input
               id="profile-phone"
               value={values.phone}

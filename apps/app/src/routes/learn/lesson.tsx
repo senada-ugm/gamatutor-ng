@@ -7,7 +7,9 @@ import { Separator } from "@workspace/ui/components/separator"
 
 import { useCourseContext } from "@/components/composed/player/course-context"
 import { EmptyState } from "@/components/composed/_shared/empty-state"
+import { InteractiveSlideViewer } from "@/components/composed/player/interactive-slide-viewer"
 import { apiSend } from "@/lib/api"
+import { DRIVE_RETINOPATHY_COURSE } from "@/lib/content/drive-retinopati-data"
 
 interface VideoEmbed {
   kind: "iframe" | "video"
@@ -50,16 +52,21 @@ export function LessonPage() {
   const lesson = course.modules.flatMap((m) => m.lessons).find((l) => l.id === lessonId)
   const isCompleted = completedLessonIds.includes(lessonId)
 
+  const isDriveCourse =
+    course.title.toLowerCase().includes("retinopati") ||
+    course.title.toLowerCase().includes("drive") ||
+    course.id.toLowerCase().includes("drive")
+
   const toggleComplete = useMutation({
     mutationFn: () =>
       isCompleted
         ? apiSend<null>("DELETE", `/lesson-progress/${lessonId}/complete`)
         : apiSend<null>("POST", `/lesson-progress/${lessonId}/complete?courseId=${encodeURIComponent(course.id)}`),
     onSuccess: async () => {
-      toast.success(isCompleted ? "Pelajaran ditandai belum selesai" : "Pelajaran selesai")
+      toast.success(isCompleted ? "Lesson marked incomplete" : "Lesson completed")
       await refreshProgress()
     },
-    onError: () => toast.error("Gagal memperbarui progres"),
+    onError: () => toast.error("Failed to update progress"),
   })
 
   const completeAndAdvance = useMutation({
@@ -67,7 +74,7 @@ export function LessonPage() {
       await apiSend<null>("POST", `/lesson-progress/${lessonId}/complete?courseId=${encodeURIComponent(course.id)}`)
     },
     onSuccess: async () => {
-      toast.success("Pelajaran selesai")
+      toast.success("Lesson completed")
       await refreshProgress()
       if (next) {
         void navigate({
@@ -76,11 +83,11 @@ export function LessonPage() {
         })
       }
     },
-    onError: () => toast.error("Gagal memperbarui progres"),
+    onError: () => toast.error("Failed to update progress"),
   })
 
   if (!lesson) {
-    return <p className="py-8 text-center text-muted-foreground">Pelajaran tidak ditemukan.</p>
+    return <p className="py-8 text-center text-muted-foreground">Lesson not found.</p>
   }
 
   const allLessons = course.modules.flatMap((m) => m.lessons)
@@ -96,7 +103,16 @@ export function LessonPage() {
       </div>
 
       <div className="min-h-64">
-        {lesson.contentType === "text" && lesson.textContent ? (
+        {isDriveCourse ? (
+          <InteractiveSlideViewer
+            course={DRIVE_RETINOPATHY_COURSE}
+            onCompleteModule={() => {
+              if (!isCompleted) {
+                completeAndAdvance.mutate()
+              }
+            }}
+          />
+        ) : lesson.contentType === "text" && lesson.textContent ? (
           <div className="max-w-prose text-sm leading-relaxed whitespace-pre-line">{lesson.textContent}</div>
         ) : lesson.contentType === "video" && lesson.url ? (
           <div className="aspect-video overflow-hidden rounded-lg border bg-black shadow-xs">
@@ -118,8 +134,8 @@ export function LessonPage() {
           </div>
         ) : (
           <EmptyState
-            title="Konten belum tersedia"
-            description="Instruktur belum mengisi materi untuk pelajaran ini."
+            title="Content not yet available"
+            description="The instructor has not published materials for this lesson yet."
           />
         )}
       </div>
@@ -135,7 +151,7 @@ export function LessonPage() {
               className="gap-2"
             >
               <Check className="size-4" />
-              {completeAndAdvance.isPending ? "Menyimpan..." : "Selesai & Lanjut"}
+              {completeAndAdvance.isPending ? "Saving..." : "Complete & Advance"}
             </Button>
           ) : (
             <Button
@@ -143,7 +159,7 @@ export function LessonPage() {
               onClick={() => toggleComplete.mutate()}
               disabled={toggleComplete.isPending}
             >
-              {toggleComplete.isPending ? "Menyimpan..." : isCompleted ? "Tandai Belum Selesai" : "Tandai Selesai"}
+              {toggleComplete.isPending ? "Saving..." : isCompleted ? "Mark Incomplete" : "Mark Complete"}
             </Button>
           )}
         </div>
@@ -155,7 +171,7 @@ export function LessonPage() {
               className="flex min-w-0 items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="size-3.5 shrink-0" />
-              <span className="truncate">Sebelumnya</span>
+              <span className="truncate">Previous</span>
             </Link>
           ) : null}
           {next ? (
@@ -165,7 +181,7 @@ export function LessonPage() {
               className="flex min-w-0 items-center gap-1 text-sm text-primary hover:underline"
               title={next.title}
             >
-              <span className="truncate">Berikutnya: {next.title}</span>
+              <span className="truncate">Next: {next.title}</span>
               <ArrowRight className="size-3.5 shrink-0" />
             </Link>
           ) : null}
