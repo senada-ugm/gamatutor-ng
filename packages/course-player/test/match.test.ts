@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { shuffle } from '../src/pages/match.js';
-import { seededRandom } from '../../../test/characterisation/harness.js';
+import { seededRandom } from './helpers.js';
 
 describe('shuffle', () => {
   it('is a permutation of the input', () => {

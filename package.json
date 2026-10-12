@@ -16,7 +16,6 @@
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest",
-    "migrate:drive": "tsx tools/migrate-drive.ts",
     "build:standalone": "tsx tools/build-standalone.ts",
     "verify": "pnpm lint && pnpm typecheck && pnpm typecheck:isolation && pnpm test",
     "typecheck:isolation": "tsc -p packages/course-schema/tsconfig.json && tsc -p packages/tracking/tsconfig.json"

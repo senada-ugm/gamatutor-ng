@@ -58,21 +58,14 @@ Open `out/drive-retinopati/index.html` in a browser, or zip that folder and
 upload it to any SCORM 1.2 LMS. It is generated entirely from
 `content/drive-retinopati/course.json` plus the player.
 
-## How the extraction is kept honest
+## How the extraction was kept honest
 
-`fixtures/legacy/index.html` is the **frozen original** and is never edited. A
-characterisation suite drives it and the extracted player through the same
-clicks in jsdom — with a seeded RNG, a frozen clock and a recording SCORM API —
-and asserts they render identical HTML and make identical LMS calls, over eight
-walkthroughs covering every page type and the full 62-click course.
-
-The only sanctioned difference is accessibility: the player adds `tabindex`,
-`role` and `aria-*` attributes the original lacked, so hotspot points and match
-chips are keyboard-operable. The parity test strips exactly those attributes
-and compares everything else strictly — anything else that differs is a bug.
-
-Opening the frozen fixture directly in a browser shows broken images by design;
-its assets moved to `content/drive-retinopati/assets/`. Use the built package.
+During S0, a characterisation suite drove the frozen original
+(`fixtures/legacy/index.html`) and the extracted player through the same clicks
+in jsdom and asserted identical HTML and identical SCORM calls. That suite was
+retired once Tim DRIVE asked for visible changes on most pages; the last
+parity-green commit is tagged `s0-parity-final`. `course.json` is now the
+source of truth, and the fixture stays only as a historical record.
 
 ## Layout
 
@@ -83,17 +76,16 @@ its assets moved to `content/drive-retinopati/assets/`. Use the built package.
 | `packages/course-player` | The runtime. Framework-free, zero third-party runtime dependencies. |
 | `content/drive-retinopati` | The DRIVE course as `course.json` + assets. |
 | `imported/` | SCORM packages from other tools, hosted verbatim. |
-| `fixtures/legacy` | The frozen original, kept as the golden reference. |
-| `tools/` | `migrate-drive.ts`, `build-standalone.ts`. |
-| `test/characterisation` | The parity harness and walkthroughs. |
+| `fixtures/legacy` | The frozen original (historical; see `s0-parity-final`). |
+| `tools/` | `build-standalone.ts`, `deploy.sh`. |
+| `test/build` | Standalone build and full-course walkthrough. |
 | `deploy/` | nginx vhost and landing page for the live host. |
 
 ## Development
 
 ```bash
-pnpm verify     # lint + typecheck + 67 tests
+pnpm verify     # lint + typecheck + tests
 pnpm test       # tests only
-pnpm migrate:drive       # regenerate content/drive-retinopati/course.json
 pnpm build:standalone    # regenerate out/drive-retinopati/
 ./tools/deploy.sh        # build and ship to gamatutor.komunitech.id
 ```
