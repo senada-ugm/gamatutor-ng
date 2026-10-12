@@ -3,10 +3,15 @@
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": ".",
-    "lib": ["ES2022"],
+    "lib": [
+      "ES2022"
+    ],
     "composite": false,
     "declaration": false,
     "noEmit": true
   },
-  "include": ["src", "test"]
+  "include": [
+    "src",
+    "test"
+  ]
 }
