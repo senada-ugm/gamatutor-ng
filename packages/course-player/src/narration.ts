@@ -369,9 +369,23 @@ export function wireSpeakButton(ctx: RenderContext): void {
   btn.onclick = () => ctx.narration.toggle();
 }
 
+const speakLabel = (playing: boolean) => (playing ? '⏸ Jeda narasi' : '🔊 Putar narasi');
+
 /** The button markup, reflecting whether the voice is playing. */
 export function speakButtonHtml(ctx: RenderContext): string {
   if (!ctx.narration.available) return '';
-  const label = ctx.narration.playing ? '⏸ Jeda narasi' : '🔊 Putar narasi';
-  return `<div class="speak-row"><button class="speak-btn" id="speakBtn" aria-pressed="${ctx.narration.playing}">${label}</button></div>`;
+  const playing = ctx.narration.playing;
+  return `<div class="speak-row"><button class="speak-btn" id="speakBtn" aria-pressed="${playing}">${speakLabel(playing)}</button></div>`;
+}
+
+/**
+ * Updates the button in place. Re-rendering the card for this would recreate
+ * a video the learner may be watching.
+ */
+export function refreshSpeakButton(ctx: RenderContext): void {
+  const btn = ctx.document.getElementById('speakBtn');
+  if (!btn) return;
+  const playing = ctx.narration.playing;
+  btn.textContent = speakLabel(playing);
+  btn.setAttribute('aria-pressed', String(playing));
 }

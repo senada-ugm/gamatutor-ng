@@ -2,7 +2,12 @@ import type { Course, Page } from '@gamatutor/course-schema';
 import { NullAdapter, statement, type TrackingAdapter } from '@gamatutor/tracking';
 import { DEFAULT_CAPABILITIES, type PlayerCapabilities, type RenderContext } from './context.js';
 import { renderSidebar } from './chrome/sidebar.js';
-import { autoNarrationEnabled, NarrationSession, stopSpeech } from './narration.js';
+import {
+  autoNarrationEnabled,
+  NarrationSession,
+  refreshSpeakButton,
+  stopSpeech,
+} from './narration.js';
 import { createState, nextTarget, prevTarget, revealCount, type PlayerState } from './nav.js';
 import { renderCards } from './pages/cards.js';
 import { renderCompletion } from './pages/completion.js';
@@ -136,7 +141,7 @@ export function createPlayer(opts: PlayerOptions): Player {
         page,
         (i) => revealTo(pageId, i),
         () => {
-          if (session === s) render();
+          if (session === s) refreshSpeakButton(ctx);
         },
       );
       session = s;

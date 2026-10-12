@@ -67,7 +67,7 @@ export function renderMatch(ctx: RenderContext, page: PageOfType<'match'>): void
     ${kickerHtml(page)}
     <h2>${esc(page.title)}</h2>
     <div class="title-underline"></div>
-    ${page.intro ? `<p style="font-size:14px;color:#334;margin:0 0 14px;line-height:1.6;">${esc(page.intro)}</p>` : ''}
+    ${page.intro ? `<p class="page-instruction">${esc(page.intro)}</p>` : ''}
     <div class="match-layout">
       <div class="match-col" id="matchLeft">${leftHtml}</div>
       <div class="match-col" id="matchRight">${rightHtml}</div>

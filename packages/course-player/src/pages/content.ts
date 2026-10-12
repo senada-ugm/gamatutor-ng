@@ -32,7 +32,7 @@ export function renderContent(ctx: RenderContext, page: ContentPage): void {
 function stepHtml(step: RevealStep, cls: string, page: ContentPage): string {
   if ('video' in step) {
     const poster = step.video.poster ? ` poster="${step.video.poster}"` : '';
-    return `<div class="${cls}"><video class="anim-video" controls${poster} src="${step.video.src}"></video></div>`;
+    return `<div class="${cls}"><video class="anim-video" controls preload="metadata"${poster} src="${step.video.src}"></video></div>`;
   }
   if ('image' in step && (step.title || step.body)) {
     return `<div class="${cls} icon-row"><img src="${step.image}" alt=""><div><h3>${esc(step.title || '')}</h3><p>${esc(step.body || '')}</p></div></div>`;
@@ -40,8 +40,24 @@ function stepHtml(step: RevealStep, cls: string, page: ContentPage): string {
   if ('image' in step) {
     return `<div class="${cls}"><img src="${step.image}" alt="Bagian slide ${page.slide}"></div>`;
   }
-  return `<div class="${cls}"><p>${esc(('texts' in step ? step.texts : []).join(' '))}</p></div>`;
+  if (step.texts.length > 1) {
+    return `<div class="${cls}"><ul>${step.texts.map((t) => `<li>${esc(t)}</li>`).join('')}</ul></div>`;
+  }
+  return `<div class="${cls}"><p>${esc(step.texts[0])}</p></div>`;
 }
+
+/** Text and icon lists of four or more read better in two columns. */
+export function revealColumns(page: ContentPage): 1 | 2 {
+  if (page.revealColumns) return page.revealColumns;
+  const steps = page.reveal_steps ?? [];
+  const listLike = steps.every(
+    (s) => ('texts' in s && s.texts.length === 1) || ('image' in s && (s.title || s.body)),
+  );
+  return listLike && steps.length >= 4 ? 2 : 1;
+}
+
+/** How many steps have already played their entrance, per player state. */
+const animated = new WeakMap<object, Record<string, number>>();
 
 function renderAnimatedContent(
   ctx: RenderContext,
@@ -50,20 +66,39 @@ function renderAnimatedContent(
 ): void {
   const total = steps.length;
   const revealed = revealCount(ctx.state, page.id);
+  const seen = animated.get(ctx.state) ?? {};
+  animated.set(ctx.state, seen);
+  const already = seen[page.id] ?? 0;
+  seen[page.id] = Math.max(already, revealed);
+
+  // Every step is drawn from the start so the layout never jumps; the ones
+  // not reached yet are hidden but keep their place.
   const stepsHtml = steps
-    .slice(0, revealed)
-    .map((s, i) => stepHtml(s, 'anim-step' + (i === revealed - 1 ? ' anim-in' : ''), page))
+    .map((s, i) => {
+      let cls = 'anim-step';
+      if (i >= revealed) cls += ' anim-pending';
+      else if (i >= already) cls += ' anim-in';
+      return stepHtml(s, cls, page);
+    })
     .join('');
 
-  const notYetDone = revealed < total;
+  const stackAttrs =
+    revealColumns(page) === 2
+      ? `class="anim-stack two-col" style="--rows:${Math.ceil(total / 2)}"`
+      : 'class="anim-stack"';
+  const pace = ctx.narration.available ? 'mengikuti narasi' : 'bergantian';
+  const hint =
+    revealed < total
+      ? `Bagian muncul ${pace} (${revealed}/${total}) &middot; klik &#8594; untuk mempercepat`
+      : `&#10003; Semua bagian sudah ditampilkan.`;
 
   const body = `
     ${kickerHtml(page)}
     ${page.title ? `<h2>${esc(page.title)}</h2><div class="title-underline"></div>` : '<div style="height:14px"></div>'}
     ${speakButtonHtml(ctx)}
     ${page.body ? `<div class="body-block">${renderBodyBlock(page.body)}</div>` : ''}
-    <div class="anim-stack">${stepsHtml}</div>
-    <div class="anim-hint">${notYetDone ? `Klik &#8594; untuk melanjutkan (${revealed}/${total})` : `&#10003; Semua bagian slide ini sudah ditampilkan.`}</div>
+    <div ${stackAttrs}>${stepsHtml}</div>
+    <div class="anim-hint" aria-live="polite">${hint}</div>
   `;
   setCard(ctx, cardShell(ctx, body));
   wireFooterNav(ctx);

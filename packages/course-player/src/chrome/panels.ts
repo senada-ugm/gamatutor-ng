@@ -1,5 +1,7 @@
 import type { RenderContext } from '../context.js';
-import { esc } from '../dom.js';
+import type { Page } from '@gamatutor/course-schema';
+import { esc, renderBodyBlock } from '../dom.js';
+import { revealSteps } from '../narration.js';
 
 /**
  * The three footer links the original course drew but never wired. Their
@@ -16,19 +18,37 @@ function currentPage(ctx: RenderContext) {
   return ctx.course.modules[ctx.state.moduleIdx]?.pages[ctx.state.pageIdx];
 }
 
+/**
+ * The narration as something to read: the lead-in as paragraphs and bullets,
+ * then what is said for each step, as a list. Hotspot pages list their points.
+ */
+export function transcriptHtml(page: Page | undefined): string {
+  if (!page) return '';
+  if (page.type === 'hotspot') {
+    return `<ol>${page.points.map((p) => `<li><b>${esc(p.label)}.</b> ${esc(p.body)}</li>`).join('')}</ol>`;
+  }
+  const lead = 'transcript' in page ? renderBodyBlock(page.transcript) : '';
+  const steps = revealSteps(page)
+    .map((s) => s.narration ?? ('texts' in s ? s.texts.join(' ') : ''))
+    .filter(Boolean);
+  const list = steps.length ? `<ul>${steps.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>` : '';
+  return lead + list;
+}
+
 function transcriptBody(ctx: RenderContext): string {
-  const page = currentPage(ctx);
-  const text = page && 'transcript' in page ? page.transcript : undefined;
-  if (text) return `<p>${esc(text)}</p>`;
-  return '<p class="gt-panel-empty">Halaman ini tidak memiliki narasi, jadi tidak ada transkrip.</p>';
+  return (
+    transcriptHtml(currentPage(ctx)) ||
+    '<p class="gt-panel-empty">Halaman ini tidak memiliki narasi, jadi tidak ada transkrip.</p>'
+  );
 }
 
 const HELP = `
   <ul>
-    <li>Tombol &#8594; dan &#8592; di kanan bawah berpindah halaman. Pada halaman bertahap, &#8594; membuka bagian berikutnya lebih dulu.</li>
+    <li>Tombol &#8594; dan &#8592; di kanan bawah berpindah halaman. Pada halaman bertahap, isi muncul sendiri mengikuti narasi; &#8594; memunculkan bagian berikutnya lebih cepat.</li>
+    <li>Narasi diputar otomatis saat halaman dibuka. Matikan lewat tombol <b>Narasi otomatis</b> di kanan atas, atau jeda dengan tombol 🔊/⏸ di halaman.</li>
     <li>Modul di sidebar terbuka berurutan. Modul berikutnya terbuka setelah Anda mencapai halaman pertamanya.</li>
-    <li>Pada soal evaluasi, pilih jawaban dulu sebelum lanjut.</li>
-    <li>Tombol 🔊 membacakan narasi halaman. Teks narasinya ada di Transkrip.</li>
+    <li>Pada soal evaluasi, pilih jawaban lalu klik Submit sebelum lanjut.</li>
+    <li>Teks narasi setiap halaman ada di Transkrip.</li>
   </ul>`;
 
 const REFERENCES =

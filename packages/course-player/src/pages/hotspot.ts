@@ -20,11 +20,15 @@ export function renderHotspot(ctx: RenderContext, page: PageOfType<'hotspot'>): 
     )
     .join('');
 
+  // In an ordered sequence the lowest unvisited number is the one to click.
+  const nextIdx = page.ordered ? visited.findIndex((v) => !v) : -1;
+
   const pinsHtml = page.points
     .map((p, i) => {
       let cls = 'hotspot-pin';
       if (visited[i]) cls += ' visited';
       if (activeIdx === i) cls += ' active';
+      if (i === nextIdx) cls += ' next';
       const expanded = activeIdx === i ? 'true' : 'false';
       return `<div class="${cls}" data-i="${i}" style="left:${p.x}%;top:${p.y}%" tabindex="0" role="button" aria-label="${esc(p.label)}" aria-expanded="${expanded}">${i + 1}</div>`;
     })
@@ -36,16 +40,18 @@ export function renderHotspot(ctx: RenderContext, page: PageOfType<'hotspot'>): 
   let detailHtml: string;
   if (activeIdx !== undefined && activeIdx !== null) {
     const p = page.points[activeIdx]!;
-    detailHtml = `<div class="hotspot-detail-head"><h3>${esc(p.label)}</h3><button class="mini-speak-btn" id="hotspotSpeakBtn" title="Dengarkan lagi">🔊</button></div><p>${esc(p.body)}</p>`;
+    detailHtml = `<div class="hotspot-detail-head"><h3>${esc(p.label)}</h3><button class="mini-speak-btn" id="hotspotSpeakBtn" title="Dengarkan lagi">🔊</button></div><p>${esc(p.body)}</p>${nextIdx >= 0 ? `<p class="hotspot-next">Berikutnya: klik nomor ${nextIdx + 1}.</p>` : ''}`;
   } else {
-    detailHtml = `<p class="placeholder">Klik salah satu titik pada gambar untuk melihat penjelasannya.</p>`;
+    detailHtml = page.ordered
+      ? `<p class="placeholder">Mulai dari nomor 1 pada gambar.</p>`
+      : `<p class="placeholder">Klik salah satu nomor pada gambar untuk melihat penjelasannya.</p>`;
   }
 
   const body = `
     ${kickerHtml(page)}
     <h2>${esc(page.title)}</h2>
     <div class="title-underline"></div>
-    ${page.intro ? `<p style="font-size:14px;color:#334;margin:0 0 14px;line-height:1.6;">${esc(page.intro)}</p>` : ''}
+    ${page.intro ? `<p class="page-instruction">${esc(page.intro)}</p>` : ''}
     <div class="hotspot-layout">
       <div class="hotspot-stage" id="hotspotStage">
         <img src="${page.image}" alt="Ilustrasi slide ${page.slide}">
