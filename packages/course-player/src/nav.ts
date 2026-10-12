@@ -13,7 +13,8 @@ export interface PlayerState {
   furthestModuleIdx: number;
   revealCounts: Record<string, number>;
   quizAnswers: Record<string, string>;
-  gradingAnswered: Record<string, boolean>;
+  /** The option chosen on each image-grading page. */
+  gradingChoice: Record<string, string>;
   gradingPins: Record<string, boolean[]>;
   hotspotVisited: Record<string, boolean[]>;
   hotspotActive: Record<string, number | null>;
@@ -34,7 +35,7 @@ export function createState(): PlayerState {
     furthestModuleIdx: 0,
     revealCounts: {},
     quizAnswers: {},
-    gradingAnswered: {},
+    gradingChoice: {},
     gradingPins: {},
     hotspotVisited: {},
     hotspotActive: {},

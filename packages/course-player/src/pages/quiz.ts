@@ -35,11 +35,12 @@ export function renderQuiz(ctx: RenderContext, page: QuizPage): void {
     .join('');
 
   const body = `
-    <div class="quiz-tag">Soal ${index + 1} dari ${total} &middot; Pre/Post Test</div>
+    <div class="quiz-tag">Soal ${index + 1} dari ${total}${page.tag ? ` &middot; ${esc(page.tag)}` : ''}</div>
     <p class="quiz-question">${esc(page.question)}</p>
+    ${answered ? '' : '<p class="page-instruction">Pilih satu jawaban, lalu klik Submit.</p>'}
     <div class="opt-list" id="quizOptList">${optionsHtml}</div>
     <button class="submit-btn" id="quizSubmitBtn" ${answered ? 'disabled' : ''}>Submit</button>
-    <div class="reasoning-box" style="display:${answered ? 'block' : 'none'}">
+    <div class="reasoning-box${answered && chosen !== page.correct ? ' is-wrong' : ''}" role="status" style="display:${answered ? 'block' : 'none'}">
       <b>${answered && chosen === page.correct ? '&#10003; Benar.' : '&#10007; Kurang tepat.'}</b>
       Jawaban yang benar: <b>${esc(page.correct)}</b>. ${esc(page.explanation)}
     </div>
