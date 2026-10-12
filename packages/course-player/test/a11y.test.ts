@@ -81,14 +81,34 @@ describe('keyboard access', () => {
 });
 
 describe('embed page', () => {
-  it('frames the 3D atlas with a title and keeps the footer arrows', () => {
-    const doc = mountAt('modul2', pageIndexOf('modul2', 'embed'));
-    const frame = doc.querySelector('.embed-frame iframe')!;
-    expect(frame.getAttribute('src')).toBe('assets/anatomi-mata/index.html?embed');
-    expect(frame.getAttribute('title')).toBe('Anatomi mata dalam 3D');
-    expect(doc.querySelector('.embed-foot a')!.getAttribute('href')).toBe(
-      'assets/anatomi-mata/index.html',
+  // DRIVE dropped its 3D atlas (Tim DRIVE: 2D anatomy only), but the page type
+  // stays for future courses, so it is exercised on a copy with one added.
+  it('frames an interactive with a title and keeps the footer arrows', () => {
+    const withEmbed = structuredClone(course);
+    withEmbed.modules[2]!.pages.splice(2, 0, {
+      id: 'x-embed',
+      type: 'embed',
+      title: 'Model interaktif',
+      src: 'assets/model/index.html?embed',
+      fullPage: 'assets/model/index.html',
+    });
+    const dom = new JSDOM(
+      `<div class="app"><div class="sidebar"><ul id="stepList"></ul></div>
+       <div class="main"><div id="contentCard"></div></div></div>`,
     );
+    const player = createPlayer({
+      mount: dom.window.document.querySelector('.app')!,
+      course: withEmbed,
+      capabilities: { narration: 'off' },
+    });
+    player.state.moduleIdx = 2;
+    player.state.pageIdx = 2;
+    player.render();
+    const doc = dom.window.document;
+    const frame = doc.querySelector('.embed-frame iframe')!;
+    expect(frame.getAttribute('src')).toBe('assets/model/index.html?embed');
+    expect(frame.getAttribute('title')).toBe('Model interaktif');
+    expect(doc.querySelector('.embed-foot a')!.getAttribute('href')).toBe('assets/model/index.html');
     expect(doc.getElementById('nextBtn')).not.toBeNull();
   });
 });

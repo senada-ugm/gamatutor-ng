@@ -21,12 +21,8 @@ describe('standalone build', () => {
     expect(() => readFileSync(`${OUT}/assets/hero-illustration.svg`)).not.toThrow();
   });
 
-  it('ships the 3D atlas inside the package, so the embed page works offline', () => {
+  it('ships no 3D atlas: the course uses the 2D anatomy only', () => {
     const html = readFileSync(`${OUT}/index.html`, 'utf8');
-    expect(html).toContain('assets/anatomi-mata/index.html?embed');
-    const atlas = readFileSync(`${OUT}/assets/anatomi-mata/index.html`, 'utf8');
-    for (const ref of atlas.match(/\.\/assets\/[^"]+/g) ?? []) {
-      expect(() => readFileSync(`${OUT}/assets/anatomi-mata/${ref.slice(2)}`)).not.toThrow();
-    }
+    expect(html).not.toContain('anatomi-mata');
   });
 });

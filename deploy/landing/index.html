@@ -279,33 +279,6 @@
   .path .meta{font-size:var(--t-sm);color:var(--ink-faint);margin-top:.15rem}
   .path .desc{grid-column:2;color:var(--ink-soft);max-width:58ch;margin-top:.5rem}
 
-  /* --------------------------------------------------------------- atlas
-     The 3D eye from /anatomi-mata/. It is a dark stage set into the bright
-     page, like a display case. three.js is half a megabyte, so the stage
-     shows a still until the visitor asks for the model; on a phone the
-     still opens the full page instead of trapping scroll in an iframe. */
-  .atlas{margin-top:clamp(4rem,8vw,6rem)}
-  .atlas-head{display:grid;gap:1rem;align-items:end;margin-bottom:clamp(1.75rem,3vw,2.5rem)}
-  .atlas-head p{color:var(--ink-soft);max-width:52ch}
-  .stage{position:relative;background:#171f23;aspect-ratio:4/3;overflow:hidden}
-  .stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
-  .stage-start{position:absolute;inset:0;display:block;color:#fff;text-decoration:none}
-  .stage-start img{width:100%;height:100%;object-fit:cover;object-position:28% 50%;display:block;opacity:.55;transition:opacity .2s var(--ease)}
-  .stage-start:hover img{opacity:.7}
-  .stage-start span{
-    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-    display:inline-flex;align-items:center;gap:.7rem;
-    background:#fff;color:var(--ink);font-weight:700;
-    padding:1rem 1.6rem;min-height:52px;white-space:nowrap;
-    box-shadow:0 10px 30px rgba(0,0,0,.35);
-  }
-  .stage-start span::before{
-    content:"";width:0;height:0;
-    border-left:11px solid var(--teal);border-block:7px solid transparent;
-  }
-  .stage-start:focus-visible{outline-offset:-4px;outline-color:#fff}
-  .atlas-foot{margin-top:1rem;font-size:var(--t-sm);color:var(--ink-faint);display:flex;flex-wrap:wrap;gap:.5rem 2rem;justify-content:space-between}
-
   /* --------------------------------------------------------------- close
      The brand run from the player's sidebar head, at full strength, once. */
   .close{
@@ -347,10 +320,6 @@
     .burden-grid{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}
     .path li{grid-template-columns:3.25rem minmax(0,16rem) minmax(0,1fr);gap:0 2rem}
     .path .desc{grid-column:3;margin-top:0;padding-top:.7rem}
-    .atlas-head{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-    /* Tall enough for the model's detail panel to show its own controls. */
-    .stage{aspect-ratio:auto;height:clamp(680px,58vw,740px)}
-    .stage-start img{object-position:50% 0}
   }
 
   /* -------------------------------------------------------------- mobile */
@@ -515,24 +484,6 @@
         </li>
       </ol>
 
-      <div class="atlas" id="anatomi">
-        <div class="atlas-head">
-          <h2>Anatomi mata dalam 3D</h2>
-          <p>Putar bola mata, buka potongannya, dan pilih salah satu dari 20 struktur,
-            dari kornea sampai diskus optik. Pendamping Modul 2.</p>
-        </div>
-        <div class="stage" id="stage">
-          <a class="stage-start" id="stageStart" href="/anatomi-mata/">
-            <img src="/anatomi-mata/poster.jpg" width="1152" height="640" loading="lazy" decoding="async"
-                 alt="Model 3D bola mata dalam tampilan potongan, dengan label struktur.">
-            <span>Buka model 3D</span>
-          </a>
-        </div>
-        <p class="atlas-foot">
-          <span>Model edukasi; proporsi dan warna disederhanakan.</span>
-          <a href="/anatomi-mata/">Buka di halaman penuh</a>
-        </p>
-      </div>
     </div>
   </section>
 
@@ -716,21 +667,6 @@
   });
   document.addEventListener('click', heroClose);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') heroClose(); });
-
-  /* The 3D stage loads its iframe only when asked, and only where there is
-     room for the model and its panel side by side. */
-  var stage = $('stage'), stageStart = $('stageStart');
-  stageStart.addEventListener('click', function (e) {
-    if (!window.matchMedia('(min-width: 900px)').matches) return;
-    e.preventDefault();
-    var frame = document.createElement('iframe');
-    frame.src = '/anatomi-mata/?embed';
-    frame.title = 'Model 3D anatomi mata';
-    frame.allow = 'fullscreen';
-    frame.allowFullscreen = true;
-    stage.replaceChild(frame, stageStart);
-    frame.focus();
-  });
 
   /* One orchestrated load, on the next frame rather than from an observer,
      so a slow script can never leave the first screen blank. */

@@ -11,6 +11,10 @@
   "assessment": {
     "mode": "formative"
   },
+  "completion": {
+    "body": "Anda telah menyelesaikan Modul 1–4 (Diabetes Mellitus, Retinopati Diabetika, Skrining & Tatalaksana, Simulasi Grading) dan evaluasi Pelatihan Skrining Retinopati Diabetika.",
+    "certificateText": "telah menyelesaikan pelatihan “Skrining Retinopati Diabetika untuk Dokter Layanan Primer”, mencakup Modul 1–4 (Diabetes Mellitus, Retinopati Diabetika, Skrining & Tatalaksana, Simulasi Grading) beserta evaluasi pre/post-test."
+  },
   "modules": [
     {
       "id": "pengantar",
@@ -29,7 +33,7 @@
           "kicker": "DAFTAR ISI",
           "title": "Cakupan modul",
           "body": "1. Diabetes Mellitus\n2. Retinopati Diabetika (RD)\n3. Skrining dan Tatalaksana Retinopati Diabetika",
-          "transcript": "Cakupan modul. Setelah menyelesaikan modul ini, Anda akan memahami terkait diabetes mellitus, retinopati diabetika, dan skrining serta tata laksana retinopati diabetika secara umum."
+          "transcript": "Cakupan modul.\nSetelah menyelesaikan modul ini, Anda akan memahami secara umum:\n• diabetes mellitus;\n• retinopati diabetika;\n• skrining serta tata laksana retinopati diabetika."
         }
       ]
     },
@@ -51,7 +55,7 @@
           "kicker": "DEFINISI",
           "title": "Apa itu Diabetes Mellitus?",
           "body": "Diabetes mellitus (DM) merupakan sekelompok penyakit metabolik dengan karakteristik hiperglikemia, yang menandakan abnormalitas proses metabolisme karbohidrat.\nKondisi ini diakibatkan oleh gangguan pada sekresi insulin, kerja insulin, ataupun keduanya.\n•  Hiperglikemia kronis adalah penanda utama — sekaligus pemicu komplikasi mikro- dan makrovaskular.",
-          "transcript": "Diabetes mellitus merupakan sekelompok penyakit metabolik dengan karakteristik hiperglikemia kronik, yang menandakan abnormalitas proses metabolisme karbohidrat dalam tubuh. Kondisi ini diakibatkan oleh gangguan pada sekresi insulin, kerja insulin, ataupun keduanya. Kondisi hiperglikemia kronis adalah penanda utama, sekaligus pemicu terjadinya komplikasi mikro dan makrovaskular.",
+          "transcript": "Diabetes mellitus merupakan sekelompok penyakit metabolik dengan karakteristik hiperglikemia kronik, yang menandakan abnormalitas proses metabolisme karbohidrat dalam tubuh.\nKondisi ini diakibatkan oleh gangguan pada sekresi insulin, kerja insulin, ataupun keduanya.\nKondisi hiperglikemia kronis adalah penanda utama, sekaligus pemicu terjadinya komplikasi mikro dan makrovaskular.",
           "image": "assets/slide4_10.png",
           "imageLayout": "below",
           "imageCaption": "The Egregious Eleven (diadaptasi dari Schwartz, Diabetes Care 2016)."
@@ -63,7 +67,7 @@
           "kicker": "EPIDEMIOLOGI",
           "title": "Prevalensi & proyeksi kasus DM",
           "intro": "Beban diabetes global terus meningkat — dan Indonesia termasuk negara dengan kasus terbanyak.",
-          "transcript": "Beban diabetes secara global terus meningkat dan telah mencapai jumlah yang mengkhawatirkan. Sekitar 589 juta penduduk dunia dilaporkan memiliki diabetes dan angka ini diproyeksikan akan meningkat sebanyak 45% di tahun 2050. Indonesia menduduki peringkat ke-5 dengan jumlah penderita diabetes terbanyak di dunia, yaitu mencapai 20,4 juta penderita atau sebesar 11,3%.",
+          "transcript": "Beban diabetes secara global terus meningkat dan telah mencapai jumlah yang mengkhawatirkan.\n• Sekitar 589 juta penduduk dunia dilaporkan memiliki diabetes.\n• Angka ini diproyeksikan meningkat sebanyak 45% pada tahun 2050.\n• Indonesia menduduki peringkat ke-5 dengan jumlah penderita diabetes terbanyak di dunia, yaitu 20,4 juta penderita atau 11,3%.",
           "columns": 3,
           "cards": [
             {
@@ -96,7 +100,7 @@
           "kicker": "KLASIFIKASI",
           "title": "DM berdasarkan etiologi",
           "body": "•  Tipe 1 — pankreas berhenti memproduksi insulin.\n•  Tipe 2 — resistensi insulin pada organ, dan/atau produksi insulin pankreas tidak mencukupi.\n•  Gestasional — terdiagnosis pada trimester kedua/ketiga kehamilan, tanpa riwayat diabetes sebelumnya.\n•  Tipe lain — mis. MODY (mutasi genetik tunggal), penyakit eksokrin pankreas, akibat obat/zat kimia, infeksi, sebab imunologi, atau genetik lain.",
-          "transcript": "Berdasarkan etiologinya, diabetes mellitus diklasifikasikan menjadi empat. Diabetes mellitus tipe 1, sebuah kondisi dimana terjadi peningkatan kadar glukosa dalam darah dikarenakan pankreas berhenti memproduksi insulin. Diabetes mellitus tipe 2, disebabkan oleh resistensi insulin pada organ ataupun pankreas yang tidak memproduksi cukup insulin. Diabetes mellitus gestasional, merupakan diabetes yang terdiagnosis pada trimester kedua atau ketiga kehamilan, dimana sebelum kehamilan tidak didapatkan diabetes. Dan tipe spesifik akibat penyebab lain, di antaranya Maturity-Onset Diabetes of the Young yang disebabkan mutasi genetik tunggal, atau penyebab lain seperti penyakit eksokrin pankreas, akibat obat atau zat kimia, infeksi, sebab imunologi, atau sebab genetik lain.",
+          "transcript": "Berdasarkan etiologinya, diabetes mellitus diklasifikasikan menjadi empat.\n• Diabetes mellitus tipe 1: kadar glukosa darah meningkat karena pankreas berhenti memproduksi insulin.\n• Diabetes mellitus tipe 2: disebabkan oleh resistensi insulin, atau pankreas yang tidak memproduksi cukup insulin.\n• Diabetes mellitus gestasional: diabetes yang terdiagnosis pada trimester kedua atau ketiga kehamilan, padahal sebelum hamil tidak didapatkan diabetes.\n• Tipe spesifik akibat penyebab lain: misalnya Maturity-Onset Diabetes of the Young akibat mutasi genetik tunggal, penyakit eksokrin pankreas, obat atau zat kimia, infeksi, sebab imunologi, atau sebab genetik lain.",
           "image": "assets/slide6_8.png",
           "imageLayout": "below"
         },
@@ -107,57 +111,67 @@
           "kicker": "FAKTOR RISIKO",
           "title": "Faktor risiko Diabetes Mellitus",
           "body": "IMT > 23 kg/m² disertai ≥ 1 faktor risiko berikut:",
-          "transcript": "Berdasarkan PERKENI 2021, beberapa faktor risiko yang terbukti meningkatkan kejadian diabetes mellitus, terutama tipe 2, adalah indeks massa tubuh di atas 23 kg per meter persegi yang disertai dengan minimal satu faktor risiko berikut: aktivitas fisik yang kurang, memiliki riwayat keluarga diabetes, berasal dari ras atau etnis tertentu, memiliki riwayat melahirkan bayi dengan berat lebih dari 4 kilogram atau terdiagnosis diabetes gestasional, memiliki hipertensi, HDL kurang dari 35 dan atau trigliserida lebih dari 250, wanita dengan sindrom polikistik ovarium, memiliki riwayat prediabetes, obesitas berat dengan akantosis nigrikans, dan memiliki riwayat penyakit kardiovaskular.",
+          "transcript": "Berdasarkan PERKENI 2021, faktor risiko yang terbukti meningkatkan kejadian diabetes mellitus, terutama tipe 2, adalah indeks massa tubuh di atas 23 kg per meter persegi yang disertai minimal satu faktor risiko berikut.",
           "reveal_steps": [
             {
               "texts": [
                 "a. Aktivitas fisik kurang"
-              ]
+              ],
+              "narration": "Aktivitas fisik yang kurang."
             },
             {
               "texts": [
                 "b. Riwayat keluarga (keturunan) DM"
-              ]
+              ],
+              "narration": "Riwayat keluarga dengan diabetes."
             },
             {
               "texts": [
                 "c. Ras/etnis tertentu"
-              ]
+              ],
+              "narration": "Berasal dari ras atau etnis tertentu."
             },
             {
               "texts": [
                 "d. Riwayat bayi lahir > 4 kg / DM gestasional"
-              ]
+              ],
+              "narration": "Riwayat melahirkan bayi dengan berat lebih dari 4 kilogram, atau pernah terdiagnosis diabetes gestasional."
             },
             {
               "texts": [
                 "e. Hipertensi (≥ 140/90 mmHg)"
-              ]
+              ],
+              "narration": "Hipertensi, yaitu tekanan darah 140 per 90 mmHg atau lebih."
             },
             {
               "texts": [
                 "f. HDL < 35 atau trigliserida > 250 mg/dL"
-              ]
+              ],
+              "narration": "HDL kurang dari 35, dan atau trigliserida lebih dari 250 mg per dL."
             },
             {
               "texts": [
                 "g. Sindrom ovarium polikistik (PCOS)"
-              ]
+              ],
+              "narration": "Wanita dengan sindrom ovarium polikistik."
             },
             {
               "texts": [
                 "h. Riwayat prediabetes"
-              ]
+              ],
+              "narration": "Riwayat prediabetes."
             },
             {
               "texts": [
                 "i. Obesitas berat + akantosis nigrikans"
-              ]
+              ],
+              "narration": "Obesitas berat disertai akantosis nigrikans."
             },
             {
               "texts": [
                 "j. Riwayat penyakit kardiovaskular"
-              ]
+              ],
+              "narration": "Riwayat penyakit kardiovaskular."
             }
           ]
         },
@@ -168,7 +182,7 @@
           "kicker": "DIAGNOSIS",
           "title": "Kriteria diagnosis DM",
           "body": "Empat kriteria diagnosis diabetes mellitus menurut PERKENI 2021 (lihat ringkasan pada gambar).",
-          "transcript": "Kriteria diagnosis DM: gula darah puasa lebih dari sama dengan 126 mg per dL; TTGO 2 jam lebih dari sama dengan 200 mg per dL; gula darah sewaktu lebih dari sama dengan 200 mg per dL disertai keluhan klasik atau krisis hiperglikemia; atau HbA1c lebih dari sama dengan 6,5 persen.",
+          "transcript": "Kriteria diagnosis diabetes mellitus, cukup salah satu:\n• gula darah puasa lebih dari atau sama dengan 126 mg per dL;\n• TTGO 2 jam lebih dari atau sama dengan 200 mg per dL;\n• gula darah sewaktu lebih dari atau sama dengan 200 mg per dL, disertai keluhan klasik atau krisis hiperglikemia;\n• HbA1c lebih dari atau sama dengan 6,5 persen.",
           "image": "assets/slide8_8.png",
           "imageLayout": "below"
         },
@@ -179,7 +193,7 @@
           "kicker": "DIAGNOSIS",
           "title": "Klasifikasi kadar glukosa & HbA1c",
           "body": "Klasifikasi kadar glukosa darah dan HbA1c untuk kategori diabetes, prediabetes, dan normal (lihat gambar).",
-          "transcript": "Berikut klasifikasi kadar glukosa dan HbA1c untuk kategori diabetes, prediabetes, dan normal. Perlu diperhatikan pula kondisi-kondisi yang membuat hasil HbA1c menjadi tidak valid, seperti anemia, hemoglobinopati, transfusi, dan gangguan ginjal.",
+          "transcript": "Berikut klasifikasi kadar glukosa dan HbA1c untuk kategori diabetes, prediabetes, dan normal.\nPerlu diperhatikan kondisi yang membuat hasil HbA1c tidak valid, seperti anemia, hemoglobinopati, transfusi, dan gangguan ginjal.",
           "image": "assets/slide9_8.png",
           "imageLayout": "below"
         },
@@ -213,7 +227,7 @@
           "type": "hotspot",
           "kicker": "ANATOMI",
           "title": "Anatomi mata",
-          "intro": "Klik tiap titik untuk melihat penjelasan singkat bagian mata tersebut — dasar untuk memahami lokasi kerusakan pada retinopati diabetika.",
+          "intro": "Klik setiap nomor (1–17) pada gambar untuk melihat nama dan fungsi bagian mata tersebut.",
           "image": "assets/slide12_8.png",
           "points": [
             {
@@ -431,23 +445,12 @@
           ]
         },
         {
-          "id": "modul2-anatomi-3d",
-          "type": "embed",
-          "kicker": "MODEL 3D",
-          "title": "Anatomi mata dalam 3D",
-          "intro": "Putar bola mata, buka potongannya, lalu pilih strukturnya satu per satu. Perhatikan retina, makula, fovea, dan diskus optik (bintik buta): keempatnya tampak lagi pada foto fundus di Modul 4.",
-          "src": "assets/anatomi-mata/index.html?embed",
-          "fullPage": "assets/anatomi-mata/index.html",
-          "height": 620,
-          "caption": "Model edukasi; proporsi dan warna disederhanakan."
-        },
-        {
           "id": "modul2-p3",
           "slide": 13,
           "type": "cards",
           "kicker": "RETINOPATI DIABETIKA",
           "title": "Apa itu retinopati diabetika?",
-          "transcript": "Retinopati diabetika adalah kerusakan kapiler retina kronik akibat hiperglikemia, yang menyebabkan kebocoran cairan, oklusi, hingga neovaskularisasi. Kejadiannya meningkat cepat, namun dapat dicegah. Spektrum keparahannya menurut ICDRS bergerak dari tanpa retinopati diabetika, ke non-proliferative RD ringan, sedang, berat, hingga proliferative RD.",
+          "transcript": "Retinopati diabetika adalah kerusakan kapiler retina kronik akibat hiperglikemia, yang menyebabkan kebocoran cairan, oklusi, hingga neovaskularisasi.\nKejadiannya meningkat cepat, namun dapat dicegah.\nSpektrum keparahannya menurut ICDRS bergerak dari tanpa retinopati diabetika, ke non-proliferative RD ringan, sedang, berat, hingga proliferative RD.",
           "columns": 3,
           "cards": [
             {
@@ -474,7 +477,7 @@
           "kicker": "BEBAN PENYAKIT",
           "title": "Retinopati diabetika",
           "body": "•  Sekitar 93 juta orang di dunia menderita retinopati diabetika.\n•  Sekitar sepertiga populasi diabetes global diperkirakan akan mengidap RD.\n•  Di Indonesia, prevalensi RD pada populasi usia 30+ tahun dengan DM Tipe 2 mencapai 43,1%.\n•  Insidensi tertinggi pada pasien dengan durasi DM > 10 tahun.",
-          "transcript": "Beban penyakit retinopati diabetika: prevalensi retinopati diabetika di Indonesia mencapai 43,1 persen, dengan sight-threatening DR sebesar 26,1 persen, dan sekitar 93 juta penderita RD secara global.",
+          "transcript": "Beban penyakit retinopati diabetika:\n• prevalensi retinopati diabetika di Indonesia mencapai 43,1 persen;\n• sight-threatening DR sebesar 26,1 persen;\n• sekitar 93 juta penderita RD di seluruh dunia.",
           "image": "assets/chart_beban_rd.png",
           "imageCaption": "Prevalensi blindness, VTDR, dan DR overall (%) — Global, Asia-Pacific high income, China, India, Indonesia."
         },
@@ -484,7 +487,7 @@
           "type": "hotspot",
           "kicker": "PATOFISIOLOGI",
           "title": "Patofisiologi retinopati diabetika",
-          "intro": "Klik tiap titik untuk menelusuri alur patofisiologi, dari hiperglikemia kronik hingga neovaskularisasi.",
+          "intro": "Klik nomor secara berurutan 1–8 untuk mengetahui patofisiologi retinopati diabetika, dari hiperglikemia kronik hingga neovaskularisasi.",
           "image": "assets/slide15_8.png",
           "points": [
             {
@@ -573,7 +576,8 @@
               "w": 16.47,
               "h": 4.13
             }
-          ]
+          ],
+          "ordered": true
         },
         {
           "id": "modul2-p6",
@@ -581,7 +585,7 @@
           "type": "cards",
           "kicker": "TANDA & GEJALA",
           "title": "Gejala klinis retinopati diabetika",
-          "transcript": "Tanda dan gejala retinopati diabetika meliputi penglihatan buram, bintik hitam atau floaters, kehilangan penglihatan mendadak yang khas pada perdarahan vitreus, dan distorsi penglihatan yang khas pada edema makula.",
+          "transcript": "Tanda dan gejala retinopati diabetika meliputi:\n• penglihatan buram;\n• bintik hitam atau floaters;\n• kehilangan penglihatan mendadak, khas pada perdarahan vitreus;\n• distorsi penglihatan, khas pada edema makula.",
           "columns": 2,
           "cards": [
             {
@@ -608,37 +612,43 @@
           "type": "content",
           "kicker": "FAKTOR RISIKO",
           "title": "Faktor risiko retinopati diabetika",
-          "transcript": "Faktor risiko retinopati diabetika meliputi durasi diabetes, kontrol glikemik, hipertensi, dislipidemia, kehamilan, dan faktor genetik.",
+          "transcript": "Faktor risiko retinopati diabetika meliputi enam hal berikut.",
           "reveal_steps": [
             {
               "image": "assets/slide17_28.png",
               "title": "Durasi diabetes",
-              "body": "Makin lama DM, makin tinggi risiko."
+              "body": "Makin lama DM, makin tinggi risiko.",
+              "narration": "Durasi diabetes: makin lama menderita diabetes, makin tinggi risikonya."
             },
             {
               "image": "assets/slide17_29.png",
               "title": "Kontrol glikemik",
-              "body": "HbA1c tinggi menaikkan risiko."
+              "body": "HbA1c tinggi menaikkan risiko.",
+              "narration": "Kontrol glikemik: HbA1c yang tinggi menaikkan risiko."
             },
             {
               "image": "assets/slide17_30.png",
               "title": "Hipertensi",
-              "body": "Memperburuk mikrovaskuler retina."
+              "body": "Memperburuk mikrovaskuler retina.",
+              "narration": "Hipertensi memperburuk kerusakan mikrovaskular retina."
             },
             {
               "image": "assets/slide17_31.png",
               "title": "Dislipidemia",
-              "body": "Memicu eksudat keras retina."
+              "body": "Memicu eksudat keras retina.",
+              "narration": "Dislipidemia memicu terbentuknya eksudat keras di retina."
             },
             {
               "image": "assets/slide17_32.png",
               "title": "Kehamilan",
-              "body": "Mempercepat progresi RD."
+              "body": "Mempercepat progresi RD.",
+              "narration": "Kehamilan dapat mempercepat progresi retinopati diabetika."
             },
             {
               "image": "assets/slide17_33.png",
               "title": "Faktor genetik",
-              "body": "Riwayat keluarga menambah risiko."
+              "body": "Riwayat keluarga menambah risiko.",
+              "narration": "Faktor genetik: riwayat keluarga menambah risiko."
             }
           ]
         },
@@ -648,7 +658,7 @@
           "type": "match",
           "kicker": "LATIHAN",
           "title": "Cocokkan faktor risiko dengan penjelasannya",
-          "intro": "Seret (drag) tiap kartu faktor risiko ke kotak penjelasan yang sesuai. Di layar sentuh/tanpa drag, klik kartu lalu klik kotak tujuannya.",
+          "intro": "Pasangkan setiap faktor risiko di kiri dengan penjelasannya di kanan: seret kartu ke kotak yang sesuai, atau klik kartu lalu klik kotak tujuannya.",
           "pairs": [
             {
               "id": "durasi",
@@ -701,7 +711,7 @@
           "type": "content",
           "kicker": "PEMERIKSAAN MATA DASAR",
           "title": "Penilaian ketajaman visual",
-          "transcript": "Langkah penilaian ketajaman visual tanpa koreksi: pasien berdiri atau duduk 6 meter dari bagan Snellen, menutup satu mata, lalu membaca baris terkecil yang masih terbaca. Hasil dicatat sebagai pecahan, misalnya 6 per 6 atau 6 per 12, kemudian pemeriksaan diulang untuk mata sebelahnya.",
+          "transcript": "Berikut langkah penilaian ketajaman visual tanpa koreksi.",
           "reveal_steps": [
             {
               "texts": [
@@ -709,13 +719,15 @@
                 "Tutup satu mata, baca baris terkecil yang masih terbaca.",
                 "Catat hasil sebagai pecahan (mis. 6/6, 6/12).",
                 "Ulangi untuk mata sebelahnya."
-              ]
+              ],
+              "narration": "Pasien berdiri atau duduk 6 meter dari bagan Snellen. Tutup satu mata, lalu baca baris terkecil yang masih terbaca. Catat hasilnya sebagai pecahan, misalnya 6 per 6 atau 6 per 12. Ulangi untuk mata sebelahnya."
             },
             {
               "video": {
                 "src": "assets/visus.mp4",
                 "poster": "assets/visus_poster.jpg"
-              }
+              },
+              "narration": "Simak videonya untuk melihat contoh pemeriksaannya."
             }
           ]
         }
@@ -744,7 +756,9 @@
           ],
           "correct": "Tidak ada retinopati diabetika",
           "reasoning": "Tidak ada retinopati diabetika.",
-          "lesions": []
+          "lesions": [],
+          "title": "Simulasi Grading Retinopati Diabetika",
+          "instruction": "Amati foto fundus, lalu klik pilihan yang tepat: adakah retinopati diabetika?"
         },
         {
           "id": "modul4-p3",
@@ -774,7 +788,9 @@
               "y": 51,
               "label": "Hard exudate"
             }
-          ]
+          ],
+          "title": "Simulasi Grading Retinopati Diabetika",
+          "instruction": "Amati foto fundus, lalu klik pilihan yang tepat: adakah retinopati diabetika?"
         },
         {
           "id": "modul4-p4",
@@ -788,7 +804,9 @@
           ],
           "correct": "Observasi",
           "reasoning": "Tidak ada retinopati diabetika.",
-          "lesions": []
+          "lesions": [],
+          "title": "Simulasi Grading Retinopati Diabetika",
+          "instruction": "Amati foto fundus, lalu klik tindak lanjut yang tepat: observasi atau rujuk."
         },
         {
           "id": "modul4-p5",
@@ -806,24 +824,34 @@
             {
               "x": 21.2,
               "y": 37.9,
-              "label": "Hard exudate"
+              "label": "Hard exudate",
+              "dx": -8,
+              "dy": 14
             },
             {
               "x": 39.3,
               "y": 33.8,
-              "label": "Perdarahan dot"
+              "label": "Perdarahan dot",
+              "dx": -8,
+              "dy": -15
             },
             {
               "x": 38.3,
               "y": 44.6,
-              "label": "Neovascular elsewhere"
+              "label": "Neovascular elsewhere",
+              "dx": 4,
+              "dy": 16
             },
             {
               "x": 79.2,
               "y": 44.6,
-              "label": "Neovascular disc"
+              "label": "Neovascular disc",
+              "dx": 4,
+              "dy": 14
             }
-          ]
+          ],
+          "title": "Simulasi Grading Retinopati Diabetika",
+          "instruction": "Amati foto fundus, lalu klik tindak lanjut yang tepat: observasi atau rujuk."
         },
         {
           "id": "modul4-p6",
@@ -848,7 +876,9 @@
               "y": 71.5,
               "label": "Perdarahan blot"
             }
-          ]
+          ],
+          "title": "Simulasi Grading Retinopati Diabetika",
+          "instruction": "Amati foto fundus, lalu klik tindak lanjut yang tepat: observasi atau rujuk."
         }
       ]
     },
@@ -892,7 +922,8 @@
             }
           ],
           "correct": "C",
-          "explanation": "Retinopati diabetika adalah kerusakan kapiler retina akibat gula darah tinggi yang kronis, yang dapat menimbulkan kebocoran cairan/edema, oklusi, hingga neovaskularisasi. Pengecoh: A = konjungtivitis; B = katarak; D = glaukoma; E = fluktuasi refraksi dapat terjadi pada DM tetapi bukan definisi RD."
+          "explanation": "Retinopati diabetika adalah kerusakan kapiler retina akibat gula darah tinggi yang kronis, yang dapat menimbulkan kebocoran cairan/edema, oklusi, hingga neovaskularisasi. Pengecoh: A = konjungtivitis; B = katarak; D = glaukoma; E = fluktuasi refraksi dapat terjadi pada DM tetapi bukan definisi RD.",
+          "tag": "Pre/Post Test"
         },
         {
           "id": "evaluasi-p3",
@@ -923,7 +954,8 @@
             }
           ],
           "correct": "D",
-          "explanation": "Pada DM tanpa retinopati diabetika (fundus normal), pemeriksaan retina ulang dianjurkan setiap 1–2 tahun. Sebagai pembanding: NPDR ringan-sedang perlu kontrol 6–12 bulan, NPDR berat & PDR 1–6 bulan sesuai keparahan, dan ibu hamil dengan DM perlu pemeriksaan lebih sering. Pilihan E keliru karena RD lama bersifat asimtomatik — menunggu keluhan berarti terlambat."
+          "explanation": "Pada DM tanpa retinopati diabetika (fundus normal), pemeriksaan retina ulang dianjurkan setiap 1–2 tahun. Sebagai pembanding: NPDR ringan-sedang perlu kontrol 6–12 bulan, NPDR berat & PDR 1–6 bulan sesuai keparahan, dan ibu hamil dengan DM perlu pemeriksaan lebih sering. Pilihan E keliru karena RD lama bersifat asimtomatik — menunggu keluhan berarti terlambat.",
+          "tag": "Pre/Post Test"
         },
         {
           "id": "evaluasi-p4",
@@ -954,7 +986,8 @@
             }
           ],
           "correct": "A",
-          "explanation": "Rangkaian patofisiologi: hiperglikemia kronik → kerusakan perisit & penebalan membran basal → kebocoran/oklusi kapiler → iskemia retina → pelepasan VEGF → neovaskularisasi (PDR)."
+          "explanation": "Rangkaian patofisiologi: hiperglikemia kronik → kerusakan perisit & penebalan membran basal → kebocoran/oklusi kapiler → iskemia retina → pelepasan VEGF → neovaskularisasi (PDR).",
+          "tag": "Pre/Post Test"
         },
         {
           "id": "evaluasi-p5",
@@ -985,7 +1018,8 @@
             }
           ],
           "correct": "B",
-          "explanation": "Skrining adalah pencarian penyakit pada orang tanpa gejala (asimtomatik) pada kelompok besar. Karena RD lama asimtomatik, skrining berkala penting dilakukan selama 'screening window' sebelum keluhan muncul. Deteksi dini berbeda karena mengenali penyakit saat gejala awal sudah muncul."
+          "explanation": "Skrining adalah pencarian penyakit pada orang tanpa gejala (asimtomatik) pada kelompok besar. Karena RD lama asimtomatik, skrining berkala penting dilakukan selama 'screening window' sebelum keluhan muncul. Deteksi dini berbeda karena mengenali penyakit saat gejala awal sudah muncul.",
+          "tag": "Pre/Post Test"
         },
         {
           "id": "evaluasi-p6",
@@ -1016,7 +1050,8 @@
             }
           ],
           "correct": "E",
-          "explanation": "Peran dokter layanan primer adalah mengenali gejala & tanda RD, mengedukasi pasien mengenai RD dan tatalaksananya, serta merujuk pasien yang membutuhkan tatalaksana lebih lanjut. Laser, injeksi anti-VEGF, dan vitrektomi adalah ranah dokter spesialis mata; menunda rujukan sampai visus turun keliru karena RD sering asimtomatik hingga stadium lanjut."
+          "explanation": "Peran dokter layanan primer adalah mengenali gejala & tanda RD, mengedukasi pasien mengenai RD dan tatalaksananya, serta merujuk pasien yang membutuhkan tatalaksana lebih lanjut. Laser, injeksi anti-VEGF, dan vitrektomi adalah ranah dokter spesialis mata; menunda rujukan sampai visus turun keliru karena RD sering asimtomatik hingga stadium lanjut.",
+          "tag": "Pre/Post Test"
         }
       ]
     },
