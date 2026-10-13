@@ -56,7 +56,4 @@ export async function baseUrl(): Promise<string> {
   return `${proto}://${host}`;
 }
 
-/** Only same-site paths are followed after login. */
-export function safeNext(next: unknown, fallback = '/kursus'): string {
-  return typeof next === 'string' && /^\/(?!\/)/.test(next) ? next : fallback;
-}
+export { safeNext } from './redirect';

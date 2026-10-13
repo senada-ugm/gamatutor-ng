@@ -1,5 +1,6 @@
 import { getDb } from '@/db/client';
 import { IncomingBatch, ingest } from '@/server/learning';
+import { allow } from '@/server/ratelimit';
 import { currentUser } from '@/server/session';
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -14,6 +15,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   }
   const parsed = IncomingBatch.safeParse(body);
   if (!parsed.success) return Response.json({ error: 'invalid batch' }, { status: 400 });
+  // A real learner sends a few hundred events an hour; this bounds abuse.
+  if (!allow(`events:${user.id}`, 3_000, 3_600_000)) {
+    return Response.json({ error: 'too many events' }, { status: 429 });
+  }
   try {
     const { accepted } = await ingest(await getDb(), user.id, id, parsed.data.events);
     return Response.json({ accepted });

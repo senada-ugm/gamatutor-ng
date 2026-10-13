@@ -46,7 +46,9 @@ export async function GET(
   if (!version) return new Response('Not found', { status: 404 });
 
   const root = resolve(storageRoot(), version.storageDir);
-  const file = resolve(join(root, ...path.map(decodeURIComponent)));
+  // Next has already decoded the segments once; decoding again would turn a
+  // literal "%" into an error and "%2e%2e" into "..".
+  const file = resolve(join(root, ...path));
   if (!file.startsWith(root + sep)) return new Response('Not found', { status: 404 });
   let size: number;
   try {

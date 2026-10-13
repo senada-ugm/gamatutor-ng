@@ -15,6 +15,13 @@
       "when": 1791850244688,
       "tag": "0001_flimsy_lethal_legion",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791850826089,
+      "tag": "0002_soft_fallen_one",
+      "breakpoints": true
     }
   ]
 }

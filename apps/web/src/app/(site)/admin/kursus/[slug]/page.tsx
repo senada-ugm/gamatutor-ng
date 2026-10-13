@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import { getDb } from '@/db/client';
 import { courseReport } from '@/server/reports';
 import { requireAdmin } from '@/server/session';
+import { AdminResetButton } from '@/components/forms';
+import { adminResetAction } from '../../../actions';
 import { formatDuration, wibStamp } from '@/server/time-report';
 
 export const metadata: Metadata = { title: 'Laporan kursus' };
@@ -90,6 +92,7 @@ export default async function CourseReportPage({ params }: { params: Promise<{ s
                   <td>
                     {l.fullName}
                     <div className="small muted">{l.email}</div>
+                    <AdminResetButton action={adminResetAction} userId={l.userId} />
                   </td>
                   <td>{l.profession}</td>
                   <td>

@@ -53,8 +53,10 @@ GT_BASE_URL=https://gamatutor.komunitech.id
 # No SMTP server is configured yet. With verification required nobody could
 # activate an account, so it is off until SMTP_URL is set; then remove this.
 GT_REQUIRE_EMAIL_VERIFICATION=false
-# SMTP_URL=smtps://user:pass@smtp.example.com:465
-# SMTP_FROM=DRIVE School <no-reply@komunitech.id>
+# Quote values that contain spaces or < >; this file is both sourced by bash
+# and read by systemd, and both honour double quotes.
+# SMTP_URL="smtps://user:pass@smtp.example.com:465"
+# SMTP_FROM="DRIVE School <no-reply@komunitech.id>"
 NEXT_TELEMETRY_DISABLED=1
 ENV
   chmod 600 /etc/gamatutor/web.env
@@ -101,7 +103,8 @@ say "Migrating, publishing courses, ensuring an admin"
 set -euo pipefail
 cd $RELEASE/apps/web
 set -a; . /etc/gamatutor/web.env; set +a
-run() { runuser -u gamatutor -- env \$(grep -v '^#' /etc/gamatutor/web.env | xargs) "\$@"; }
+# web.env is already exported above; runuser keeps the environment.
+run() { runuser -u gamatutor -- "\$@"; }
 run ../../node_modules/.bin/tsx scripts/publish-course.ts ../../content/drive-retinopati \
   --topic retina --topic-title Retina \
   --summary "Skrining retinopati diabetika untuk dokter layanan primer: diabetes mellitus, retinopati diabetika, skrining dan tatalaksana, serta simulasi grading foto fundus."

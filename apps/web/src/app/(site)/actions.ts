@@ -10,17 +10,20 @@ import {
   newVerifyToken,
   registerUser,
   updateProfile,
+  newResetToken,
+  requestPasswordReset,
+  resetPassword,
   verificationRequired,
-  verifyEmail,
 } from '@/server/accounts';
 import { enrol } from '@/server/catalogue';
 import { getMailer } from '@/server/mailer';
-import { allow } from '@/server/ratelimit';
+import { allow, blocked, fail } from '@/server/ratelimit';
 import { fieldErrors, parseRegistration, profileSchema } from '@/server/registration';
 import {
   baseUrl,
   clearSessionCookie,
   clientIp,
+  requireAdmin,
   requireUser,
   safeNext,
   sessionToken,
@@ -63,7 +66,8 @@ async function sendVerification(email: string, name: string, token: string): Pro
 
 export async function registerAction(_prev: FormState, form: FormData): Promise<FormState> {
   const v = values(form);
-  if (!allow(`register:${await clientIp()}`, 10, 3_600_000)) {
+  // Generous per address: a hospital or workshop registers from one NAT IP.
+  if (!allow(`register:${await clientIp()}`, 120, 3_600_000)) {
     return { message: 'Terlalu banyak percobaan pendaftaran. Coba lagi dalam satu jam.', values: kept(v) };
   }
   const parsed = parseRegistration(v);
@@ -72,7 +76,8 @@ export async function registerAction(_prev: FormState, form: FormData): Promise<
     const db = await getDb();
     const { user, verifyToken } = await registerUser(db, parsed.data);
     if (!verificationRequired()) {
-      await verifyEmail(db, verifyToken);
+      // Signed in straight away, but the email stays unverified, so turning
+      // verification on later still asks these accounts to confirm.
       await setSessionCookie(await createSession(db, user.id));
       redirect('/kursus');
     }
@@ -88,8 +93,9 @@ export async function loginAction(_prev: FormState, form: FormData): Promise<For
   const v = values(form);
   const email = (v.email ?? '').trim().toLowerCase();
   const ip = await clientIp();
-  if (!allow(`login-ip:${ip}`, 30, 900_000) || !allow(`login:${email}`, 8, 900_000)) {
-    return { message: 'Terlalu banyak percobaan masuk. Tunggu 15 menit lalu coba lagi.', values: { email } };
+  // Only failures count, so a whole class signing in from one address is fine.
+  if (blocked(`login-ip:${ip}`, 200) || blocked(`login:${email}`, 10)) {
+    return { message: 'Terlalu banyak percobaan masuk yang gagal. Tunggu 15 menit lalu coba lagi.', values: { email } };
   }
   const db = await getDb();
   let token: string;
@@ -97,6 +103,10 @@ export async function loginAction(_prev: FormState, form: FormData): Promise<For
     ({ token } = await login(db, email, v.password ?? ''));
   } catch (e) {
     if (!(e instanceof AccountError)) throw e;
+    if (e.code === 'bad-login') {
+      fail(`login-ip:${ip}`, 900_000);
+      fail(`login:${email}`, 900_000);
+    }
     if (e.code === 'unverified') {
       const user = await db.query.users.findFirst({ where: (u, { eq }) => eq(u.email, email) });
       let devLink: string | undefined;
@@ -136,4 +146,61 @@ export async function startCourseAction(form: FormData): Promise<void> {
   const enrolment = await enrol(await getDb(), user.id, slug);
   if (!enrolment) redirect('/kursus');
   redirect(`/belajar/${slug}`);
+}
+
+/** Always the same answer, so the form does not reveal which emails exist. */
+export async function forgotAction(_prev: FormState, form: FormData): Promise<FormState> {
+  const email = String(form.get('email') ?? '').trim().toLowerCase();
+  const generic: FormState = {
+    done: true,
+    message: getMailer().logsOnly
+      ? 'Pengiriman email belum aktif di server ini. Hubungi admin pelatihan; admin dapat membuatkan tautan atur ulang kata sandi untuk Anda.'
+      : 'Jika email itu terdaftar, kami sudah mengirim tautan untuk mengatur ulang kata sandi. Periksa juga folder spam.',
+  };
+  if (!email || !allow(`forgot:${await clientIp()}`, 30, 3_600_000) || !allow(`forgot:${email}`, 3, 3_600_000)) {
+    return generic;
+  }
+  const db = await getDb();
+  const found = await requestPasswordReset(db, email);
+  if (found && !getMailer().logsOnly) {
+    const link = `${await baseUrl()}/atur-sandi?token=${encodeURIComponent(found.token)}`;
+    await getMailer().send({
+      to: found.user.email,
+      subject: 'Atur ulang kata sandi — DRIVE School',
+      text: `Halo ${found.user.fullName},
+
+Klik tautan berikut untuk membuat kata sandi baru:
+${link}
+
+Tautan berlaku 2 jam. Abaikan email ini jika Anda tidak memintanya.`,
+    });
+  }
+  return generic;
+}
+
+export async function resetAction(_prev: FormState, form: FormData): Promise<FormState> {
+  const token = String(form.get('token') ?? '');
+  const password = String(form.get('password') ?? '');
+  if (password.length < 8) return { errors: { password: 'Kata sandi minimal 8 karakter.' } };
+  if (password !== form.get('passwordConfirm')) {
+    return { errors: { passwordConfirm: 'Konfirmasi kata sandi tidak sama.' } };
+  }
+  try {
+    await resetPassword(await getDb(), token, password);
+  } catch (e) {
+    if (e instanceof AccountError) return { message: e.message };
+    throw e;
+  }
+  redirect('/masuk?reset=1');
+}
+
+/** An admin hands a learner a reset link in person when email is not set up. */
+export async function adminResetAction(_prev: FormState, form: FormData): Promise<FormState> {
+  await requireAdmin();
+  const userId = String(form.get('userId') ?? '');
+  const db = await getDb();
+  const user = await db.query.users.findFirst({ where: (u, { eq }) => eq(u.id, userId) });
+  if (!user) return { message: 'Peserta tidak ditemukan.' };
+  const token = await newResetToken(db, user.id);
+  return { done: true, devLink: `${await baseUrl()}/atur-sandi?token=${encodeURIComponent(token)}` };
 }

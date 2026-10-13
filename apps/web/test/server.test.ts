@@ -4,9 +4,30 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { openDb, type Db } from '../src/db/client';
-import { AccountError, login, registerUser, updateProfile, userForSession, verifyEmail } from '../src/server/accounts';
+import { eq } from 'drizzle-orm';
+import { attempts, results } from '../src/db/schema';
+import {
+  AccountError,
+  login,
+  newResetToken,
+  registerUser,
+  resetPassword,
+  updateProfile,
+  userForSession,
+  verifyEmail,
+} from '../src/server/accounts';
 import { catalogue, enrol, learningContext, publishCourse } from '../src/server/catalogue';
-import { certificateBySerial, ingest, issueCertificate, saveResumeState, type IncomingEvent } from '../src/server/learning';
+import {
+  certificateBySerial,
+  clampTime,
+  ingest,
+  issueCertificate,
+  saveResumeState,
+  scoreFromAnswers,
+  type IncomingEvent,
+} from '../src/server/learning';
+import { allow, blocked, fail, resetRateLimits } from '../src/server/ratelimit';
+import { safeNext } from '../src/server/redirect';
 import { hashPassword, verifyPassword } from '../src/server/password';
 import { parseRegistration, registrationSchema } from '../src/server/registration';
 import { courseReport, eventsCsv, learnersCsv } from '../src/server/reports';
@@ -44,6 +65,24 @@ const ev = (verb: string, objectId: string, at: string, extra: Partial<IncomingE
   timestamp: at,
   ...extra,
 });
+
+const COURSE = JSON.parse(readFileSync('content/drive-retinopati/course.json', 'utf8'));
+const QUIZ: Array<{ id: string; correct: string; options: Array<{ letter: string }> }> = COURSE.modules
+  .flatMap((m: { pages: unknown[] }) => m.pages)
+  .filter((p: { type: string }) => p.type === 'quiz');
+
+/** Answers every graded question, `right` of them correctly, at `iso`. */
+const answers = (right: number, iso: string) =>
+  QUIZ.map((q, i) =>
+    ev('answered', q.id, iso, {
+      result: { response: i < right ? q.correct : q.options.find((o) => o.letter !== q.correct)!.letter },
+    }),
+  );
+
+/** Lets a test use fixed historical timestamps (the attempt "started" earlier). */
+async function backdate(attemptId: string, iso: string) {
+  await db.update(attempts).set({ startedAt: new Date(iso) }).where(eq(attempts.id, attemptId));
+}
 
 beforeAll(async () => {
   db = await openDb('memory://');
@@ -155,12 +194,15 @@ describe('events, results and certificates (notes 9, 10, 15)', () => {
     const u = await newLearner('gita@example.id');
     await enrol(db, u.id, 'drive-retinopati');
     const ctx = (await learningContext(db, u.id, 'drive-retinopati'))!;
+    await backdate(ctx.attempt.id, '2026-10-13T02:00:00Z');
     const score = (raw: number) => ({ score: { raw, min: 0, max: 5 } });
     await ingest(db, u.id, ctx.attempt.id, [
+      ...answers(2, '2026-10-13T02:50:00Z'),
       ev('failed', 'drive-retinopati', '2026-10-13T03:00:00Z', { result: { success: false, ...score(2) }, context: { attempt: 1 } }),
     ]);
     await expect(issueCertificate(db, u.id, ctx.attempt.id)).rejects.toThrow('lulus');
     await ingest(db, u.id, ctx.attempt.id, [
+      ...answers(5, '2026-10-13T03:50:00Z'),
       ev('passed', 'drive-retinopati', '2026-10-13T04:00:00Z', { result: { success: true, ...score(5) }, context: { attempt: 2 } }),
     ]);
     const cert = await issueCertificate(db, u.id, ctx.attempt.id);
@@ -191,6 +233,7 @@ describe('admin report (note 15)', () => {
     const u = await newLearner('indah@example.id');
     await enrol(db, u.id, 'drive-retinopati');
     const ctx = (await learningContext(db, u.id, 'drive-retinopati'))!;
+    await backdate(ctx.attempt.id, '2026-10-12T12:00:00Z');
     // 20:00 WIB Monday: three minutes of activity, then a new session next day.
     await ingest(db, u.id, ctx.attempt.id, [
       ev('experienced', 'modul1-p2', '2026-10-12T13:00:00Z'),
@@ -212,5 +255,92 @@ describe('admin report (note 15)', () => {
     const raw = (await eventsCsv(db, 'drive-retinopati'))!;
     expect(raw).toContain('2026-10-12 20:00');
     expect(raw).toContain('heartbeat');
+  });
+});
+
+describe('review fixes', () => {
+  it('grades on the server: a forged pass without answers earns nothing', async () => {
+    const u = await newLearner('joko@example.id');
+    await enrol(db, u.id, 'drive-retinopati');
+    const ctx = (await learningContext(db, u.id, 'drive-retinopati'))!;
+    await backdate(ctx.attempt.id, '2026-10-13T00:00:00Z');
+    const forged = { result: { success: true, score: { raw: 5, min: 0, max: 5 } }, context: { attempt: 1 } };
+    await ingest(db, u.id, ctx.attempt.id, [ev('passed', 'drive-retinopati', '2026-10-13T01:00:00Z', forged)]);
+    await expect(issueCertificate(db, u.id, ctx.attempt.id)).rejects.toThrow('lulus');
+    // A claimed pass on wrong answers is recorded as the failure it is.
+    await ingest(db, u.id, ctx.attempt.id, [
+      ...answers(1, '2026-10-13T01:10:00Z'),
+      ev('passed', 'drive-retinopati', '2026-10-13T01:20:00Z', { ...forged, context: { attempt: 2 } }),
+    ]);
+    const rows = await db.select().from(results).where(eq(results.attemptId, ctx.attempt.id));
+    expect(rows.map((r) => [r.scoreRaw, r.passed])).toEqual([[1, false]]);
+    await expect(issueCertificate(db, u.id, ctx.attempt.id)).rejects.toThrow('lulus');
+  });
+
+  it('does not count the same reported attempt twice', async () => {
+    const u = await newLearner('kartika@example.id');
+    await enrol(db, u.id, 'drive-retinopati');
+    const ctx = (await learningContext(db, u.id, 'drive-retinopati'))!;
+    await backdate(ctx.attempt.id, '2026-10-13T00:00:00Z');
+    const pass = { result: { success: true }, context: { attempt: 1 } };
+    await ingest(db, u.id, ctx.attempt.id, [...answers(5, '2026-10-13T01:00:00Z'), ev('passed', 'x', '2026-10-13T01:05:00Z', pass)]);
+    await ingest(db, u.id, ctx.attempt.id, [ev('passed', 'x', '2026-10-13T01:06:00Z', pass)]);
+    const rows = await db.select().from(results).where(eq(results.attemptId, ctx.attempt.id));
+    expect(rows).toHaveLength(1);
+  });
+
+  it('scores the latest answer per question', () => {
+    const q = [{ id: 'q1', correct: 'A' }];
+    const at = (m: number) => new Date(Date.UTC(2026, 9, 13, 1, m));
+    expect(scoreFromAnswers(q, [{ objectId: 'q1', response: 'B', at: at(1) }, { objectId: 'q1', response: 'A', at: at(2) }])).toEqual({ raw: 1, max: 1, answered: 1 });
+    expect(scoreFromAnswers(q, [])).toEqual({ raw: 0, max: 1, answered: 0 });
+  });
+
+  it('keeps event times inside the attempt', () => {
+    const start = new Date('2026-10-13T00:00:00Z');
+    const now = new Date('2026-10-13T05:00:00Z');
+    expect(clampTime(new Date('1970-01-01T00:00:00Z'), start, now)).toEqual(start);
+    expect(clampTime(new Date('2030-01-01T00:00:00Z'), start, now)).toEqual(now);
+    expect(clampTime(new Date('2026-10-13T02:00:00Z'), start, now).toISOString()).toBe('2026-10-13T02:00:00.000Z');
+  });
+
+  it('ignores a resume save older than the stored one', async () => {
+    const u = await newLearner('lina@example.id');
+    await enrol(db, u.id, 'drive-retinopati');
+    const ctx = (await learningContext(db, u.id, 'drive-retinopati'))!;
+    expect(await saveResumeState(db, u.id, ctx.attempt.id, { pageIdx: 5 }, 200)).toBe(true);
+    expect(await saveResumeState(db, u.id, ctx.attempt.id, { pageIdx: 4 }, 100)).toBe(false);
+    expect((await learningContext(db, u.id, 'drive-retinopati'))!.attempt.resumeState).toEqual({ pageIdx: 5 });
+  });
+
+  it('resets a password once, signing the account out everywhere', async () => {
+    const u = await newLearner('maya@example.id');
+    const { token: session } = await login(db, 'maya@example.id', 'rahasia-sekali');
+    const reset = await newResetToken(db, u.id);
+    await resetPassword(db, reset, 'kata-sandi-baru-1');
+    expect(await userForSession(db, session)).toBeNull();
+    await expect(login(db, 'maya@example.id', 'rahasia-sekali')).rejects.toMatchObject({ code: 'bad-login' });
+    expect((await login(db, 'maya@example.id', 'kata-sandi-baru-1')).user.id).toBe(u.id);
+    await expect(resetPassword(db, reset, 'lagi-lagi-123')).rejects.toMatchObject({ code: 'bad-token' });
+  });
+
+  it('follows only same-site paths after login', () => {
+    expect(safeNext('/belajar/drive-retinopati?x=1')).toBe('/belajar/drive-retinopati?x=1');
+    for (const bad of ['//evil.com', '/\\evil.com', '/\t/evil.com', '/\n/evil.com', 'https://evil.com', '/%09/evil.com', '', 42]) {
+      const out = safeNext(bad);
+      expect(out.startsWith('/') && !out.startsWith('//')).toBe(true);
+      expect(new URL(out, 'https://gamatutor.komunitech.id').host).toBe('gamatutor.komunitech.id');
+    }
+  });
+
+  it('rate-limits failures only, per key', () => {
+    resetRateLimits();
+    for (let i = 0; i < 9; i++) fail('login:x', 60_000, 1_000);
+    expect(blocked('login:x', 10, 1_000)).toBe(false);
+    fail('login:x', 60_000, 1_000);
+    expect(blocked('login:x', 10, 1_000)).toBe(true);
+    expect(blocked('login:x', 10, 62_000)).toBe(false);
+    expect(allow('a', 1, 1_000, 0)).toBe(true);
+    expect(allow('a', 1, 1_000, 0)).toBe(false);
   });
 });

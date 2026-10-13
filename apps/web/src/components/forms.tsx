@@ -177,7 +177,8 @@ export function LoginForm({ action, next }: { action: Action; next: string }) {
       <Field name="password" label="Kata sandi" type="password" state={state} autoComplete="current-password" />
       <Submit>Masuk</Submit>
       <p className="small muted">
-        Belum punya akun? <Link href="/daftar">Daftar sebagai peserta</Link>
+        <Link href="/lupa-sandi">Lupa kata sandi?</Link> · Belum punya akun?{' '}
+        <Link href="/daftar">Daftar sebagai peserta</Link>
       </p>
     </form>
   );
@@ -200,6 +201,49 @@ export function ProfileForm({
       {state.done && <p className="notice ok" role="status">{state.message}</p>}
       <ProfileFields state={state} professions={professions} provinces={provinces} defaults={defaults} />
       <Submit>Simpan profil</Submit>
+    </form>
+  );
+}
+
+export function ForgotForm({ action }: { action: Action }) {
+  const [state, formAction] = useActionState(action, {});
+  if (state.done) return <p className="notice info">{state.message}</p>;
+  return (
+    <form action={formAction} className="form" noValidate>
+      <Field name="email" label="Email akun Anda" type="email" state={state} autoComplete="email" />
+      <Submit>Kirim tautan atur ulang</Submit>
+    </form>
+  );
+}
+
+export function ResetForm({ action, token }: { action: Action; token: string }) {
+  const [state, formAction] = useActionState(action, {});
+  return (
+    <form action={formAction} className="form" noValidate>
+      {state.message && <p className="notice err" role="alert">{state.message}</p>}
+      <input type="hidden" name="token" value={token} />
+      <Field name="password" label="Kata sandi baru" type="password" state={state} autoComplete="new-password" hint="Minimal 8 karakter." />
+      <Field name="passwordConfirm" label="Ulangi kata sandi baru" type="password" state={state} autoComplete="new-password" />
+      <Submit>Simpan kata sandi</Submit>
+    </form>
+  );
+}
+
+export function AdminResetButton({ action, userId }: { action: Action; userId: string }) {
+  const [state, formAction] = useActionState(action, {});
+  if (state.devLink) {
+    return (
+      <span className="small devlink">
+        Berlaku 2 jam, sekali pakai: <code>{state.devLink}</code>
+      </span>
+    );
+  }
+  return (
+    <form action={formAction}>
+      <input type="hidden" name="userId" value={userId} />
+      <button className="linkbtn" style={{ color: 'var(--blue)', padding: 0 }} type="submit">
+        Buat tautan reset sandi
+      </button>
     </form>
   );
 }

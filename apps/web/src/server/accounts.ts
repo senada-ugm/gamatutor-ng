@@ -127,3 +127,51 @@ export async function updateProfile(db: Db, userId: string, profile: Profile): P
   const [user] = await db.update(users).set(profile).where(eq(users.id, userId)).returning();
   return user!;
 }
+
+const RESET_HOURS = 2;
+
+/** A reset token for the account with this email, or null if there is none. */
+export async function requestPasswordReset(
+  db: Db,
+  email: string,
+): Promise<{ token: string; user: User } | null> {
+  const user = await db.query.users.findFirst({ where: eq(users.email, email.trim().toLowerCase()) });
+  if (!user) return null;
+  return { token: await newResetToken(db, user.id), user };
+}
+
+export async function newResetToken(db: Db, userId: string): Promise<string> {
+  const token = newToken();
+  await db.insert(emailTokens).values({
+    id: tokenId(token),
+    userId,
+    purpose: 'reset',
+    expiresAt: new Date(Date.now() + RESET_HOURS * 3_600_000),
+  });
+  return token;
+}
+
+/**
+ * Sets a new password from a reset token (once, within two hours) and signs
+ * the account out everywhere. Reaching the link also proves the email, for an
+ * emailed token; an admin-made link is handed over in person.
+ */
+export async function resetPassword(db: Db, token: string, password: string): Promise<User> {
+  const row = await db.query.emailTokens.findFirst({
+    where: and(
+      eq(emailTokens.id, tokenId(token)),
+      eq(emailTokens.purpose, 'reset'),
+      isNull(emailTokens.usedAt),
+      gt(emailTokens.expiresAt, new Date()),
+    ),
+  });
+  if (!row) throw new AccountError('bad-token', 'Tautan atur ulang tidak valid atau sudah kedaluwarsa. Minta tautan baru.');
+  await db.update(emailTokens).set({ usedAt: new Date() }).where(eq(emailTokens.id, row.id));
+  await db.delete(sessions).where(eq(sessions.userId, row.userId));
+  const [user] = await db
+    .update(users)
+    .set({ passwordHash: await hashPassword(password) })
+    .where(eq(users.id, row.userId))
+    .returning();
+  return user!;
+}

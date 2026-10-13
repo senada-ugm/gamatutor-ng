@@ -26,7 +26,10 @@ platform (accounts, catalogue, reports) since 2026-10-13.
 | Logs | `journalctl -u gamatutor-web` |
 
 **Email verification is switched off** (`GT_REQUIRE_EMAIL_VERIFICATION=false`)
-because no SMTP server is configured. To turn it on, set `SMTP_URL` and
+because no SMTP server is configured. New accounts stay *unverified* meanwhile,
+so turning verification on later asks them to confirm their email. Until then a
+learner who forgets their password asks an admin, who makes a one-time reset
+link from the course report (`Buat tautan reset sandi`). To turn it on, set `SMTP_URL` and
 `SMTP_FROM` in `web.env`, delete that line, and `systemctl restart gamatutor-web`.
 
 Publishing a course is part of every deploy and is idempotent: a course whose
@@ -34,7 +37,8 @@ Publishing a course is part of every deploy and is idempotent: a course whose
 
 ```bash
 cd /opt/gamatutor/current/apps/web
-runuser -u gamatutor -- env $(grep -v '^#' /etc/gamatutor/web.env | xargs) ../../node_modules/.bin/tsx scripts/publish-course.ts ../../content/<dir> --topic retina
+set -a; . /etc/gamatutor/web.env; set +a
+runuser -u gamatutor -- ../../node_modules/.bin/tsx scripts/publish-course.ts ../../content/<dir> --topic retina
 ```
 
 ## Host

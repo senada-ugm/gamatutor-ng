@@ -1,5 +1,6 @@
 import { sql } from 'drizzle-orm';
 import {
+  bigint,
   bigserial,
   boolean,
   date,
@@ -51,7 +52,7 @@ export const emailTokens = pgTable('email_tokens', {
   userId: uuid('user_id')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
-  purpose: text('purpose', { enum: ['verify'] }).notNull(),
+  purpose: text('purpose', { enum: ['verify', 'reset'] }).notNull(),
   expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
   usedAt: timestamp('used_at', { withTimezone: true }),
   createdAt: created(),
@@ -127,6 +128,8 @@ export const attempts = pgTable('attempts', {
   startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
   lastSeenAt: timestamp('last_seen_at', { withTimezone: true }).notNull().defaultNow(),
   resumeState: jsonb('resume_state'),
+  /** Sequence of the stored resume state; an older save never replaces it. */
+  resumeSeq: bigint('resume_seq', { mode: 'number' }),
 });
 
 /** Append-only. Replays are absorbed by the unique client_event_id. */
@@ -166,6 +169,8 @@ export const results = pgTable(
       .notNull()
       .references(() => attempts.id, { onDelete: 'cascade' }),
     attemptNo: integer('attempt_no').notNull(),
+    /** The attempt number the player reported, to recognise a repeated report. */
+    clientAttempt: integer('client_attempt'),
     scoreRaw: integer('score_raw').notNull(),
     scoreMax: integer('score_max').notNull(),
     passed: boolean('passed').notNull(),

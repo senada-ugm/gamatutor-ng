@@ -44,7 +44,15 @@ const g = globalThis as unknown as { __gtDb?: Promise<Db> };
 
 /** The process-wide database, opened once (and once across dev hot reloads). */
 export function getDb(): Promise<Db> {
-  g.__gtDb ??= openDb(process.env.DATABASE_URL ?? resolve(process.cwd(), '.data/pglite'));
+  if (!g.__gtDb) {
+    const opening = openDb(process.env.DATABASE_URL ?? resolve(process.cwd(), '.data/pglite'));
+    g.__gtDb = opening;
+    // A database that was not up yet (a reboot) must not poison every later
+    // request: forget the failure so the next request tries again.
+    opening.catch(() => {
+      if (g.__gtDb === opening) g.__gtDb = undefined;
+    });
+  }
   return g.__gtDb;
 }
 
