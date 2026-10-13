@@ -130,12 +130,49 @@ function synth(ctx: RenderContext): SpeechSynthesis | null {
   return w.speechSynthesis ?? null;
 }
 
+/** The one-off clip playing for a hotspot point, per window. */
+const clips = new WeakMap<object, HTMLAudioElement>();
+
+function stopClip(ctx: RenderContext): void {
+  const clip = clips.get(ctx.window);
+  if (!clip) return;
+  try {
+    clip.pause();
+  } catch {
+    /* already gone */
+  }
+  clips.delete(ctx.window);
+}
+
 export function stopSpeech(ctx: RenderContext): void {
+  stopClip(ctx);
   try {
     synth(ctx)?.cancel();
   } catch {
     /* nothing to stop */
   }
+}
+
+/**
+ * One-off narration for a hotspot point: the recorded clip when there is one,
+ * otherwise speech synthesis of the text.
+ */
+export function speakPoint(ctx: RenderContext, text: string, audio: string | undefined): void {
+  if (ctx.capabilities.narration === 'off') return;
+  const w = ctx.window as SpeechCapableWindow;
+  if (audio && w.Audio) {
+    stopSpeech(ctx);
+    const clip = new w.Audio(ctx.asset(audio));
+    clips.set(ctx.window, clip);
+    try {
+      const p = clip.play();
+      if (p && typeof p.catch === 'function') p.catch(() => speakText(ctx, text));
+    } catch {
+      speakText(ctx, text);
+    }
+    return;
+  }
+  speakText(ctx, text);
 }
 
 /** One-off speech, used by hotspot points. */

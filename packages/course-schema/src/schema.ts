@@ -84,7 +84,16 @@ const HotspotSchema = z.object({
   image: z.string(),
   /** Points are a sequence; the next unvisited one is highlighted. */
   ordered: z.boolean().optional(),
-  points: z.array(z.object({ x: z.number(), y: z.number(), label: z.string(), body: z.string() })),
+  points: z.array(
+    z.object({
+      x: z.number(),
+      y: z.number(),
+      label: z.string(),
+      body: z.string(),
+      /** Recorded narration of this point; speech synthesis otherwise. */
+      audio: z.string().optional(),
+    }),
+  ),
   masks: z
     .array(z.object({ x: z.number(), y: z.number(), w: z.number(), h: z.number() }))
     .optional(),
@@ -187,6 +196,8 @@ export const CourseSchema = z.object({
   brand: z.object({ name: z.string(), mark: z.string() }),
   passingScore: z.number().min(0).max(1),
   assessment: z.object({ mode: z.enum(['formative', 'secured']) }),
+  /** Shown under Referensi: sources and licences (e.g. for a synthetic voice). */
+  credits: z.string().optional(),
   /** Course-specific copy for the completion screen and the certificate. */
   completion: z
     .object({ body: z.string().optional(), certificateText: z.string().optional() })

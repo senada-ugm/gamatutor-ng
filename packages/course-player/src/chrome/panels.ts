@@ -93,7 +93,10 @@ export function wireFooterLinks(ctx: RenderContext): void {
   const actions: Array<[string, () => string]> = [
     ['Transkrip', () => transcriptBody(ctx)],
     ['Bantuan', () => HELP],
-    ['Referensi', () => REFERENCES],
+    [
+      'Referensi',
+      () => REFERENCES + (ctx.course.credits ? renderBodyBlock(ctx.course.credits) : ''),
+    ],
   ];
   links.forEach((el, i) => {
     const action = actions[i];

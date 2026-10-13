@@ -1,9 +1,11 @@
 # Panduan voiceover untuk Tim DRIVE
 
-Saat ini narasi dibacakan oleh suara sintetis peramban (Web Speech). Begitu
-rekaman voiceover Tim DRIVE siap, player memakainya secara otomatis: rekaman
-diputar saat halaman dibuka, dan butir-butir daftar muncul tepat ketika narator
-menyebutnya.
+Saat ini kursus memakai **voiceover sementara**: suara sintetis Meta MMS-TTS
+Bahasa Indonesia (lisensi CC BY-NC 4.0, nonkomersial, dengan atribusi di panel
+Referensi). Suara ini seragam di semua perangkat dan butir daftar muncul tepat
+saat disebut, tetapi tetap terdengar sintetis dan beberapa istilah medis
+terbaca kurang alami. Begitu rekaman Tim DRIVE siap, rekaman itu
+menggantikannya: cukup timpa file MP3-nya dan perbarui detik mulai tiap butir.
 
 ## Yang perlu diserahkan
 
@@ -54,20 +56,20 @@ file per nomor.
 
 ## Untuk pengembang
 
-Rekaman diletakkan di `content/drive-retinopati/assets/audio/`, lalu di
-`course.json`:
+Voiceover sementara dibuat ulang dengan:
 
-```json
-{
-  "id": "modul1-p5",
-  "type": "content",
-  "audio": "assets/audio/07-faktor-risiko-dm.mp3",
-  "reveal_steps": [
-    { "texts": ["a. Aktivitas fisik kurang"], "narration": "…", "cue": 12.5 }
-  ]
-}
+```bash
+python tools/voiceover/make_voiceover.py content/drive-retinopati --qa
 ```
 
-Lalu jalankan `./tools/deploy-web.sh` dan `./tools/deploy.sh`. Kursus yang
-berubah otomatis terbit sebagai versi baru untuk peserta yang baru mendaftar;
-peserta yang sedang berjalan tetap memakai versinya.
+(perlu `torch`, `transformers`, `scipy`, dan `ffmpeg`; `--qa` mentranskripsi
+balik tiap klip dengan Whisper sebagai cek kasar kejelasan). Skrip itu menulis
+`assets/audio/<id-halaman>.mp3`, `cue` tiap butir, klip tiap nomor hotspot, dan
+`credits` ke `course.json`.
+
+Untuk rekaman Tim DRIVE: timpa `content/drive-retinopati/assets/audio/<id>.mp3`
+dengan rekaman mereka, isi `cue` (detik) tiap butir di `course.json`, hapus
+`credits`, lalu jalankan `./tools/deploy-web.sh` dan `./tools/deploy.sh`.
+Kursus yang berubah otomatis terbit sebagai versi baru untuk peserta yang baru
+mendaftar; peserta yang sedang berjalan tetap memakai versinya. Untuk kembali
+ke suara peramban, hapus kunci `audio` dari `course.json`.

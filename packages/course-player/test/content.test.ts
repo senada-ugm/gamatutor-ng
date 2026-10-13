@@ -118,3 +118,30 @@ describe('ordered hotspot', () => {
     expect(m.doc.querySelector('.hotspot-next')!.textContent).toContain('nomor 2');
   });
 });
+
+describe('recorded narration for hotspot points and credits', () => {
+  it("plays a point's own clip instead of speech synthesis, and lists credits", () => {
+    const withAudio = structuredClone(course);
+    withAudio.credits = 'Suara narasi: MMS-TTS (CC BY-NC 4.0).';
+    const hs = withAudio.modules[0]!.pages[3]!;
+    if (hs.type !== 'hotspot') throw new Error('fixture moved');
+    hs.points[0]!.audio = 'assets/audio/hs-0.mp3';
+    const m = mount(withAudio, { capabilities: { narration: 'audio' } });
+    const played: string[] = [];
+    const w = m.dom.window as unknown as Record<string, unknown>;
+    w['Audio'] = class {
+      constructor(public src: string) {
+        played.push(src);
+      }
+      play() {
+        return Promise.resolve();
+      }
+      pause() {}
+    };
+    goTo(m, withAudio, 'hs');
+    m.doc.querySelector<HTMLElement>('.hotspot-pin')!.click();
+    expect(played).toEqual(['assets/audio/hs-0.mp3']);
+    (m.doc.querySelectorAll<HTMLElement>('.footer-links span')[2]!).click();
+    expect(m.doc.querySelector('.gt-panel-body')!.textContent).toContain('CC BY-NC 4.0');
+  });
+});

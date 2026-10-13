@@ -33,7 +33,8 @@
           "kicker": "DAFTAR ISI",
           "title": "Cakupan modul",
           "body": "1. Diabetes Mellitus\n2. Retinopati Diabetika (RD)\n3. Skrining dan Tatalaksana Retinopati Diabetika",
-          "transcript": "Cakupan modul.\nSetelah menyelesaikan modul ini, Anda akan memahami secara umum:\n• diabetes mellitus;\n• retinopati diabetika;\n• skrining serta tata laksana retinopati diabetika."
+          "transcript": "Cakupan modul.\nSetelah menyelesaikan modul ini, Anda akan memahami secara umum:\n• diabetes mellitus;\n• retinopati diabetika;\n• skrining serta tata laksana retinopati diabetika.",
+          "audio": "assets/audio/pengantar-p2.mp3"
         }
       ]
     },
@@ -58,7 +59,8 @@
           "transcript": "Diabetes mellitus merupakan sekelompok penyakit metabolik dengan karakteristik hiperglikemia kronik, yang menandakan abnormalitas proses metabolisme karbohidrat dalam tubuh.\nKondisi ini diakibatkan oleh gangguan pada sekresi insulin, kerja insulin, ataupun keduanya.\nKondisi hiperglikemia kronis adalah penanda utama, sekaligus pemicu terjadinya komplikasi mikro dan makrovaskular.",
           "image": "assets/slide4_10.png",
           "imageLayout": "below",
-          "imageCaption": "The Egregious Eleven (diadaptasi dari Schwartz, Diabetes Care 2016)."
+          "imageCaption": "The Egregious Eleven (diadaptasi dari Schwartz, Diabetes Care 2016).",
+          "audio": "assets/audio/modul1-p2.mp3"
         },
         {
           "id": "modul1-p3",
@@ -91,7 +93,8 @@
               "big": "11,3%",
               "body": "penduduk Indonesia usia 20–79 tahun"
             }
-          ]
+          ],
+          "audio": "assets/audio/modul1-p3.mp3"
         },
         {
           "id": "modul1-p4",
@@ -102,7 +105,8 @@
           "body": "•  Tipe 1 — pankreas berhenti memproduksi insulin.\n•  Tipe 2 — resistensi insulin pada organ, dan/atau produksi insulin pankreas tidak mencukupi.\n•  Gestasional — terdiagnosis pada trimester kedua/ketiga kehamilan, tanpa riwayat diabetes sebelumnya.\n•  Tipe lain — mis. MODY (mutasi genetik tunggal), penyakit eksokrin pankreas, akibat obat/zat kimia, infeksi, sebab imunologi, atau genetik lain.",
           "transcript": "Berdasarkan etiologinya, diabetes mellitus diklasifikasikan menjadi empat.\n• Diabetes mellitus tipe 1: kadar glukosa darah meningkat karena pankreas berhenti memproduksi insulin.\n• Diabetes mellitus tipe 2: disebabkan oleh resistensi insulin, atau pankreas yang tidak memproduksi cukup insulin.\n• Diabetes mellitus gestasional: diabetes yang terdiagnosis pada trimester kedua atau ketiga kehamilan, padahal sebelum hamil tidak didapatkan diabetes.\n• Tipe spesifik akibat penyebab lain: misalnya Maturity-Onset Diabetes of the Young akibat mutasi genetik tunggal, penyakit eksokrin pankreas, obat atau zat kimia, infeksi, sebab imunologi, atau sebab genetik lain.",
           "image": "assets/slide6_8.png",
-          "imageLayout": "below"
+          "imageLayout": "below",
+          "audio": "assets/audio/modul1-p4.mp3"
         },
         {
           "id": "modul1-p5",
@@ -117,63 +121,74 @@
               "texts": [
                 "a. Aktivitas fisik kurang"
               ],
-              "narration": "Aktivitas fisik yang kurang."
+              "narration": "Aktivitas fisik yang kurang.",
+              "cue": 21.22
             },
             {
               "texts": [
                 "b. Riwayat keluarga (keturunan) DM"
               ],
-              "narration": "Riwayat keluarga dengan diabetes."
+              "narration": "Riwayat keluarga dengan diabetes.",
+              "cue": 24.95
             },
             {
               "texts": [
                 "c. Ras/etnis tertentu"
               ],
-              "narration": "Berasal dari ras atau etnis tertentu."
+              "narration": "Berasal dari ras atau etnis tertentu.",
+              "cue": 28.57
             },
             {
               "texts": [
                 "d. Riwayat bayi lahir > 4 kg / DM gestasional"
               ],
-              "narration": "Riwayat melahirkan bayi dengan berat lebih dari 4 kilogram, atau pernah terdiagnosis diabetes gestasional."
+              "narration": "Riwayat melahirkan bayi dengan berat lebih dari 4 kilogram, atau pernah terdiagnosis diabetes gestasional.",
+              "cue": 32.47
             },
             {
               "texts": [
                 "e. Hipertensi (≥ 140/90 mmHg)"
               ],
-              "narration": "Hipertensi, yaitu tekanan darah 140 per 90 mmHg atau lebih."
+              "narration": "Hipertensi, yaitu tekanan darah 140 per 90 mmHg atau lebih.",
+              "cue": 41.83
             },
             {
               "texts": [
                 "f. HDL < 35 atau trigliserida > 250 mg/dL"
               ],
-              "narration": "HDL kurang dari 35, dan atau trigliserida lebih dari 250 mg per dL."
+              "narration": "HDL kurang dari 35, dan atau trigliserida lebih dari 250 mg per dL.",
+              "cue": 52.0
             },
             {
               "texts": [
                 "g. Sindrom ovarium polikistik (PCOS)"
               ],
-              "narration": "Wanita dengan sindrom ovarium polikistik."
+              "narration": "Wanita dengan sindrom ovarium polikistik.",
+              "cue": 60.02
             },
             {
               "texts": [
                 "h. Riwayat prediabetes"
               ],
-              "narration": "Riwayat prediabetes."
+              "narration": "Riwayat prediabetes.",
+              "cue": 64.04
             },
             {
               "texts": [
                 "i. Obesitas berat + akantosis nigrikans"
               ],
-              "narration": "Obesitas berat disertai akantosis nigrikans."
+              "narration": "Obesitas berat disertai akantosis nigrikans.",
+              "cue": 66.9
             },
             {
               "texts": [
                 "j. Riwayat penyakit kardiovaskular"
               ],
-              "narration": "Riwayat penyakit kardiovaskular."
+              "narration": "Riwayat penyakit kardiovaskular.",
+              "cue": 71.46
             }
-          ]
+          ],
+          "audio": "assets/audio/modul1-p5.mp3"
         },
         {
           "id": "modul1-p6",
@@ -184,7 +199,8 @@
           "body": "Empat kriteria diagnosis diabetes mellitus menurut PERKENI 2021 (lihat ringkasan pada gambar).",
           "transcript": "Kriteria diagnosis diabetes mellitus, cukup salah satu:\n• gula darah puasa lebih dari atau sama dengan 126 mg per dL;\n• TTGO 2 jam lebih dari atau sama dengan 200 mg per dL;\n• gula darah sewaktu lebih dari atau sama dengan 200 mg per dL, disertai keluhan klasik atau krisis hiperglikemia;\n• HbA1c lebih dari atau sama dengan 6,5 persen.",
           "image": "assets/slide8_8.png",
-          "imageLayout": "below"
+          "imageLayout": "below",
+          "audio": "assets/audio/modul1-p6.mp3"
         },
         {
           "id": "modul1-p7",
@@ -195,7 +211,8 @@
           "body": "Klasifikasi kadar glukosa darah dan HbA1c untuk kategori diabetes, prediabetes, dan normal (lihat gambar).",
           "transcript": "Berikut klasifikasi kadar glukosa dan HbA1c untuk kategori diabetes, prediabetes, dan normal.\nPerlu diperhatikan kondisi yang membuat hasil HbA1c tidak valid, seperti anemia, hemoglobinopati, transfusi, dan gangguan ginjal.",
           "image": "assets/slide9_8.png",
-          "imageLayout": "below"
+          "imageLayout": "below",
+          "audio": "assets/audio/modul1-p7.mp3"
         },
         {
           "id": "modul1-p8",
@@ -206,7 +223,8 @@
           "body": "Hiperglikemia kronis memicu makroangiopati (jantung, otak, pembuluh darah perifer) dan mikroangiopati (retinopati, neuropati, nefropati).",
           "transcript": "Diabetes mellitus yang menyebabkan hiperglikemia dapat memicu makroangiopati dan mikroangiopati, termasuk di antaranya retinopati, neuropati, dan nefropati.",
           "image": "assets/slide10_8.png",
-          "imageLayout": "below"
+          "imageLayout": "below",
+          "audio": "assets/audio/modul1-p8.mp3"
         }
       ]
     },
@@ -234,103 +252,120 @@
               "x": 21.38,
               "y": 17.12,
               "label": "Kornea",
-              "body": "Lapisan bening tembus cahaya di bagian depan mata; membiaskan sebagian besar cahaya yang masuk sebelum melewati lensa."
+              "body": "Lapisan bening tembus cahaya di bagian depan mata; membiaskan sebagian besar cahaya yang masuk sebelum melewati lensa.",
+              "audio": "assets/audio/modul2-p2-1.mp3"
             },
             {
               "x": 22.88,
               "y": 22.67,
               "label": "Iris",
-              "body": "Selaput berwarna yang mengatur ukuran pupil, sehingga mengontrol jumlah cahaya yang masuk ke dalam mata."
+              "body": "Selaput berwarna yang mengatur ukuran pupil, sehingga mengontrol jumlah cahaya yang masuk ke dalam mata.",
+              "audio": "assets/audio/modul2-p2-2.mp3"
             },
             {
               "x": 87.75,
               "y": 20.09,
               "label": "Bilik mata anterior",
-              "body": "Rongga berisi aqueous humor antara kornea dan iris."
+              "body": "Rongga berisi aqueous humor antara kornea dan iris.",
+              "audio": "assets/audio/modul2-p2-3.mp3"
             },
             {
               "x": 88.2,
               "y": 24.72,
               "label": "Bilik mata posterior",
-              "body": "Rongga kecil berisi aqueous humor antara iris dan lensa, tempat cairan ini diproduksi sebelum mengalir ke bilik anterior."
+              "body": "Rongga kecil berisi aqueous humor antara iris dan lensa, tempat cairan ini diproduksi sebelum mengalir ke bilik anterior.",
+              "audio": "assets/audio/modul2-p2-4.mp3"
             },
             {
               "x": 83.5,
               "y": 29.38,
               "label": "Lensa",
-              "body": "Struktur bening di belakang iris yang memfokuskan cahaya ke retina; bentuknya berubah saat berakomodasi (fokus dekat-jauh)."
+              "body": "Struktur bening di belakang iris yang memfokuskan cahaya ke retina; bentuknya berubah saat berakomodasi (fokus dekat-jauh).",
+              "audio": "assets/audio/modul2-p2-5.mp3"
             },
             {
               "x": 19.2,
               "y": 27.96,
               "label": "Badan siliaris",
-              "body": "Struktur otot yang menghasilkan aqueous humor dan mengatur bentuk lensa saat berakomodasi."
+              "body": "Struktur otot yang menghasilkan aqueous humor dan mengatur bentuk lensa saat berakomodasi.",
+              "audio": "assets/audio/modul2-p2-6.mp3"
             },
             {
               "x": 19.85,
               "y": 33.47,
               "label": "Ora serrata",
-              "body": "Batas tepi retina di bagian perifer, tempat retina menyatu dengan badan siliaris."
+              "body": "Batas tepi retina di bagian perifer, tempat retina menyatu dengan badan siliaris.",
+              "audio": "assets/audio/modul2-p2-7.mp3"
             },
             {
               "x": 17.23,
               "y": 48.36,
               "label": "Otot rektus medial",
-              "body": "Salah satu otot ekstraokular yang menggerakkan bola mata ke arah dalam (nasal)."
+              "body": "Salah satu otot ekstraokular yang menggerakkan bola mata ke arah dalam (nasal).",
+              "audio": "assets/audio/modul2-p2-8.mp3"
             },
             {
               "x": 87.83,
               "y": 48.89,
               "label": "Otot rektus lateral",
-              "body": "Otot ekstraokular yang menggerakkan bola mata ke arah luar (temporal)."
+              "body": "Otot ekstraokular yang menggerakkan bola mata ke arah luar (temporal).",
+              "audio": "assets/audio/modul2-p2-9.mp3"
             },
             {
               "x": 44,
               "y": 48.4,
               "label": "Badan vitreus",
-              "body": "Gel bening yang mengisi rongga antara lensa dan retina, menjaga bentuk bola mata."
+              "body": "Gel bening yang mengisi rongga antara lensa dan retina, menjaga bentuk bola mata.",
+              "audio": "assets/audio/modul2-p2-10.mp3"
             },
             {
               "x": 83.6,
               "y": 60.49,
               "label": "Sklera",
-              "body": "Lapisan luar mata yang keras dan berwarna putih; berfungsi sebagai pelindung struktural bola mata."
+              "body": "Lapisan luar mata yang keras dan berwarna putih; berfungsi sebagai pelindung struktural bola mata.",
+              "audio": "assets/audio/modul2-p2-11.mp3"
             },
             {
               "x": 83.65,
               "y": 65.16,
               "label": "Koroid",
-              "body": "Lapisan pembuluh darah di antara sklera dan retina yang memberi nutrisi ke retina bagian luar."
+              "body": "Lapisan pembuluh darah di antara sklera dan retina yang memberi nutrisi ke retina bagian luar.",
+              "audio": "assets/audio/modul2-p2-12.mp3"
             },
             {
               "x": 83.63,
               "y": 70,
               "label": "Retina",
-              "body": "Lapisan saraf peka cahaya di bagian dalam mata — di sinilah kerusakan pembuluh darah akibat diabetes (retinopati diabetika) terjadi."
+              "body": "Lapisan saraf peka cahaya di bagian dalam mata — di sinilah kerusakan pembuluh darah akibat diabetes (retinopati diabetika) terjadi.",
+              "audio": "assets/audio/modul2-p2-13.mp3"
             },
             {
               "x": 54.28,
               "y": 94.56,
               "label": "Fovea",
-              "body": "Titik di tengah makula dengan ketajaman penglihatan tertinggi; edema pada area ini (edema makula) sangat memengaruhi tajam penglihatan."
+              "body": "Titik di tengah makula dengan ketajaman penglihatan tertinggi; edema pada area ini (edema makula) sangat memengaruhi tajam penglihatan.",
+              "audio": "assets/audio/modul2-p2-14.mp3"
             },
             {
               "x": 18.48,
               "y": 81.38,
               "label": "Selubung dural",
-              "body": "Lapisan pelindung yang membungkus saraf optik, bersambungan dengan meningen otak."
+              "body": "Lapisan pelindung yang membungkus saraf optik, bersambungan dengan meningen otak.",
+              "audio": "assets/audio/modul2-p2-15.mp3"
             },
             {
               "x": 12.85,
               "y": 87.38,
               "label": "Arteri & vena retina sentralis",
-              "body": "Pembuluh darah utama yang memperdarahi dan mengalirkan darah dari retina, masuk melalui saraf optik."
+              "body": "Pembuluh darah utama yang memperdarahi dan mengalirkan darah dari retina, masuk melalui saraf optik.",
+              "audio": "assets/audio/modul2-p2-16.mp3"
             },
             {
               "x": 19.98,
               "y": 93.38,
               "label": "Saraf optik",
-              "body": "Berkas serat saraf yang menghantarkan sinyal visual dari retina ke otak."
+              "body": "Berkas serat saraf yang menghantarkan sinyal visual dari retina ke otak.",
+              "audio": "assets/audio/modul2-p2-17.mp3"
             }
           ],
           "masks": [
@@ -468,7 +503,8 @@
           ],
           "trailingImage": "assets/slide13_15.png",
           "trailingCaption": "Spektrum keparahan retinopati diabetika (ICDRS)",
-          "trailingNote": "Tanpa RD → Non-proliferative RD (NPDR) ringan → sedang → berat → Proliferative RD (PDR), seiring meningkatnya risiko kebutaan."
+          "trailingNote": "Tanpa RD → Non-proliferative RD (NPDR) ringan → sedang → berat → Proliferative RD (PDR), seiring meningkatnya risiko kebutaan.",
+          "audio": "assets/audio/modul2-p3.mp3"
         },
         {
           "id": "modul2-p4",
@@ -479,7 +515,8 @@
           "body": "•  Sekitar 93 juta orang di dunia menderita retinopati diabetika.\n•  Sekitar sepertiga populasi diabetes global diperkirakan akan mengidap RD.\n•  Di Indonesia, prevalensi RD pada populasi usia 30+ tahun dengan DM Tipe 2 mencapai 43,1%.\n•  Insidensi tertinggi pada pasien dengan durasi DM > 10 tahun.",
           "transcript": "Beban penyakit retinopati diabetika:\n• prevalensi retinopati diabetika di Indonesia mencapai 43,1 persen;\n• sight-threatening DR sebesar 26,1 persen;\n• sekitar 93 juta penderita RD di seluruh dunia.",
           "image": "assets/chart_beban_rd.png",
-          "imageCaption": "Prevalensi blindness, VTDR, dan DR overall (%) — Global, Asia-Pacific high income, China, India, Indonesia."
+          "imageCaption": "Prevalensi blindness, VTDR, dan DR overall (%) — Global, Asia-Pacific high income, China, India, Indonesia.",
+          "audio": "assets/audio/modul2-p4.mp3"
         },
         {
           "id": "modul2-p5",
@@ -494,49 +531,57 @@
               "x": 9.5,
               "y": 16,
               "label": "Hiperglikemia kronik",
-              "body": "Kadar glukosa darah yang tinggi dalam jangka panjang adalah pemicu awal seluruh rangkaian kerusakan pada pembuluh darah retina."
+              "body": "Kadar glukosa darah yang tinggi dalam jangka panjang adalah pemicu awal seluruh rangkaian kerusakan pada pembuluh darah retina.",
+              "audio": "assets/audio/modul2-p5-1.mp3"
             },
             {
               "x": 38,
               "y": 13,
               "label": "Kerusakan dinding kapiler",
-              "body": "Hiperglikemia kronik merusak perisit, menebalkan membran basal, dan merusak taut antar sel endotel kapiler retina, membuat dinding pembuluh darah rapuh dan bocor."
+              "body": "Hiperglikemia kronik merusak perisit, menebalkan membran basal, dan merusak taut antar sel endotel kapiler retina, membuat dinding pembuluh darah rapuh dan bocor.",
+              "audio": "assets/audio/modul2-p5-2.mp3"
             },
             {
               "x": 28,
               "y": 32.85,
               "label": "Kebocoran kapiler",
-              "body": "Cairan plasma merembes keluar dari kapiler yang rusak (ekstravasasi plasma), menyebabkan penumpukan cairan di jaringan retina."
+              "body": "Cairan plasma merembes keluar dari kapiler yang rusak (ekstravasasi plasma), menyebabkan penumpukan cairan di jaringan retina.",
+              "audio": "assets/audio/modul2-p5-3.mp3"
             },
             {
               "x": 47.87,
               "y": 32.85,
               "label": "Oklusi kapiler",
-              "body": "Sel darah putih menumpuk dan menyumbat kapiler retina (leukostasis), mengurangi aliran darah ke jaringan sekitarnya."
+              "body": "Sel darah putih menumpuk dan menyumbat kapiler retina (leukostasis), mengurangi aliran darah ke jaringan sekitarnya.",
+              "audio": "assets/audio/modul2-p5-4.mp3"
             },
             {
               "x": 28.75,
               "y": 71.53,
               "label": "Edema makula",
-              "body": "Cairan yang bocor terkumpul di makula (pusat penglihatan tajam), menyebabkan penglihatan kabur atau distorsi — komplikasi RD yang paling sering mengganggu penglihatan."
+              "body": "Cairan yang bocor terkumpul di makula (pusat penglihatan tajam), menyebabkan penglihatan kabur atau distorsi — komplikasi RD yang paling sering mengganggu penglihatan.",
+              "audio": "assets/audio/modul2-p5-5.mp3"
             },
             {
               "x": 63.19,
               "y": 41.53,
               "label": "Iskemia retina",
-              "body": "Penyumbatan kapiler yang meluas membuat sebagian jaringan retina kekurangan oksigen dan nutrisi."
+              "body": "Penyumbatan kapiler yang meluas membuat sebagian jaringan retina kekurangan oksigen dan nutrisi.",
+              "audio": "assets/audio/modul2-p5-6.mp3"
             },
             {
               "x": 73.89,
               "y": 40.62,
               "label": "Peningkatan VEGF",
-              "body": "Jaringan retina yang iskemik melepaskan vascular endothelial growth factor (VEGF) untuk memicu pertumbuhan pembuluh darah baru."
+              "body": "Jaringan retina yang iskemik melepaskan vascular endothelial growth factor (VEGF) untuk memicu pertumbuhan pembuluh darah baru.",
+              "audio": "assets/audio/modul2-p5-7.mp3"
             },
             {
               "x": 90,
               "y": 40.08,
               "label": "Neovaskularisasi (PDR)",
-              "body": "Pembuluh darah baru yang rapuh tumbuh abnormal di permukaan retina — stadium paling berat RD, berisiko perdarahan vitreus, ablasio retina traksional, dan glaukoma neovaskular."
+              "body": "Pembuluh darah baru yang rapuh tumbuh abnormal di permukaan retina — stadium paling berat RD, berisiko perdarahan vitreus, ablasio retina traksional, dan glaukoma neovaskular.",
+              "audio": "assets/audio/modul2-p5-8.mp3"
             }
           ],
           "masks": [
@@ -604,7 +649,8 @@
               "title": "Distorsi penglihatan",
               "body": "Garis tampak bengkok — khas edema makula."
             }
-          ]
+          ],
+          "audio": "assets/audio/modul2-p6.mp3"
         },
         {
           "id": "modul2-p7",
@@ -618,39 +664,46 @@
               "image": "assets/slide17_28.png",
               "title": "Durasi diabetes",
               "body": "Makin lama DM, makin tinggi risiko.",
-              "narration": "Durasi diabetes: makin lama menderita diabetes, makin tinggi risikonya."
+              "narration": "Durasi diabetes: makin lama menderita diabetes, makin tinggi risikonya.",
+              "cue": 6.23
             },
             {
               "image": "assets/slide17_29.png",
               "title": "Kontrol glikemik",
               "body": "HbA1c tinggi menaikkan risiko.",
-              "narration": "Kontrol glikemik: HbA1c yang tinggi menaikkan risiko."
+              "narration": "Kontrol glikemik: HbA1c yang tinggi menaikkan risiko.",
+              "cue": 12.54
             },
             {
               "image": "assets/slide17_30.png",
               "title": "Hipertensi",
               "body": "Memperburuk mikrovaskuler retina.",
-              "narration": "Hipertensi memperburuk kerusakan mikrovaskular retina."
+              "narration": "Hipertensi memperburuk kerusakan mikrovaskular retina.",
+              "cue": 18.13
             },
             {
               "image": "assets/slide17_31.png",
               "title": "Dislipidemia",
               "body": "Memicu eksudat keras retina.",
-              "narration": "Dislipidemia memicu terbentuknya eksudat keras di retina."
+              "narration": "Dislipidemia memicu terbentuknya eksudat keras di retina.",
+              "cue": 23.03
             },
             {
               "image": "assets/slide17_32.png",
               "title": "Kehamilan",
               "body": "Mempercepat progresi RD.",
-              "narration": "Kehamilan dapat mempercepat progresi retinopati diabetika."
+              "narration": "Kehamilan dapat mempercepat progresi retinopati diabetika.",
+              "cue": 28.33
             },
             {
               "image": "assets/slide17_33.png",
               "title": "Faktor genetik",
               "body": "Riwayat keluarga menambah risiko.",
-              "narration": "Faktor genetik: riwayat keluarga menambah risiko."
+              "narration": "Faktor genetik: riwayat keluarga menambah risiko.",
+              "cue": 33.78
             }
-          ]
+          ],
+          "audio": "assets/audio/modul2-p7.mp3"
         },
         {
           "id": "modul2-p8",
@@ -720,16 +773,19 @@
                 "Catat hasil sebagai pecahan (mis. 6/6, 6/12).",
                 "Ulangi untuk mata sebelahnya."
               ],
-              "narration": "Pasien berdiri atau duduk 6 meter dari bagan Snellen. Tutup satu mata, lalu baca baris terkecil yang masih terbaca. Catat hasilnya sebagai pecahan, misalnya 6 per 6 atau 6 per 12. Ulangi untuk mata sebelahnya."
+              "narration": "Pasien berdiri atau duduk 6 meter dari bagan Snellen. Tutup satu mata, lalu baca baris terkecil yang masih terbaca. Catat hasilnya sebagai pecahan, misalnya 6 per 6 atau 6 per 12. Ulangi untuk mata sebelahnya.",
+              "cue": 6.42
             },
             {
               "video": {
                 "src": "assets/visus.mp4",
                 "poster": "assets/visus_poster.jpg"
               },
-              "narration": "Simak videonya untuk melihat contoh pemeriksaannya."
+              "narration": "Simak videonya untuk melihat contoh pemeriksaannya.",
+              "cue": 27.39
             }
-          ]
+          ],
+          "audio": "assets/audio/modul3-p2.mp3"
         }
       ]
     },
@@ -1061,5 +1117,6 @@
       "completion": true,
       "pages": []
     }
-  ]
+  ],
+  "credits": "Suara narasi sementara: sintesis suara Meta MMS-TTS Bahasa Indonesia (facebook/mms-tts-ind), lisensi CC BY-NC 4.0, untuk penggunaan nonkomersial. Akan diganti rekaman voiceover Tim DRIVE."
 }

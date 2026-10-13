@@ -3,7 +3,7 @@ import { statement } from '@gamatutor/tracking';
 import type { RenderContext } from '../context.js';
 import { cardShell, setCard, wireFooterNav } from '../chrome/shell.js';
 import { esc, kickerHtml } from '../dom.js';
-import { speakText } from '../narration.js';
+import { speakPoint } from '../narration.js';
 
 export function renderHotspot(ctx: RenderContext, page: PageOfType<'hotspot'>): void {
   const { state } = ctx;
@@ -69,7 +69,7 @@ export function renderHotspot(ctx: RenderContext, page: PageOfType<'hotspot'>): 
   if (speakBtn) {
     speakBtn.onclick = () => {
       const p = page.points[activeIdx as number]!;
-      speakText(ctx, p.label + '. ' + p.body);
+      speakPoint(ctx, p.label + '. ' + p.body, p.audio);
     };
   }
 
@@ -88,7 +88,7 @@ export function renderHotspot(ctx: RenderContext, page: PageOfType<'hotspot'>): 
       ctx.adapter.emit(
         statement('interacted', page.id, { context: { pointIndex: i, label: point.label } }),
       );
-      speakText(ctx, point.label + '. ' + point.body);
+      speakPoint(ctx, point.label + '. ' + point.body, point.audio);
       ctx.rerender();
     };
   });
