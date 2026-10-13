@@ -45,6 +45,16 @@ const rootRoute = createRootRoute({
   ),
 })
 
+const indexRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/",
+  beforeLoad: async () => {
+    const session = await getSession()
+    if (session) throw redirect({ to: "/dashboard" })
+    throw redirect({ to: "/login" })
+  },
+})
+
 const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/login",
@@ -410,6 +420,7 @@ const learnAnnouncementsRoute = createRoute({
 })
 
 const routeTree = rootRoute.addChildren([
+  indexRoute,
   loginRoute,
   registerRoute,
   forgotPasswordRoute,
