@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { mkdtempSync } from 'node:fs';
+import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
@@ -109,12 +109,26 @@ describe('catalogue (note 13)', () => {
     expect(groups[0]!.courses[0]!.state).toBe('berjalan');
   });
 
+  it('does not republish an unchanged course', async () => {
+    const again = await publishCourse(db, {
+      courseDir: 'content/drive-retinopati',
+      topicSlug: 'retina',
+      topicTitle: 'Retina',
+      storage,
+    });
+    expect(again.unchanged).toBe(true);
+  });
+
   it('publishes a second version without moving enrolled learners', async () => {
     const u = await newLearner('dewi@example.id');
     await enrol(db, u.id, 'drive-retinopati');
     const before = await learningContext(db, u.id, 'drive-retinopati');
+    // A changed course (here: a copy with an edited title) is a new version.
+    const edited = mkdtempSync(join(tmpdir(), 'gt-course-'));
+    const json = JSON.parse(readFileSync('content/drive-retinopati/course.json', 'utf8'));
+    writeFileSync(join(edited, 'course.json'), JSON.stringify({ ...json, title: json.title + ' (rev)' }));
     const { version } = await publishCourse(db, {
-      courseDir: 'content/drive-retinopati',
+      courseDir: edited,
       topicSlug: 'retina',
       topicTitle: 'Retina',
       storage,

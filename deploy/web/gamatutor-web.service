@@ -1,0 +1,27 @@
+# GamaTutor platform (Next.js), behind nginx on 127.0.0.1:3110.
+# Installed by tools/deploy-web.sh; edit here, not on the server.
+[Unit]
+Description=GamaTutor platform (Next.js)
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=gamatutor
+Group=gamatutor
+WorkingDirectory=/opt/gamatutor/current/apps/web
+EnvironmentFile=/etc/gamatutor/web.env
+ExecStart=/usr/bin/node node_modules/next/dist/bin/next start --hostname 127.0.0.1 --port 3110
+Restart=on-failure
+RestartSec=3
+# A memory leak must not take the shared box with it.
+MemoryMax=1G
+
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/gamatutor /opt/gamatutor/current/apps/web/.next
+
+[Install]
+WantedBy=multi-user.target

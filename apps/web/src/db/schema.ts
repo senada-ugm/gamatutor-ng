@@ -91,6 +91,8 @@ export const courseVersions = pgTable(
     version: integer('version').notNull(),
     manifest: jsonb('manifest').notNull(),
     storageDir: text('storage_dir').notNull(),
+    /** sha256 of course.json and every asset; an unchanged course is not republished. */
+    contentHash: text('content_hash'),
     publishedAt: timestamp('published_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [unique().on(t.courseId, t.version)],

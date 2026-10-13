@@ -1,5 +1,6 @@
-import { cpSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { createHash } from 'node:crypto';
+import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync } from 'node:fs';
+import { join, relative, resolve, sep } from 'node:path';
 import { and, asc, desc, eq, sql } from 'drizzle-orm';
 import { parseCourse, type Course } from '@gamatutor/course-schema';
 import type { Db } from '../db/client';
@@ -15,6 +16,24 @@ import {
 
 export function storageRoot(): string {
   return process.env.GT_STORAGE_DIR ?? resolve(process.cwd(), 'storage');
+}
+
+/** Hash of course.json and every asset (path and bytes), in a stable order. */
+export function contentHash(courseDir: string): string {
+  const h = createHash('sha256');
+  h.update(readFileSync(join(courseDir, 'course.json')));
+  const assets = join(courseDir, 'assets');
+  if (existsSync(assets)) {
+    const files = (readdirSync(assets, { recursive: true, withFileTypes: true }) as import('node:fs').Dirent[])
+      .filter((d) => d.isFile())
+      .map((d) => join(d.parentPath, d.name))
+      .sort();
+    for (const f of files) {
+      h.update(relative(assets, f).split(sep).join('/'));
+      h.update(readFileSync(f));
+    }
+  }
+  return h.digest('hex');
 }
 
 export interface PublishOptions {
@@ -34,6 +53,7 @@ export async function publishCourse(db: Db, opts: PublishOptions) {
   const raw = JSON.parse(readFileSync(join(opts.courseDir, 'course.json'), 'utf8'));
   const manifest: Course = parseCourse(raw);
   const storage = opts.storage ?? storageRoot();
+  const hash = contentHash(opts.courseDir);
 
   return db.transaction(async (tx) => {
     const [topic] = await tx
@@ -63,6 +83,11 @@ export async function publishCourse(db: Db, opts: PublishOptions) {
         .where(eq(courses.id, course.id))
         .returning();
     }
+    const latest = await tx.query.courseVersions.findFirst({
+      where: eq(courseVersions.courseId, course!.id),
+      orderBy: desc(courseVersions.version),
+    });
+    if (latest && latest.contentHash === hash) return { course: course!, version: latest, unchanged: true };
     const [{ next } = { next: 1 }] = await tx
       .select({ next: sql<number>`coalesce(max(${courseVersions.version}), 0) + 1` })
       .from(courseVersions)
@@ -75,9 +100,9 @@ export async function publishCourse(db: Db, opts: PublishOptions) {
     if (existsSync(assets)) cpSync(assets, join(target, 'assets'), { recursive: true });
     const [row] = await tx
       .insert(courseVersions)
-      .values({ courseId: course!.id, version, manifest, storageDir: dir })
+      .values({ courseId: course!.id, version, manifest, storageDir: dir, contentHash: hash })
       .returning();
-    return { course: course!, version: row! };
+    return { course: course!, version: row!, unchanged: false };
   });
 }
 

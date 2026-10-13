@@ -1,38 +1,41 @@
 # Deployment
 
-**Live: <https://gamatutor.komunitech.id>** — first deployed 2026-09-05.
+**Live: <https://gamatutor.komunitech.id>** — first deployed 2026-09-05; the
+platform (accounts, catalogue, reports) since 2026-10-13.
 
-## What is actually deployed
-
-Static files only. Slice S0 produced a course player and a standalone package
-builder; there is no server-side application yet, so there is no process to run,
-no database, and no systemd unit. When slice S1 lands the Next.js app, this
-document needs a second half.
+## What is deployed
 
 | URL | Serves |
 |---|---|
-| `/` | Placeholder landing page listing the available courses |
-| `/courses/drive-retinopati/` | DRIVE, built natively from `content/drive-retinopati/` |
-| `/courses/dasar-algoritma/` | Dasar Algoritma, a SlideForge SCORM package from `imported/` |
+| `/` | The DRIVE landing page (static), whose buttons lead into the platform |
+| `/daftar`, `/masuk`, `/kursus`, `/belajar/…`, `/sertifikat/…`, `/verify/…`, `/admin/…` | The platform: `apps/web`, a Next.js app on 127.0.0.1:3110 behind nginx |
+| `/courses/drive-retinopati/` | The DRIVE SCORM build (static): for other LMSs, and as a public preview without tracking or certificates |
+| `/courses/dasar-algoritma/` | A SlideForge SCORM package from `imported/`, hosted verbatim |
+| `/app/` | The old platform mockup (static) |
 
-Two kinds of course are hosted, and the distinction matters:
+### The platform
 
-- **Native** — built here by `tools/build-standalone.ts` from a `course.json`
-  and this repo's player.
-- **Imported** — a SCORM package another tool produced, unpacked and served
-  verbatim. `dasar-algoritma` came out of SlideForge from
-  `demo-algoritma.pptx`; it is committed exactly as SlideForge emitted it and
-  is never edited here. It runs its own player, finds no LMS API, and says so
-  in a banner before falling back to browser-local progress.
+| | |
+|---|---|
+| Code | `/opt/gamatutor/releases/<commit>`, live one at `/opt/gamatutor/current` |
+| Process | systemd `gamatutor-web` (user `gamatutor`), `deploy/web/gamatutor-web.service` |
+| Database | Docker container `gamatutor-db` (postgres:17-alpine), 127.0.0.1:15433, volume `gamatutor-pgdata` |
+| Course files | `/var/lib/gamatutor/storage/<course>/v<n>/` (published versions are immutable) |
+| Config | `/etc/gamatutor/web.env` (0640) — database URL, base URL, SMTP |
+| Admin login | `/etc/gamatutor/admin.txt` (0600), created on first deploy |
+| Logs | `journalctl -u gamatutor-web` |
 
-That is the crude version of slice S4, which adds real import: manifest
-validation, immutable course versions, a separate content origin, and a
-`postMessage` bridge so an imported package's SCORM calls land in GamaTutor's
-own event spine. Today there is no tracking for either kind.
+**Email verification is switched off** (`GT_REQUIRE_EMAIL_VERIFICATION=false`)
+because no SMTP server is configured. To turn it on, set `SMTP_URL` and
+`SMTP_FROM` in `web.env`, delete that line, and `systemctl restart gamatutor-web`.
 
-The root is deliberately **not** the course. Slice S1 puts the platform at `/`,
-and a course squatting the root would have to move later, breaking any links
-shared in the meantime.
+Publishing a course is part of every deploy and is idempotent: a course whose
+`course.json` and assets have not changed keeps its version. To publish by hand:
+
+```bash
+cd /opt/gamatutor/current/apps/web
+runuser -u gamatutor -- env $(grep -v '^#' /etc/gamatutor/web.env | xargs) ../../node_modules/.bin/tsx scripts/publish-course.ts ../../content/<dir> --topic retina
+```
 
 ## Host
 
@@ -52,6 +55,17 @@ nginx down takes all of them with it — which is why the deploy script never
 reloads without a passing `nginx -t`.
 
 ## Deploying
+
+```bash
+./tools/deploy-web.sh          # the platform: ship HEAD, build on the server, switch, restart
+./tools/deploy.sh              # static courses, landing page, nginx vhost
+```
+
+Run them in that order: the vhost proxies to the app. `deploy-web.sh` refuses
+to run with uncommitted changes, builds on the server (Next.js with webpack),
+health-checks `/kursus` and rolls back to the previous release on failure. It
+keeps the three newest releases.
+
 
 ```bash
 ./tools/deploy.sh              # build every course, ship, reload

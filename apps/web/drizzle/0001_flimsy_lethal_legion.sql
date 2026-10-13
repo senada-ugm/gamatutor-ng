@@ -1,0 +1,1 @@
+ALTER TABLE "course_versions" ADD COLUMN "content_hash" text;

@@ -15,7 +15,8 @@
 # alongside the live one and moved into place, with the previous copy kept as
 # <id>.prev so a bad deploy can be undone by swapping it back.
 #
-# There is no server-side application yet — slice S0 is static only.
+# The platform itself (apps/web) is deployed by tools/deploy-web.sh; run that
+# first, since the vhost installed here proxies everything else to it.
 set -euo pipefail
 
 HOST=${GAMATUTOR_HOST:-root@31.97.190.72}
@@ -143,5 +144,7 @@ for id in "${COURSES[@]}"; do
 done
 echo "  /              -> $(curl -s -o /dev/null -w '%{http_code}' "https://$DOMAIN/")"
 echo "  /app/          -> $(curl -s -o /dev/null -w '%{http_code}' "https://$DOMAIN/app/")"
+echo "  /kursus        -> $(curl -s -o /dev/null -w '%{http_code}' "https://$DOMAIN/kursus")"
+echo "  /daftar        -> $(curl -s -o /dev/null -w '%{http_code}' "https://$DOMAIN/daftar")"
 
 say "Deployed to https://$DOMAIN"

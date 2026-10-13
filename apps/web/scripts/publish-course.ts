@@ -29,11 +29,15 @@ const topicSlug = values.topic!;
 const topicTitle = values['topic-title'] ?? topicSlug.charAt(0).toUpperCase() + topicSlug.slice(1);
 
 const db = await getDb();
-const { course, version } = await publishCourse(db, {
+const { course, version, unchanged } = await publishCourse(db, {
   courseDir: resolve(dir),
   topicSlug,
   topicTitle,
   ...(values.summary !== undefined ? { summary: values.summary } : {}),
 });
-console.log(`published ${course.slug} v${version.version} under topic "${topicTitle}"`);
+console.log(
+  unchanged
+    ? `${course.slug} unchanged; still v${version.version}`
+    : `published ${course.slug} v${version.version} under topic "${topicTitle}"`,
+);
 process.exit(0);
