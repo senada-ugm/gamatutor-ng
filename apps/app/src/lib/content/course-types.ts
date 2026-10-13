@@ -20,6 +20,9 @@ export type RevealStep = RevealStepText | RevealStepImage | RevealStepVideo
 export interface BasePage {
   id: string
   slide?: number
+  kicker?: string
+  title?: string
+  transcript?: string
 }
 
 export interface HeroPage extends BasePage {
@@ -30,16 +33,13 @@ export interface HeroPage extends BasePage {
 
 export interface DividerPage extends BasePage {
   type: "divider"
-  kicker?: string
   title: string
 }
 
 export interface ContentPage extends BasePage {
   type: "content"
-  kicker?: string
   title?: string
   body?: string
-  transcript?: string
   image?: string
   imageLayout?: "below"
   imageCaption?: string
@@ -55,10 +55,8 @@ export interface CardItem {
 
 export interface CardsPage extends BasePage {
   type: "cards"
-  kicker?: string
   title?: string
   intro?: string
-  transcript?: string
   columns?: number
   cards: CardItem[]
   trailingImage?: string
