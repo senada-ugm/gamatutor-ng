@@ -1,11 +1,15 @@
 export interface RevealStepText {
   texts: string[]
+  narration?: string
+  cue?: number
 }
 
 export interface RevealStepImage {
   image: string
   title?: string
   body?: string
+  narration?: string
+  cue?: number
 }
 
 export interface RevealStepVideo {
@@ -13,6 +17,8 @@ export interface RevealStepVideo {
     src: string
     poster?: string
   }
+  narration?: string
+  cue?: number
 }
 
 export type RevealStep = RevealStepText | RevealStepImage | RevealStepVideo
@@ -23,6 +29,7 @@ export interface BasePage {
   kicker?: string
   title?: string
   transcript?: string
+  audio?: string
 }
 
 export interface HeroPage extends BasePage {
@@ -69,6 +76,7 @@ export interface HotspotPoint {
   y: number
   label: string
   body: string
+  audio?: string
 }
 
 export interface HotspotMask {

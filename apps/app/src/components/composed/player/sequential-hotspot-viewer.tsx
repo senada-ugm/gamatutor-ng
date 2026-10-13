@@ -1,8 +1,8 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ArrowRight, CheckCircle, Info, Volume2 } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
-import type { HotspotPage } from "@/lib/content/course-types"
+import type { HotspotPage, HotspotPoint } from "@/lib/content/course-types"
 
 interface SequentialHotspotViewerProps {
   page: HotspotPage
@@ -19,6 +19,19 @@ export function SequentialHotspotViewer({
 }: SequentialHotspotViewerProps) {
   const [currentStep, setCurrentStep] = useState<number>(0)
   const [visited, setVisited] = useState<Record<number, boolean>>({ 0: true })
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current = null
+      }
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        window.speechSynthesis.cancel()
+      }
+    }
+  }, [])
 
   function handleSelectStep(idx: number) {
     setCurrentStep(idx)
@@ -37,7 +50,28 @@ export function SequentialHotspotViewer({
     }
   }
 
-  function handleSpeak(text: string) {
+  function handleSpeak(point: HotspotPoint) {
+    if (audioRef.current) {
+      audioRef.current.pause()
+      audioRef.current = null
+    }
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel()
+    }
+
+    if (point.audio && typeof window !== "undefined") {
+      const audio = new Audio(point.audio)
+      audioRef.current = audio
+      audio.play().catch(() => {
+        fallbackSpeak(`${point.label}. ${point.body}`)
+      })
+      return
+    }
+
+    fallbackSpeak(`${point.label}. ${point.body}`)
+  }
+
+  function fallbackSpeak(text: string) {
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel()
       const u = new SpeechSynthesisUtterance(text)
@@ -193,7 +227,7 @@ export function SequentialHotspotViewer({
                   size="sm"
                   variant="ghost"
                   className="h-8 w-8 p-0 text-muted-foreground hover:text-primary"
-                  onClick={() => handleSpeak(`${activePoint.label}. ${activePoint.body}`)}
+                  onClick={() => handleSpeak(activePoint)}
                   title="Listen to clinical rationale"
                 >
                   <Volume2 className="h-4 w-4" />

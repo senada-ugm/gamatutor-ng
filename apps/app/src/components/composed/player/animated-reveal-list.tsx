@@ -7,6 +7,7 @@ import type { RevealStep } from "@/lib/content/course-types"
 interface AnimatedRevealListProps {
   steps: RevealStep[]
   intro?: string
+  currentTime?: number
   autoPlayIntervalMs?: number
   onComplete?: () => void
   className?: string
@@ -15,19 +16,45 @@ interface AnimatedRevealListProps {
 export function AnimatedRevealList({
   steps,
   intro,
+  currentTime,
   autoPlayIntervalMs = 1200,
   onComplete,
   className = "",
 }: AnimatedRevealListProps) {
-  // Start with at least 1 or 2 steps visible, or let user auto-play
-  const [revealedCount, setRevealedCount] = useState<number>(2)
-  const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(true)
+  const hasCues = steps.some((s) => s.cue !== undefined)
+  // Start with 1 step visible, or let cue/timer reveal the rest
+  const [revealedCount, setRevealedCount] = useState<number>(hasCues ? 0 : 2)
+  const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(!hasCues)
 
   const totalSteps = steps.length
   const isAllRevealed = revealedCount >= totalSteps
 
+  // Sync with audio currentTime cues if available
   useEffect(() => {
-    if (!isAutoPlaying || isAllRevealed) return
+    if (currentTime === undefined || !hasCues) return
+
+    let cueMatches = 0
+    for (let i = 0; i < steps.length; i++) {
+      const step = steps[i]
+      if (step && step.cue !== undefined && step.cue <= currentTime) {
+        cueMatches = i + 1
+      }
+    }
+
+    if (cueMatches > 0) {
+      setRevealedCount((prev) => {
+        const next = Math.max(prev, cueMatches)
+        if (next >= totalSteps) {
+          onComplete?.()
+        }
+        return next
+      })
+    }
+  }, [currentTime, hasCues, steps, totalSteps, onComplete])
+
+  useEffect(() => {
+    // If cues are present and audio is driving, don't run the blind interval timer
+    if (hasCues || !isAutoPlaying || isAllRevealed) return
 
     const timer = window.setInterval(() => {
       setRevealedCount((prev) => {
@@ -42,7 +69,7 @@ export function AnimatedRevealList({
     }, autoPlayIntervalMs)
 
     return () => window.clearInterval(timer)
-  }, [isAutoPlaying, isAllRevealed, totalSteps, autoPlayIntervalMs, onComplete])
+  }, [hasCues, isAutoPlaying, isAllRevealed, totalSteps, autoPlayIntervalMs, onComplete])
 
   function handleRevealAll() {
     setRevealedCount(totalSteps)
@@ -154,6 +181,27 @@ export function AnimatedRevealList({
                     {step.body && <p className="mt-1 text-xs text-muted-foreground">{step.body}</p>}
                   </div>
                 ) : null}
+              </div>
+            )
+          }
+
+          if ("video" in step) {
+            return (
+              <div
+                key={idx}
+                className="animate-in overflow-hidden rounded-xl border bg-black/90 shadow-xs fade-in slide-in-from-bottom-2 md:col-span-2"
+              >
+                <video
+                  src={step.video.src}
+                  poster={step.video.poster}
+                  controls
+                  className="max-h-[420px] w-full rounded-xl object-contain"
+                />
+                {step.narration && (
+                  <div className="border-t bg-card p-3">
+                    <p className="text-xs text-muted-foreground">{step.narration}</p>
+                  </div>
+                )}
               </div>
             )
           }

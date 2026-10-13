@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Eye, Info, Volume2, Box, Layers, CheckCircle2 } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
@@ -22,6 +22,19 @@ export function EyeAnatomyViewer({
   const [activeIdx, setActiveIdx] = useState<number | null>(0)
   const [visited, setVisited] = useState<Record<number, boolean>>({ 0: true })
   const [currentMode, setCurrentMode] = useState<"2d" | "3d">(mode)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current = null
+      }
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        window.speechSynthesis.cancel()
+      }
+    }
+  }, [])
 
   function handleSelectPoint(idx: number) {
     setActiveIdx(idx)
@@ -29,7 +42,28 @@ export function EyeAnatomyViewer({
     onPointSelect?.(idx, page.points[idx])
   }
 
-  function handleSpeak(text: string) {
+  function handleSpeak(point: HotspotPoint) {
+    if (audioRef.current) {
+      audioRef.current.pause()
+      audioRef.current = null
+    }
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel()
+    }
+
+    if (point.audio && typeof window !== "undefined") {
+      const audio = new Audio(point.audio)
+      audioRef.current = audio
+      audio.play().catch(() => {
+        fallbackSpeak(`${point.label}. ${point.body}`)
+      })
+      return
+    }
+
+    fallbackSpeak(`${point.label}. ${point.body}`)
+  }
+
+  function fallbackSpeak(text: string) {
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel()
       const u = new SpeechSynthesisUtterance(text)
@@ -187,7 +221,7 @@ export function EyeAnatomyViewer({
                     size="sm"
                     variant="ghost"
                     className="h-8 w-8 p-0 text-muted-foreground hover:text-primary"
-                    onClick={() => handleSpeak(`${activePoint.label}. ${activePoint.body}`)}
+                    onClick={() => handleSpeak(activePoint)}
                     title="Listen to description"
                   >
                     <Volume2 className="h-4 w-4" />

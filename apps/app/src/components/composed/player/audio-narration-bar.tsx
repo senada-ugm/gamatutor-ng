@@ -9,6 +9,7 @@ interface AudioNarrationBarProps {
   lang?: string
   autoPlay?: boolean
   onComplete?: () => void
+  onTimeUpdate?: (currentTime: number) => void
   className?: string
 }
 
@@ -18,6 +19,7 @@ export function AudioNarrationBar({
   lang = "id-ID",
   autoPlay = false,
   onComplete,
+  onTimeUpdate,
   className = "",
 }: AudioNarrationBarProps) {
   const [isPlaying, setIsPlaying] = useState(false)
@@ -67,6 +69,7 @@ export function AudioNarrationBar({
         audioRef.current.ontimeupdate = () => {
           if (audioRef.current && audioRef.current.duration) {
             setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100)
+            onTimeUpdate?.(audioRef.current.currentTime)
           }
         }
       }
@@ -128,6 +131,7 @@ export function AudioNarrationBar({
 
   function handleReplay() {
     setProgress(0)
+    onTimeUpdate?.(0)
     handlePlay()
   }
 
@@ -210,7 +214,9 @@ export function AudioNarrationBar({
             const nextVal = typeof val === "number" ? val : (val[0] ?? 0)
             setProgress(nextVal)
             if (audioUrl && audioRef.current && audioRef.current.duration) {
-              audioRef.current.currentTime = (nextVal / 100) * audioRef.current.duration
+              const nextTime = (nextVal / 100) * audioRef.current.duration
+              audioRef.current.currentTime = nextTime
+              onTimeUpdate?.(nextTime)
             }
           }}
           className="flex-1"

@@ -51,6 +51,7 @@ export function InteractiveSlideViewer({
   )
 
   const [currentIndex, setCurrentIndex] = useState<number>(initialSlideIndex)
+  const [currentPlaybackTime, setCurrentPlaybackTime] = useState<number>(0)
   const currentItem = allSlides[currentIndex] || allSlides[0]
   const totalSlides = allSlides.length
 
@@ -63,6 +64,7 @@ export function InteractiveSlideViewer({
   function goToSlide(index: number) {
     if (index >= 0 && index < totalSlides) {
       setCurrentIndex(index)
+      setCurrentPlaybackTime(0)
       onSlideChange?.(index, allSlides[index].page)
     }
   }
@@ -127,7 +129,7 @@ export function InteractiveSlideViewer({
       <div className="flex-1 space-y-6 overflow-y-auto p-6 md:p-8">
         {page.type === "hero" && <HeroSlide page={page} onStart={handleNext} />}
         {page.type === "divider" && <DividerSlide page={page} onProceed={handleNext} />}
-        {page.type === "content" && <ContentSlide page={page} />}
+        {page.type === "content" && <ContentSlide page={page} currentTime={currentPlaybackTime} />}
         {page.type === "cards" && <CardsSlide page={page} />}
         {page.type === "hotspot" && <HotspotSlide page={page} onAllCompleted={handleNext} />}
         {page.type === "match" && <MatchSlide page={page} onDone={handleNext} />}
@@ -155,17 +157,29 @@ export function InteractiveSlideViewer({
         )}
       </div>
 
-      {/* Optional Persistent Narration Bar on Content & Cards with Audio */}
-      {"transcript" in page && page.transcript && (
+      {/* Persistent Audio Narration Bar on Content & Cards with Voiceover Audio */}
+      {(("audio" in page && page.audio) || ("transcript" in page && page.transcript)) && (
         <div className="shrink-0 border-t bg-card/80 p-3">
-          <AudioNarrationBar transcript={page.transcript} />
+          <AudioNarrationBar
+            key={page.id}
+            audioUrl={"audio" in page && page.audio ? page.audio : undefined}
+            transcript={"transcript" in page && page.transcript ? page.transcript : undefined}
+            onTimeUpdate={setCurrentPlaybackTime}
+          />
         </div>
       )}
 
       {/* Bottom Card Footer Chrome (from gamatutor-ng card-footer) */}
       <div className="flex shrink-0 items-center justify-between border-t bg-card/90 px-6 py-2.5 backdrop-blur-xs">
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          {"transcript" in page && page.transcript ? (
+          {"audio" in page && page.audio ? (
+            <Badge
+              variant="outline"
+              className="gap-1 border-primary/30 bg-primary/5 text-[11px] font-medium text-primary"
+            >
+              <span>🔊 Voiceover Audio Available</span>
+            </Badge>
+          ) : "transcript" in page && page.transcript ? (
             <Badge variant="outline" className="gap-1 border-muted text-[11px] font-normal text-muted-foreground">
               <span>📄 Audio Transcript Available</span>
             </Badge>
@@ -262,7 +276,7 @@ function DividerSlide({ page, onProceed }: { page: DividerPage; onProceed: () =>
   )
 }
 
-function ContentSlide({ page }: { page: ContentPage }) {
+function ContentSlide({ page, currentTime }: { page: ContentPage; currentTime?: number }) {
   return (
     <div className="animate-in space-y-6 fade-in">
       <div className="space-y-1.5">
@@ -282,8 +296,10 @@ function ContentSlide({ page }: { page: ContentPage }) {
         <div className="space-y-2 text-sm leading-relaxed whitespace-pre-line text-foreground/90">{page.body}</div>
       )}
 
-      {/* Slide 7 Auto-Reveal 2-Column List (Reviews #5 & #6) */}
-      {page.reveal_steps && page.reveal_steps.length > 0 && <AnimatedRevealList steps={page.reveal_steps} />}
+      {/* Slide 7 Auto-Reveal 2-Column List with Audio Cue Sync (Reviews #5 & #6) */}
+      {page.reveal_steps && page.reveal_steps.length > 0 && (
+        <AnimatedRevealList steps={page.reveal_steps} currentTime={currentTime} />
+      )}
 
       {/* Image if present */}
       {page.image && (
