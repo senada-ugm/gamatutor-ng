@@ -136,7 +136,7 @@ export function PlayerShell({
           </TabNav>
         </header>
         <main className="flex-1 overflow-y-auto">
-          <div className="mx-auto max-w-3xl px-4 py-8 lg:px-6">{children}</div>
+          <div className="mx-auto max-w-5xl px-4 py-8 lg:px-6">{children}</div>
         </main>
       </div>
     </div>
@@ -151,14 +151,18 @@ function CourseOutline({ course, completedLessonIds }: { course: ContractCourse;
 
   return (
     <>
-      <div className="space-y-2 p-4 pe-12 lg:pe-4">
+      <div className="space-y-3 p-4 pe-12 lg:pe-4">
         <BackLink to="/dashboard" label="Back to Dashboard" />
+        <div className="flex items-center gap-2 text-xs font-bold tracking-wider text-primary uppercase">
+          <span className="flex size-5 items-center justify-center rounded-full bg-primary/10 text-xs">👁</span>
+          <span>DRIVE Initiative</span>
+        </div>
         <h2 className="line-clamp-2 leading-snug font-semibold">{course.title}</h2>
         {totalLessons > 0 ? (
-          <div className="space-y-1.5">
-            <Progress value={percent} aria-label="Course progress" />
+          <div className="space-y-1.5 pt-1">
+            <Progress value={percent} aria-label="Course progress" className="h-2" />
             <p className="text-xs text-muted-foreground">
-              {completed.size} of {totalLessons} lessons completed
+              {completed.size} of {totalLessons} lessons completed ({percent}%)
             </p>
           </div>
         ) : null}
