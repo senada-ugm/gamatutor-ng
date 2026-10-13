@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { getDb } from '@/db/client';
 import {
@@ -16,6 +17,7 @@ import {
   verificationRequired,
 } from '@/server/accounts';
 import { enrol } from '@/server/catalogue';
+import { setIdentityVerified } from '@/server/people';
 import { getMailer } from '@/server/mailer';
 import { allow, blocked, fail } from '@/server/ratelimit';
 import { fieldErrors, parseRegistration, profileSchema } from '@/server/registration';
@@ -203,4 +205,12 @@ export async function adminResetAction(_prev: FormState, form: FormData): Promis
   if (!user) return { message: 'Peserta tidak ditemukan.' };
   const token = await newResetToken(db, user.id);
   return { done: true, devLink: `${await baseUrl()}/atur-sandi?token=${encodeURIComponent(token)}` };
+}
+
+/** An admin marks a learner's identity as checked against the organiser's list. */
+export async function adminIdentityAction(form: FormData): Promise<void> {
+  await requireAdmin();
+  const userId = String(form.get('userId') ?? '');
+  await setIdentityVerified(await getDb(), userId, form.get('verified') === '1');
+  revalidatePath('/admin/peserta');
 }

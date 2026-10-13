@@ -283,10 +283,17 @@ export async function issueCertificate(db: Db, userId: string, attemptId: string
 
 export async function certificateBySerial(db: Db, serial: string) {
   const [row] = await db
-    .select({ cert: certificates, userId: enrolments.userId, courseSlug: courses.slug })
+    .select({
+      cert: certificates,
+      userId: enrolments.userId,
+      courseSlug: courses.slug,
+      identityVerifiedAt: users.identityVerifiedAt,
+      emailVerifiedAt: users.emailVerifiedAt,
+    })
     .from(certificates)
     .innerJoin(enrolments, eq(enrolments.id, certificates.enrolmentId))
     .innerJoin(courses, eq(courses.id, enrolments.courseId))
+    .innerJoin(users, eq(users.id, enrolments.userId))
     .where(eq(certificates.serial, serial.toUpperCase()));
   return row ?? null;
 }

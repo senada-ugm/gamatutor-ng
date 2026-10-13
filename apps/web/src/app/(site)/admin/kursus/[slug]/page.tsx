@@ -108,6 +108,9 @@ export default async function CourseReportPage({ params }: { params: Promise<{ s
                   <td className="num">{l.attempts}</td>
                   <td>{l.lastScore || '—'}</td>
                   <td>
+                    {!l.identityVerified && (
+                      <div className="small muted">identitas belum diverifikasi</div>
+                    )}
                     {l.certificate ? (
                       <Link href={`/sertifikat/${l.certificate}`}>Bersertifikat</Link>
                     ) : l.passed ? (

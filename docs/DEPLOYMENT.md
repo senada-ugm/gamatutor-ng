@@ -29,7 +29,12 @@ platform (accounts, catalogue, reports) since 2026-10-13.
 because no SMTP server is configured. New accounts stay *unverified* meanwhile,
 so turning verification on later asks them to confirm their email. Until then a
 learner who forgets their password asks an admin, who makes a one-time reset
-link from the course report (`Buat tautan reset sandi`). To turn it on, set `SMTP_URL` and
+link from the course report (`Buat tautan reset sandi`).
+
+Because nobody's email is proven meanwhile, **identity is checked by the
+organiser instead**: on `/admin/peserta` an admin matches each learner against
+Tim DRIVE's own participant list and marks them *terverifikasi*. The public
+`/verify/{serial}` page states whether the holder of a certificate was checked. To turn it on, set `SMTP_URL` and
 `SMTP_FROM` in `web.env`, delete that line, and `systemctl restart gamatutor-web`.
 
 Publishing a course is part of every deploy and is idempotent: a course whose

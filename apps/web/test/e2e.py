@@ -123,11 +123,12 @@ def take_course(page):
     shot(page, '04-certificate')
     serial = page.url.rsplit('/', 1)[-1]
     page.goto(f'{BASE}/verify/{serial}')
-    expect(page.locator('.notice.ok')).to_contain_text('sah')
+    expect(page.locator('.notice.ok').first).to_contain_text('tercatat')
+    expect(page.locator('.notice.info')).to_contain_text('belum diverifikasi')
     return serial
 
 
-def admin_report(page):
+def admin_report(page, serial):
     login(page, os.environ.get('GT_E2E_ADMIN_EMAIL', 'admin@drive.local'),
           os.environ.get('GT_E2E_ADMIN_PASSWORD', 'admin-lokal-123456'), '/admin')
     page.click('a:has-text("Laporan")')
@@ -140,6 +141,12 @@ def admin_report(page):
     text = Path(dl.value.path()).read_text(encoding='utf-8-sig')
     assert text.startswith('waktu_wib,'), text[:80]
     assert EMAIL in text and 'experienced' in text, 'events CSV is missing this learner'
+    # The organiser checks the learner against their list; /verify then says so.
+    page.goto(f'{BASE}/admin/peserta?q={EMAIL}')
+    page.click('button:has-text("Tandai terverifikasi")')
+    expect(page.locator('tr', has_text=EMAIL)).to_contain_text('Terverifikasi')
+    page.goto(f'{BASE}/verify/{serial}')
+    expect(page.locator('.notice.ok').nth(1)).to_contain_text('sudah diverifikasi')
 
 
 def main():
@@ -154,7 +161,7 @@ def main():
             login(page, EMAIL, PASSWORD)
         serial = take_course(page)
         admin = browser.new_context(viewport={'width': 1366, 'height': 900}, accept_downloads=True)
-        admin_report(admin.new_page())
+        admin_report(admin.new_page(), serial)
         browser.close()
     print(f'e2e ok: {EMAIL} certified as {serial}')
 

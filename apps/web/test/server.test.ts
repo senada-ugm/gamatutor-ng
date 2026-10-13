@@ -28,6 +28,7 @@ import {
 } from '../src/server/learning';
 import { allow, blocked, fail, resetRateLimits } from '../src/server/ratelimit';
 import { safeNext } from '../src/server/redirect';
+import { listPeople, setIdentityVerified } from '../src/server/people';
 import { hashPassword, verifyPassword } from '../src/server/password';
 import { parseRegistration, registrationSchema } from '../src/server/registration';
 import { courseReport, eventsCsv, learnersCsv } from '../src/server/reports';
@@ -344,5 +345,23 @@ describe('review fixes', () => {
     expect(blocked('login:x', 10, 62_000)).toBe(false);
     expect(allow('a', 1, 1_000, 0)).toBe(true);
     expect(allow('a', 1, 1_000, 0)).toBe(false);
+  });
+
+  it('lets an admin mark a holder as checked, and the certificate lookup says so', async () => {
+    const u = await newLearner('nina@example.id');
+    await enrol(db, u.id, 'drive-retinopati');
+    const ctx = (await learningContext(db, u.id, 'drive-retinopati'))!;
+    await backdate(ctx.attempt.id, '2026-10-13T00:00:00Z');
+    await ingest(db, u.id, ctx.attempt.id, [
+      ...answers(5, '2026-10-13T01:00:00Z'),
+      ev('passed', 'drive-retinopati', '2026-10-13T01:05:00Z', { context: { attempt: 1 } }),
+    ]);
+    const cert = await issueCertificate(db, u.id, ctx.attempt.id);
+    expect((await certificateBySerial(db, cert.serial))!.identityVerifiedAt).toBeNull();
+    expect((await listPeople(db, 'nina@'))[0]!.email).toBe('nina@example.id');
+    await setIdentityVerified(db, u.id, true);
+    expect((await certificateBySerial(db, cert.serial))!.identityVerifiedAt).toBeInstanceOf(Date);
+    await setIdentityVerified(db, u.id, false);
+    expect((await certificateBySerial(db, cert.serial))!.identityVerifiedAt).toBeNull();
   });
 });

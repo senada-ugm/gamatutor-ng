@@ -16,6 +16,11 @@ export default async function AdminPage() {
         Laporan peserta, lama belajar, dan waktu akses per kursus. Kursus baru diterbitkan dengan{' '}
         <code>pnpm web course:publish content/&lt;folder&gt; --topic retina</code>.
       </p>
+      <p>
+        <Link className="btn btn-ghost" href="/admin/peserta">
+          Kelola peserta &amp; verifikasi identitas
+        </Link>
+      </p>
       <div className="table-wrap">
         <table>
           <thead>

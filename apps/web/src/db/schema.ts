@@ -27,6 +27,11 @@ export const users = pgTable('users', {
     .notNull()
     .default('learner'),
   emailVerifiedAt: timestamp('email_verified_at', { withTimezone: true }),
+  /**
+   * Set by an admin who has checked the person against the organiser's own
+   * participant list. Certificates say whether the holder was checked.
+   */
+  identityVerifiedAt: timestamp('identity_verified_at', { withTimezone: true }),
   fullName: text('full_name').notNull(),
   birthDate: date('birth_date').notNull(),
   profession: text('profession').notNull(),

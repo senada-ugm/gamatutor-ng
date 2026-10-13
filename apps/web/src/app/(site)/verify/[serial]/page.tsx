@@ -25,7 +25,18 @@ export default async function VerifyCertificatePage({
     <div className="narrow" style={{ margin: '0 auto' }}>
       <h1>Verifikasi sertifikat</h1>
       <div className="card">
-        <p className="notice ok">Sertifikat ini sah dan diterbitkan oleh {s.brand}.</p>
+        <p className="notice ok">Sertifikat ini tercatat dan diterbitkan oleh {s.brand}.</p>
+        {found.identityVerifiedAt ? (
+          <p className="notice ok">
+            Identitas pemegang sudah diverifikasi penyelenggara pada{' '}
+            {found.identityVerifiedAt.toLocaleDateString('id-ID', { dateStyle: 'long', timeZone: 'Asia/Jakarta' })}.
+          </p>
+        ) : (
+          <p className="notice info">
+            Identitas pemegang <b>belum diverifikasi</b> penyelenggara. Nama di bawah ini diisi sendiri oleh peserta saat
+            mendaftar.
+          </p>
+        )}
         <table>
           <tbody>
             <tr>

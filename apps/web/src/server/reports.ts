@@ -59,6 +59,7 @@ export interface LearnerRow {
   lastScore: string;
   passed: boolean | null;
   certificate: string | null;
+  identityVerified: boolean;
 }
 
 export async function courseReport(db: Db, slug: string, now = new Date()) {
@@ -79,6 +80,7 @@ export async function courseReport(db: Db, slug: string, now = new Date()) {
       institution: users.institution,
       province: users.province,
       city: users.city,
+      identityVerifiedAt: users.identityVerifiedAt,
       enrolledAt: enrolments.createdAt,
       attemptId: attempts.id,
       certificate: certificates.serial,
@@ -125,6 +127,7 @@ export async function courseReport(db: Db, slug: string, now = new Date()) {
       lastScore: last ? `${last.raw}/${last.max}` : '',
       passed: last ? last.passed : null,
       certificate: p.certificate,
+      identityVerified: !!p.identityVerifiedAt,
     };
   });
 
@@ -160,13 +163,13 @@ export function learnersCsv(rows: LearnerRow[]): string {
     [
       'nama_lengkap', 'email', 'profesi', 'instansi', 'provinsi', 'kab_kota', 'terdaftar_wib',
       'akses_pertama_wib', 'akses_terakhir_wib', 'jumlah_sesi', 'waktu_aktif_menit',
-      'jumlah_percobaan', 'skor_terakhir', 'lulus', 'sertifikat',
+      'jumlah_percobaan', 'skor_terakhir', 'lulus', 'sertifikat', 'identitas_terverifikasi',
     ],
     rows.map((r) => [
       r.fullName, r.email, r.profession, r.institution, r.province, r.city, wibStamp(r.enrolledAt),
       r.firstAt ? wibStamp(r.firstAt) : '', r.lastAt ? wibStamp(r.lastAt) : '', r.sessions,
       Math.round(r.activeMs / 60_000), r.attempts, r.lastScore,
-      r.passed === null ? '' : r.passed ? 'ya' : 'tidak', r.certificate ?? '',
+      r.passed === null ? '' : r.passed ? 'ya' : 'tidak', r.certificate ?? '', r.identityVerified ? 'ya' : 'tidak',
     ]),
   );
 }
