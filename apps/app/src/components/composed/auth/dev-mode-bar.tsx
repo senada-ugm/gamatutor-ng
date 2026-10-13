@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useQuery, useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
-import { Zap, ChevronDown, RotateCcw, ShieldCheck, Building2, User, Loader2 } from "lucide-react"
+import { Zap, ChevronDown, RotateCcw, Loader2 } from "lucide-react"
 import { Button } from "@workspace/ui/components/button"
 import {
   DropdownMenu,
@@ -106,17 +106,6 @@ export function DevModeBar({ onSelectAccount, submitting }: DevModeBarProps) {
         },
       ]
 
-  const getRoleIcon = (role: string) => {
-    switch (role) {
-      case "admin":
-        return <ShieldCheck className="h-4 w-4 text-red-500" />
-      case "owner":
-        return <Building2 className="h-4 w-4 text-blue-500" />
-      default:
-        return <User className="h-4 w-4 text-emerald-500" />
-    }
-  }
-
   return (
     <div className="flex flex-col gap-2 pt-1">
       <DropdownMenu>
@@ -139,15 +128,10 @@ export function DevModeBar({ onSelectAccount, submitting }: DevModeBarProps) {
             <DropdownMenuItem
               key={acc.email}
               onClick={() => onSelectAccount(acc.email, acc.password)}
-              className="flex cursor-pointer items-center justify-between gap-3 px-3 py-2"
+              className="flex cursor-pointer flex-col items-start gap-0.5 px-3 py-1.5"
             >
-              <div className="flex min-w-0 items-center gap-2">
-                {getRoleIcon(acc.role)}
-                <div className="min-w-0">
-                  <p className="truncate text-xs leading-none font-medium">{acc.name}</p>
-                  <p className="truncate font-mono text-[11px] text-muted-foreground">{acc.email}</p>
-                </div>
-              </div>
+              <span className="text-xs leading-none font-medium">{acc.name}</span>
+              <span className="font-mono text-[11px] leading-none text-muted-foreground">{acc.email}</span>
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
