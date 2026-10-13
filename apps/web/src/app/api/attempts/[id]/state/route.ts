@@ -1,5 +1,5 @@
 import { getDb } from '@/db/client';
-import { saveResumeState } from '@/server/learning';
+import { AttemptNotFound, saveResumeState } from '@/server/learning';
 import { currentUser } from '@/server/session';
 
 /**
@@ -28,7 +28,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   try {
     const stored = await saveResumeState(await getDb(), user.id, id, state, seq);
     return Response.json({ ok: true, stored });
-  } catch {
-    return Response.json({ error: 'attempt not found' }, { status: 404 });
+  } catch (e) {
+    if (e instanceof AttemptNotFound) return Response.json({ error: 'attempt not found' }, { status: 404 });
+    throw e;
   }
 }

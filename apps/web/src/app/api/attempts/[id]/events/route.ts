@@ -1,5 +1,5 @@
 import { getDb } from '@/db/client';
-import { IncomingBatch, ingest } from '@/server/learning';
+import { AttemptNotFound, IncomingBatch, ingest } from '@/server/learning';
 import { allow } from '@/server/ratelimit';
 import { currentUser } from '@/server/session';
 
@@ -22,7 +22,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   try {
     const { accepted } = await ingest(await getDb(), user.id, id, parsed.data.events);
     return Response.json({ accepted });
-  } catch {
-    return Response.json({ error: 'attempt not found' }, { status: 404 });
+  } catch (e) {
+    if (e instanceof AttemptNotFound) return Response.json({ error: 'attempt not found' }, { status: 404 });
+    throw e;
   }
 }

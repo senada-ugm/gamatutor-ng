@@ -85,6 +85,12 @@ export function scoreFromAnswers(
   return { raw, max: quizzes.length, answered };
 }
 
+export class AttemptNotFound extends Error {
+  constructor() {
+    super('attempt not found');
+  }
+}
+
 /** The attempt, if it belongs to this user; ingest never crosses learners. */
 export async function attemptForUser(db: Db, userId: string, attemptId: string) {
   const [row] = await db
@@ -108,7 +114,7 @@ export async function ingest(
   now = new Date(),
 ): Promise<{ accepted: number }> {
   const owned = await attemptForUser(db, userId, attemptId);
-  if (!owned) throw new Error('attempt not found');
+  if (!owned) throw new AttemptNotFound();
   if (batch.length === 0) return { accepted: 0 };
   return db.transaction(async (tx) => {
     const rows = batch.map((e) => {
@@ -192,7 +198,10 @@ export async function ingest(
       // An offline queue arriving late must not move "last seen" backwards.
       await tx
         .update(attempts)
-        .set({ lastSeenAt: sql`greatest(${attempts.lastSeenAt}, ${latest})` })
+        .set({
+          // An explicit cast: postgres-js will not bind a Date into raw SQL.
+          lastSeenAt: sql`greatest(${attempts.lastSeenAt}, cast(${latest.toISOString()} as timestamptz))`,
+        })
         .where(eq(attempts.id, attemptId));
     }
     return { accepted: inserted.length };
@@ -212,7 +221,7 @@ export async function saveResumeState(
   seq = Date.now(),
 ): Promise<boolean> {
   const owned = await attemptForUser(db, userId, attemptId);
-  if (!owned) throw new Error('attempt not found');
+  if (!owned) throw new AttemptNotFound();
   const json = JSON.stringify(state ?? null);
   if (json.length > 200_000) throw new Error('state too large');
   const updated = await db

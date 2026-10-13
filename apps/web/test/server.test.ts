@@ -85,7 +85,9 @@ async function backdate(attemptId: string, iso: string) {
 }
 
 beforeAll(async () => {
-  db = await openDb('memory://');
+  // PGlite by default; GT_TEST_DATABASE_URL runs the same suite on a real (empty)
+  // Postgres, which catches driver differences PGlite does not have.
+  db = await openDb(process.env.GT_TEST_DATABASE_URL ?? 'memory://');
   await publishCourse(db, {
     courseDir: 'content/drive-retinopati',
     topicSlug: 'retina',

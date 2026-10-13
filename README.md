@@ -88,6 +88,8 @@ source of truth, and the fixture stays only as a historical record.
 ```bash
 pnpm verify     # lint + typecheck + tests
 pnpm test       # tests only
+# the platform's database tests on a real, empty Postgres (production's driver):
+GT_TEST_DATABASE_URL=postgres://user:pass@127.0.0.1:5432/empty pnpm vitest run apps/web
 pnpm build:standalone    # regenerate out/drive-retinopati/
 ./tools/deploy-web.sh    # ship the platform to gamatutor.komunitech.id
 ./tools/deploy.sh        # ship static courses, landing page, nginx vhost
