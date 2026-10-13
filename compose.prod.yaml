@@ -71,6 +71,7 @@ services:
       - HOST=0.0.0.0
       - PORT=8000
       - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-lms}
+      - AUTO_MIGRATE=${AUTO_MIGRATE:-true}
       - REDIS_URL=redis://redis:6379
       - S3_ENDPOINT=http://rustfs:9000
       - S3_BUCKET=${S3_BUCKET:-lms-uploads}
@@ -80,7 +81,9 @@ services:
       - S3_FORCE_PATH_STYLE=true
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET:-replace-with-a-real-secret-at-least-32-chars-long}
       - BETTER_AUTH_URL=${BETTER_AUTH_URL:-http://localhost:8000}
-      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:3000,http://localhost:8000}
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:3000,http://localhost:8000}
+      - PII_ENCRYPTION_KEY=${PII_ENCRYPTION_KEY:-0123456789abcdef0123456789abcdef}
+      - SMTP_HOST=${SMTP_HOST:-mailpit}
     depends_on:
       postgres:
         condition: service_healthy

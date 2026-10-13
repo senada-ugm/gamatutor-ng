@@ -28,6 +28,7 @@ const envSchema = z
     PORT: z.coerce.number().default(8000),
     // The web app origin — must be a valid origin, empty disables CORS origin checks.
     CORS_ORIGIN: z.string().default("http://localhost:3030"),
+    CORS_ORIGINS: z.string().optional(),
     // Rate limiting defaults ON: auth endpoints without it are
     // brute-forceable. Local dev/test opt out via .env.local.
     RATE_LIMIT_ENABLED: booleanFromEnvironment(true),
@@ -67,6 +68,9 @@ const envSchema = z
 
     // Database connection pool limit — size appropriately per pod against PgBouncer / Postgres max_connections.
     DATABASE_POOL_MAX: z.coerce.number().int().min(1).max(100).default(10),
+
+    // Run Drizzle schema migrations automatically during server bootstrap. Defaults to true.
+    AUTO_MIGRATE: booleanFromEnvironment(true),
 
     // Email — SMTP (Mailpit on 1025 for local dev) or Resend API (production).
     SMTP_HOST: z.string().optional().default(""),
@@ -155,6 +159,7 @@ function validateEnv() {
 
 export const env = validateEnv()
 
-export const corsOrigins: string[] = env.CORS_ORIGIN.split(",")
+export const corsOrigins: string[] = (env.CORS_ORIGINS ?? env.CORS_ORIGIN)
+  .split(",")
   .map((s) => s.trim())
   .filter(Boolean)
