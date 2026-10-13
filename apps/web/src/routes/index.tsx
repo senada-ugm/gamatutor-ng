@@ -1,12 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
-import { ShieldCheck } from "lucide-react"
+import { ArrowRight, ShieldCheck } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
 import { Card, CardContent } from "@workspace/ui/components/card"
+import { NativeAnchor } from "@workspace/ui/composed/native-anchor"
 import type { ContractCourse } from "@workspace/contracts/domain"
 
 import { SiteHeader } from "@/components/_shared/site-header"
 import { getServerCourses } from "@/lib/server-api"
+import { APP_ORIGIN } from "@/lib/env"
 
 export const Route = createFileRoute("/")({
   loader: async () => {
@@ -31,7 +33,7 @@ export const Route = createFileRoute("/")({
 function LandingPage() {
   const { courses } = Route.useLoaderData()
 
-  // Find the canonical DRIVE retinopathy course if present, or fallback
+  // Prioritize the canonical DRIVE retinopathy course
   const driveCourse = courses.find(
     (c) =>
       c.title.toLowerCase().includes("retinopati") ||
@@ -41,132 +43,171 @@ function LandingPage() {
   const otherCourses = courses.filter((c) => c.id !== driveCourse?.id)
 
   return (
-    <div className="flex min-h-svh flex-col bg-muted/20">
+    <div className="flex min-h-svh flex-col bg-[#f4f7f9] dark:bg-background">
       <SiteHeader />
 
       <main className="flex-1">
-        <div className="mx-auto max-w-[760px] px-4 py-12 md:py-16">
-          {/* Header Mark & Title (from gamatutor-ng deploy/landing/index.html) */}
-          <header className="mb-8 flex items-center gap-3.5">
-            <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-blue-600 text-xl text-white shadow-xs select-none">
-              👁
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">GamaTutor</h1>
-              <p className="text-sm text-muted-foreground">Platform penyampaian e-learning — SENADA UGM</p>
-            </div>
-          </header>
-
-          {/* Status Platform Banner */}
-          <div className="mb-8 rounded-xl border border-teal-500/30 bg-teal-500/10 p-4 text-sm text-foreground/90 dark:bg-teal-950/20">
-            <p className="leading-relaxed">
-              <strong className="font-semibold text-teal-800 dark:text-teal-300">Platform Produksi Aktif.</strong>{" "}
-              Platform pembelajaran klinis interaktif resmi hasil kolaborasi tim DRIVE dan Departemen Ilmu Kesehatan
-              Mata FKKMK UGM. Dilengkapi engine simulasi fundus fotografi, 8-tahap hotspot patofisiologi, voiceover
-              tersinkronisasi, dan sertifikasi digital terverifikasi.
+        <div className="mx-auto max-w-5xl px-4 py-8 md:py-12">
+          {/* Hero Section (matches gamatutor-ng .hero style) */}
+          <section className="rounded-2xl bg-gradient-to-br from-[#132d47] via-[#173a5e] to-[#2d77c2] p-8 text-white shadow-md sm:p-12 md:p-14">
+            <h1 className="max-w-2xl text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl">
+              Pelatihan Skrining Retinopati Diabetika
+            </h1>
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/90 sm:text-lg">
+              Kursus daring untuk dokter layanan primer: diabetes mellitus, retinopati diabetika, skrining dan
+              tatalaksana, lalu simulasi grading foto fundus. Bernarasi, interaktif, dan bersertifikat.
             </p>
-          </div>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Button
+                size="lg"
+                className="bg-white font-bold text-[#173a5e] shadow-md hover:bg-slate-100"
+                nativeButton={false}
+                render={<Link to="/courses" />}
+              >
+                <span>Jelajahi Pelatihan</span>
+                <ArrowRight className="ml-2 size-4" />
+              </Button>
+              <NativeAnchor
+                href={`${APP_ORIGIN}/register`}
+                variant="outline"
+                size="lg"
+                className="border-2 border-white/80 bg-transparent px-6 font-semibold text-white hover:bg-white/15 hover:text-white"
+              >
+                Daftar sebagai peserta
+              </NativeAnchor>
+            </div>
+          </section>
 
-          {/* Section: Kursus Tersedia */}
-          <section className="space-y-3">
-            <h2 className="text-xs font-bold tracking-wider text-muted-foreground uppercase">Kursus Tersedia</h2>
+          {/* Features Grid (matches gamatutor-ng .features grid) */}
+          <section className="mt-6 grid gap-4 sm:grid-cols-3">
+            <Card className="border bg-card p-6 shadow-xs transition-shadow hover:shadow-md">
+              <h2 className="text-base font-bold text-[#173a5e] dark:text-sky-300">Belajar sesuai waktu Anda</h2>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                Kemajuan tersimpan otomatis. Lanjutkan kapan saja dari perangkat mana pun.
+              </p>
+            </Card>
+            <Card className="border bg-card p-6 shadow-xs transition-shadow hover:shadow-md">
+              <h2 className="text-base font-bold text-[#173a5e] dark:text-sky-300">Simulasi grading</h2>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                Nilai foto fundus pasien diabetes, lalu lihat setiap lesi yang seharusnya terlihat.
+              </p>
+            </Card>
+            <Card className="border bg-card p-6 shadow-xs transition-shadow hover:shadow-md">
+              <h2 className="text-base font-bold text-[#173a5e] dark:text-sky-300">Sertifikat atas nama Anda</h2>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                Diterbitkan otomatis setelah lulus evaluasi, sesuai nama di akun, dan bisa diverifikasi.
+              </p>
+            </Card>
+          </section>
 
-            {/* Canonical DRIVE Retinopathy Course Card */}
-            <Link
-              to={driveCourse ? "/courses/$courseId" : "/courses"}
-              params={driveCourse ? { courseId: driveCourse.id } : {}}
-              className="block no-underline"
-            >
-              <Card className="group cursor-pointer border p-5 transition-all hover:-translate-y-0.5 hover:border-blue-500/50 hover:shadow-md">
-                <div className="space-y-2">
-                  <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-lg font-bold text-foreground transition-colors group-hover:text-primary">
-                      DRIVE — Skrining Retinopati Diabetika
-                    </h3>
-                    <Badge variant="outline" className="shrink-0 border-teal-500/40 text-teal-700 dark:text-teal-300">
-                      Modul Klinis
-                    </Badge>
-                  </div>
-                  <p className="text-sm leading-relaxed text-muted-foreground">
-                    Untuk dokter layanan primer. Mencakup diabetes mellitus, retinopati diabetika, skrining dan
-                    tatalaksana, simulasi grading fundus, serta evaluasi pre/post-test.
-                  </p>
+          {/* Catalogue Section Grouped by Topic (matches gamatutor-ng .topic catalogue) */}
+          <section className="mt-10 space-y-4">
+            <div className="flex items-center gap-2.5">
+              <span className="h-5 w-1.5 rounded-full bg-[#5bb4b2]" />
+              <h2 className="text-lg font-bold tracking-tight text-[#173a5e] dark:text-foreground">
+                Topik: Retina &amp; Oftalmologi
+              </h2>
+            </div>
 
-                  <div className="flex flex-wrap gap-1.5 pt-2">
-                    <Badge variant="secondary" className="text-xs">
-                      7 modul · 32 halaman
-                    </Badge>
-                    <Badge variant="secondary" className="text-xs">
-                      Simulasi grading
-                    </Badge>
-                    <Badge variant="secondary" className="text-xs">
-                      5 soal evaluasi
-                    </Badge>
-                    <Badge variant="secondary" className="text-xs">
-                      Sertifikat
-                    </Badge>
-                    <Badge variant="secondary" className="text-xs">
-                      Bahasa Indonesia
-                    </Badge>
-                  </div>
-                </div>
-              </Card>
-            </Link>
-
-            {/* Other Published Courses in Database */}
-            {otherCourses.map((c) => (
-              <Link key={c.id} to="/courses/$courseId" params={{ courseId: c.id }} className="block no-underline">
-                <Card className="group cursor-pointer border p-5 transition-all hover:-translate-y-0.5 hover:border-blue-500/50 hover:shadow-md">
-                  <div className="space-y-2">
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        {c.institution?.name && (
-                          <p className="mb-1 text-xs text-muted-foreground">{c.institution.name}</p>
-                        )}
-                        <h3 className="text-lg font-bold text-foreground transition-colors group-hover:text-primary">
-                          {c.title}
+            <div className="grid gap-4 sm:grid-cols-2">
+              {/* Canonical DRIVE Retinopathy Course */}
+              <Link
+                to={driveCourse ? "/courses/$courseId" : "/courses"}
+                params={driveCourse ? { courseId: driveCourse.id } : {}}
+                className="block no-underline"
+              >
+                <Card className="group h-full cursor-pointer border bg-card p-5 transition-all hover:-translate-y-0.5 hover:border-blue-500/50 hover:shadow-md">
+                  <div className="flex h-full flex-col justify-between space-y-3">
+                    <div>
+                      <div className="flex items-start justify-between gap-2">
+                        <h3 className="text-base font-bold text-[#173a5e] transition-colors group-hover:text-primary dark:text-sky-200">
+                          DRIVE — Skrining Retinopati Diabetika
                         </h3>
+                        <Badge
+                          variant="outline"
+                          className="shrink-0 border-teal-500/40 text-teal-700 dark:text-teal-300"
+                        >
+                          Baru
+                        </Badge>
                       </div>
-                      <Badge variant="outline" className="shrink-0">
-                        {c.level || "Umum"}
-                      </Badge>
+                      <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-muted-foreground">
+                        Untuk dokter layanan primer. Mencakup diabetes mellitus, retinopati diabetika, skrining dan
+                        tatalaksana, simulasi grading fundus, serta evaluasi pre/post-test.
+                      </p>
                     </div>
-                    {c.shortDescription && (
-                      <p className="text-sm leading-relaxed text-muted-foreground">{c.shortDescription}</p>
-                    )}
+
                     <div className="flex flex-wrap gap-1.5 pt-2">
-                      <Badge variant="secondary" className="text-xs">
-                        {c.modules?.length ?? 1} modul
-                      </Badge>
-                      <Badge variant="secondary" className="text-xs">
+                      <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                        7 modul · 32 halaman
+                      </span>
+                      <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                        Simulasi grading
+                      </span>
+                      <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                        5 soal evaluasi
+                      </span>
+                      <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300">
                         Sertifikat
-                      </Badge>
-                      <Badge variant="secondary" className="text-xs">
-                        Bahasa Indonesia
-                      </Badge>
+                      </span>
                     </div>
                   </div>
                 </Card>
               </Link>
-            ))}
+
+              {/* Other Published Courses */}
+              {otherCourses.map((c) => (
+                <Link key={c.id} to="/courses/$courseId" params={{ courseId: c.id }} className="block no-underline">
+                  <Card className="group h-full cursor-pointer border bg-card p-5 transition-all hover:-translate-y-0.5 hover:border-blue-500/50 hover:shadow-md">
+                    <div className="flex h-full flex-col justify-between space-y-3">
+                      <div>
+                        <div className="flex items-start justify-between gap-2">
+                          <h3 className="text-base font-bold text-[#173a5e] transition-colors group-hover:text-primary dark:text-sky-200">
+                            {c.title}
+                          </h3>
+                          <Badge variant="outline" className="shrink-0">
+                            {c.level || "Umum"}
+                          </Badge>
+                        </div>
+                        {c.shortDescription && (
+                          <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-muted-foreground">
+                            {c.shortDescription}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="flex flex-wrap gap-1.5 pt-2">
+                        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                          {c.modules?.length ?? 1} modul
+                        </span>
+                        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                          Sertifikat
+                        </span>
+                        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                          Bahasa Indonesia
+                        </span>
+                      </div>
+                    </div>
+                  </Card>
+                </Link>
+              ))}
+            </div>
           </section>
 
-          {/* Section: Alat Penyusun & Standar Terbuka (from gamatutor-ng companion block) */}
-          <section className="mt-8 space-y-3">
+          {/* Section: Alat Penyusun (matches gamatutor-ng .companion) */}
+          <section className="mt-10 space-y-3">
             <h2 className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
               Alat Penyusun &amp; Standar Terbuka
             </h2>
 
-            <Card className="border p-5 text-sm text-muted-foreground">
-              <p className="mb-2.5 leading-relaxed">
+            <Card className="border bg-card p-5 text-sm text-muted-foreground">
+              <p className="mb-2 leading-relaxed">
                 <strong className="font-semibold text-foreground">SlideForge</strong> mengubah presentasi PowerPoint
-                menjadi kursus HTML5 yang sesuai standar internasional — SCORM 1.2/2004, xAPI, cmi5 — lengkap dengan
-                kuis bernilai yang terlapor ke gradebook LMS mana pun.
+                menjadi kursus HTML5 yang sesuai standar — SCORM 1.2/2004, xAPI, cmi5 — lengkap dengan kuis bernilai
+                yang terlapor ke gradebook LMS mana pun.
               </p>
               <p className="leading-relaxed">
                 <strong className="font-semibold text-foreground">GamaTutor</strong> menayangkan hasilnya secara native
-                dengan interaktivitas tingkat tinggi (hotspot sequential, visualisasi anatomi 2D, voiceover audio
-                tersinkronisasi) tanpa penguncian vendor. &rarr;{" "}
+                dengan interaktivitas klinis tingkat tinggi tanpa penguncian vendor. &rarr;{" "}
                 <a
                   href="https://slideforge.komunitech.id/"
                   target="_blank"
@@ -180,19 +221,17 @@ function LandingPage() {
           </section>
 
           {/* Section: Verifikasi Sertifikat Publik */}
-          <section className="mt-8 space-y-3">
-            <h2 className="text-xs font-bold tracking-wider text-muted-foreground uppercase">Verifikasi Kelulusan</h2>
-
-            <Card className="border border-dashed p-5">
+          <section className="mt-8">
+            <Card className="border border-dashed bg-card/60 p-5">
               <CardContent className="flex flex-col items-start justify-between gap-4 p-0 sm:flex-row sm:items-center">
                 <div className="flex items-center gap-3">
                   <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                     <ShieldCheck className="size-5" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-semibold text-foreground">Verifikasi Sertifikat Resmi</h4>
+                    <h4 className="text-sm font-semibold text-foreground">Verifikasi Sertifikat Lulusan</h4>
                     <p className="text-xs text-muted-foreground">
-                      Periksa keabsahan sertifikat kelulusan dokter dan tenaga medis menggunakan kode serial unik.
+                      Periksa keabsahan sertifikat kelulusan dokter dan peserta pelatihan menggunakan kode serial unik.
                     </p>
                   </div>
                 </div>
@@ -203,7 +242,7 @@ function LandingPage() {
             </Card>
           </section>
 
-          {/* Footer */}
+          {/* Footer (matches gamatutor-ng footer) */}
           <footer className="mt-12 border-t pt-6 text-xs leading-relaxed text-muted-foreground">
             <p className="mb-2">
               Setiap kursus di sini juga tersedia sebagai paket SCORM 1.2 yang dapat diunggah ke LMS mana pun — tidak
@@ -212,7 +251,7 @@ function LandingPage() {
             <div className="flex flex-wrap items-center justify-between gap-2">
               <p>Departemen Ilmu Kesehatan Mata, FKKMK Universitas Gadjah Mada, Yogyakarta.</p>
               <p>
-                Repositori:{" "}
+                Kode sumber:{" "}
                 <a
                   href="https://github.com/senada-ugm/gamatutor-ng"
                   target="_blank"
