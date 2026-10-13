@@ -9,6 +9,14 @@ export const SESSION_DAYS = 30;
 const DAY = 86_400_000;
 const VERIFY_HOURS = 48;
 
+/**
+ * Email verification is on unless explicitly switched off — only for a host
+ * that has no SMTP server yet, where no learner could otherwise get in.
+ */
+export function verificationRequired(): boolean {
+  return process.env.GT_REQUIRE_EMAIL_VERIFICATION !== 'false';
+}
+
 export class AccountError extends Error {
   constructor(
     readonly code: 'email-taken' | 'bad-login' | 'unverified' | 'bad-token',
@@ -80,7 +88,7 @@ export async function login(db: Db, email: string, password: string): Promise<{ 
   // Hash even for unknown emails, so timing does not reveal which exist.
   const ok = await verifyPassword(password, user?.passwordHash ?? 'scrypt$16384$8$1$AAAA$AAAA');
   if (!user || !ok) throw new AccountError('bad-login', 'Email atau kata sandi salah.');
-  if (!user.emailVerifiedAt) {
+  if (!user.emailVerifiedAt && verificationRequired()) {
     throw new AccountError('unverified', 'Email Anda belum diverifikasi. Buka tautan yang kami kirim ke email Anda.');
   }
   return { token: await createSession(db, user.id), user };
