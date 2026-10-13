@@ -56,6 +56,19 @@ LETTERS = {
 WORDS = {'PERKENI': 'perkeni', 'ICDRS': 'i ce de er es', 'HbA1c': 'ha be a satu ce',
          'VEGF': 'fe e ge ef', 'Snellen': 'snelen'}
 
+# Foreign and Latin terms, respelled the way an Indonesian doctor says them;
+# MMS reads letters with Indonesian sounds, so "aqueous" would come out wrong.
+RESPELL = {
+    'Maturity-Onset Diabetes of the Young': 'maturiti onset daiabetis of de yang',
+    'sight-threatening': 'sait tretening',
+    'non-proliferative': 'non proliferatif',
+    'proliferative': 'proliferatif',
+    'vascular endothelial growth factor': 'vaskular endotelial grout faktor',
+    'aqueous humor': 'akueus humor',
+    'floaters': 'flouters',
+    'mellitus': 'melitus',
+}
+
 SYMBOLS = [
     ('≥', ' lebih dari atau sama dengan '), ('≤', ' kurang dari atau sama dengan '),
     ('>', ' lebih dari '), ('<', ' kurang dari '), ('%', ' persen'),
@@ -71,6 +84,8 @@ def spell(acronym: str) -> str:
 
 def normalize(text: str) -> str:
     s = text.replace('\n', ' ')
+    for k, v in RESPELL.items():
+        s = re.sub(re.escape(k), v, s, flags=re.IGNORECASE)
     for k, v in WORDS.items():
         s = re.sub(rf'\b{re.escape(k)}\b', v, s)
     for k, v in SYMBOLS:

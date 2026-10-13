@@ -1,6 +1,6 @@
 """Interim synthetic voiceover for a course, until the organiser's recordings exist.
 
-    python tools/voiceover/make_voiceover.py content/drive-retinopati [--qa]
+    python tools/voiceover/make_voiceover.py content/drive-retinopati [--best-of 4] [--qa]
 
 Synthesises every narrated page (the transcript as lead-in, then each reveal
 step's narration) and every hotspot point with Meta's MMS-TTS Indonesian
@@ -11,9 +11,11 @@ course.json as its `cue`, so items appear exactly when they are named.
 
 Recorded voiceover replaces this simply by overwriting the MP3s and cues (see
 docs/panduan-voiceover.md). --qa transcribes each clip back with Whisper and
-prints how many words came through, as a rough intelligibility check.
+prints how many words came through, as a rough intelligibility check;
+--best-of N renders each sentence N ways and keeps the one Whisper hears best.
 """
 
+import difflib
 import json
 import re
 import subprocess
@@ -91,6 +93,29 @@ class Voice:
         with torch.no_grad():
             return self.model(**self.tok(clean, return_tensors='pt')).waveform[0].numpy()
 
+    def best(self, text: str, seed: int, tries: int, asr) -> np.ndarray:
+        """The clearest of `tries` renderings, judged by how much Whisper hears.
+
+        The model's duration predictor is stochastic, so the same sentence can
+        come out crisp or slurred; picking the best of a few is cheap.
+        """
+        if tries <= 1 or asr is None:
+            return self.say(text, seed)
+        ref = normalize(text).split()
+        best_clip, best_score = None, -1.0
+        for k in range(tries):
+            clip = self.say(text, seed + 7919 * k)
+            if len(clip) == 0:
+                return clip
+            heard = asr({'raw': clip, 'sampling_rate': self.sr},
+                        generate_kwargs={'language': 'indonesian', 'task': 'transcribe'})['text']
+            score = difflib.SequenceMatcher(None, ref, normalize(heard).split()).ratio()
+            if score > best_score:
+                best_clip, best_score = clip, score
+            if score >= 0.95:
+                break
+        return best_clip
+
     def silence(self, seconds: float) -> np.ndarray:
         return np.zeros(int(self.sr * seconds), dtype=np.float32)
 
@@ -122,6 +147,11 @@ def segments_of(page: dict) -> list[tuple[int | None, str]]:
 def main() -> None:
     course_dir = Path(sys.argv[1])
     qa = '--qa' in sys.argv
+    tries = int(sys.argv[sys.argv.index('--best-of') + 1]) if '--best-of' in sys.argv else 1
+    asr = None
+    if tries > 1 or qa:
+        from transformers import pipeline
+        asr = pipeline('automatic-speech-recognition', model='openai/whisper-small')
     course_path = course_dir / 'course.json'
     course = json.loads(course_path.read_text(encoding='utf8'))
     out_dir = course_dir / 'assets' / 'audio'
@@ -145,7 +175,7 @@ def main() -> None:
                         if k:
                             parts.append(voice.silence(SENTENCE_GAP))
                             t += SENTENCE_GAP
-                        clip = voice.say(sentence, seed=1000 * seg_no + k)
+                        clip = voice.best(sentence, 1000 * seg_no + k, tries, asr)
                         parts.append(clip)
                         t += len(clip) / voice.sr
                         said.append(sentence)
@@ -161,7 +191,7 @@ def main() -> None:
                     for k, sentence in enumerate(sentences(text)):
                         if k:
                             parts.append(voice.silence(SENTENCE_GAP))
-                        parts.append(voice.say(sentence, seed=k))
+                        parts.append(voice.best(sentence, k, tries, asr))
                     name = f"{page['id']}-{i + 1}.mp3"
                     to_mp3(np.concatenate(parts), voice.sr, out_dir / name)
                     point['audio'] = f'assets/audio/{name}'
@@ -172,15 +202,16 @@ def main() -> None:
     course_path.write_text(json.dumps(course, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
 
     if qa:
-        import difflib
+        # A different model from the one that picked the renderings, so the
+        # check is not grading its own choices.
         from transformers import pipeline
-        asr = pipeline('automatic-speech-recognition', model='openai/whisper-small')
+        judge = pipeline('automatic-speech-recognition', model='openai/whisper-base')
         scores = []
         for name, text in made:
             pcm = subprocess.run(
                 ['ffmpeg', '-loglevel', 'error', '-i', str(out_dir / name), '-f', 'f32le',
                  '-ac', '1', '-ar', '16000', '-'], check=True, capture_output=True).stdout
-            heard = asr({'raw': np.frombuffer(pcm, dtype=np.float32), 'sampling_rate': 16000},
+            heard = judge({'raw': np.frombuffer(pcm, dtype=np.float32), 'sampling_rate': 16000},
                         generate_kwargs={'language': 'indonesian', 'task': 'transcribe'},
                         return_timestamps=True)['text']
             ref, hyp = normalize(text).split(), normalize(heard).split()
