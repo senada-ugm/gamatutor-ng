@@ -72,6 +72,9 @@ const envSchema = z
     // Run Drizzle schema migrations automatically during server bootstrap. Defaults to true.
     AUTO_MIGRATE: booleanFromEnvironment(true),
 
+    // Demonstration / development mode — enables quick-login and database reset for demos. Defaults to false.
+    DEV_MODE: booleanFromEnvironment(false),
+
     // Email — SMTP (Mailpit on 1025 for local dev) or Resend API (production).
     SMTP_HOST: z.string().optional().default(""),
     SMTP_PORT: z.coerce.number().int().default(1025),

@@ -36,6 +36,8 @@ const INTENTIONAL_EXCLUSIONS = new Map([
     "reports.tsp header — operational CSV formatting of institution order book",
   ],
   ["GET /reports/telemetry/export", "reports.tsp header — operational CSV export of learner slide telemetry"],
+  ["GET /dev/status", "dev utility — reports demo mode status and seed account hints"],
+  ["POST /dev/reset-seed", "dev utility — resets and seeds demo database when DEV_MODE=true"],
 ])
 
 // --- 1. contracted operations from the generated OpenAPI -------------------

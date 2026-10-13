@@ -32,6 +32,7 @@ import { telemetryModule } from "./modules/telemetry/index.js"
 import { uploadsModule } from "./modules/uploads/index.js"
 import { startUploadSweep, stopUploadSweep } from "./modules/uploads/services/uploads.service.js"
 import { usersModule } from "./modules/users/index.js"
+import { devModule } from "./modules/dev/index.js"
 import rateLimitPlugin from "./plugins/rate-limit.js"
 import metricsPlugin from "./plugins/metrics.js"
 import securityHeadersPlugin from "./plugins/security-headers.js"
@@ -127,6 +128,7 @@ export async function buildApp() {
   await app.register(usersModule, { prefix: "/v1" })
   await app.register(auditModule, { prefix: "/v1" })
   await app.register(telemetryModule, { prefix: "/v1" })
+  await app.register(devModule, { prefix: "/v1" })
 
   // Orphaned-upload sweep: started once the app is ready, stopped on
   // shutdown — not a bare module-scope setInterval, which would leak

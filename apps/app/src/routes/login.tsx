@@ -5,6 +5,7 @@ import { Field, FieldDescription, FieldGroup, FieldLabel } from "@workspace/ui/c
 import { Input } from "@workspace/ui/components/input"
 
 import { AuthPage } from "@/components/composed/_shared/auth-page"
+import { DevModeBar } from "@/components/composed/auth/dev-mode-bar"
 import { signIn } from "@/lib/auth"
 
 import { apiSend } from "@/lib/api"
@@ -16,10 +17,13 @@ export function LoginPage() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  async function handleSignIn() {
+  async function handleSignIn(overrideEmail?: string, overridePassword?: string) {
     if (submitting) return
-    const email = emailRef.current?.value?.trim() ?? ""
-    const password = passwordRef.current?.value ?? ""
+    const email = overrideEmail ?? emailRef.current?.value?.trim() ?? ""
+    const password = overridePassword ?? passwordRef.current?.value ?? ""
+    if (emailRef.current && overrideEmail) emailRef.current.value = overrideEmail
+    if (passwordRef.current && overridePassword) passwordRef.current.value = overridePassword
+
     if (!email || !password) {
       setError("Please enter your email and password")
       return
@@ -56,6 +60,12 @@ export function LoginPage() {
 
   return (
     <AuthPage title="Sign In" description="Sign in to continue your clinical training.">
+      <DevModeBar
+        onSelectAccount={(email, password) => {
+          void handleSignIn(email, password)
+        }}
+        submitting={submitting}
+      />
       <form
         onSubmit={(e) => {
           e.preventDefault()

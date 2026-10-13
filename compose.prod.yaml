@@ -72,6 +72,7 @@ services:
       - PORT=8000
       - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-lms}
       - AUTO_MIGRATE=${AUTO_MIGRATE:-true}
+      - DEV_MODE=${DEV_MODE:-false}
       - REDIS_URL=redis://redis:6379
       - S3_ENDPOINT=http://rustfs:9000
       - S3_BUCKET=${S3_BUCKET:-lms-uploads}

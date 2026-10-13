@@ -6,7 +6,7 @@
  * authenticated admin session to call the real admin API with yet. Every
  * later admin action goes through the real API.
  */
-import { eq } from "drizzle-orm"
+import { eq, sql } from "drizzle-orm"
 import { auth } from "../auth.js"
 import { db } from "./index.js"
 import { courses, institutionOwnerships, institutions } from "./app-schema.js"
@@ -143,7 +143,7 @@ async function upsertSeedUser(email: string, name: string) {
   return created
 }
 
-async function main() {
+export async function seedDatabase() {
   const admin = await upsertSeedUser("admin@lms.dev", "LMS Admin")
   await db.update(users).set({ emailVerified: true, role: "admin" }).where(eq(users.id, admin.id))
   console.log(`  → ${admin.email} marked verified + role=admin`)
@@ -341,10 +341,54 @@ async function main() {
   }
 
   console.log(`\nSeeded. Sign in with any account, password: ${SEED_PASSWORD}`)
-  process.exit(0)
 }
 
-main().catch((error) => {
-  console.error(error)
-  process.exit(1)
-})
+export async function resetAndSeedDatabase() {
+  await db.execute(sql`
+    TRUNCATE TABLE
+      announcements,
+      assignments,
+      certificates,
+      course_lessons,
+      attendance_sessions,
+      certificate_settings,
+      coupons,
+      audit_log,
+      course_instructors,
+      attendance_records,
+      accounts,
+      enrollments,
+      course_modules,
+      courses,
+      discussions,
+      institution_requests,
+      institution_ownerships,
+      institutions,
+      notifications,
+      quizzes,
+      platform_settings,
+      quiz_questions,
+      sessions,
+      lesson_progress,
+      orders,
+      verifications,
+      users,
+      assignment_submissions,
+      discussion_replies,
+      quiz_attempts,
+      wishlist_items,
+      learning_telemetry_logs,
+      participant_profiles
+    CASCADE;
+  `)
+  await seedDatabase()
+}
+
+if (process.argv[1] && process.argv[1].replace(/\\/g, "/").endsWith("seed.ts")) {
+  seedDatabase()
+    .then(() => process.exit(0))
+    .catch((error) => {
+      console.error(error)
+      process.exit(1)
+    })
+}
