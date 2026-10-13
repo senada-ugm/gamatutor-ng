@@ -9,7 +9,14 @@
 import { eq, sql } from "drizzle-orm"
 import { auth } from "../auth.js"
 import { db } from "./index.js"
-import { courses, institutionOwnerships, institutions } from "./app-schema.js"
+import {
+  courses,
+  courseInstructors,
+  enrollments,
+  institutionOwnerships,
+  institutions,
+  participantProfiles,
+} from "./app-schema.js"
 import { generateId } from "../lib/response.js"
 import { users } from "./auth-schema.js"
 import { createCourse, publishCourse } from "../modules/courses/services/courses.service.js"
@@ -334,8 +341,48 @@ export async function seedDatabase() {
         await createLesson(createdMod.id, les)
       }
     }
-    await publishCourse(created.id, { id: admin.id })
-    console.log(`  → seeded canonical DRIVE course (${created.id}) with slug 'drive-retinopati'`)
+    const driveCourseId = created.id
+    console.log(`  → seeded canonical DRIVE course (${driveCourseId}) with slug 'drive-retinopati'`)
+
+    // Assign owner@lms.dev as accepted instructor on DRIVE course
+    await db
+      .insert(courseInstructors)
+      .values({
+        id: generateId("ci"),
+        courseId: driveCourseId,
+        email: owner.email,
+        userId: owner.id,
+        role: "instructor",
+        status: "accepted",
+      })
+      .onConflictDoNothing()
+
+    // Seed doctor participant profile for user@lms.dev
+    await db
+      .insert(participantProfiles)
+      .values({
+        id: plain.id,
+        profession: "Dokter Umum Layanan Primer",
+        institutionName: "Puskesmas Jetis Kota Yogyakarta",
+        strNumber: "3412345678901234",
+        educationLevel: "Profesi Dokter (dr.)",
+        dati2: "Kota Yogyakarta",
+      })
+      .onConflictDoNothing()
+
+    // Enroll user@lms.dev as 'selected' student so course is immediately active
+    await db
+      .insert(enrollments)
+      .values({
+        id: generateId("enr"),
+        userId: plain.id,
+        courseId: driveCourseId,
+        status: "selected",
+        enrollmentType: "free",
+        approvedAt: new Date(),
+      })
+      .onConflictDoNothing()
+    console.log(`  → enrolled ${plain.email} into DRIVE course (status=selected)`)
   } else {
     console.log(`  → DRIVE course already exists (${existingDriveCourse.id})`)
   }
