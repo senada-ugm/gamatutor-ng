@@ -9,7 +9,6 @@ import type {
   DividerPage,
   HeroPage,
   HotspotPage,
-  ImageGradingPage,
   MatchPage,
   QuizPage,
   SlidePage,
