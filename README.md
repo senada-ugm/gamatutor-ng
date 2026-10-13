@@ -22,27 +22,23 @@ attendance or finance module.
 
 ## Status
 
-Slice **S0 is complete**. The platform itself (S1 onward) is not built yet.
-
-S0 turned the original single-file DRIVE course — 966 lines of hand-written
-HTML, CSS and JavaScript — into a monorepo whose framework-free player renders
-that course from data, and rebuilt the original SCORM package from that data.
-
 | | |
 |---|---|
-| **Done** | Course schema + migrations, tracking contracts, the extracted player, the SCORM 1.2 adapter, and a standalone package build |
-| **Not started** | Everything with a server: catalogue, accounts, cohorts, the event spine, gradebook, analytics, SCORM import, PWA |
+| **S0** | Course schema, tracking contracts, the extracted player, SCORM 1.2 adapter, standalone package build |
+| **Tim DRIVE review, group A** | Player and content revisions: narration that brings items in as it speaks, two-column lists, readable transcripts, clearer instructions, arrows to lesions, red wrong answers, retake with a satisfaction prompt, certificate name from the login, one-screen layout — [spec](docs/superpowers/specs/2026-10-13-drive-feedback-a-design.md) |
+| **Group B — the platform** (`apps/web`) | Registration with full profile, email-verified login, topic-grouped catalogue with immutable course versions, the player with server-side resume and events, certificates in the account name with public verification, admin study-time reports and CSV — [spec](docs/superpowers/specs/2026-10-13-drive-feedback-b-platform-design.md) |
+| **Not started** | Cohorts and join codes, SCORM import, item analysis, offline/PWA |
 
-See [the design spec](docs/superpowers/specs/2026-09-05-gamatutor-platform-design.md)
-for the whole plan, and [the S0 plan](docs/superpowers/plans/2026-09-05-s0-monorepo-and-player-extraction.md)
-for how this slice was built.
+See [the platform design](docs/superpowers/specs/2026-09-05-gamatutor-platform-design.md)
+for the whole plan.
 
 ## Try it
 
-Two courses are live:
-
-- [DRIVE — Skrining Retinopati Diabetika](https://gamatutor.komunitech.id/courses/drive-retinopati/)
-  — native, built from `content/`.
+- **The platform:** <https://gamatutor.komunitech.id/daftar> — register, then
+  take DRIVE from the catalogue.
+- [DRIVE as a SCORM build](https://gamatutor.komunitech.id/courses/drive-retinopati/)
+  — the same course packaged for any SCORM 1.2 LMS (public preview here, no
+  tracking or certificate).
 - [Dasar Algoritma](https://gamatutor.komunitech.id/courses/dasar-algoritma/)
   — a SCORM 1.2 package [SlideForge](https://slideforge.komunitech.id/) built
   from a PowerPoint deck, hosted verbatim.
@@ -51,7 +47,12 @@ To build the native one yourself:
 
 ```bash
 pnpm install
-pnpm build:standalone          # -> out/drive-retinopati/
+pnpm build:standalone          # -> out/drive-retinopati/ (SCORM package)
+
+# the platform, with an in-process Postgres (PGlite) in apps/web/.data
+pnpm web course:publish ../../content/drive-retinopati --topic retina --topic-title Retina
+GT_ADMIN_PASSWORD=<12+ chars> pnpm web admin:create admin@example.id
+pnpm web build && pnpm web start   # http://localhost:3100
 ```
 
 Open `out/drive-retinopati/index.html` in a browser, or zip that folder and
@@ -77,7 +78,8 @@ source of truth, and the fixture stays only as a historical record.
 | `content/drive-retinopati` | The DRIVE course as `course.json` + assets. |
 | `imported/` | SCORM packages from other tools, hosted verbatim. |
 | `fixtures/legacy` | The frozen original (historical; see `s0-parity-final`). |
-| `tools/` | `build-standalone.ts`, `deploy.sh`. |
+| `apps/web` | The platform: Next.js 16, Drizzle, Postgres (PGlite in development). |
+| `tools/` | `build-standalone.ts`, `fit-check.py`, `deploy.sh`, `deploy-web.sh`. |
 | `test/build` | Standalone build and full-course walkthrough. |
 | `deploy/` | nginx vhost and landing page for the live host. |
 
@@ -87,7 +89,8 @@ source of truth, and the fixture stays only as a historical record.
 pnpm verify     # lint + typecheck + tests
 pnpm test       # tests only
 pnpm build:standalone    # regenerate out/drive-retinopati/
-./tools/deploy.sh        # build and ship to gamatutor.komunitech.id
+./tools/deploy-web.sh    # ship the platform to gamatutor.komunitech.id
+./tools/deploy.sh        # ship static courses, landing page, nginx vhost
 ```
 
 Deployment is documented in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) — read the

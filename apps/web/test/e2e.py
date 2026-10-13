@@ -9,6 +9,7 @@ CSV export. Exits non-zero on the first failure.
 """
 
 import json
+import os
 from urllib.parse import quote
 import re
 import sys
@@ -18,7 +19,7 @@ from pathlib import Path
 from playwright.sync_api import expect, sync_playwright
 
 BASE = sys.argv[1].rstrip('/')
-LOG = Path(sys.argv[2])
+LOG = Path(sys.argv[2]) if len(sys.argv) > 2 and sys.argv[2] != '-' else None
 SHOTS = Path(sys.argv[3]) if len(sys.argv) > 3 else None
 ROOT = Path(__file__).resolve().parents[3]
 COURSE = json.loads((ROOT / 'content/drive-retinopati/course.json').read_text(encoding='utf8'))
@@ -36,6 +37,8 @@ def shot(page, name):
 
 
 def verification_link() -> str:
+    if LOG is None:
+        raise SystemExit('verification is on but no server log was given')
     for _ in range(50):
         links = re.findall(r'https?://\S+/verifikasi\?token=\S+', LOG.read_text(encoding='utf8', errors='ignore'))
         mine = [l for l in links]
@@ -66,8 +69,10 @@ def register(page):
     page.fill('#f-passwordConfirm', PASSWORD)
     page.check('input[name=consent]')
     page.click('button[type=submit]')
-    expect(page.locator('.notice.ok')).to_contain_text(EMAIL)
+    # With verification on, a notice; with it off (a host without SMTP), straight in.
+    page.wait_for_function("() => location.pathname === '/kursus' || !!document.querySelector('.notice.ok')")
     shot(page, '01-registered')
+    return page.url.endswith('/kursus')
 
 
 def login(page, email, password, then='/kursus'):
@@ -123,7 +128,8 @@ def take_course(page):
 
 
 def admin_report(page):
-    login(page, 'admin@drive.local', 'admin-lokal-123456', '/admin')
+    login(page, os.environ.get('GT_E2E_ADMIN_EMAIL', 'admin@drive.local'),
+          os.environ.get('GT_E2E_ADMIN_PASSWORD', 'admin-lokal-123456'), '/admin')
     page.click('a:has-text("Laporan")')
     row = page.locator('tr', has_text=EMAIL)
     expect(row).to_contain_text('Dokter spesialis')
@@ -141,10 +147,11 @@ def main():
         browser = p.chromium.launch()
         learner = browser.new_context(viewport={'width': 1366, 'height': 768})
         page = learner.new_page()
-        register(page)
-        page.goto(verification_link())
-        page.wait_for_url('**/masuk?verified=1')
-        login(page, EMAIL, PASSWORD)
+        signed_in = register(page)
+        if not signed_in:
+            page.goto(verification_link())
+            page.wait_for_url('**/masuk?verified=1')
+            login(page, EMAIL, PASSWORD)
         serial = take_course(page)
         admin = browser.new_context(viewport={'width': 1366, 'height': 900}, accept_downloads=True)
         admin_report(admin.new_page())
