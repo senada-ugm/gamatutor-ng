@@ -185,7 +185,11 @@ function slugify(title: string): string {
 }
 
 export async function getCourseRow(id: string): Promise<typeof courses.$inferSelect> {
-  const [row] = await db.select().from(courses).where(eq(courses.id, id)).limit(1)
+  const [row] = await db
+    .select()
+    .from(courses)
+    .where(or(eq(courses.id, id), eq(courses.slug, id)))
+    .limit(1)
   if (!row) throw new NotFoundError("Course", id)
   return row
 }

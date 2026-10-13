@@ -348,15 +348,19 @@ export async function enroll(
       )
       .limit(1)
 
+    const isFreeOnline = course.courseType === "online" && (course.price ?? 0) === 0
+    const initialStatus = isFreeOnline ? "selected" : "registered"
+    const nowTimestamp = new Date()
+
     if (existing) {
       if (existing.status === "canceled" || existing.status === "failed") {
         const [reopened] = await tx
           .update(enrollments)
           .set({
-            status: "registered",
+            status: initialStatus,
             enrollmentType: input.enrollmentType ?? "free",
-            enrolledAt: new Date(),
-            approvedAt: null,
+            enrolledAt: nowTimestamp,
+            approvedAt: isFreeOnline ? nowTimestamp : null,
             interviewedAt: null,
             interviewNotes: null,
             failedAt: null,
@@ -378,7 +382,8 @@ export async function enroll(
         id: generateId("enr"),
         userId,
         courseId: input.courseId,
-        status: "registered",
+        status: initialStatus,
+        approvedAt: isFreeOnline ? nowTimestamp : null,
         enrollmentType: input.enrollmentType ?? "free",
       })
       .onConflictDoNothing()

@@ -1,8 +1,10 @@
 import { useQuery } from "@tanstack/react-query"
 
+import { Button } from "@workspace/ui/components/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@workspace/ui/components/card"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@workspace/ui/components/table"
+import { Download } from "lucide-react"
 
 import { EmptyState } from "@/components/composed/_shared/empty-state"
 import { ErrorState } from "@/components/composed/_shared/error-state"
@@ -52,19 +54,32 @@ export function AdminDashboardPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Ringkasan"
-        description="Statistik platform dan arus dana."
+        title="Admin Overview"
+        description="Platform statistics, financial flows, and research telemetry."
         actions={
-          health.data ? (
-            <div className="flex items-center gap-2 rounded-full border px-3 py-1 text-xs">
-              <span
-                className={`size-2 rounded-full ${health.data.status === "ok" ? "bg-emerald-500" : "bg-amber-500"}`}
-              />
-              <span className="text-muted-foreground">
-                Sistem: {health.data.status === "ok" ? "Normal" : "Degradasi"}
-              </span>
-            </div>
-          ) : null
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                window.open("/v1/reports/telemetry/export", "_blank")
+              }}
+              className="gap-2 font-medium"
+            >
+              <Download className="size-4" />
+              Export Learning Telemetry (CSV)
+            </Button>
+            {health.data ? (
+              <div className="flex items-center gap-2 rounded-full border px-3 py-1 text-xs">
+                <span
+                  className={`size-2 rounded-full ${health.data.status === "ok" ? "bg-emerald-500" : "bg-amber-500"}`}
+                />
+                <span className="text-muted-foreground">
+                  System: {health.data.status === "ok" ? "Normal" : "Degraded"}
+                </span>
+              </div>
+            ) : null}
+          </div>
         }
       />
 

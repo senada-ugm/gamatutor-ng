@@ -33,11 +33,14 @@ export function AdminAuditPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Log Audit" description="Jejak setiap aksi administratif di platform." />
+      <PageHeader
+        title="Audit Log"
+        description="Comprehensive audit trail of administrative mutations across the platform."
+      />
 
       <SearchInput
-        label="Cari log audit"
-        placeholder="Cari aksi, entitas, atau aktor…"
+        label="Search audit log"
+        placeholder="Search action, entity, or actor..."
         value={search}
         onChange={(next) => {
           setSearch(next)

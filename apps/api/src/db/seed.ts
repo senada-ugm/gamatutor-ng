@@ -218,6 +218,128 @@ async function main() {
     console.log(`  → courses already seeded for ${owner.email}'s institution`)
   }
 
+  // --- Canonical DRIVE Program Seeding (FK-KMK UGM) ---
+  const [existingUgm] = await db
+    .select()
+    .from(institutions)
+    .where(eq(institutions.name, "Departemen Oftalmologi FK-KMK UGM"))
+    .limit(1)
+
+  let ugmId = existingUgm?.id
+  if (!existingUgm) {
+    const [ugm] = await db
+      .insert(institutions)
+      .values({
+        id: generateId("ins"),
+        name: "Departemen Oftalmologi FK-KMK UGM",
+        institutionType: "pemerintah",
+        logo: "/content/drive-retinopati/assets/v42_image1.png",
+      })
+      .returning()
+    ugmId = ugm!.id
+    await db.insert(institutionOwnerships).values({
+      id: generateId("own"),
+      userId: admin.id,
+      institutionId: ugmId,
+    })
+    console.log(`  → created Departemen Oftalmologi FK-KMK UGM (${ugmId})`)
+  }
+
+  const [existingDriveCourse] = await db.select().from(courses).where(eq(courses.slug, "drive-retinopati")).limit(1)
+
+  if (!existingDriveCourse) {
+    const created = await createCourse(
+      {
+        institutionId: ugmId!,
+        title: "DRIVE — Skrining Retinopati Diabetika untuk Dokter Layanan Primer",
+        shortDescription:
+          "Pelatihan interaktif skrining dan deteksi dini Retinopati Diabetika untuk dokter layanan primer berbasis pedoman klinis PERKENI, IDF, dan AAO.",
+        description:
+          "Modul 1: Pengenalan Diabetes Mellitus dan Retinopati Diabetika. Dilengkapi narasi klinis terstandar, visualisasi anatomi 2D, alur patofisiologi sequential, simulasi grading fundus, kuis evaluasi, dan penerbitan sertifikat kelulusan resmi.",
+        thumbnail: "/content/drive-retinopati/assets/v42_image1.png",
+        courseType: "online",
+        level: "beginner",
+        price: 0,
+        isDisabilityFriendly: true,
+        supportedDisabilityTypes: [],
+      },
+      { id: admin.id, name: admin.name }
+    )
+
+    // Ensure human-readable slug 'drive-retinopati' so route /courses/drive-retinopati always matches
+    await db.update(courses).set({ slug: "drive-retinopati" }).where(eq(courses.id, created.id))
+
+    const driveModules = [
+      {
+        title: "Pengantar & Overview Pelatihan",
+        lessons: [
+          {
+            title: "Pengantar Program DRIVE & Cakupan Materi",
+            contentType: "text" as const,
+            textContent:
+              "Selamat datang di Modul 1 Pelatihan Skrining Retinopati Diabetika dalam program DRIVE (Diabetic Retinopathy Initiatives). Modul ini membekali dokter layanan primer dengan pemahaman komprehensif mengenai diabetes mellitus dan komplikasinya di retina.",
+            isPreview: true,
+          },
+        ],
+      },
+      {
+        title: "Bab 1: Diabetes Mellitus",
+        lessons: [
+          {
+            title: "Definisi, Epidemiologi, Klasifikasi, dan Komplikasi DM",
+            contentType: "text" as const,
+            textContent:
+              "Membahas definisi DM menurut PERKENI 2021, data IDF Atlas 11th Ed 2025, patogenesis Egregious Eleven, kriteria diagnosis glukosa/HbA1c, dan komplikasi mikrovaskular.",
+          },
+        ],
+      },
+      {
+        title: "Bab 2: Retinopati Diabetika",
+        lessons: [
+          {
+            title: "Anatomi Mata, Definisi RD, Patofisiologi Sequential, dan Faktor Risiko",
+            contentType: "text" as const,
+            textContent:
+              "Eksplorasi anatomi mata 2D, definisi RD, alur patofisiologi sequential 1-8, faktor risiko, dan latihan matching pair interaktif.",
+          },
+        ],
+      },
+      {
+        title: "Bab 3: Skrining dan Tatalaksana RD",
+        lessons: [
+          {
+            title: "Skrining FKTP, Natural History, Kriteria ECIM, dan Rujukan",
+            contentType: "text" as const,
+            textContent:
+              "Konsep skrining vs deteksi dini, kriteria WHO ECIM, jadwal kontrol berkala, 4 pilar tatalaksana, dan peran dokter layanan primer.",
+          },
+        ],
+      },
+      {
+        title: "Simulasi Grading Fundus & Evaluasi Akhir",
+        lessons: [
+          {
+            title: "Simulasi Grading 5 Kasus Fundus & Standardized Clinical Post-Test",
+            contentType: "text" as const,
+            textContent:
+              "Simulasi grading lesi fundus interaktif dengan penanda retikel non-obscuring dan post-test 5 soal terstandar untuk klaim sertifikat kelulusan.",
+          },
+        ],
+      },
+    ]
+
+    for (const mod of driveModules) {
+      const createdMod = await createModule(created.id, { title: mod.title })
+      for (const les of mod.lessons) {
+        await createLesson(createdMod.id, les)
+      }
+    }
+    await publishCourse(created.id, { id: admin.id })
+    console.log(`  → seeded canonical DRIVE course (${created.id}) with slug 'drive-retinopati'`)
+  } else {
+    console.log(`  → DRIVE course already exists (${existingDriveCourse.id})`)
+  }
+
   console.log(`\nSeeded. Sign in with any account, password: ${SEED_PASSWORD}`)
   process.exit(0)
 }

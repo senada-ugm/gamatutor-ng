@@ -4,6 +4,9 @@ import type { FastifyInstance } from "fastify"
 import { z } from "zod"
 import { assertCanManageCourse } from "../../../lib/course-access.js"
 
+import { eq } from "drizzle-orm"
+import { db } from "../../../db/index.js"
+import { enrollments } from "../../../db/app-schema.js"
 import { requireSession } from "../../../lib/require-session.js"
 import { dataResponse } from "../../../lib/response.js"
 import { validateBody } from "../../../lib/validation.js"
@@ -51,7 +54,16 @@ export function certificatesRoutes(app: FastifyInstance) {
     { preValidation: [validateBody(zCertificateIssue)] },
     async (request, reply) => {
       const user = await requireSession(request)
-      await assertCanManageCourse(user, request.params.courseId)
+      const [enrollment] = await db
+        .select()
+        .from(enrollments)
+        .where(eq(enrollments.id, request.body.enrollmentId))
+        .limit(1)
+
+      const isSelfClaim = enrollment && enrollment.userId === user.id
+      if (!isSelfClaim) {
+        await assertCanManageCourse(user, request.params.courseId)
+      }
       const created = await service.issueCertificate(request.params.courseId, request.body)
       reply.status(201)
       return dataResponse(created, request.id)

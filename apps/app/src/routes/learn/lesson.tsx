@@ -8,8 +8,9 @@ import { Separator } from "@workspace/ui/components/separator"
 import { useCourseContext } from "@/components/composed/player/course-context"
 import { EmptyState } from "@/components/composed/_shared/empty-state"
 import { InteractiveSlideViewer } from "@/components/composed/player/interactive-slide-viewer"
-import { apiSend } from "@/lib/api"
+import { apiGet, apiSend } from "@/lib/api"
 import { DRIVE_RETINOPATHY_COURSE } from "@/lib/content/drive-retinopati-data"
+import type { ContractCertificate, ContractEnrollment } from "@workspace/contracts/domain"
 
 interface VideoEmbed {
   kind: "iframe" | "video"
@@ -86,6 +87,34 @@ export function LessonPage() {
     onError: () => toast.error("Failed to update progress"),
   })
 
+  const claimCertificate = useMutation({
+    mutationFn: async () => {
+      const enrollmentsList = await apiGet<ContractEnrollment[]>(
+        `/enrollments?courseId=${encodeURIComponent(course.id)}&pageSize=1`
+      )
+      const myEnrollment = enrollmentsList[0]
+      if (!myEnrollment) {
+        throw new Error("No active enrollment found to claim certificate")
+      }
+      return apiSend<ContractCertificate>("POST", `/courses/${course.id}/certificates`, {
+        enrollmentId: myEnrollment.id,
+        title: "Sertifikat Kelulusan Pelatihan Skrining Retinopati Diabetika",
+        description: `Diberikan atas kelulusan pada pelatihan ${course.title} oleh Departemen Oftalmologi FK-KMK UGM.`,
+      })
+    },
+    onSuccess: (cert) => {
+      toast.success("Certificate claimed successfully!")
+      void navigate({
+        to: "/certificates/$certificateId",
+        params: { certificateId: cert.id },
+      })
+    },
+    onError: (err: unknown) => {
+      const msg = err instanceof Error ? err.message : "Failed to claim certificate"
+      toast.error(msg)
+    },
+  })
+
   if (!lesson) {
     return <p className="py-8 text-center text-muted-foreground">Lesson not found.</p>
   }
@@ -112,7 +141,7 @@ export function LessonPage() {
               }
             }}
             onClaimCertificate={() => {
-              void navigate({ to: "/dashboard" })
+              claimCertificate.mutate()
             }}
           />
         ) : lesson.contentType === "text" && lesson.textContent ? (
