@@ -13,6 +13,7 @@ import { Button } from "@workspace/ui/components/button"
 import { ManagementShell } from "@/components/composed/workspace/management-shell"
 import { WorkspaceShell } from "@/components/composed/workspace/workspace-shell"
 import { getSession } from "@/lib/auth"
+import { WEB_ORIGIN } from "@/lib/env"
 import { DashboardPage } from "@/routes/dashboard"
 
 /**
@@ -51,7 +52,7 @@ const indexRoute = createRoute({
   beforeLoad: async () => {
     const session = await getSession()
     if (session) throw redirect({ to: "/dashboard" })
-    throw redirect({ to: "/login" })
+    throw redirect({ href: WEB_ORIGIN })
   },
 })
 
