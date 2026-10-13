@@ -133,19 +133,19 @@ export function InteractiveSlideViewer({
 
       {/* Main Slide Content Stage - Clamped Viewport with Scroll when needed */}
       <div className="flex-1 space-y-6 overflow-y-auto p-6 md:p-8">
-        {page.type === "hero" && <HeroSlide page={page as HeroPage} onStart={handleNext} />}
-        {page.type === "divider" && <DividerSlide page={page as DividerPage} onProceed={handleNext} />}
-        {page.type === "content" && <ContentSlide page={page as ContentPage} />}
-        {page.type === "cards" && <CardsSlide page={page as CardsPage} />}
-        {page.type === "hotspot" && <HotspotSlide page={page as HotspotPage} onAllCompleted={handleNext} />}
-        {page.type === "match" && <MatchSlide page={page as MatchPage} onDone={handleNext} />}
-        {page.type === "image-grading" && <ClinicalFundusGrading page={page as ImageGradingPage} onNext={handleNext} />}
+        {page.type === "hero" && <HeroSlide page={page} onStart={handleNext} />}
+        {page.type === "divider" && <DividerSlide page={page} onProceed={handleNext} />}
+        {page.type === "content" && <ContentSlide page={page} />}
+        {page.type === "cards" && <CardsSlide page={page} />}
+        {page.type === "hotspot" && <HotspotSlide page={page} onAllCompleted={handleNext} />}
+        {page.type === "match" && <MatchSlide page={page} onDone={handleNext} />}
+        {page.type === "image-grading" && <ClinicalFundusGrading page={page} onNext={handleNext} />}
         {page.type === "quiz" && (
           <ClinicalQuizRunner
             questions={
               (course.modules
                 .find((m) => m.id === "evaluasi")
-                ?.pages.filter((p) => p.type === "quiz") as QuizPage[]) || [page as QuizPage]
+                ?.pages.filter((p) => p.type === "quiz") as QuizPage[]) || [page]
             }
             onRetake={() => {
               const evalStartIdx = allSlides.findIndex((s) => s.moduleId === "evaluasi")

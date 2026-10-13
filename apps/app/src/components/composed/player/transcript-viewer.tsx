@@ -52,14 +52,14 @@ export function TranscriptViewer({
               .split("\n")
               .map((l) => l.trim())
               .filter(Boolean)
-            const isBulletList = lines.every((l) => /^[•\-\*]|\d+\.\s/.test(l))
+            const isBulletList = lines.every((l) => /^[•\-*]|\d+\.\s/.test(l))
 
             if (isBulletList) {
               return (
                 <ul key={pIdx} className="list-disc space-y-1.5 pl-5 text-foreground/90">
                   {lines.map((item, lIdx) => (
                     <li key={lIdx} className="pl-1">
-                      {item.replace(/^[•\-\*]|\d+\.\s*/, "")}
+                      {item.replace(/^[•\-*]|\d+\.\s*/, "")}
                     </li>
                   ))}
                 </ul>
