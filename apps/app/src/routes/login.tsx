@@ -60,12 +60,6 @@ export function LoginPage() {
 
   return (
     <AuthPage title="Sign In" description="Sign in to continue your clinical training.">
-      <DevModeBar
-        onSelectAccount={(email, password) => {
-          void handleSignIn(email, password)
-        }}
-        submitting={submitting}
-      />
       <form
         onSubmit={(e) => {
           e.preventDefault()
@@ -97,6 +91,12 @@ export function LoginPage() {
               {submitting ? "Signing in..." : "Sign In"}
             </Button>
           </Field>
+          <DevModeBar
+            onSelectAccount={(email, password) => {
+              void handleSignIn(email, password)
+            }}
+            submitting={submitting}
+          />
           <FieldDescription className="text-center">
             Don't have an account?{" "}
             <Link to="/register" className="underline underline-offset-4">

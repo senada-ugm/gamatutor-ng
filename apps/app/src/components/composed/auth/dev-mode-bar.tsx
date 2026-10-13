@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useQuery, useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
-import { ChevronDown, RotateCcw, ShieldCheck, Building2, User, Loader2 } from "lucide-react"
+import { Zap, ChevronDown, RotateCcw, ShieldCheck, Building2, User, Loader2 } from "lucide-react"
 import { Button } from "@workspace/ui/components/button"
 import {
   DropdownMenu,
@@ -118,20 +118,21 @@ export function DevModeBar({ onSelectAccount, submitting }: DevModeBarProps) {
   }
 
   return (
-    <div className="mb-4 flex flex-col gap-2">
+    <div className="flex flex-col gap-2 pt-1">
       <DropdownMenu>
         <DropdownMenuTrigger
           render={
             <Button
               type="button"
               variant="outline"
-              className="w-full justify-between font-normal"
+              className="h-7 w-full gap-1 border-border px-2 text-xs font-medium hover:bg-input/50 hover:text-foreground dark:bg-input/30"
               disabled={submitting}
             />
           }
         >
-          <span>Quick Login (DEV_MODE)</span>
-          <ChevronDown className="h-4 w-4 opacity-50" />
+          <Zap className="h-4 w-4 text-yellow-500" />
+          <span>Masuk Instan</span>
+          <ChevronDown className="ml-auto h-4 w-4 opacity-70" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-[--anchor-width] min-w-56 p-1">
           {accounts.map((acc) => (
@@ -157,19 +158,18 @@ export function DevModeBar({ onSelectAccount, submitting }: DevModeBarProps) {
           render={
             <Button
               type="button"
-              variant="ghost"
-              size="sm"
-              className="w-full text-xs text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+              variant="outline"
+              className="h-7 w-full gap-1 border-destructive/40 px-2 text-xs font-medium text-destructive hover:bg-destructive/10 hover:text-destructive"
               disabled={resetMutation.isPending}
             />
           }
         >
           {resetMutation.isPending ? (
-            <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
           ) : (
-            <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
+            <RotateCcw className="h-3.5 w-3.5" />
           )}
-          Reset DB & Seed
+          <span>Reset DB & Seed</span>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
