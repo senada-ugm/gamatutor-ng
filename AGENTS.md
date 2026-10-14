@@ -9,14 +9,10 @@ apps/
                       admin workspace, transactional catalog, notifications.
                       All API calls go through src/lib/api.ts (the hey-api
                       SDK's path interpolation is broken in Vite).
-  web/              - TanStack Start SSR site — MARKETING ONLY: landing,
-                      catalog (?q= server-side search), course detail, and
-                      the public /certificates/verify page. No auth, no
-                      session: every Masuk/Daftar CTA hands off to
-                      APP_ORIGIN (apps/app) via lib/env.ts; /login and
-                      /register meta-refresh there. Data comes from
-                      src/lib/server-api.ts (public server fns, no cookie
-                      forwarding needed anymore).
+  web/              - DEFERRED (Future Use): TanStack Start SSR marketing site
+                      prototype. Currently excluded from Docker Compose and active
+                      deployments; all active landing, course catalog, and LMS
+                      features are served directly by apps/app and apps/api.
   api/              - Fastify backend, real Postgres via Drizzle (health,
                       institutions, users, courses, course-content,
                       course-instructors, enrollments, attendance,
