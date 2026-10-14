@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import { Link } from "@tanstack/react-router"
 import { useQuery } from "@tanstack/react-query"
 import { Award, ChevronRight, GraduationCap } from "lucide-react"
@@ -13,6 +14,7 @@ import { EmptyState } from "@/components/composed/_shared/empty-state"
 import { ErrorState } from "@/components/composed/_shared/error-state"
 import { useAuthoringScope } from "@/lib/authoring-institution"
 import { useSession } from "@/lib/session"
+import { hasPendingDoctorProfile, syncPendingDoctorProfile } from "@/lib/pending-profile"
 import { apiGet } from "@/lib/api"
 import { formatCourseDate } from "@/lib/lms-date"
 import type { ContractCourse, ContractEnrollment, ContractRegisteredInstitution } from "@workspace/contracts/domain"
@@ -22,6 +24,15 @@ export function DashboardPage() {
   const authoringScope = useAuthoringScope()
   const user = session ?? null
   const isAdmin = user?.role === "admin"
+
+  // Sync point for registration's staged clinical profile: the email
+  // verification link auto-signs-in straight to the app without passing
+  // through the login page, and any earlier sync failure retries here.
+  useEffect(() => {
+    if (user?.id && hasPendingDoctorProfile()) {
+      void syncPendingDoctorProfile(user.id)
+    }
+  }, [user?.id])
 
   const enrollmentsQuery = useQuery({
     queryKey: ["my-enrollments", user?.id],

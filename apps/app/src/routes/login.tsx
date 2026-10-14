@@ -7,8 +7,7 @@ import { Input } from "@workspace/ui/components/input"
 import { AuthPage } from "@/components/composed/_shared/auth-page"
 import { DevModeBar } from "@/components/composed/auth/dev-mode-bar"
 import { signIn } from "@/lib/auth"
-
-import { apiSend } from "@/lib/api"
+import { syncPendingDoctorProfile } from "@/lib/pending-profile"
 
 export function LoginPage() {
   const navigate = useNavigate()
@@ -38,17 +37,11 @@ export function LoginPage() {
         return
       }
 
-      // Sync pending doctor profile from registration if present
-      const pendingProfile = localStorage.getItem("pending_doctor_profile")
-      if (pendingProfile && user.id) {
-        try {
-          const parsed = JSON.parse(pendingProfile)
-          await apiSend("PATCH", `/participant-profiles/${user.id}`, parsed)
-          localStorage.removeItem("pending_doctor_profile")
-        } catch {
-          // Non-blocking sync failure
-        }
-      }
+      // Registration's clinical fields sync on first session — a failure
+      // keeps the staged copy and retries at the next sync point (the
+      // dashboard mount also retries, covering the email-verification
+      // auto-sign-in path that never passes through this page).
+      if (user.id) await syncPendingDoctorProfile(user.id)
 
       navigate({ to: "/dashboard" })
     } catch {
