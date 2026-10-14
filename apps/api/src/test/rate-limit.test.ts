@@ -25,12 +25,6 @@ describe("Tiered Rate Limiter & Abuse Defense", () => {
       assert.equal(resolveMaxRequests(getSessionReq), 1000)
     })
 
-    it("categorizes coupon validation as coupon (20 req/min)", () => {
-      const couponReq = { url: "/v1/coupons/validate", method: "POST" } as any
-      assert.equal(getRouteCategory(couponReq), "coupon")
-      assert.equal(resolveMaxRequests(couponReq), 20)
-    })
-
     it("categorizes upload mutations as upload (30 req/min)", () => {
       const uploadReq = { url: "/v1/uploads", method: "POST" } as any
       assert.equal(getRouteCategory(uploadReq), "upload")

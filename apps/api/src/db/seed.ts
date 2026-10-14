@@ -36,7 +36,6 @@ const SEED_COURSES: Array<{
   description: string
   level: "beginner" | "intermediate" | "advanced" | "expert"
   courseType: "online" | "offline" | "hybrid"
-  price?: number
   thumbnailSeed: string
   modules: Array<{
     title: string
@@ -49,7 +48,6 @@ const SEED_COURSES: Array<{
     description: "Pelatihan ini membahas komponen, state, dan hooks dengan studi kasus nyata.",
     level: "beginner",
     courseType: "online",
-    price: 250000,
     thumbnailSeed: "lms-react-dasar",
     modules: [
       {
@@ -97,7 +95,6 @@ const SEED_COURSES: Array<{
     description: "Dari media sosial hingga iklan berbayar, disesuaikan untuk usaha kecil.",
     level: "intermediate",
     courseType: "offline",
-    price: 150000,
     thumbnailSeed: "lms-digital-marketing",
     modules: [
       {
@@ -206,7 +203,6 @@ export async function seedDatabase() {
           thumbnail: `https://picsum.photos/seed/${seedCourse.thumbnailSeed}/800/450`,
           courseType: seedCourse.courseType,
           level: seedCourse.level,
-          price: seedCourse.price,
           isDisabilityFriendly: false,
           supportedDisabilityTypes: [],
         },
@@ -266,7 +262,6 @@ export async function seedDatabase() {
         thumbnail: "/content/drive-retinopati/assets/v42_image1.png",
         courseType: "online",
         level: "beginner",
-        price: 0,
         isDisabilityFriendly: true,
         supportedDisabilityTypes: [],
       },
@@ -399,7 +394,6 @@ export async function resetAndSeedDatabase() {
       course_lessons,
       attendance_sessions,
       certificate_settings,
-      coupons,
       audit_log,
       course_instructors,
       attendance_records,
@@ -417,13 +411,11 @@ export async function resetAndSeedDatabase() {
       quiz_questions,
       sessions,
       lesson_progress,
-      orders,
       verifications,
       users,
       assignment_submissions,
       discussion_replies,
       quiz_attempts,
-      wishlist_items,
       learning_telemetry_logs,
       participant_profiles
     CASCADE;

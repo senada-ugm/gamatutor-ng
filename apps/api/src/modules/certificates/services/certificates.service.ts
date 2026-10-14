@@ -11,7 +11,6 @@ import { certificateSettings, certificates, courses, enrollments, institutions }
 import { users as userTable } from "../../../db/auth-schema.js"
 import { ConflictError, ForbiddenError, NotFoundError } from "../../../lib/errors.js"
 import { generateId } from "../../../lib/response.js"
-import { hasPaidOrder } from "../../payments/services/payments.service.js"
 import { claimUpload, extractUploadIdFromUrl, releaseUpload } from "../../uploads/services/uploads.service.js"
 
 function toSettings(row: typeof certificateSettings.$inferSelect): CertificateSettings {
@@ -150,13 +149,6 @@ export async function issueCertificate(courseId: string, input: CertificateIssue
 
   const [course] = await db.select().from(courses).where(eq(courses.id, courseId)).limit(1)
   if (!course) throw new NotFoundError("Course", courseId)
-
-  if ((course.price ?? 0) > 0) {
-    const paid = await hasPaidOrder(enrollment.userId, courseId, tx)
-    if (!paid) {
-      throw new ForbiddenError("Sertifikat tidak dapat diterbitkan: peserta belum melunasi pembayaran pelatihan ini")
-    }
-  }
 
   const year = new Date().getFullYear()
   const d = tx ?? db

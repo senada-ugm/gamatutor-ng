@@ -6,56 +6,24 @@ import { toast } from "sonner"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
 import { Card, CardContent } from "@workspace/ui/components/card"
-import { Input } from "@workspace/ui/components/input"
 
 import { apiSend } from "@/lib/api"
-import { formatRupiah } from "@/lib/format"
-import type { ContractCourse, ContractEnrollment, ContractOrder } from "@workspace/contracts/domain"
+import type { ContractCourse, ContractEnrollment } from "@workspace/contracts/domain"
 
 /**
  * Lean port of legacy's EnrollButton state machine: the enrollment
- * funnel states driven by the real enrollment row, plus the paid-course
- * coupon -> order -> payment-instructions flow. Mock-only viewer states
- * (profile completeness, eligibility) have no real backend gate and are
- * omitted.
+ * funnel states driven by the real enrollment row. DRIVE-Learn training
+ * is free — enrollment is a single POST with no checkout step (the
+ * coupon -> order -> payment-instructions flow was removed with the
+ * payments domain; see docs/PLANS.md Phase 1).
  */
-
-interface CouponApplyResult {
-  valid: boolean
-  message?: string
-  coupon?: { code: string; description?: string | null }
-  pricing?: { originalPrice: number; discountAmount: number; finalPrice: number }
-}
 
 export function EnrollPanel({ course, enrollment }: { course: ContractCourse; enrollment: ContractEnrollment | null }) {
   const queryClient = useQueryClient()
-  const isFree = !course.price || course.price <= 0
   const [busy, setBusy] = useState(false)
-  const [showPaidConfirm, setShowPaidConfirm] = useState(false)
-  const [couponCode, setCouponCode] = useState("")
-  const [appliedCoupon, setAppliedCoupon] = useState<CouponApplyResult | null>(null)
-  const [couponValidating, setCouponValidating] = useState(false)
-  const [createdOrder, setCreatedOrder] = useState<ContractOrder | null>(null)
 
   function invalidate() {
     void queryClient.invalidateQueries({ queryKey: ["my-enrollment", course.id] })
-    void queryClient.invalidateQueries({ queryKey: ["my-orders"] })
-  }
-
-  async function validateCoupon() {
-    if (!couponCode.trim() || couponValidating) return
-    setCouponValidating(true)
-    try {
-      const result = await apiSend<CouponApplyResult>("POST", "/coupons/validate", {
-        courseId: course.id,
-        code: couponCode.trim(),
-      })
-      setAppliedCoupon(result)
-    } catch (err) {
-      setAppliedCoupon({ valid: false, message: err instanceof Error ? err.message : "Failed to validate coupon" })
-    } finally {
-      setCouponValidating(false)
-    }
   }
 
   async function enroll() {
@@ -63,24 +31,8 @@ export function EnrollPanel({ course, enrollment }: { course: ContractCourse; en
     try {
       await apiSend<ContractEnrollment>("POST", "/enrollments", {
         courseId: course.id,
-        enrollmentType: isFree ? "free" : "paid",
+        enrollmentType: "free",
       })
-      if (!isFree) {
-        const order = await apiSend<ContractOrder>("POST", "/orders", {
-          courseId: course.id,
-          couponCode: appliedCoupon?.valid ? couponCode.trim() : undefined,
-        })
-        setShowPaidConfirm(false)
-        setCouponCode("")
-        setAppliedCoupon(null)
-        if (order) {
-          setCreatedOrder(order)
-          invalidate()
-          return
-        }
-        return
-      }
-      setShowPaidConfirm(false)
       toast.success("Enrolled successfully", { description: "Awaiting organizer approval." })
       invalidate()
     } catch (err) {
@@ -98,7 +50,7 @@ export function EnrollPanel({ course, enrollment }: { course: ContractCourse; en
       toast.success("Enrollment cancelled")
       invalidate()
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to cancel enrollment")
+      toast.error(err instanceof Error ? err.message : "Failed to cancel")
     } finally {
       setBusy(false)
     }
@@ -153,7 +105,7 @@ export function EnrollPanel({ course, enrollment }: { course: ContractCourse; en
       <div className="space-y-2">
         <p className="text-sm text-muted-foreground">Pendaftaran Anda dibatalkan.</p>
         {!isRegisteredClosed && !isRegisteredNotOpen ? (
-          <Button disabled={busy} onClick={() => (isFree ? void enroll() : setShowPaidConfirm(true))}>
+          <Button disabled={busy} onClick={() => void enroll()}>
             Daftar Ulang
           </Button>
         ) : null}
@@ -175,7 +127,7 @@ export function EnrollPanel({ course, enrollment }: { course: ContractCourse; en
     )
   } else {
     body = (
-      <Button disabled={busy} onClick={() => (isFree ? void enroll() : setShowPaidConfirm(true))}>
+      <Button disabled={busy} onClick={() => void enroll()}>
         {busy ? "Mendaftar…" : "Daftar"}
       </Button>
     )
@@ -184,115 +136,8 @@ export function EnrollPanel({ course, enrollment }: { course: ContractCourse; en
   return (
     <Card>
       <CardContent className="flex flex-col items-start gap-4">
-        {course.price ? (
-          <div>
-            <p className="text-xs text-muted-foreground">Tuition Fee</p>
-            <p className="text-2xl font-semibold">{formatRupiah(course.price)}</p>
-          </div>
-        ) : (
-          <Badge variant="secondary">Free</Badge>
-        )}
+        <Badge variant="secondary">Gratis</Badge>
         {body}
-
-        {showPaidConfirm ? (
-          <div className="w-full space-y-3 rounded-lg border p-3">
-            <p className="text-sm font-medium">Confirm Enrollment</p>
-            <div className="flex gap-2">
-              <Input
-                id="coupon"
-                value={couponCode}
-                onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                placeholder="Kode kupon (opsional)"
-                className="font-mono uppercase"
-                disabled={appliedCoupon?.valid === true}
-              />
-              {appliedCoupon?.valid ? (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => {
-                    setAppliedCoupon(null)
-                    setCouponCode("")
-                  }}
-                >
-                  Hapus
-                </Button>
-              ) : (
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  disabled={!couponCode.trim() || couponValidating}
-                  onClick={() => void validateCoupon()}
-                >
-                  {couponValidating ? "Memeriksa..." : "Terapkan"}
-                </Button>
-              )}
-            </div>
-            {appliedCoupon?.valid && appliedCoupon.coupon ? (
-              <p className="text-xs text-primary">
-                Kupon &ldquo;{appliedCoupon.coupon.code}&rdquo; diterapkan
-                {appliedCoupon.coupon.description ? ` — ${appliedCoupon.coupon.description}` : ""}.
-              </p>
-            ) : null}
-            {appliedCoupon && !appliedCoupon.valid && appliedCoupon.message ? (
-              <p className="text-xs text-destructive">{appliedCoupon.message}</p>
-            ) : null}
-
-            <div className="rounded-md bg-muted p-3 text-sm">
-              {appliedCoupon?.valid && appliedCoupon.pricing ? (
-                <>
-                  <div className="flex items-center justify-between">
-                    <span>Harga Normal</span>
-                    <span className="line-through">{formatRupiah(appliedCoupon.pricing.originalPrice)}</span>
-                  </div>
-                  <div className="mt-1 flex items-center justify-between text-primary">
-                    <span>Diskon</span>
-                    <span>-{formatRupiah(appliedCoupon.pricing.discountAmount)}</span>
-                  </div>
-                  <div className="mt-2 flex items-center justify-between border-t pt-2">
-                    <span className="font-medium">Total Bayar</span>
-                    <span className="text-lg font-bold text-primary">
-                      {formatRupiah(appliedCoupon.pricing.finalPrice)}
-                    </span>
-                  </div>
-                </>
-              ) : (
-                <div className="flex items-center justify-between">
-                  <span className="font-medium">Total Bayar</span>
-                  <span className="text-lg font-bold text-primary">{formatRupiah(course.price ?? 0)}</span>
-                </div>
-              )}
-            </div>
-
-            <div className="flex gap-2">
-              <Button disabled={busy} onClick={() => void enroll()}>
-                {busy ? "Memproses..." : "Konfirmasi Pendaftaran"}
-              </Button>
-              <Button variant="outline" onClick={() => setShowPaidConfirm(false)}>
-                Batal
-              </Button>
-            </div>
-          </div>
-        ) : null}
-
-        {createdOrder ? (
-          <div className="w-full space-y-3 rounded-lg border border-primary/30 bg-primary/5 p-3">
-            <p className="text-sm font-medium">Selesaikan Pembayaran</p>
-            <p className="text-2xl font-bold text-primary">{formatRupiah(createdOrder.finalAmount)}</p>
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              Transfer sesuai jumlah di atas ke rekening penyelenggara, lalu tunggu konfirmasi. Setelah lunas dan Anda
-              disetujui sebagai peserta, materi pelatihan terbuka otomatis.
-            </p>
-            <div className="flex gap-2">
-              <Button size="sm" nativeButton={false} render={<Link to="/orders" />}>
-                Lihat Pesanan Saya
-              </Button>
-              <Button size="sm" variant="outline" onClick={() => setCreatedOrder(null)}>
-                Tutup
-              </Button>
-            </div>
-          </div>
-        ) : null}
       </CardContent>
     </Card>
   )

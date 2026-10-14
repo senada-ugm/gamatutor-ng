@@ -2,7 +2,6 @@ import { useState } from "react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 
-import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@workspace/ui/components/dialog"
 import { Skeleton } from "@workspace/ui/components/skeleton"
@@ -27,7 +26,7 @@ import type {
  * Graduating auto-issues a certificate server-side.
  */
 
-export function ParticipantsPanel({ courseId, coursePrice }: { courseId: string; coursePrice?: number | null }) {
+export function ParticipantsPanel({ courseId }: { courseId: string }) {
   const queryClient = useQueryClient()
   const confirm = useConfirm()
   const [selectedEnrollmentId, setSelectedEnrollmentId] = useState<string | null>(null)
@@ -141,8 +140,6 @@ export function ParticipantsPanel({ courseId, coursePrice }: { courseId: string;
             {rows.map((enrollment) => {
               const isActive = ["registered", "interviewed", "selected"].includes(enrollment.status)
               const profile = profiles.data?.get(enrollment.userId)
-              const isPaidCourse = (coursePrice ?? 0) > 0
-              const canGraduate = !isPaidCourse || Boolean(enrollment.isPaid)
 
               return (
                 <TableRow key={enrollment.id}>
@@ -151,14 +148,7 @@ export function ParticipantsPanel({ courseId, coursePrice }: { courseId: string;
                     {profile?.email ? <p className="text-xs text-muted-foreground">{profile.email}</p> : null}
                   </TableCell>
                   <TableCell>
-                    <div className="flex flex-col items-start gap-1">
-                      <EnrollmentStatusBadge status={enrollment.status} />
-                      {isPaidCourse ? (
-                        <Badge variant={enrollment.isPaid ? "default" : "destructive"}>
-                          {enrollment.isPaid ? "Lunas" : "Belum Bayar"}
-                        </Badge>
-                      ) : null}
-                    </div>
+                    <EnrollmentStatusBadge status={enrollment.status} />
                   </TableCell>
                   <TableCell className="hidden text-muted-foreground sm:table-cell">
                     {formatCourseDate(enrollment.enrolledAt, { full: false })}
@@ -208,8 +198,7 @@ export function ParticipantsPanel({ courseId, coursePrice }: { courseId: string;
                         <Button
                           size="sm"
                           variant="outline"
-                          disabled={updateStatus.isPending || !canGraduate}
-                          title={!canGraduate ? "Peserta belum melunasi pembayaran" : undefined}
+                          disabled={updateStatus.isPending}
                           onClick={() =>
                             updateStatus.mutate({
                               id: enrollment.id,
@@ -224,8 +213,7 @@ export function ParticipantsPanel({ courseId, coursePrice }: { courseId: string;
                         <Button
                           size="sm"
                           variant="ghost"
-                          disabled={issueCertificate.isPending || !canGraduate}
-                          title={!canGraduate ? "Peserta belum melunasi pembayaran" : undefined}
+                          disabled={issueCertificate.isPending}
                           onClick={() => issueCertificate.mutate(enrollment.id)}
                         >
                           Terbitkan Sertifikat
@@ -304,14 +292,7 @@ export function ParticipantsPanel({ courseId, coursePrice }: { courseId: string;
                   </div>
                   <div>
                     <span className="text-xs text-muted-foreground">Status</span>
-                    <div className="mt-0.5 flex items-center gap-1.5">
-                      <EnrollmentStatusBadge status={enrollmentDetail.data.status} />
-                      {(coursePrice ?? 0) > 0 ? (
-                        <Badge variant={enrollmentDetail.data.isPaid ? "default" : "destructive"}>
-                          {enrollmentDetail.data.isPaid ? "Lunas" : "Belum Bayar"}
-                        </Badge>
-                      ) : null}
-                    </div>
+                    <EnrollmentStatusBadge status={enrollmentDetail.data.status} />
                   </div>
                   <div>
                     <span className="text-xs text-muted-foreground">Tanggal Terdaftar</span>

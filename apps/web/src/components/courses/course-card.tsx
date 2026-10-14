@@ -5,7 +5,6 @@ import type { ContractCourse } from "@workspace/contracts/domain"
 
 import { CourseThumbnail } from "./course-thumbnail"
 import { InstitutionLogo } from "./institution-logo"
-import { formatRupiah } from "@/lib/format"
 import { LEVEL_LABELS } from "@/lib/labels"
 
 export function CourseCard({ course }: { course: ContractCourse }) {
@@ -20,15 +19,9 @@ export function CourseCard({ course }: { course: ContractCourse }) {
           </div>
           <div className="flex items-start justify-between gap-2">
             <h3 className="line-clamp-2 leading-snug font-medium">{course.title}</h3>
-            {course.price ? (
-              <Badge variant="secondary" className="shrink-0">
-                {formatRupiah(course.price)}
-              </Badge>
-            ) : (
-              <Badge variant="outline" className="shrink-0">
-                Gratis
-              </Badge>
-            )}
+            <Badge variant="outline" className="shrink-0">
+              Gratis
+            </Badge>
           </div>
           {course.shortDescription ? (
             <p className="line-clamp-2 text-sm text-muted-foreground">{course.shortDescription}</p>

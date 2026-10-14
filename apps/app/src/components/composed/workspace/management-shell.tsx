@@ -142,14 +142,6 @@ export function ManagementShell() {
                     <span>Peserta</span>
                     {isAllInstitutions ? <span className="text-[10px] opacity-75">Per Institusi</span> : null}
                   </Link>
-                  <Link
-                    to="/institution/pembayaran"
-                    data-sidebar="menu-button"
-                    className={verticalTabClass(!!matchRoute({ to: "/institution/pembayaran" }))}
-                  >
-                    <span>Pembayaran</span>
-                    {isAllInstitutions ? <span className="text-[10px] opacity-75">Per Institusi</span> : null}
-                  </Link>
                 </div>
 
                 {isAdmin ? (

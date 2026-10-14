@@ -43,6 +43,13 @@
       "when": 1791831060474,
       "tag": "0005_busy_doorman",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1791998535075,
+      "tag": "0006_lumpy_piledriver",
+      "breakpoints": true
     }
   ]
 }

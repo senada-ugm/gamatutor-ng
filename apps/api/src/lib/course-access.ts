@@ -2,7 +2,6 @@ import { and, eq } from "drizzle-orm"
 import { db } from "../db/index.js"
 import { courseInstructors, courses, enrollments, institutionOwnerships } from "../db/app-schema.js"
 import { ForbiddenError, NotFoundError } from "./errors.js"
-import { hasPaidOrder } from "../modules/payments/services/payments.service.js"
 
 type ActingUser = { id: string; role?: string | null; email?: string | null }
 
@@ -129,14 +128,6 @@ export async function assertIsEnrolledParticipant(user: ActingUser, courseId: st
     .limit(1)
   if (!enrollment || !(PARTICIPANT_STATUSES as readonly string[]).includes(enrollment.status)) {
     throw new ForbiddenError("You are not an active participant in this course")
-  }
-
-  // Paid courses additionally require a paid order — apply and selection
-  // are free, money unlocks content. One indexed lookup, only for priced
-  // courses (see payments.service.ts's hasPaidOrder).
-  const [course] = await db.select({ price: courses.price }).from(courses).where(eq(courses.id, courseId)).limit(1)
-  if ((course?.price ?? 0) > 0 && !(await hasPaidOrder(user.id, courseId))) {
-    throw new ForbiddenError("This course requires payment before content unlocks — complete your order first")
   }
 }
 

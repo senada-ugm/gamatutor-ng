@@ -726,14 +726,12 @@ export function LandingPage() {
                           >
                             {c.courseType === "offline" ? "Luring (Tatap Muka)" : "Daring Mandiri"}
                           </Badge>
-                          {c.price === 0 || !c.price ? (
-                            <Badge
-                              variant="outline"
-                              className="border-[#5bb4b2]/40 bg-teal-50/50 text-[11px] font-semibold text-[#137a77] dark:bg-teal-950/30 dark:text-teal-300"
-                            >
-                              Gratis
-                            </Badge>
-                          ) : null}
+                          <Badge
+                            variant="outline"
+                            className="border-[#5bb4b2]/40 bg-teal-50/50 text-[11px] font-semibold text-[#137a77] dark:bg-teal-950/30 dark:text-teal-300"
+                          >
+                            Gratis
+                          </Badge>
                         </div>
 
                         <h3 className="text-base leading-snug font-bold text-[#0f2a44] dark:text-white">{c.title}</h3>

@@ -8,9 +8,8 @@
  *
  * As admin: dashboard stats, user suspend/reactivate, institution
  * create/edit, platform settings save, audit trail. As the seeded
- * learner: catalog -> enroll free course -> wishlist, paid course ->
- * coupon -> order -> my-orders, announcement visible in the player,
- * course report tab, certificate view + public verify.
+ * learner: catalog -> enroll course, announcement visible in the
+ * player, course report tab, certificate view + public verify.
  */
 import { chromium } from "playwright"
 
@@ -47,9 +46,8 @@ await login(page, ADMIN)
 
 // ================= ADMIN DASHBOARD =================
 await page.goto(`${BASE}/admin`, { timeout: 30000 })
-await expect("admin dashboard renders overview + financial stats", async () => {
+await expect("admin dashboard renders overview stats", async () => {
   await page.getByText("Tingkat Penyelesaian").waitFor({ timeout: 8000 })
-  await page.getByText("Ringkasan Keuangan").waitFor({ timeout: 8000 })
 })
 
 // ================= ADMIN USERS =================
@@ -125,25 +123,12 @@ const paidCourseRes = await page.request.post(`${API}/v1/courses`, {
     courseType: "online",
     isDisabilityFriendly: false,
     supportedDisabilityTypes: [],
-    price: 100000,
   },
 })
 const paidCourseId = (await paidCourseRes.json()).data.id
 for (const id of [freeCourseId, paidCourseId]) {
   await page.request.post(`${API}/v1/courses/${id}/publish`)
 }
-
-// Coupon for the paid course — created through the editor's Kupon tab UI
-const couponCode = `SMOKEWS${STAMP}`
-await page.goto(`${BASE}/instructor/courses/${paidCourseId}/editor/kupon`, { timeout: 30000 })
-await page.getByRole("button", { name: "Kupon Baru" }).click()
-await page.locator("#coupon-code").fill(couponCode)
-await page.locator("#coupon-value").fill("20")
-await page.getByRole("button", { name: "Buat Kupon", exact: true }).click()
-await expect("coupon creation through the editor's Kupon tab persists", async () => {
-  await page.getByText(couponCode).waitFor({ timeout: 8000 })
-  await page.getByText("Diskon 20%").waitFor({ timeout: 8000 })
-})
 
 // Published announcement + module on the free course (for the player check)
 const moduleRes = await page.request.post(`${API}/v1/courses/${freeCourseId}/modules`, { data: { title: "Modul 1" } })
@@ -167,7 +152,7 @@ await expect("catalog lists the seeded courses", async () => {
   await page.getByText(`Smoke WS Paid ${STAMP}`).waitFor({ timeout: 8000 })
 })
 
-// --- Free course: enroll + wishlist ---
+// --- Free course: enroll ---
 await page.getByText(`Smoke WS Free ${STAMP}`).click()
 await expect("course detail renders with syllabus", async () => {
   await page.getByText("Modul 1").waitFor({ timeout: 8000 })
@@ -176,31 +161,12 @@ await page.getByRole("button", { name: "Daftar", exact: true }).click()
 await expect("free enroll lands in Menunggu persetujuan", async () => {
   await page.getByText("Menunggu persetujuan").waitFor({ timeout: 8000 })
 })
-await page.getByRole("button", { name: "Simpan ke Wishlist" }).click()
-await expect("wishlist toggle saves", async () => {
-  await page.getByRole("button", { name: "Hapus dari Wishlist" }).waitFor({ timeout: 8000 })
-})
-await page.goto(`${BASE}/wishlist`, { timeout: 30000 })
-await expect("wishlist page lists the saved course", async () => {
-  await page.getByText(`Smoke WS Free ${STAMP}`).waitFor({ timeout: 8000 })
-})
 
-// --- Paid course: coupon -> order ---
+// --- Second course: instant online enrollment ---
 await page.goto(`${BASE}/courses/${paidCourseId}`, { timeout: 30000 })
 await page.getByRole("button", { name: "Daftar", exact: true }).click()
-await page.locator("#coupon").fill(couponCode)
-await page.getByRole("button", { name: "Terapkan" }).click()
-await expect("valid coupon applies with discounted total (Rp80.000)", async () => {
-  await page.getByText("80.000").waitFor({ timeout: 8000 })
-})
-await page.getByRole("button", { name: "Konfirmasi Pendaftaran" }).click()
-await expect("order created with payment instructions", async () => {
-  await page.getByText("Selesaikan Pembayaran").waitFor({ timeout: 10000 })
-})
-await page.goto(`${BASE}/orders`, { timeout: 30000 })
-await expect("my orders shows the pending discounted order", async () => {
-  await page.getByText("Menunggu Pembayaran").first().waitFor({ timeout: 8000 })
-  await page.getByText("80.000").first().waitFor({ timeout: 8000 })
+await expect("online (free) enroll lands directly in the course", async () => {
+  await page.getByText("You are enrolled as an active participant.").waitFor({ timeout: 8000 })
 })
 
 // --- Notifications inbox renders ---

@@ -2,7 +2,7 @@
 
 import { client } from './client.gen.js';
 import { type Client, type ClientMeta, formDataBodySerializer, type Options as Options2, type RequestResult, type TDataShape } from './client/index.js';
-import type { AdminReportsApiGetData, AdminReportsApiGetErrors, AdminReportsApiGetResponses, AnnouncementApiDeleteData, AnnouncementApiDeleteErrors, AnnouncementApiDeleteResponses, AnnouncementApiPinData, AnnouncementApiPinErrors, AnnouncementApiPinResponses, AnnouncementApiPublishData, AnnouncementApiPublishErrors, AnnouncementApiPublishResponses, AnnouncementApiUnpinData, AnnouncementApiUnpinErrors, AnnouncementApiUnpinResponses, AssessmentsApiCreateData, AssessmentsApiCreateErrors, AssessmentsApiCreateResponses, AssessmentsApiListData, AssessmentsApiListErrors, AssessmentsApiListResponses, AssignmentsApiDeleteData, AssignmentsApiDeleteErrors, AssignmentsApiDeleteResponses, AssignmentsApiGetData, AssignmentsApiGetErrors, AssignmentsApiGetResponses, AssignmentsApiUpdateData, AssignmentsApiUpdateErrors, AssignmentsApiUpdateResponses, AssignmentSubmissionApiGetData, AssignmentSubmissionApiGetErrors, AssignmentSubmissionApiGetResponses, AssignmentSubmissionApiGradeData, AssignmentSubmissionApiGradeErrors, AssignmentSubmissionApiGradeResponses, AssignmentSubmissionApiReopenData, AssignmentSubmissionApiReopenErrors, AssignmentSubmissionApiReopenResponses, AssignmentSubmissionsApiListData, AssignmentSubmissionsApiListErrors, AssignmentSubmissionsApiListResponses, AssignmentSubmissionsApiSubmitData, AssignmentSubmissionsApiSubmitErrors, AssignmentSubmissionsApiSubmitResponses, AttendanceSessionsApiActivateData, AttendanceSessionsApiActivateErrors, AttendanceSessionsApiActivateResponses, AttendanceSessionsApiCheckInData, AttendanceSessionsApiCheckInErrors, AttendanceSessionsApiCheckInResponses, AttendanceSessionsApiGetData, AttendanceSessionsApiGetErrors, AttendanceSessionsApiGetResponses, AttendanceSessionsApiMarkRecordData, AttendanceSessionsApiMarkRecordErrors, AttendanceSessionsApiMarkRecordResponses, AttendanceSessionsApiMyRecordData, AttendanceSessionsApiMyRecordErrors, AttendanceSessionsApiMyRecordResponses, AttendanceSessionsApiRosterData, AttendanceSessionsApiRosterErrors, AttendanceSessionsApiRosterResponses, AttendanceSessionsApiUpdateData, AttendanceSessionsApiUpdateErrors, AttendanceSessionsApiUpdateResponses, AuditLogApiListData, AuditLogApiListErrors, AuditLogApiListResponses, CertificatesApiGetData, CertificatesApiGetErrors, CertificatesApiGetResponses, CertificatesApiVerifyData, CertificatesApiVerifyErrors, CertificatesApiVerifyResponses, CertificateSettingsApiGetData, CertificateSettingsApiGetErrors, CertificateSettingsApiGetResponses, CertificateSettingsApiUpdateData, CertificateSettingsApiUpdateErrors, CertificateSettingsApiUpdateResponses, CouponsApiCreateData, CouponsApiCreateErrors, CouponsApiCreateResponses, CouponsApiDeleteData, CouponsApiDeleteErrors, CouponsApiDeleteResponses, CouponsApiGetData, CouponsApiGetErrors, CouponsApiGetResponses, CouponsApiListData, CouponsApiListErrors, CouponsApiListResponses, CouponsApiUpdateData, CouponsApiUpdateErrors, CouponsApiUpdateResponses, CouponsApiValidateData, CouponsApiValidateErrors, CouponsApiValidateResponses, CourseAnnouncementsApiCreateData, CourseAnnouncementsApiCreateErrors, CourseAnnouncementsApiCreateResponses, CourseAnnouncementsApiListData, CourseAnnouncementsApiListErrors, CourseAnnouncementsApiListResponses, CourseAssignmentsApiCreateData, CourseAssignmentsApiCreateErrors, CourseAssignmentsApiCreateResponses, CourseAssignmentsApiListData, CourseAssignmentsApiListErrors, CourseAssignmentsApiListResponses, CourseAttendanceSessionsApiCreateData, CourseAttendanceSessionsApiCreateErrors, CourseAttendanceSessionsApiCreateResponses, CourseAttendanceSessionsApiListData, CourseAttendanceSessionsApiListErrors, CourseAttendanceSessionsApiListResponses, CourseCertificatesApiIssueData, CourseCertificatesApiIssueErrors, CourseCertificatesApiIssueResponses, CourseDiscussionsApiCreateData, CourseDiscussionsApiCreateErrors, CourseDiscussionsApiCreateResponses, CourseDiscussionsApiListData, CourseDiscussionsApiListErrors, CourseDiscussionsApiListResponses, CourseInstructorsApiCreateData, CourseInstructorsApiCreateErrors, CourseInstructorsApiCreateResponses, CourseInstructorsApiInstitutionRosterData, CourseInstructorsApiInstitutionRosterErrors, CourseInstructorsApiInstitutionRosterResponses, CourseInstructorsApiListData, CourseInstructorsApiListErrors, CourseInstructorsApiListMineData, CourseInstructorsApiListMineErrors, CourseInstructorsApiListMineResponses, CourseInstructorsApiListResponses, CourseInstructorsApiRemoveData, CourseInstructorsApiRemoveErrors, CourseInstructorsApiRemoveResponses, CourseInstructorsApiUpdateRoleData, CourseInstructorsApiUpdateRoleErrors, CourseInstructorsApiUpdateRoleResponses, CourseModulesApiCreateData, CourseModulesApiCreateErrors, CourseModulesApiCreateResponses, CourseQuizzesApiCreateData, CourseQuizzesApiCreateErrors, CourseQuizzesApiCreateResponses, CourseQuizzesApiListData, CourseQuizzesApiListErrors, CourseQuizzesApiListResponses, CourseReportsApiGetData, CourseReportsApiGetErrors, CourseReportsApiGetResponses, CoursesApiCreateData, CoursesApiCreateErrors, CoursesApiCreateResponses, CoursesApiGetData, CoursesApiGetErrors, CoursesApiGetResponses, CoursesApiListData, CoursesApiListErrors, CoursesApiListResponses, CoursesApiPublishData, CoursesApiPublishErrors, CoursesApiPublishResponses, CoursesApiUnpublishData, CoursesApiUnpublishErrors, CoursesApiUnpublishResponses, CoursesApiUpdateData, CoursesApiUpdateErrors, CoursesApiUpdateResponses, DiscussionRepliesApiDeleteData, DiscussionRepliesApiDeleteErrors, DiscussionRepliesApiDeleteResponses, DiscussionsApiCloseData, DiscussionsApiCloseErrors, DiscussionsApiCloseResponses, DiscussionsApiDeleteData, DiscussionsApiDeleteErrors, DiscussionsApiDeleteResponses, DiscussionsApiGetData, DiscussionsApiGetErrors, DiscussionsApiGetResponses, DiscussionsApiPinData, DiscussionsApiPinErrors, DiscussionsApiPinResponses, DiscussionsApiReopenData, DiscussionsApiReopenErrors, DiscussionsApiReopenResponses, DiscussionsApiReplyData, DiscussionsApiReplyErrors, DiscussionsApiReplyResponses, DiscussionsApiResolveData, DiscussionsApiResolveErrors, DiscussionsApiResolveResponses, DiscussionsApiUnpinData, DiscussionsApiUnpinErrors, DiscussionsApiUnpinResponses, DiscussionsApiUnresolveData, DiscussionsApiUnresolveErrors, DiscussionsApiUnresolveResponses, EnrollmentsApiCreateData, EnrollmentsApiCreateErrors, EnrollmentsApiCreateResponses, EnrollmentsApiDeleteData, EnrollmentsApiDeleteErrors, EnrollmentsApiDeleteResponses, EnrollmentsApiGetData, EnrollmentsApiGetErrors, EnrollmentsApiGetResponses, EnrollmentsApiListData, EnrollmentsApiListErrors, EnrollmentsApiListResponses, EnrollmentsApiUpdateData, EnrollmentsApiUpdateErrors, EnrollmentsApiUpdateResponses, FinancialReportsApiGetData, FinancialReportsApiGetErrors, FinancialReportsApiGetResponses, HealthApiCheckData, HealthApiCheckResponses, InstitutionOwnershipsApiGrantData, InstitutionOwnershipsApiGrantErrors, InstitutionOwnershipsApiGrantResponses, InstitutionOwnershipsApiListByUserData, InstitutionOwnershipsApiListByUserErrors, InstitutionOwnershipsApiListByUserResponses, InstitutionReportsApiGetData, InstitutionReportsApiGetErrors, InstitutionReportsApiGetResponses, InstitutionRequestsApiApproveData, InstitutionRequestsApiApproveErrors, InstitutionRequestsApiApproveResponses, InstitutionRequestsApiCreateData, InstitutionRequestsApiCreateErrors, InstitutionRequestsApiCreateResponses, InstitutionRequestsApiGetData, InstitutionRequestsApiGetErrors, InstitutionRequestsApiGetResponses, InstitutionRequestsApiListData, InstitutionRequestsApiListErrors, InstitutionRequestsApiListResponses, InstitutionRequestsApiRejectData, InstitutionRequestsApiRejectErrors, InstitutionRequestsApiRejectResponses, InstitutionsApiCreateData, InstitutionsApiCreateErrors, InstitutionsApiCreateResponses, InstitutionsApiGetData, InstitutionsApiGetErrors, InstitutionsApiGetResponses, InstitutionsApiListData, InstitutionsApiListErrors, InstitutionsApiListResponses, InstitutionsApiUpdateData, InstitutionsApiUpdateErrors, InstitutionsApiUpdateResponses, LessonProgressApiCompleteData, LessonProgressApiCompleteErrors, LessonProgressApiCompleteResponses, LessonProgressApiListData, LessonProgressApiListErrors, LessonProgressApiListResponses, LessonProgressApiUncompleteData, LessonProgressApiUncompleteErrors, LessonProgressApiUncompleteResponses, LessonsApiDeleteData, LessonsApiDeleteErrors, LessonsApiDeleteResponses, LessonsApiUpdateData, LessonsApiUpdateErrors, LessonsApiUpdateResponses, ModuleLessonsApiCreateData, ModuleLessonsApiCreateErrors, ModuleLessonsApiCreateResponses, ModulesApiDeleteData, ModulesApiDeleteErrors, ModulesApiDeleteResponses, ModulesApiUpdateData, ModulesApiUpdateErrors, ModulesApiUpdateResponses, NotificationsApiListData, NotificationsApiListErrors, NotificationsApiListResponses, NotificationsApiMarkAllReadData, NotificationsApiMarkAllReadErrors, NotificationsApiMarkAllReadResponses, NotificationsApiMarkReadData, NotificationsApiMarkReadErrors, NotificationsApiMarkReadResponses, OrdersApiCancelData, OrdersApiCancelErrors, OrdersApiCancelResponses, OrdersApiConfirmPaymentData, OrdersApiConfirmPaymentErrors, OrdersApiConfirmPaymentResponses, OrdersApiCreateCheckoutData, OrdersApiCreateCheckoutErrors, OrdersApiCreateCheckoutResponses, OrdersApiCreateData, OrdersApiCreateErrors, OrdersApiCreateResponses, OrdersApiGetData, OrdersApiGetErrors, OrdersApiGetResponses, OrdersApiListData, OrdersApiListErrors, OrdersApiListResponses, OrdersApiRefundData, OrdersApiRefundErrors, OrdersApiRefundResponses, OrdersApiSubmitProofData, OrdersApiSubmitProofErrors, OrdersApiSubmitProofResponses, ParticipantProfilesApiGetData, ParticipantProfilesApiGetErrors, ParticipantProfilesApiGetResponses, ParticipantProfilesApiListData, ParticipantProfilesApiListErrors, ParticipantProfilesApiListResponses, ParticipantProfilesApiUpdateData, ParticipantProfilesApiUpdateErrors, ParticipantProfilesApiUpdateResponses, PlatformSettingsApiGetData, PlatformSettingsApiGetErrors, PlatformSettingsApiGetResponses, PlatformSettingsApiUpdateData, PlatformSettingsApiUpdateErrors, PlatformSettingsApiUpdateResponses, QuizAttemptApiGetData, QuizAttemptApiGetErrors, QuizAttemptApiGetResponses, QuizAttemptApiGradeData, QuizAttemptApiGradeErrors, QuizAttemptApiGradeResponses, QuizAttemptApiResetData, QuizAttemptApiResetErrors, QuizAttemptApiResetResponses, QuizAttemptApiSubmitData, QuizAttemptApiSubmitErrors, QuizAttemptApiSubmitResponses, QuizAttemptsApiListData, QuizAttemptsApiListErrors, QuizAttemptsApiListResponses, QuizAttemptsApiStartData, QuizAttemptsApiStartErrors, QuizAttemptsApiStartResponses, QuizQuestionApiDeleteData, QuizQuestionApiDeleteErrors, QuizQuestionApiDeleteResponses, QuizQuestionApiUpdateData, QuizQuestionApiUpdateErrors, QuizQuestionApiUpdateResponses, QuizQuestionsApiCreateData, QuizQuestionsApiCreateErrors, QuizQuestionsApiCreateResponses, QuizzesApiDeleteData, QuizzesApiDeleteErrors, QuizzesApiDeleteResponses, QuizzesApiGetData, QuizzesApiGetErrors, QuizzesApiGetResponses, QuizzesApiUpdateData, QuizzesApiUpdateErrors, QuizzesApiUpdateResponses, TelemetryApiCreateData, TelemetryApiCreateErrors, TelemetryApiCreateResponses, UploadsApiCreateData, UploadsApiCreateErrors, UploadsApiCreateResponses, UploadsApiDeleteData, UploadsApiDeleteErrors, UploadsApiDeleteResponses, UploadsApiGetData, UploadsApiGetErrors, UploadsApiGetResponses, UsersApiCapabilitiesData, UsersApiCapabilitiesErrors, UsersApiCapabilitiesResponses, UsersApiGetData, UsersApiGetErrors, UsersApiGetResponses, UsersApiListData, UsersApiListErrors, UsersApiListResponses, UsersApiReactivateData, UsersApiReactivateErrors, UsersApiReactivateResponses, UsersApiSuspendData, UsersApiSuspendErrors, UsersApiSuspendResponses, WishlistApiAddData, WishlistApiAddErrors, WishlistApiAddResponses, WishlistApiListData, WishlistApiListErrors, WishlistApiListResponses, WishlistApiRemoveData, WishlistApiRemoveErrors, WishlistApiRemoveResponses } from './types.gen.js';
+import type { AdminReportsApiGetData, AdminReportsApiGetErrors, AdminReportsApiGetResponses, AnnouncementApiDeleteData, AnnouncementApiDeleteErrors, AnnouncementApiDeleteResponses, AnnouncementApiPinData, AnnouncementApiPinErrors, AnnouncementApiPinResponses, AnnouncementApiPublishData, AnnouncementApiPublishErrors, AnnouncementApiPublishResponses, AnnouncementApiUnpinData, AnnouncementApiUnpinErrors, AnnouncementApiUnpinResponses, AssessmentsApiCreateData, AssessmentsApiCreateErrors, AssessmentsApiCreateResponses, AssessmentsApiListData, AssessmentsApiListErrors, AssessmentsApiListResponses, AssignmentsApiDeleteData, AssignmentsApiDeleteErrors, AssignmentsApiDeleteResponses, AssignmentsApiGetData, AssignmentsApiGetErrors, AssignmentsApiGetResponses, AssignmentsApiUpdateData, AssignmentsApiUpdateErrors, AssignmentsApiUpdateResponses, AssignmentSubmissionApiGetData, AssignmentSubmissionApiGetErrors, AssignmentSubmissionApiGetResponses, AssignmentSubmissionApiGradeData, AssignmentSubmissionApiGradeErrors, AssignmentSubmissionApiGradeResponses, AssignmentSubmissionApiReopenData, AssignmentSubmissionApiReopenErrors, AssignmentSubmissionApiReopenResponses, AssignmentSubmissionsApiListData, AssignmentSubmissionsApiListErrors, AssignmentSubmissionsApiListResponses, AssignmentSubmissionsApiSubmitData, AssignmentSubmissionsApiSubmitErrors, AssignmentSubmissionsApiSubmitResponses, AttendanceSessionsApiActivateData, AttendanceSessionsApiActivateErrors, AttendanceSessionsApiActivateResponses, AttendanceSessionsApiCheckInData, AttendanceSessionsApiCheckInErrors, AttendanceSessionsApiCheckInResponses, AttendanceSessionsApiGetData, AttendanceSessionsApiGetErrors, AttendanceSessionsApiGetResponses, AttendanceSessionsApiMarkRecordData, AttendanceSessionsApiMarkRecordErrors, AttendanceSessionsApiMarkRecordResponses, AttendanceSessionsApiMyRecordData, AttendanceSessionsApiMyRecordErrors, AttendanceSessionsApiMyRecordResponses, AttendanceSessionsApiRosterData, AttendanceSessionsApiRosterErrors, AttendanceSessionsApiRosterResponses, AttendanceSessionsApiUpdateData, AttendanceSessionsApiUpdateErrors, AttendanceSessionsApiUpdateResponses, AuditLogApiListData, AuditLogApiListErrors, AuditLogApiListResponses, CertificatesApiGetData, CertificatesApiGetErrors, CertificatesApiGetResponses, CertificatesApiVerifyData, CertificatesApiVerifyErrors, CertificatesApiVerifyResponses, CertificateSettingsApiGetData, CertificateSettingsApiGetErrors, CertificateSettingsApiGetResponses, CertificateSettingsApiUpdateData, CertificateSettingsApiUpdateErrors, CertificateSettingsApiUpdateResponses, CourseAnnouncementsApiCreateData, CourseAnnouncementsApiCreateErrors, CourseAnnouncementsApiCreateResponses, CourseAnnouncementsApiListData, CourseAnnouncementsApiListErrors, CourseAnnouncementsApiListResponses, CourseAssignmentsApiCreateData, CourseAssignmentsApiCreateErrors, CourseAssignmentsApiCreateResponses, CourseAssignmentsApiListData, CourseAssignmentsApiListErrors, CourseAssignmentsApiListResponses, CourseAttendanceSessionsApiCreateData, CourseAttendanceSessionsApiCreateErrors, CourseAttendanceSessionsApiCreateResponses, CourseAttendanceSessionsApiListData, CourseAttendanceSessionsApiListErrors, CourseAttendanceSessionsApiListResponses, CourseCertificatesApiIssueData, CourseCertificatesApiIssueErrors, CourseCertificatesApiIssueResponses, CourseDiscussionsApiCreateData, CourseDiscussionsApiCreateErrors, CourseDiscussionsApiCreateResponses, CourseDiscussionsApiListData, CourseDiscussionsApiListErrors, CourseDiscussionsApiListResponses, CourseInstructorsApiCreateData, CourseInstructorsApiCreateErrors, CourseInstructorsApiCreateResponses, CourseInstructorsApiInstitutionRosterData, CourseInstructorsApiInstitutionRosterErrors, CourseInstructorsApiInstitutionRosterResponses, CourseInstructorsApiListData, CourseInstructorsApiListErrors, CourseInstructorsApiListMineData, CourseInstructorsApiListMineErrors, CourseInstructorsApiListMineResponses, CourseInstructorsApiListResponses, CourseInstructorsApiRemoveData, CourseInstructorsApiRemoveErrors, CourseInstructorsApiRemoveResponses, CourseInstructorsApiUpdateRoleData, CourseInstructorsApiUpdateRoleErrors, CourseInstructorsApiUpdateRoleResponses, CourseModulesApiCreateData, CourseModulesApiCreateErrors, CourseModulesApiCreateResponses, CourseQuizzesApiCreateData, CourseQuizzesApiCreateErrors, CourseQuizzesApiCreateResponses, CourseQuizzesApiListData, CourseQuizzesApiListErrors, CourseQuizzesApiListResponses, CourseReportsApiGetData, CourseReportsApiGetErrors, CourseReportsApiGetResponses, CoursesApiCreateData, CoursesApiCreateErrors, CoursesApiCreateResponses, CoursesApiGetData, CoursesApiGetErrors, CoursesApiGetResponses, CoursesApiListData, CoursesApiListErrors, CoursesApiListResponses, CoursesApiPublishData, CoursesApiPublishErrors, CoursesApiPublishResponses, CoursesApiUnpublishData, CoursesApiUnpublishErrors, CoursesApiUnpublishResponses, CoursesApiUpdateData, CoursesApiUpdateErrors, CoursesApiUpdateResponses, DiscussionRepliesApiDeleteData, DiscussionRepliesApiDeleteErrors, DiscussionRepliesApiDeleteResponses, DiscussionsApiCloseData, DiscussionsApiCloseErrors, DiscussionsApiCloseResponses, DiscussionsApiDeleteData, DiscussionsApiDeleteErrors, DiscussionsApiDeleteResponses, DiscussionsApiGetData, DiscussionsApiGetErrors, DiscussionsApiGetResponses, DiscussionsApiPinData, DiscussionsApiPinErrors, DiscussionsApiPinResponses, DiscussionsApiReopenData, DiscussionsApiReopenErrors, DiscussionsApiReopenResponses, DiscussionsApiReplyData, DiscussionsApiReplyErrors, DiscussionsApiReplyResponses, DiscussionsApiResolveData, DiscussionsApiResolveErrors, DiscussionsApiResolveResponses, DiscussionsApiUnpinData, DiscussionsApiUnpinErrors, DiscussionsApiUnpinResponses, DiscussionsApiUnresolveData, DiscussionsApiUnresolveErrors, DiscussionsApiUnresolveResponses, EnrollmentsApiCreateData, EnrollmentsApiCreateErrors, EnrollmentsApiCreateResponses, EnrollmentsApiDeleteData, EnrollmentsApiDeleteErrors, EnrollmentsApiDeleteResponses, EnrollmentsApiGetData, EnrollmentsApiGetErrors, EnrollmentsApiGetResponses, EnrollmentsApiListData, EnrollmentsApiListErrors, EnrollmentsApiListResponses, EnrollmentsApiUpdateData, EnrollmentsApiUpdateErrors, EnrollmentsApiUpdateResponses, HealthApiCheckData, HealthApiCheckResponses, InstitutionOwnershipsApiGrantData, InstitutionOwnershipsApiGrantErrors, InstitutionOwnershipsApiGrantResponses, InstitutionOwnershipsApiListByUserData, InstitutionOwnershipsApiListByUserErrors, InstitutionOwnershipsApiListByUserResponses, InstitutionReportsApiGetData, InstitutionReportsApiGetErrors, InstitutionReportsApiGetResponses, InstitutionRequestsApiApproveData, InstitutionRequestsApiApproveErrors, InstitutionRequestsApiApproveResponses, InstitutionRequestsApiCreateData, InstitutionRequestsApiCreateErrors, InstitutionRequestsApiCreateResponses, InstitutionRequestsApiGetData, InstitutionRequestsApiGetErrors, InstitutionRequestsApiGetResponses, InstitutionRequestsApiListData, InstitutionRequestsApiListErrors, InstitutionRequestsApiListResponses, InstitutionRequestsApiRejectData, InstitutionRequestsApiRejectErrors, InstitutionRequestsApiRejectResponses, InstitutionsApiCreateData, InstitutionsApiCreateErrors, InstitutionsApiCreateResponses, InstitutionsApiGetData, InstitutionsApiGetErrors, InstitutionsApiGetResponses, InstitutionsApiListData, InstitutionsApiListErrors, InstitutionsApiListResponses, InstitutionsApiUpdateData, InstitutionsApiUpdateErrors, InstitutionsApiUpdateResponses, LessonProgressApiCompleteData, LessonProgressApiCompleteErrors, LessonProgressApiCompleteResponses, LessonProgressApiListData, LessonProgressApiListErrors, LessonProgressApiListResponses, LessonProgressApiUncompleteData, LessonProgressApiUncompleteErrors, LessonProgressApiUncompleteResponses, LessonsApiDeleteData, LessonsApiDeleteErrors, LessonsApiDeleteResponses, LessonsApiUpdateData, LessonsApiUpdateErrors, LessonsApiUpdateResponses, ModuleLessonsApiCreateData, ModuleLessonsApiCreateErrors, ModuleLessonsApiCreateResponses, ModulesApiDeleteData, ModulesApiDeleteErrors, ModulesApiDeleteResponses, ModulesApiUpdateData, ModulesApiUpdateErrors, ModulesApiUpdateResponses, NotificationsApiListData, NotificationsApiListErrors, NotificationsApiListResponses, NotificationsApiMarkAllReadData, NotificationsApiMarkAllReadErrors, NotificationsApiMarkAllReadResponses, NotificationsApiMarkReadData, NotificationsApiMarkReadErrors, NotificationsApiMarkReadResponses, ParticipantProfilesApiGetData, ParticipantProfilesApiGetErrors, ParticipantProfilesApiGetResponses, ParticipantProfilesApiListData, ParticipantProfilesApiListErrors, ParticipantProfilesApiListResponses, ParticipantProfilesApiUpdateData, ParticipantProfilesApiUpdateErrors, ParticipantProfilesApiUpdateResponses, PlatformSettingsApiGetData, PlatformSettingsApiGetErrors, PlatformSettingsApiGetResponses, PlatformSettingsApiUpdateData, PlatformSettingsApiUpdateErrors, PlatformSettingsApiUpdateResponses, QuizAttemptApiGetData, QuizAttemptApiGetErrors, QuizAttemptApiGetResponses, QuizAttemptApiGradeData, QuizAttemptApiGradeErrors, QuizAttemptApiGradeResponses, QuizAttemptApiResetData, QuizAttemptApiResetErrors, QuizAttemptApiResetResponses, QuizAttemptApiSubmitData, QuizAttemptApiSubmitErrors, QuizAttemptApiSubmitResponses, QuizAttemptsApiListData, QuizAttemptsApiListErrors, QuizAttemptsApiListResponses, QuizAttemptsApiStartData, QuizAttemptsApiStartErrors, QuizAttemptsApiStartResponses, QuizQuestionApiDeleteData, QuizQuestionApiDeleteErrors, QuizQuestionApiDeleteResponses, QuizQuestionApiUpdateData, QuizQuestionApiUpdateErrors, QuizQuestionApiUpdateResponses, QuizQuestionsApiCreateData, QuizQuestionsApiCreateErrors, QuizQuestionsApiCreateResponses, QuizzesApiDeleteData, QuizzesApiDeleteErrors, QuizzesApiDeleteResponses, QuizzesApiGetData, QuizzesApiGetErrors, QuizzesApiGetResponses, QuizzesApiUpdateData, QuizzesApiUpdateErrors, QuizzesApiUpdateResponses, TelemetryApiCreateData, TelemetryApiCreateErrors, TelemetryApiCreateResponses, UploadsApiCreateData, UploadsApiCreateErrors, UploadsApiCreateResponses, UploadsApiDeleteData, UploadsApiDeleteErrors, UploadsApiDeleteResponses, UploadsApiGetData, UploadsApiGetErrors, UploadsApiGetResponses, UsersApiCapabilitiesData, UsersApiCapabilitiesErrors, UsersApiCapabilitiesResponses, UsersApiGetData, UsersApiGetErrors, UsersApiGetResponses, UsersApiListData, UsersApiListErrors, UsersApiListResponses, UsersApiReactivateData, UsersApiReactivateErrors, UsersApiReactivateResponses, UsersApiSuspendData, UsersApiSuspendErrors, UsersApiSuspendResponses } from './types.gen.js';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -17,11 +17,6 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
      */
     meta?: keyof ClientMeta extends never ? Record<string, unknown> : ClientMeta;
 };
-
-/**
- * Platform money summary from paid/pending orders. Admin only.
- */
-export const financialReportsApiGet = <ThrowOnError extends boolean = false>(options?: Options<FinancialReportsApiGetData, ThrowOnError>): RequestResult<FinancialReportsApiGetResponses, FinancialReportsApiGetErrors, ThrowOnError> => (options?.client ?? client).get<FinancialReportsApiGetResponses, FinancialReportsApiGetErrors, ThrowOnError>({ url: '/admin/financial-summary', ...options });
 
 /**
  * Platform totals + 30-day growth for the admin dashboard. Admin only.
@@ -213,60 +208,6 @@ export const certificatesApiVerify = <ThrowOnError extends boolean = false>(opti
  * Fetches a certificate by id. Requires the recipient, an admin, or a course manager — the public path is /certificates/verify.
  */
 export const certificatesApiGet = <ThrowOnError extends boolean = false>(options: Options<CertificatesApiGetData, ThrowOnError>): RequestResult<CertificatesApiGetResponses, CertificatesApiGetErrors, ThrowOnError> => (options.client ?? client).get<CertificatesApiGetResponses, CertificatesApiGetErrors, ThrowOnError>({ url: '/certificates/{id}', ...options });
-
-/**
- * Lists coupons. Admin only.
- */
-export const couponsApiList = <ThrowOnError extends boolean = false>(options?: Options<CouponsApiListData, ThrowOnError>): RequestResult<CouponsApiListResponses, CouponsApiListErrors, ThrowOnError> => (options?.client ?? client).get<CouponsApiListResponses, CouponsApiListErrors, ThrowOnError>({ url: '/coupons', ...options });
-
-/**
- * Creates a coupon. Admin only.
- */
-export const couponsApiCreate = <ThrowOnError extends boolean = false>(options: Options<CouponsApiCreateData, ThrowOnError>): RequestResult<CouponsApiCreateResponses, CouponsApiCreateErrors, ThrowOnError> => (options.client ?? client).post<CouponsApiCreateResponses, CouponsApiCreateErrors, ThrowOnError>({
-    url: '/coupons',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Prices a course with a coupon code — the learner-facing "Terapkan"
- * button. Validates scope, window, quota, and per-user caps.
- */
-export const couponsApiValidate = <ThrowOnError extends boolean = false>(options: Options<CouponsApiValidateData, ThrowOnError>): RequestResult<CouponsApiValidateResponses, CouponsApiValidateErrors, ThrowOnError> => (options.client ?? client).post<CouponsApiValidateResponses, CouponsApiValidateErrors, ThrowOnError>({
-    url: '/coupons/validate',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Deletes a coupon. Admin only; refused while any order still
- * references it.
- */
-export const couponsApiDelete = <ThrowOnError extends boolean = false>(options: Options<CouponsApiDeleteData, ThrowOnError>): RequestResult<CouponsApiDeleteResponses, CouponsApiDeleteErrors, ThrowOnError> => (options.client ?? client).delete<CouponsApiDeleteResponses, CouponsApiDeleteErrors, ThrowOnError>({ url: '/coupons/{id}', ...options });
-
-/**
- * Reads one coupon. Admin only.
- */
-export const couponsApiGet = <ThrowOnError extends boolean = false>(options: Options<CouponsApiGetData, ThrowOnError>): RequestResult<CouponsApiGetResponses, CouponsApiGetErrors, ThrowOnError> => (options.client ?? client).get<CouponsApiGetResponses, CouponsApiGetErrors, ThrowOnError>({ url: '/coupons/{id}', ...options });
-
-/**
- * Updates a coupon's rules/validity. Admin only; code and scope are
- * immutable (redemptions reference the row, not the string).
- */
-export const couponsApiUpdate = <ThrowOnError extends boolean = false>(options: Options<CouponsApiUpdateData, ThrowOnError>): RequestResult<CouponsApiUpdateResponses, CouponsApiUpdateErrors, ThrowOnError> => (options.client ?? client).patch<CouponsApiUpdateResponses, CouponsApiUpdateErrors, ThrowOnError>({
-    url: '/coupons/{id}',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
 
 /**
  * Lists a course's instructors — active assignments and pending invites.
@@ -710,7 +651,7 @@ export const institutionsApiUpdate = <ThrowOnError extends boolean = false>(opti
 });
 
 /**
- * Funnel + money for one institution, broken down by course. The
+ * Funnel for one institution, broken down by course. The
  * institution's owners and admins only.
  */
 export const institutionReportsApiGet = <ThrowOnError extends boolean = false>(options: Options<InstitutionReportsApiGetData, ThrowOnError>): RequestResult<InstitutionReportsApiGetResponses, InstitutionReportsApiGetErrors, ThrowOnError> => (options.client ?? client).get<InstitutionReportsApiGetResponses, InstitutionReportsApiGetErrors, ThrowOnError>({ url: '/institutions/{institutionId}/report', ...options });
@@ -791,84 +732,6 @@ export const notificationsApiMarkAllRead = <ThrowOnError extends boolean = false
  * Marks one notification read. Own notifications only.
  */
 export const notificationsApiMarkRead = <ThrowOnError extends boolean = false>(options: Options<NotificationsApiMarkReadData, ThrowOnError>): RequestResult<NotificationsApiMarkReadResponses, NotificationsApiMarkReadErrors, ThrowOnError> => (options.client ?? client).post<NotificationsApiMarkReadResponses, NotificationsApiMarkReadErrors, ThrowOnError>({ url: '/notifications/{id}/read', ...options });
-
-/**
- * Lists orders. No params (or userId=self) = the caller's own;
- * courseId = a course's orders, course managers only;
- * institutionId = every order under one institution, its owners
- * (and admins) only.
- */
-export const ordersApiList = <ThrowOnError extends boolean = false>(options?: Options<OrdersApiListData, ThrowOnError>): RequestResult<OrdersApiListResponses, OrdersApiListErrors, ThrowOnError> => (options?.client ?? client).get<OrdersApiListResponses, OrdersApiListErrors, ThrowOnError>({ url: '/orders', ...options });
-
-/**
- * Creates the caller's pending order for a paid course. Amounts are
- * computed server-side from the course price and coupon — never
- * trusted from the client. One active order per (user, course).
- */
-export const ordersApiCreate = <ThrowOnError extends boolean = false>(options: Options<OrdersApiCreateData, ThrowOnError>): RequestResult<OrdersApiCreateResponses, OrdersApiCreateErrors, ThrowOnError> => (options.client ?? client).post<OrdersApiCreateResponses, OrdersApiCreateErrors, ThrowOnError>({
-    url: '/orders',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Reads one order. Order owner, admin, or the course's managers.
- */
-export const ordersApiGet = <ThrowOnError extends boolean = false>(options: Options<OrdersApiGetData, ThrowOnError>): RequestResult<OrdersApiGetResponses, OrdersApiGetErrors, ThrowOnError> => (options.client ?? client).get<OrdersApiGetResponses, OrdersApiGetErrors, ThrowOnError>({ url: '/orders/{id}', ...options });
-
-/**
- * Cancels a pending order. Order owner (while pending) or course
- * managers; releases the coupon redemption it consumed.
- */
-export const ordersApiCancel = <ThrowOnError extends boolean = false>(options: Options<OrdersApiCancelData, ThrowOnError>): RequestResult<OrdersApiCancelResponses, OrdersApiCancelErrors, ThrowOnError> => (options.client ?? client).post<OrdersApiCancelResponses, OrdersApiCancelErrors, ThrowOnError>({ url: '/orders/{id}/cancel', ...options });
-
-/**
- * Creates a hosted Stripe-compatible checkout session for a pending
- * order and returns its URL — the learner pays on the gateway's page
- * and the webhook flips the order to paid. Order owner only.
- */
-export const ordersApiCreateCheckout = <ThrowOnError extends boolean = false>(options: Options<OrdersApiCreateCheckoutData, ThrowOnError>): RequestResult<OrdersApiCreateCheckoutResponses, OrdersApiCreateCheckoutErrors, ThrowOnError> => (options.client ?? client).post<OrdersApiCreateCheckoutResponses, OrdersApiCreateCheckoutErrors, ThrowOnError>({ url: '/orders/{id}/checkout', ...options });
-
-/**
- * Institution-owner/admin confirmation of a received manual transfer —
- * flips pending to paid and records the confirmer, payment reference, and optional proof URL.
- */
-export const ordersApiConfirmPayment = <ThrowOnError extends boolean = false>(options: Options<OrdersApiConfirmPaymentData, ThrowOnError>): RequestResult<OrdersApiConfirmPaymentResponses, OrdersApiConfirmPaymentErrors, ThrowOnError> => (options.client ?? client).post<OrdersApiConfirmPaymentResponses, OrdersApiConfirmPaymentErrors, ThrowOnError>({
-    url: '/orders/{id}/confirm-payment',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Refunds a paid order. Course managers only; revokes the content
- * access the payment granted (refunded no longer unlocks content).
- */
-export const ordersApiRefund = <ThrowOnError extends boolean = false>(options: Options<OrdersApiRefundData, ThrowOnError>): RequestResult<OrdersApiRefundResponses, OrdersApiRefundErrors, ThrowOnError> => (options.client ?? client).post<OrdersApiRefundResponses, OrdersApiRefundErrors, ThrowOnError>({
-    url: '/orders/{id}/refund',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Learner submits their manual transfer reference/receipt proof for a pending order. Order owner only.
- */
-export const ordersApiSubmitProof = <ThrowOnError extends boolean = false>(options: Options<OrdersApiSubmitProofData, ThrowOnError>): RequestResult<OrdersApiSubmitProofResponses, OrdersApiSubmitProofErrors, ThrowOnError> => (options.client ?? client).post<OrdersApiSubmitProofResponses, OrdersApiSubmitProofErrors, ThrowOnError>({
-    url: '/orders/{id}/submit-proof',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
 
 /**
  * Batch read behind a roster page: the profiles for up to 200
@@ -1106,26 +969,3 @@ export const usersApiSuspend = <ThrowOnError extends boolean = false>(options: O
         ...options.headers
     }
 });
-
-/**
- * Lists the caller's wishlist, newest first.
- */
-export const wishlistApiList = <ThrowOnError extends boolean = false>(options?: Options<WishlistApiListData, ThrowOnError>): RequestResult<WishlistApiListResponses, WishlistApiListErrors, ThrowOnError> => (options?.client ?? client).get<WishlistApiListResponses, WishlistApiListErrors, ThrowOnError>({ url: '/wishlist', ...options });
-
-/**
- * Saves a course (idempotent — already-saved returns the existing
- * row). Draft/unpublished courses cannot be saved.
- */
-export const wishlistApiAdd = <ThrowOnError extends boolean = false>(options: Options<WishlistApiAddData, ThrowOnError>): RequestResult<WishlistApiAddResponses, WishlistApiAddErrors, ThrowOnError> => (options.client ?? client).post<WishlistApiAddResponses, WishlistApiAddErrors, ThrowOnError>({
-    url: '/wishlist',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Removes a course from the caller's wishlist.
- */
-export const wishlistApiRemove = <ThrowOnError extends boolean = false>(options: Options<WishlistApiRemoveData, ThrowOnError>): RequestResult<WishlistApiRemoveResponses, WishlistApiRemoveErrors, ThrowOnError> => (options.client ?? client).delete<WishlistApiRemoveResponses, WishlistApiRemoveErrors, ThrowOnError>({ url: '/wishlist/{courseId}', ...options });

@@ -4,19 +4,17 @@
  *   pnpm --filter api dev          # CORS_ORIGIN=http://localhost:3030
  *   pnpm --filter app dev
  *   node tests/smoke-app-editor-tabs.mjs
- * Signs in as the seeded admin, creates a PAID course through the UI,
- * then exercises Pembayaran (order -> confirm -> refund), Sertifikat
- * (signature with a real image upload, persisted across reload), and
- * Instruktur (invite an existing account -> active row -> remove).
+ * Signs in as the seeded admin, creates a course through the UI, then
+ * exercises Sertifikat (signature with a real image upload, persisted
+ * across reload) and Instruktur (invite an existing account -> active
+ * row -> remove).
  */
 import { chromium } from "playwright"
 
 const BASE = process.env.SMOKE_BASE_URL ?? "http://localhost:3030"
-const API = process.env.SMOKE_API_URL ?? "http://localhost:8000"
 const EMAIL = process.env.SMOKE_EMAIL ?? "admin@lms.dev"
 const PASSWORD = process.env.SMOKE_PASSWORD ?? "correcthorsebatterystaple"
 const COURSE_TITLE = `Smoke Editor Tabs ${Date.now()}`
-const PRICE = 50000
 const SIGNER_NAME = "Dr. Bambang Sutrisno"
 const SIGNER_TITLE = "Ketua Lembaga"
 const INVITE_EMAIL = "user@lms.dev"
@@ -63,45 +61,19 @@ await expect("login reaches the dashboard", async () => {
   await page.waitForURL("**/dashboard", { timeout: 8000 })
 })
 
-// --- Create a PAID course through the UI ---
+// --- Create a course through the UI ---
 await page.goto(`${BASE}/instructor/courses/new`, { timeout: 30000 })
 await selectFirstInstitution(page)
 await page.locator("#title").fill(COURSE_TITLE)
-await page.locator("#price").fill(String(PRICE))
 await page.getByRole("button", { name: "Buat Pelatihan" }).click()
-await expect("paid course creation lands on the editor", async () => {
+await expect("course creation lands on the editor", async () => {
   await page.waitForURL(/\/instructor\/courses\/crs_[^/]+\/editor$/, { timeout: 8000 })
   await page.getByRole("heading", { name: COURSE_TITLE, exact: true }).waitFor({ timeout: 8000 })
 })
 const courseId = page.url().match(/\/courses\/(crs_[^/]+)\/editor/)?.[1]
 
-// ================= PEMBAYARAN =================
-const orderRes = await page.request.post(`${API}/v1/orders`, { data: { courseId } })
-if (!orderRes.ok()) throw new Error(`order create failed: ${orderRes.status()} ${await orderRes.text()}`)
-
-// Scoped to the editor's tab strip: the management sidebar carries a
-// "Pembayaran" link of its own.
-await page.getByRole("navigation").getByRole("link", { name: "Pembayaran" }).click()
-await expect("payments tab shows the pending order", async () => {
-  await page.getByText("Menunggu Pembayaran").waitFor({ timeout: 8000 })
-  // id-ID currency renders "Rp 50.000" — assert the grouped digits only
-  await page.getByText("50.000").waitFor({ timeout: 8000 })
-})
-
-await page.getByRole("button", { name: "Terima Pembayaran" }).click()
-await page.locator("#payment-ref").fill("TRX-SMOKE-12345")
-await page.getByRole("button", { name: "Konfirmasi Terima" }).click()
-await expect("confirming receipt flips the order to Lunas", async () => {
-  await page.getByText("Lunas", { exact: true }).waitFor({ timeout: 8000 })
-})
-
-await page.getByRole("button", { name: "Refund", exact: true }).click()
-await expect("refunding flips the order to Dikembalikan", async () => {
-  await page.getByText("Dikembalikan", { exact: true }).waitFor({ timeout: 8000 })
-})
-
 // ================= SERTIFIKAT =================
-await page.getByRole("navigation").getByRole("link", { name: "Sertifikat", exact: true }).click()
+await page.goto(`${BASE}/instructor/courses/${courseId}/editor/sertifikat`, { timeout: 30000 })
 await page.getByRole("button", { name: "+ Tambah Penandatangan" }).click()
 await page.locator("#sig-name-1").fill(SIGNER_NAME)
 await page.locator("#sig-title-1").fill(SIGNER_TITLE)

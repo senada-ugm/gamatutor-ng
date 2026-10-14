@@ -83,7 +83,6 @@ async function toCourse(
     instructor: row.instructor,
     modules: opts.previewOnly ? moduleTree.map(stripToPreview) : moduleTree,
     updatedAt: row.updatedAt.toISOString(),
-    price: row.price ?? undefined,
   }
 }
 
@@ -242,7 +241,6 @@ export async function createCourse(
       institutionId: input.institutionId,
       instructor: { id: actingUser.id, name: actingUser.name, image: actingUser.image ?? null },
       modules: [],
-      price: input.price,
     })
     .returning()
   const created = await toCourse(row!)
@@ -311,7 +309,6 @@ export async function updateCourse(
         trainingBudget: input.trainingBudget,
         contactPersonName: input.contactPersonName,
         contactPersonPhone: input.contactPersonPhone,
-        price: input.price,
         updatedAt: new Date(),
       })
       .where(eq(courses.id, id))

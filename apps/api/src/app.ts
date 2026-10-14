@@ -21,10 +21,8 @@ import { discussionsModule } from "./modules/discussions/index.js"
 import { enrollmentsModule } from "./modules/enrollments/index.js"
 import { healthRoutes } from "./modules/health/index.js"
 import { institutionsModule } from "./modules/institutions/index.js"
-import { paymentsModule } from "./modules/payments/index.js"
 import { notificationsModule } from "./modules/notifications/index.js"
 import { reportsModule } from "./modules/reports/index.js"
-import { wishlistModule } from "./modules/wishlist/index.js"
 import { announcementsModule } from "./modules/announcements/index.js"
 import { platformSettingsModule } from "./modules/platform-settings/index.js"
 import { quizzesModule } from "./modules/quizzes/index.js"
@@ -119,10 +117,8 @@ export async function buildApp() {
   await app.register(discussionsModule, { prefix: "/v1" })
   await app.register(quizzesModule, { prefix: "/v1" })
   await app.register(uploadsModule, { prefix: "/v1" })
-  await app.register(paymentsModule, { prefix: "/v1" })
   await app.register(notificationsModule, { prefix: "/v1" })
   await app.register(reportsModule, { prefix: "/v1" })
-  await app.register(wishlistModule, { prefix: "/v1" })
   await app.register(announcementsModule, { prefix: "/v1" })
   await app.register(platformSettingsModule, { prefix: "/v1" })
   await app.register(usersModule, { prefix: "/v1" })

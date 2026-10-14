@@ -2,7 +2,6 @@ import assert from "node:assert/strict"
 import { describe, it } from "node:test"
 
 import { isAnswerCorrect } from "../modules/quizzes/services/quizzes.service.js"
-import { computePricing } from "../modules/payments/services/payments.service.js"
 import { computeStatus, distanceMeters } from "../modules/attendance/services/attendance.service.js"
 import { ALLOWED_TRANSITIONS } from "../modules/enrollments/services/enrollments.service.js"
 import { detectMimeType, looksLikeText } from "../modules/uploads/services/uploads.service.js"
@@ -10,7 +9,7 @@ import { detectMimeType, looksLikeText } from "../modules/uploads/services/uploa
 /**
  * Unit tests for the pure business logic — the decisions too small to
  * see in an E2E journey but wrong in expensive ways when they drift:
- * grading, coupon pricing, geofencing, late thresholds, status
+ * grading, geofencing, late thresholds, status
  * transitions, and content sniffing. These import the SERVICE modules
  * (dotenv-backed env loads at import), but only exercise functions with
  * no I/O — the DB is never touched.
@@ -87,60 +86,6 @@ describe("quiz grading — isAnswerCorrect", () => {
   it("essay never auto-grades", () => {
     const question = q({ questionType: "essay" })
     assert.equal(isAnswerCorrect(question, ["anything at all"]), false)
-  })
-})
-
-// ---------------------------------------------------------------------------
-// Coupon pricing (computePricing) — the one place preview and order
-// creation both read, so they can never disagree.
-// ---------------------------------------------------------------------------
-type CouponLike = Parameters<typeof computePricing>[0]
-function coupon(partial: Partial<CouponLike> & { discountType: CouponLike["discountType"] }): CouponLike {
-  return {
-    id: "cpn_test",
-    code: "TEST",
-    discountValue: 20,
-    maxDiscountAmount: null,
-    maxUses: null,
-    maxUsesPerUser: 1,
-    startsAt: null,
-    expiresAt: null,
-    courseId: null,
-    institutionId: null,
-    isActive: true,
-    ...partial,
-  } as CouponLike
-}
-
-describe("coupon pricing — computePricing", () => {
-  it("percentage discounts scale with the price, rounded", () => {
-    const p = computePricing(coupon({ discountType: "percentage", discountValue: 20 }), 100_000)
-    assert.deepEqual(p, { originalPrice: 100_000, discountAmount: 20_000, finalPrice: 80_000 })
-  })
-
-  it("percentage caps at 100% even if the row is corrupt", () => {
-    const p = computePricing(coupon({ discountType: "percentage", discountValue: 150 }), 100_000)
-    assert.equal(p.finalPrice, 0)
-  })
-
-  it("maxDiscountAmount caps percentage discounts", () => {
-    const p = computePricing(
-      coupon({ discountType: "percentage", discountValue: 50, maxDiscountAmount: 30_000 }),
-      100_000
-    )
-    assert.equal(p.discountAmount, 30_000)
-    assert.equal(p.finalPrice, 70_000)
-  })
-
-  it("fixed discounts apply their flat amount", () => {
-    const p = computePricing(coupon({ discountType: "fixed", discountValue: 15_000 }), 100_000)
-    assert.equal(p.finalPrice, 85_000)
-  })
-
-  it("a discount larger than the price clamps to free, never negative", () => {
-    const p = computePricing(coupon({ discountType: "fixed", discountValue: 250_000 }), 100_000)
-    assert.equal(p.discountAmount, 100_000)
-    assert.equal(p.finalPrice, 0)
   })
 })
 

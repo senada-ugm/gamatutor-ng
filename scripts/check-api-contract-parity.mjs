@@ -23,17 +23,12 @@ const ROOT = new URL("..", import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "
 /** Served-but-uncontracted routes, each with the spec that documents the
  *  exclusion (the spec-side note is what makes it intentional). */
 const INTENTIONAL_EXCLUSIONS = new Map([
-  ["POST /payments/webhook", "payments.tsp header — gateway callback, raw-body scope, no SDK client"],
   ["GET /uploads/{id}/file", "uploads.tsp header — byte serving with sniffed Content-Type"],
   ["POST /uploads/sweep", "uploads.tsp header — admin orphan-sweep trigger"],
   ["GET /v1/health", "health.tsp — SDK-prefix alias of the contracted /health"],
   [
     "GET /courses/{courseId}/participants/export",
     "reports.tsp header — operational CSV formatting of contracted report data",
-  ],
-  [
-    "GET /institutions/{institutionId}/orders/export",
-    "reports.tsp header — operational CSV formatting of institution order book",
   ],
   ["GET /reports/telemetry/export", "reports.tsp header — operational CSV export of learner slide telemetry"],
   ["GET /dev/status", "dev utility — reports demo mode status and seed account hints"],

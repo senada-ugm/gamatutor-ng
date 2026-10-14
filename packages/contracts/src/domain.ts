@@ -55,14 +55,6 @@ import type {
   CommonStandardErrorCode,
   CommonValidationErrorCode,
   CommonWarning,
-  Coupon,
-  CouponCreate,
-  CouponDiscountType,
-  CouponPricing,
-  CouponStats,
-  CouponUpdate,
-  CouponValidate,
-  CouponValidation,
   Course,
   CourseCreate,
   CourseInstructor,
@@ -104,12 +96,6 @@ import type {
   Module,
   Notification,
   NotificationType,
-  Order,
-  OrderConfirmPayment,
-  OrderCreate,
-  OrderRefund,
-  OrderSubmitProof,
-  OrderStatus,
   ParticipantGender,
   ParticipantProfile,
   ParticipantProfileUpdate,
@@ -129,8 +115,6 @@ import type {
   RegisteredInstitution,
   ReportUser,
   RequesterInfo,
-  FinancialSummary,
-  FinancialSummaryCourseRow,
   InstitutionReport,
   InstitutionReportCourseRow,
   TrainingType,
@@ -141,9 +125,6 @@ import type {
   AdminOverview,
   AdminGrowth30d,
   AuditLogEntry,
-  CheckoutSession,
-  WishlistItem,
-  WishlistCourseSummary,
   PlatformSettings,
   PlatformSettingsUpdate,
   TelemetryEvent,
@@ -325,59 +306,29 @@ export {
 export { CourseInstructorRole, CourseInstructorStatus } from "../gen/types.gen.js"
 export { EnrollmentStatus, EnrollmentType, FailureReasonCode, ParticipantGender } from "../gen/types.gen.js"
 export type {
-  Coupon,
-  CouponCreate,
-  CouponDiscountType,
-  CouponPricing,
-  CouponStats,
-  CouponUpdate,
-  CouponValidate,
-  CouponValidation,
-  Order,
-  OrderConfirmPayment,
-  OrderCreate,
-  OrderRefund,
-  OrderSubmitProof,
-  OrderStatus,
   Notification,
   NotificationType,
   AttendanceSummary,
   CourseReport,
   CourseReportParticipant,
-  FinancialSummary,
-  FinancialSummaryCourseRow,
   InstitutionReport,
   InstitutionReportCourseRow,
   ParticipantProfileUpdate,
   ReportUser,
 } from "../gen/types.gen.js"
 
-/** Contract-prefixed aliases for the payments/notifications/reports
+/** Contract-prefixed aliases for the notifications/reports
  *  domains, matching the consumer-facing naming convention above. */
-export type ContractCoupon = Coupon
-export type ContractCouponCreate = CouponCreate
-export type ContractCouponUpdate = CouponUpdate
-export type ContractCouponValidate = CouponValidate
-export type ContractCouponValidation = CouponValidation
-export type ContractCouponPricing = CouponPricing
-export type ContractCouponStats = CouponStats
-export type ContractCouponDiscountType = CouponDiscountType
-export type ContractOrder = Order
-export type ContractOrderConfirmPayment = OrderConfirmPayment
-export type ContractOrderSubmitProof = OrderSubmitProof
-export type ContractOrderCreate = OrderCreate
-export type ContractOrderRefund = OrderRefund
-export type ContractOrderStatus = OrderStatus
-export type ContractCheckoutSession = CheckoutSession
+
 export type ContractNotification = Notification
 export type ContractNotificationType = NotificationType
 export type ContractAttendanceSummary = AttendanceSummary
 export type ContractCourseReport = CourseReport
 export type ContractCourseReportParticipant = CourseReportParticipant
-export type ContractFinancialSummary = FinancialSummary
+
 export type ContractAdminOverview = AdminOverview
 export type ContractAdminGrowth30d = AdminGrowth30d
-export type ContractFinancialSummaryCourseRow = FinancialSummaryCourseRow
+
 export type ContractInstitutionReport = InstitutionReport
 export type ContractInstitutionReportCourseRow = InstitutionReportCourseRow
 export type ContractParticipantProfileUpdate = ParticipantProfileUpdate
@@ -386,8 +337,6 @@ export type ContractAuditLogEntry = AuditLogEntry
 export type ContractAnnouncement = Announcement
 export type ContractAnnouncementCreate = AnnouncementCreate
 export type ContractAnnouncementPriority = AnnouncementPriority
-export type ContractWishlistItem = WishlistItem
-export type ContractWishlistCourseSummary = WishlistCourseSummary
 export type ContractPlatformSettings = PlatformSettings
 export type ContractPlatformSettingsUpdate = PlatformSettingsUpdate
 export type ContractTelemetryEvent = TelemetryEvent
@@ -396,8 +345,4 @@ export { AttendanceSessionStatus, AttendanceVerificationMethod, AttendanceRecord
 export { CertificateSignaturePlacement } from "../gen/types.gen.js"
 export { QuizQuestionType, QuizAttemptStatus } from "../gen/types.gen.js"
 export { AssignmentSubmissionStatus } from "../gen/types.gen.js"
-export {
-  CouponDiscountType as CouponDiscountTypeValue,
-  OrderStatus as OrderStatusValue,
-  NotificationType as NotificationTypeValue,
-} from "../gen/types.gen.js"
+export { NotificationType as NotificationTypeValue } from "../gen/types.gen.js"

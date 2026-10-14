@@ -126,8 +126,6 @@ export const courses = pgTable(
       .references(() => institutions.id, { onDelete: "cascade" }),
     instructor: jsonb("instructor").$type<ContractCourseInstructorSummary>().notNull(),
     modules: jsonb("modules").$type<ContractModule[]>().notNull().default([]),
-    /** Mockup-only: price in Rupiah. Null means free. */
-    price: integer("price"),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
@@ -643,85 +641,6 @@ export const auditLog = pgTable(
   (table) => [index("audit_log_created_at_idx").on(table.createdAt)]
 )
 
-/** Admin-managed discount coupon, mirroring the source app's lms_coupons
- *  shape (see lib/mock/coupons-admin.ts). Scope: institutionId null =
- *  platform-wide, courseId null = every course in scope. currentUses is
- *  incremented at order creation under a row lock and released on
- *  cancel (a refund keeps the count — the discount was consumed).
- *  Amounts in integer Rupiah. */
-export const coupons = pgTable(
-  "coupons",
-  {
-    id: text("id").primaryKey(),
-    code: text("code").notNull().unique(),
-    description: text("description"),
-    discountType: text("discount_type").notNull(),
-    discountValue: integer("discount_value").notNull(),
-    maxDiscountAmount: integer("max_discount_amount"),
-    courseId: text("course_id").references(() => courses.id, { onDelete: "set null" }),
-    institutionId: text("institution_id").references(() => institutions.id, { onDelete: "set null" }),
-    maxUses: integer("max_uses"),
-    maxUsesPerUser: integer("max_uses_per_user").notNull().default(1),
-    currentUses: integer("current_uses").notNull().default(0),
-    isActive: boolean("is_active").notNull().default(true),
-    startsAt: timestamp("starts_at"),
-    expiresAt: timestamp("expires_at"),
-    createdById: text("created_by_id").notNull(),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at").defaultNow().notNull(),
-  },
-  (table) => [
-    index("coupons_institution_idx").on(table.institutionId),
-    index("coupons_course_idx").on(table.courseId),
-    check("coupons_discount_type_check", sql`${table.discountType} in ('percentage', 'fixed')`),
-  ]
-)
-
-/** A learner's payment order for a paid course. One ACTIVE (pending or
- *  paid) order per (user, course) — the partial unique index backstops
- *  the service's check-then-insert. Amounts are computed server-side at
- *  creation from the course price + coupon; the coupon's snapshot code
- *  is kept so coupon deletion doesn't orphan the order's history. */
-export const orders = pgTable(
-  "orders",
-  {
-    id: text("id").primaryKey(),
-    userId: text("user_id").notNull(),
-    courseId: text("course_id")
-      .notNull()
-      .references(() => courses.id, { onDelete: "cascade" }),
-    couponId: text("coupon_id").references(() => coupons.id, { onDelete: "set null" }),
-    couponCode: text("coupon_code"),
-    originalPrice: integer("original_price").notNull(),
-    discountAmount: integer("discount_amount").notNull().default(0),
-    finalAmount: integer("final_amount").notNull(),
-    status: text("status").notNull().default("pending"),
-    paymentMethod: text("payment_method").notNull().default("manual_transfer"),
-    confirmedByUserId: text("confirmed_by_user_id"),
-    paymentReference: text("payment_reference"),
-    confirmationNotes: text("confirmation_notes"),
-    proofUrl: text("proof_url"),
-    /** Gateway bookkeeping: the checkout session we created and the
-     *  payment intent the webhook reported (needed to refund through
-     *  the gateway). Null for manual-transfer orders. */
-    externalSessionId: text("external_session_id"),
-    externalPaymentIntentId: text("external_payment_intent_id"),
-    paidAt: timestamp("paid_at"),
-    refundedAt: timestamp("refunded_at"),
-    refundReason: text("refund_reason"),
-    canceledAt: timestamp("canceled_at"),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-  },
-  (table) => [
-    uniqueIndex("orders_user_course_active_idx")
-      .on(table.userId, table.courseId)
-      .where(sql`status in ('pending', 'paid')`),
-    index("orders_course_idx").on(table.courseId),
-    index("orders_coupon_idx").on(table.couponId),
-    check("orders_status_check", sql`${table.status} in ('pending', 'paid', 'canceled', 'refunded')`),
-  ]
-)
-
 /** One in-app notification row per recipient per business moment
  *  (selection result, payment confirmed, graded, certificate issued) —
  *  written by lib/notify.ts, which also fires the matching transactional
@@ -739,23 +658,6 @@ export const notifications = pgTable(
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (table) => [index("notifications_user_created_idx").on(table.userId, table.createdAt)]
-)
-
-/** A learner's saved courses — plain user x course join, own rows only. */
-export const wishlistItems = pgTable(
-  "wishlist_items",
-  {
-    id: text("id").primaryKey(),
-    userId: text("user_id").notNull(),
-    courseId: text("course_id")
-      .notNull()
-      .references(() => courses.id, { onDelete: "cascade" }),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-  },
-  (table) => [
-    uniqueIndex("wishlist_user_course_idx").on(table.userId, table.courseId),
-    index("wishlist_user_idx").on(table.userId),
-  ]
 )
 
 /** Course-scoped announcement authored by a course manager; publishing

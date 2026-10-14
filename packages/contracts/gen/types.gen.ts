@@ -381,17 +381,6 @@ export type CertificationEntry = {
 };
 
 /**
- * A hosted Stripe-compatible checkout the learner is redirected to.
- * Only available when the gateway is configured (PAYMENT_SECRET_KEY);
- * otherwise 503 and the manual-transfer flow applies.
- */
-export type CheckoutSession = {
-    orderId: CommonResourceId;
-    sessionId: string;
-    url: string;
-};
-
-/**
  * Detailed validation or sub-error metadata representing individual model errors.
  */
 export type CommonErrorDetail = {
@@ -609,107 +598,6 @@ export type CommonWarning = {
     documentationUrl?: string;
 };
 
-export type Coupon = {
-    id: CommonResourceId;
-    code: string;
-    description?: string;
-    discountType: CouponDiscountType;
-    /**
-     * Percent (0-100] for percentage coupons; flat Rupiah for fixed.
-     */
-    discountValue: number;
-    /**
-     * Cap for percentage coupons, in Rupiah.
-     */
-    maxDiscountAmount?: number;
-    /**
-     * Scope: null = every course in scope; else only this course.
-     */
-    courseId?: CommonResourceId;
-    /**
-     * Scope: null = platform-wide; else only courses of this institution.
-     */
-    institutionId?: CommonResourceId;
-    /**
-     * Total redemption cap; null = unlimited.
-     */
-    maxUses?: number;
-    maxUsesPerUser: number;
-    readonly currentUses: number;
-    isActive: boolean;
-    startsAt?: string;
-    expiresAt?: string;
-    readonly stats: CouponStats;
-    readonly createdAt: string;
-};
-
-export type CouponCreate = {
-    code: string;
-    description?: string;
-    discountType: CouponDiscountType;
-    discountValue: number;
-    maxDiscountAmount?: number;
-    courseId?: CommonResourceId;
-    institutionId?: CommonResourceId;
-    maxUses?: number;
-    maxUsesPerUser: number;
-    isActive?: boolean;
-    startsAt?: string;
-    expiresAt?: string;
-};
-
-export const CouponDiscountType = { PERCENTAGE: 'percentage', FIXED: 'fixed' } as const;
-
-export type CouponDiscountType = typeof CouponDiscountType[keyof typeof CouponDiscountType];
-
-export type CouponPricing = {
-    originalPrice: number;
-    discountAmount: number;
-    finalPrice: number;
-};
-
-/**
- * Computed alongside the stored row — the admin list embeds these per
- * coupon (one grouped query, not N+1).
- */
-export type CouponStats = {
-    totalUses: number;
-    uniqueUsers: number;
-    /**
-     * Sum of discountAmount across paid orders that used this coupon.
-     */
-    totalDiscountGiven: number;
-    remainingUses?: number;
-};
-
-export type CouponUpdate = {
-    description?: string;
-    discountType?: CouponDiscountType;
-    discountValue?: number;
-    maxDiscountAmount?: number;
-    maxUses?: number;
-    maxUsesPerUser?: number;
-    isActive?: boolean;
-    startsAt?: string;
-    expiresAt?: string;
-};
-
-/**
- * What the learner's coupon box calls: price a course with a code,
- * without creating anything.
- */
-export type CouponValidate = {
-    courseId: CommonResourceId;
-    code: string;
-};
-
-export type CouponValidation = {
-    valid: boolean;
-    message?: string;
-    coupon?: Coupon;
-    pricing?: CouponPricing;
-};
-
 export type Course = {
     id: CommonResourceId;
     slug: string;
@@ -748,12 +636,6 @@ export type Course = {
     instructor: CourseInstructorSummary;
     modules: Array<Module>;
     readonly updatedAt?: string;
-    /**
-     * Mockup-only: price in Rupiah. Absent/null means free — the real
-     * product has this feature-flagged off (see courses.ts's fixture
-     * comment).
-     */
-    price?: number;
 };
 
 /**
@@ -793,10 +675,6 @@ export type CourseCreate = {
     trainingBudget?: number;
     contactPersonName?: string;
     contactPersonPhone?: string;
-    /**
-     * Mockup-only: price in Rupiah. Absent/null means free.
-     */
-    price?: number;
     institutionId: CommonResourceId;
 };
 
@@ -950,10 +828,6 @@ export type CourseUpdate = {
     trainingBudget?: number;
     contactPersonName?: string;
     contactPersonPhone?: string;
-    /**
-     * Mockup-only: price in Rupiah. Absent/null means free.
-     */
-    price?: number;
 };
 
 export type Discussion = {
@@ -1053,10 +927,6 @@ export type Enrollment = {
     finalGrade?: number;
     certificateIssued?: boolean;
     certificateId?: string;
-    /**
-     * True if the course is free, or if this enrollment's user holds a paid order for this course.
-     */
-    isPaid?: boolean;
 };
 
 /**
@@ -1125,31 +995,6 @@ export const FailureReasonCode = {
 } as const;
 
 export type FailureReasonCode = typeof FailureReasonCode[keyof typeof FailureReasonCode];
-
-export type FinancialSummary = {
-    totalRevenue: number;
-    totalDiscountGiven: number;
-    paidOrders: number;
-    pendingOrders: number;
-    refundedOrders: number;
-    byCourse: Array<FinancialSummaryCourseRow>;
-};
-
-export type FinancialSummaryCourseRow = {
-    courseId: CommonResourceId;
-    courseTitle: string;
-    institutionId: CommonResourceId;
-    paidOrders: number;
-    /**
-     * Sum of finalAmount over paid orders, integer Rupiah.
-     */
-    revenue: number;
-    /**
-     * Sum of discountAmount over paid orders.
-     */
-    discountGiven: number;
-    pendingOrders: number;
-};
 
 export const FundingSource = {
     APBD: 'APBD',
@@ -1228,10 +1073,10 @@ export type InstitutionProfileUpdate = {
 };
 
 /**
- * One institution's funnel and money in a single call - the owner's
- * equivalent of AdminOverview, scoped to what they own. Counts follow
- * the same definitions the course-level report uses: a registrant is
- * any enrollment that was not canceled or failed, a participant is
+ * One institution's funnel in a single call - the owner's equivalent
+ * of AdminOverview, scoped to what they own. Counts follow the same
+ * definitions the course-level report uses: a registrant is any
+ * enrollment that was not canceled or failed, a participant is
  * selected or graduated.
  */
 export type InstitutionReport = {
@@ -1246,12 +1091,6 @@ export type InstitutionReport = {
      * graduated as a percent of selected+graduated, rounded; 0 when none.
      */
     completionRate: number;
-    /**
-     * Sum of finalAmount over paid orders for this institution's courses.
-     */
-    totalRevenue: number;
-    paidOrders: number;
-    pendingOrders: number;
     byCourse: Array<InstitutionReportCourseRow>;
 };
 
@@ -1262,11 +1101,6 @@ export type InstitutionReportCourseRow = {
     registrantCount: number;
     participantCount: number;
     graduatedCount: number;
-    paidOrders: number;
-    /**
-     * Sum of finalAmount over this course's paid orders.
-     */
-    revenue: number;
 };
 
 /**
@@ -1430,60 +1264,6 @@ export const NotificationType = {
  * frontend can badge/filter without a contract change per new event.
  */
 export type NotificationType = typeof NotificationType[keyof typeof NotificationType];
-
-export type Order = {
-    id: CommonResourceId;
-    userId: CommonResourceId;
-    courseId: CommonResourceId;
-    couponId?: CommonResourceId;
-    couponCode?: string;
-    originalPrice: number;
-    discountAmount: number;
-    finalAmount: number;
-    status: OrderStatus;
-    /**
-     * "manual_transfer" today; a gateway adapter fills this when one
-     * lands (see the domain comment above).
-     */
-    paymentMethod: string;
-    readonly createdAt: string;
-    readonly paidAt?: string;
-    readonly confirmedByUserId?: CommonResourceId;
-    paymentReference?: string;
-    confirmationNotes?: string;
-    proofUrl?: string;
-    readonly refundedAt?: string;
-    refundReason?: string;
-};
-
-export type OrderConfirmPayment = {
-    paymentReference?: string;
-    note?: string;
-    proofUrl?: string;
-};
-
-export type OrderCreate = {
-    courseId: CommonResourceId;
-    couponCode?: string;
-};
-
-export type OrderRefund = {
-    reason: string;
-};
-
-export const OrderStatus = {
-    PENDING: 'pending',
-    PAID: 'paid',
-    CANCELED: 'canceled',
-    REFUNDED: 'refunded'
-} as const;
-
-export type OrderStatus = typeof OrderStatus[keyof typeof OrderStatus];
-
-export type OrderSubmitProof = {
-    paymentReference: string;
-    proofUrl?: string;
-};
 
 export const ParticipantGender = { MALE: 'male', FEMALE: 'female' } as const;
 
@@ -1913,37 +1693,6 @@ export type UserSuspend = {
     reason: string;
 };
 
-export type WishlistAdd = {
-    courseId: CommonResourceId;
-};
-
-/**
- * Just what the wishlist cards render — not the full Course (no
- * module tree, no pricing detail).
- */
-export type WishlistCourseSummary = {
-    id: CommonResourceId;
-    title: string;
-    shortDescription?: string;
-    thumbnail?: string;
-    courseType: string;
-    level: string;
-    status: string;
-    institutionId: CommonResourceId;
-    /**
-     * Integer Rupiah; null/undefined means free.
-     */
-    price?: number;
-};
-
-export type WishlistItem = {
-    id: CommonResourceId;
-    userId: CommonResourceId;
-    courseId: CommonResourceId;
-    readonly course?: WishlistCourseSummary;
-    readonly createdAt: string;
-};
-
 export type AnnouncementWritable = {
     id: CommonResourceId;
     courseId: CommonResourceId;
@@ -2033,44 +1782,6 @@ export type CertificateSettingsWritable = {
     signatures: Array<CertificateSignature>;
 };
 
-export type CouponWritable = {
-    id: CommonResourceId;
-    code: string;
-    description?: string;
-    discountType: CouponDiscountType;
-    /**
-     * Percent (0-100] for percentage coupons; flat Rupiah for fixed.
-     */
-    discountValue: number;
-    /**
-     * Cap for percentage coupons, in Rupiah.
-     */
-    maxDiscountAmount?: number;
-    /**
-     * Scope: null = every course in scope; else only this course.
-     */
-    courseId?: CommonResourceId;
-    /**
-     * Scope: null = platform-wide; else only courses of this institution.
-     */
-    institutionId?: CommonResourceId;
-    /**
-     * Total redemption cap; null = unlimited.
-     */
-    maxUses?: number;
-    maxUsesPerUser: number;
-    isActive: boolean;
-    startsAt?: string;
-    expiresAt?: string;
-};
-
-export type CouponValidationWritable = {
-    valid: boolean;
-    message?: string;
-    coupon?: CouponWritable;
-    pricing?: CouponPricing;
-};
-
 export type CourseWritable = {
     id: CommonResourceId;
     slug: string;
@@ -2105,12 +1816,6 @@ export type CourseWritable = {
     institutionId: CommonResourceId;
     instructor: CourseInstructorSummary;
     modules: Array<Module>;
-    /**
-     * Mockup-only: price in Rupiah. Absent/null means free — the real
-     * product has this feature-flagged off (see courses.ts's fixture
-     * comment).
-     */
-    price?: number;
 };
 
 export type CourseInstructorWritable = {
@@ -2171,10 +1876,6 @@ export type EnrollmentWritable = {
     finalGrade?: number;
     certificateIssued?: boolean;
     certificateId?: string;
-    /**
-     * True if the course is free, or if this enrollment's user holds a paid order for this course.
-     */
-    isPaid?: boolean;
 };
 
 /**
@@ -2229,27 +1930,6 @@ export type NotificationWritable = {
      * App-relative route to the subject, e.g. /learn/{courseId}
      */
     link?: string;
-};
-
-export type OrderWritable = {
-    id: CommonResourceId;
-    userId: CommonResourceId;
-    courseId: CommonResourceId;
-    couponId?: CommonResourceId;
-    couponCode?: string;
-    originalPrice: number;
-    discountAmount: number;
-    finalAmount: number;
-    status: OrderStatus;
-    /**
-     * "manual_transfer" today; a gateway adapter fills this when one
-     * lands (see the domain comment above).
-     */
-    paymentMethod: string;
-    paymentReference?: string;
-    confirmationNotes?: string;
-    proofUrl?: string;
-    refundReason?: string;
 };
 
 export type PlatformSettingsWritable = {
@@ -2364,12 +2044,6 @@ export type UserWritable = {
     role: UserRole;
 };
 
-export type WishlistItemWritable = {
-    id: CommonResourceId;
-    userId: CommonResourceId;
-    courseId: CommonResourceId;
-};
-
 /**
  * Sort order configuration matching standard patterns (e.g. `createdAt:desc`).
  */
@@ -2394,44 +2068,6 @@ export type CommonSearchParamQ = string;
  * Query string matching wildcard terms.
  */
 export type CommonSearchParamSearch = string;
-
-export type FinancialReportsApiGetData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/admin/financial-summary';
-};
-
-export type FinancialReportsApiGetErrors = {
-    /**
-     * An unexpected error response.
-     */
-    default: CommonErrorResponse;
-};
-
-export type FinancialReportsApiGetError = FinancialReportsApiGetErrors[keyof FinancialReportsApiGetErrors];
-
-export type FinancialReportsApiGetResponses = {
-    /**
-     * Standard single resource response envelope.
-     */
-    200: {
-        /**
-         * The raw payload representation.
-         */
-        data: FinancialSummary;
-        /**
-         * Trace metadata.
-         */
-        meta: CommonResponseMeta;
-        /**
-         * Minor warning list.
-         */
-        warnings?: Array<CommonWarning>;
-    };
-};
-
-export type FinancialReportsApiGetResponse = FinancialReportsApiGetResponses[keyof FinancialReportsApiGetResponses];
 
 export type AdminReportsApiGetData = {
     body?: never;
@@ -3446,255 +3082,6 @@ export type CertificatesApiGetResponses = {
 };
 
 export type CertificatesApiGetResponse = CertificatesApiGetResponses[keyof CertificatesApiGetResponses];
-
-export type CouponsApiListData = {
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * The page index to retrieve (default: 1).
-         */
-        page?: number;
-        /**
-         * The maximum number of records to return on a page (default: 50).
-         */
-        pageSize?: number;
-        /**
-         * Sort order configuration matching standard patterns (e.g. `createdAt:desc`).
-         */
-        orderBy?: string;
-        /**
-         * Query string matching wildcard terms.
-         */
-        search?: string;
-        /**
-         * Short query alias parameter.
-         */
-        q?: string;
-        isActive?: boolean;
-        institutionId?: CommonResourceId;
-        courseId?: CommonResourceId;
-    };
-    url: '/coupons';
-};
-
-export type CouponsApiListErrors = {
-    /**
-     * An unexpected error response.
-     */
-    default: CommonErrorResponse;
-};
-
-export type CouponsApiListError = CouponsApiListErrors[keyof CouponsApiListErrors];
-
-export type CouponsApiListResponses = {
-    /**
-     * Standard page-based paginated response envelope.
-     */
-    200: {
-        /**
-         * The list of resources for the current page.
-         */
-        data: Array<Coupon>;
-        /**
-         * Pagination details and navigation links.
-         */
-        pagination: CommonPagePagination;
-        /**
-         * Response tracing metadata.
-         */
-        meta: CommonResponseMeta;
-        /**
-         * Minor warning list.
-         */
-        warnings?: Array<CommonWarning>;
-    };
-};
-
-export type CouponsApiListResponse = CouponsApiListResponses[keyof CouponsApiListResponses];
-
-export type CouponsApiCreateData = {
-    body: CouponCreate;
-    path?: never;
-    query?: never;
-    url: '/coupons';
-};
-
-export type CouponsApiCreateErrors = {
-    /**
-     * An unexpected error response.
-     */
-    default: CommonErrorResponse;
-};
-
-export type CouponsApiCreateError = CouponsApiCreateErrors[keyof CouponsApiCreateErrors];
-
-export type CouponsApiCreateResponses = {
-    /**
-     * Standard single resource response envelope.
-     */
-    201: {
-        /**
-         * The raw payload representation.
-         */
-        data: Coupon;
-        /**
-         * Trace metadata.
-         */
-        meta: CommonResponseMeta;
-        /**
-         * Minor warning list.
-         */
-        warnings?: Array<CommonWarning>;
-    };
-};
-
-export type CouponsApiCreateResponse = CouponsApiCreateResponses[keyof CouponsApiCreateResponses];
-
-export type CouponsApiValidateData = {
-    body: CouponValidate;
-    path?: never;
-    query?: never;
-    url: '/coupons/validate';
-};
-
-export type CouponsApiValidateErrors = {
-    /**
-     * An unexpected error response.
-     */
-    default: CommonErrorResponse;
-};
-
-export type CouponsApiValidateError = CouponsApiValidateErrors[keyof CouponsApiValidateErrors];
-
-export type CouponsApiValidateResponses = {
-    /**
-     * Standard single resource response envelope.
-     */
-    200: {
-        /**
-         * The raw payload representation.
-         */
-        data: CouponValidation;
-        /**
-         * Trace metadata.
-         */
-        meta: CommonResponseMeta;
-        /**
-         * Minor warning list.
-         */
-        warnings?: Array<CommonWarning>;
-    };
-};
-
-export type CouponsApiValidateResponse = CouponsApiValidateResponses[keyof CouponsApiValidateResponses];
-
-export type CouponsApiDeleteData = {
-    body?: never;
-    path: {
-        id: CommonResourceId;
-    };
-    query?: never;
-    url: '/coupons/{id}';
-};
-
-export type CouponsApiDeleteErrors = {
-    /**
-     * An unexpected error response.
-     */
-    default: CommonErrorResponse;
-};
-
-export type CouponsApiDeleteError = CouponsApiDeleteErrors[keyof CouponsApiDeleteErrors];
-
-export type CouponsApiDeleteResponses = {
-    /**
-     * There is no content to send for this request, but the headers may be useful.
-     */
-    204: void;
-};
-
-export type CouponsApiDeleteResponse = CouponsApiDeleteResponses[keyof CouponsApiDeleteResponses];
-
-export type CouponsApiGetData = {
-    body?: never;
-    path: {
-        id: CommonResourceId;
-    };
-    query?: never;
-    url: '/coupons/{id}';
-};
-
-export type CouponsApiGetErrors = {
-    /**
-     * An unexpected error response.
-     */
-    default: CommonErrorResponse;
-};
-
-export type CouponsApiGetError = CouponsApiGetErrors[keyof CouponsApiGetErrors];
-
-export type CouponsApiGetResponses = {
-    /**
-     * Standard single resource response envelope.
-     */
-    200: {
-        /**
-         * The raw payload representation.
-         */
-        data: Coupon;
-        /**
-         * Trace metadata.
-         */
-        meta: CommonResponseMeta;
-        /**
-         * Minor warning list.
-         */
-        warnings?: Array<CommonWarning>;
-    };
-};
-
-export type CouponsApiGetResponse = CouponsApiGetResponses[keyof CouponsApiGetResponses];
-
-export type CouponsApiUpdateData = {
-    body: CouponUpdate;
-    path: {
-        id: CommonResourceId;
-    };
-    query?: never;
-    url: '/coupons/{id}';
-};
-
-export type CouponsApiUpdateErrors = {
-    /**
-     * An unexpected error response.
-     */
-    default: CommonErrorResponse;
-};
-
-export type CouponsApiUpdateError = CouponsApiUpdateErrors[keyof CouponsApiUpdateErrors];
-
-export type CouponsApiUpdateResponses = {
-    /**
-     * Standard single resource response envelope.
-     */
-    200: {
-        /**
-         * The raw payload representation.
-         */
-        data: Coupon;
-        /**
-         * Trace metadata.
-         */
-        meta: CommonResponseMeta;
-        /**
-         * Minor warning list.
-         */
-        warnings?: Array<CommonWarning>;
-    };
-};
-
-export type CouponsApiUpdateResponse = CouponsApiUpdateResponses[keyof CouponsApiUpdateResponses];
 
 export type CourseInstructorsApiListData = {
     body?: never;
@@ -6433,343 +5820,6 @@ export type NotificationsApiMarkReadResponses = {
 
 export type NotificationsApiMarkReadResponse = NotificationsApiMarkReadResponses[keyof NotificationsApiMarkReadResponses];
 
-export type OrdersApiListData = {
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * The page index to retrieve (default: 1).
-         */
-        page?: number;
-        /**
-         * The maximum number of records to return on a page (default: 50).
-         */
-        pageSize?: number;
-        /**
-         * Sort order configuration matching standard patterns (e.g. `createdAt:desc`).
-         */
-        orderBy?: string;
-        courseId?: CommonResourceId;
-        institutionId?: CommonResourceId;
-        userId?: CommonResourceId;
-        status?: OrderStatus;
-    };
-    url: '/orders';
-};
-
-export type OrdersApiListErrors = {
-    /**
-     * An unexpected error response.
-     */
-    default: CommonErrorResponse;
-};
-
-export type OrdersApiListError = OrdersApiListErrors[keyof OrdersApiListErrors];
-
-export type OrdersApiListResponses = {
-    /**
-     * Standard page-based paginated response envelope.
-     */
-    200: {
-        /**
-         * The list of resources for the current page.
-         */
-        data: Array<Order>;
-        /**
-         * Pagination details and navigation links.
-         */
-        pagination: CommonPagePagination;
-        /**
-         * Response tracing metadata.
-         */
-        meta: CommonResponseMeta;
-        /**
-         * Minor warning list.
-         */
-        warnings?: Array<CommonWarning>;
-    };
-};
-
-export type OrdersApiListResponse = OrdersApiListResponses[keyof OrdersApiListResponses];
-
-export type OrdersApiCreateData = {
-    body: OrderCreate;
-    path?: never;
-    query?: never;
-    url: '/orders';
-};
-
-export type OrdersApiCreateErrors = {
-    /**
-     * An unexpected error response.
-     */
-    default: CommonErrorResponse;
-};
-
-export type OrdersApiCreateError = OrdersApiCreateErrors[keyof OrdersApiCreateErrors];
-
-export type OrdersApiCreateResponses = {
-    /**
-     * Standard single resource response envelope.
-     */
-    201: {
-        /**
-         * The raw payload representation.
-         */
-        data: Order;
-        /**
-         * Trace metadata.
-         */
-        meta: CommonResponseMeta;
-        /**
-         * Minor warning list.
-         */
-        warnings?: Array<CommonWarning>;
-    };
-};
-
-export type OrdersApiCreateResponse = OrdersApiCreateResponses[keyof OrdersApiCreateResponses];
-
-export type OrdersApiGetData = {
-    body?: never;
-    path: {
-        id: CommonResourceId;
-    };
-    query?: never;
-    url: '/orders/{id}';
-};
-
-export type OrdersApiGetErrors = {
-    /**
-     * An unexpected error response.
-     */
-    default: CommonErrorResponse;
-};
-
-export type OrdersApiGetError = OrdersApiGetErrors[keyof OrdersApiGetErrors];
-
-export type OrdersApiGetResponses = {
-    /**
-     * Standard single resource response envelope.
-     */
-    200: {
-        /**
-         * The raw payload representation.
-         */
-        data: Order;
-        /**
-         * Trace metadata.
-         */
-        meta: CommonResponseMeta;
-        /**
-         * Minor warning list.
-         */
-        warnings?: Array<CommonWarning>;
-    };
-};
-
-export type OrdersApiGetResponse = OrdersApiGetResponses[keyof OrdersApiGetResponses];
-
-export type OrdersApiCancelData = {
-    body?: never;
-    path: {
-        id: CommonResourceId;
-    };
-    query?: never;
-    url: '/orders/{id}/cancel';
-};
-
-export type OrdersApiCancelErrors = {
-    /**
-     * An unexpected error response.
-     */
-    default: CommonErrorResponse;
-};
-
-export type OrdersApiCancelError = OrdersApiCancelErrors[keyof OrdersApiCancelErrors];
-
-export type OrdersApiCancelResponses = {
-    /**
-     * Standard single resource response envelope.
-     */
-    200: {
-        /**
-         * The raw payload representation.
-         */
-        data: Order;
-        /**
-         * Trace metadata.
-         */
-        meta: CommonResponseMeta;
-        /**
-         * Minor warning list.
-         */
-        warnings?: Array<CommonWarning>;
-    };
-};
-
-export type OrdersApiCancelResponse = OrdersApiCancelResponses[keyof OrdersApiCancelResponses];
-
-export type OrdersApiCreateCheckoutData = {
-    body?: never;
-    path: {
-        id: CommonResourceId;
-    };
-    query?: never;
-    url: '/orders/{id}/checkout';
-};
-
-export type OrdersApiCreateCheckoutErrors = {
-    /**
-     * An unexpected error response.
-     */
-    default: CommonErrorResponse;
-};
-
-export type OrdersApiCreateCheckoutError = OrdersApiCreateCheckoutErrors[keyof OrdersApiCreateCheckoutErrors];
-
-export type OrdersApiCreateCheckoutResponses = {
-    /**
-     * Standard single resource response envelope.
-     */
-    200: {
-        /**
-         * The raw payload representation.
-         */
-        data: CheckoutSession;
-        /**
-         * Trace metadata.
-         */
-        meta: CommonResponseMeta;
-        /**
-         * Minor warning list.
-         */
-        warnings?: Array<CommonWarning>;
-    };
-};
-
-export type OrdersApiCreateCheckoutResponse = OrdersApiCreateCheckoutResponses[keyof OrdersApiCreateCheckoutResponses];
-
-export type OrdersApiConfirmPaymentData = {
-    body?: OrderConfirmPayment;
-    path: {
-        id: CommonResourceId;
-    };
-    query?: never;
-    url: '/orders/{id}/confirm-payment';
-};
-
-export type OrdersApiConfirmPaymentErrors = {
-    /**
-     * An unexpected error response.
-     */
-    default: CommonErrorResponse;
-};
-
-export type OrdersApiConfirmPaymentError = OrdersApiConfirmPaymentErrors[keyof OrdersApiConfirmPaymentErrors];
-
-export type OrdersApiConfirmPaymentResponses = {
-    /**
-     * Standard single resource response envelope.
-     */
-    200: {
-        /**
-         * The raw payload representation.
-         */
-        data: Order;
-        /**
-         * Trace metadata.
-         */
-        meta: CommonResponseMeta;
-        /**
-         * Minor warning list.
-         */
-        warnings?: Array<CommonWarning>;
-    };
-};
-
-export type OrdersApiConfirmPaymentResponse = OrdersApiConfirmPaymentResponses[keyof OrdersApiConfirmPaymentResponses];
-
-export type OrdersApiRefundData = {
-    body: OrderRefund;
-    path: {
-        id: CommonResourceId;
-    };
-    query?: never;
-    url: '/orders/{id}/refund';
-};
-
-export type OrdersApiRefundErrors = {
-    /**
-     * An unexpected error response.
-     */
-    default: CommonErrorResponse;
-};
-
-export type OrdersApiRefundError = OrdersApiRefundErrors[keyof OrdersApiRefundErrors];
-
-export type OrdersApiRefundResponses = {
-    /**
-     * Standard single resource response envelope.
-     */
-    200: {
-        /**
-         * The raw payload representation.
-         */
-        data: Order;
-        /**
-         * Trace metadata.
-         */
-        meta: CommonResponseMeta;
-        /**
-         * Minor warning list.
-         */
-        warnings?: Array<CommonWarning>;
-    };
-};
-
-export type OrdersApiRefundResponse = OrdersApiRefundResponses[keyof OrdersApiRefundResponses];
-
-export type OrdersApiSubmitProofData = {
-    body: OrderSubmitProof;
-    path: {
-        id: CommonResourceId;
-    };
-    query?: never;
-    url: '/orders/{id}/submit-proof';
-};
-
-export type OrdersApiSubmitProofErrors = {
-    /**
-     * An unexpected error response.
-     */
-    default: CommonErrorResponse;
-};
-
-export type OrdersApiSubmitProofError = OrdersApiSubmitProofErrors[keyof OrdersApiSubmitProofErrors];
-
-export type OrdersApiSubmitProofResponses = {
-    /**
-     * Standard single resource response envelope.
-     */
-    200: {
-        /**
-         * The raw payload representation.
-         */
-        data: Order;
-        /**
-         * Trace metadata.
-         */
-        meta: CommonResponseMeta;
-        /**
-         * Minor warning list.
-         */
-        warnings?: Array<CommonWarning>;
-    };
-};
-
-export type OrdersApiSubmitProofResponse = OrdersApiSubmitProofResponses[keyof OrdersApiSubmitProofResponses];
-
 export type ParticipantProfilesApiListData = {
     body?: never;
     path?: never;
@@ -7791,123 +6841,3 @@ export type UsersApiSuspendResponses = {
 };
 
 export type UsersApiSuspendResponse = UsersApiSuspendResponses[keyof UsersApiSuspendResponses];
-
-export type WishlistApiListData = {
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * The page index to retrieve (default: 1).
-         */
-        page?: number;
-        /**
-         * The maximum number of records to return on a page (default: 50).
-         */
-        pageSize?: number;
-        /**
-         * Sort order configuration matching standard patterns (e.g. `createdAt:desc`).
-         */
-        orderBy?: string;
-    };
-    url: '/wishlist';
-};
-
-export type WishlistApiListErrors = {
-    /**
-     * An unexpected error response.
-     */
-    default: CommonErrorResponse;
-};
-
-export type WishlistApiListError = WishlistApiListErrors[keyof WishlistApiListErrors];
-
-export type WishlistApiListResponses = {
-    /**
-     * Standard page-based paginated response envelope.
-     */
-    200: {
-        /**
-         * The list of resources for the current page.
-         */
-        data: Array<WishlistItem>;
-        /**
-         * Pagination details and navigation links.
-         */
-        pagination: CommonPagePagination;
-        /**
-         * Response tracing metadata.
-         */
-        meta: CommonResponseMeta;
-        /**
-         * Minor warning list.
-         */
-        warnings?: Array<CommonWarning>;
-    };
-};
-
-export type WishlistApiListResponse = WishlistApiListResponses[keyof WishlistApiListResponses];
-
-export type WishlistApiAddData = {
-    body: WishlistAdd;
-    path?: never;
-    query?: never;
-    url: '/wishlist';
-};
-
-export type WishlistApiAddErrors = {
-    /**
-     * An unexpected error response.
-     */
-    default: CommonErrorResponse;
-};
-
-export type WishlistApiAddError = WishlistApiAddErrors[keyof WishlistApiAddErrors];
-
-export type WishlistApiAddResponses = {
-    /**
-     * Standard single resource response envelope.
-     */
-    201: {
-        /**
-         * The raw payload representation.
-         */
-        data: WishlistItem;
-        /**
-         * Trace metadata.
-         */
-        meta: CommonResponseMeta;
-        /**
-         * Minor warning list.
-         */
-        warnings?: Array<CommonWarning>;
-    };
-};
-
-export type WishlistApiAddResponse = WishlistApiAddResponses[keyof WishlistApiAddResponses];
-
-export type WishlistApiRemoveData = {
-    body?: never;
-    path: {
-        courseId: CommonResourceId;
-    };
-    query?: never;
-    url: '/wishlist/{courseId}';
-};
-
-export type WishlistApiRemoveErrors = {
-    /**
-     * An unexpected error response.
-     */
-    default: CommonErrorResponse;
-};
-
-export type WishlistApiRemoveError = WishlistApiRemoveErrors[keyof WishlistApiRemoveErrors];
-
-export type WishlistApiRemoveResponses = {
-    /**
-     * There is no content to send for this request, but the headers may be useful.
-     */
-    204: void;
-};
-
-export type WishlistApiRemoveResponse = WishlistApiRemoveResponses[keyof WishlistApiRemoveResponses];

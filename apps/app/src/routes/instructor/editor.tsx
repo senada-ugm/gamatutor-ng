@@ -30,8 +30,6 @@ type EditorRoutePath =
   | "/instructor/courses/$courseId/editor/peserta"
   | "/instructor/courses/$courseId/editor/instruktur"
   | "/instructor/courses/$courseId/editor/pengumuman"
-  | "/instructor/courses/$courseId/editor/pembayaran"
-  | "/instructor/courses/$courseId/editor/kupon"
   | "/instructor/courses/$courseId/editor/sertifikat"
   | "/instructor/courses/$courseId/editor/laporan"
 
@@ -73,11 +71,9 @@ const TAB_GROUPS: readonly TabGroup[] = [
   },
   {
     id: "operations",
-    label: "Komersial & Hasil",
+    label: "Sertifikat & Laporan",
     icon: BarChart3,
     tabs: [
-      { to: "/instructor/courses/$courseId/editor/pembayaran", label: "Pembayaran" },
-      { to: "/instructor/courses/$courseId/editor/kupon", label: "Kupon" },
       { to: "/instructor/courses/$courseId/editor/sertifikat", label: "Sertifikat" },
       { to: "/instructor/courses/$courseId/editor/laporan", label: "Laporan" },
     ],

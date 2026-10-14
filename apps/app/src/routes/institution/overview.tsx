@@ -10,7 +10,6 @@ import { CourseStatusBadge } from "@/components/composed/courses/_atoms/course-s
 import { PageHeader } from "@/components/composed/_shared/page-header"
 import { InstitutionScoped } from "@/components/composed/institutions/institution-scoped"
 import { apiGet } from "@/lib/api"
-import { formatRupiah } from "@/lib/format"
 import type { ContractInstitutionReport } from "@workspace/contracts/domain"
 
 /**
@@ -55,7 +54,7 @@ function Overview({ institutionId }: { institutionId: string }) {
     <div className="space-y-6">
       <PageHeader
         title={r?.name ?? "Ringkasan Institusi"}
-        description="Corong peserta dan arus dana untuk seluruh pelatihan institusi ini."
+        description="Corong peserta untuk seluruh pelatihan institusi ini."
       />
 
       {report.isLoading ? (
@@ -75,19 +74,19 @@ function Overview({ institutionId }: { institutionId: string }) {
             <Stat label="Pelatihan" value={r.courseCount} />
             <Stat label="Pendaftar" value={r.registrantCount} />
             <Stat label="Peserta" value={r.participantCount} />
-            <Stat label="Pendapatan" value={formatRupiah(r.totalRevenue)} />
+            <Stat label="Lulusan" value={r.graduatedCount} />
           </div>
 
           <Card>
             <CardHeader>
-              <CardTitle>Partisipasi &amp; Pembayaran</CardTitle>
-              <CardDescription>Dihitung dari pendaftaran dan pesanan lunas institusi ini.</CardDescription>
+              <CardTitle>Partisipasi</CardTitle>
+              <CardDescription>Dihitung dari pendaftaran institusi ini.</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <StatFigure label="Pelatihan Terbit" value={r.publishedCourseCount} />
-              <StatFigure label="Lulusan" value={r.graduatedCount} />
               <StatFigure label="Tingkat Kelulusan" value={`${r.completionRate}%`} />
-              <StatFigure label="Menunggu Bayar" value={r.pendingOrders} />
+              <StatFigure label="Pendaftar" value={r.registrantCount} />
+              <StatFigure label="Peserta" value={r.participantCount} />
             </CardContent>
           </Card>
 
@@ -112,7 +111,6 @@ function Overview({ institutionId }: { institutionId: string }) {
                         <TableHead className="text-right">Pendaftar</TableHead>
                         <TableHead className="text-right">Peserta</TableHead>
                         <TableHead className="text-right">Lulus</TableHead>
-                        <TableHead className="text-right">Pendapatan</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -125,7 +123,6 @@ function Overview({ institutionId }: { institutionId: string }) {
                           <TableCell className="text-right tabular-nums">{row.registrantCount}</TableCell>
                           <TableCell className="text-right tabular-nums">{row.participantCount}</TableCell>
                           <TableCell className="text-right tabular-nums">{row.graduatedCount}</TableCell>
-                          <TableCell className="text-right tabular-nums">{formatRupiah(row.revenue)}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>

@@ -18,7 +18,7 @@ import fp from "fastify-plugin"
 import { Redis } from "ioredis"
 import { env } from "../env.js"
 
-export type RouteCategory = "auth-write" | "coupon" | "upload" | "general"
+export type RouteCategory = "auth-write" | "upload" | "general"
 
 export function getRouteCategory(req: FastifyRequest): RouteCategory {
   const url = (req.url.split("?")[0] ?? req.url).toLowerCase()
@@ -27,11 +27,6 @@ export function getRouteCategory(req: FastifyRequest): RouteCategory {
   // Protect sensitive Better Auth mutation endpoints from credential stuffing and spam
   if (url.startsWith("/api/auth") && (method === "POST" || method === "PUT" || method === "DELETE")) {
     return "auth-write"
-  }
-
-  // Prevent dictionary attacks on coupon discount codes
-  if (url.startsWith("/v1/coupons/validate") && method === "POST") {
-    return "coupon"
   }
 
   // Prevent disk saturation & payload bombing
@@ -46,8 +41,6 @@ export function resolveMaxRequests(req: FastifyRequest): number {
   const category = getRouteCategory(req)
   switch (category) {
     case "auth-write":
-      return 20
-    case "coupon":
       return 20
     case "upload":
       return 30
@@ -90,7 +83,7 @@ async function rateLimitPlugin(app: FastifyInstance, opts?: { forceEnabled?: boo
       keyGenerator: generateRateLimitKey,
       errorResponseBuilder,
     })
-    app.log.info("Rate limiting enabled (Redis-backed, tiered: auth/coupons=20/min, uploads=30/min, general=1000/min)")
+    app.log.info("Rate limiting enabled (Redis-backed, tiered: auth=20/min, uploads=30/min, general=1000/min)")
     return
   }
 
@@ -101,7 +94,7 @@ async function rateLimitPlugin(app: FastifyInstance, opts?: { forceEnabled?: boo
     errorResponseBuilder,
   })
 
-  app.log.info("Rate limiting enabled (in-memory, tiered: auth/coupons=20/min, uploads=30/min, general=1000/min)")
+  app.log.info("Rate limiting enabled (in-memory, tiered: auth=20/min, uploads=30/min, general=1000/min)")
 }
 
 export default fp(rateLimitPlugin, {

@@ -7,7 +7,6 @@ import type { ContractCourse } from "@workspace/contracts/domain"
 
 import { CourseThumbnail } from "./course-thumbnail"
 import { InstitutionLogo } from "@/components/composed/_shared/institution-logo"
-import { formatRupiah } from "@/lib/format"
 import { LEVEL_LABELS } from "@/lib/labels"
 
 export type CourseLearningState = "baru" | "berjalan" | "lulus"
@@ -68,8 +67,8 @@ export function CourseCard({ course, status, showCta = true }: CourseCardProps) 
                 {course.title}
               </h3>
             </Link>
-            <Badge variant={course.price ? "secondary" : "outline"} className="shrink-0 font-medium">
-              {course.price ? formatRupiah(course.price) : "Gratis"}
+            <Badge variant="outline" className="shrink-0 font-medium">
+              Gratis
             </Badge>
           </div>
 

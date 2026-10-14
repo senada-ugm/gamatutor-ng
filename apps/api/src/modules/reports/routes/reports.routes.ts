@@ -23,11 +23,6 @@ export function reportsRoutes(app: FastifyInstance) {
     return dataResponse(await service.getAdminOverview(), request.id)
   })
 
-  app.get("/admin/financial-summary", async (request) => {
-    await requireAdmin(request)
-    return dataResponse(await service.getFinancialSummary(), request.id)
-  })
-
   /** Not part of the TypeSpec contract on purpose — operational CSV
    *  formatting of the report data (see reports.tsp's header comment for
    *  the same precedent as POST /uploads/sweep). Same manager gate as
@@ -41,16 +36,4 @@ export function reportsRoutes(app: FastifyInstance) {
     reply.header("Content-Disposition", `attachment; filename="${encodeURIComponent(filename)}"`)
     return "\uFEFF" + csv
   })
-
-  app.get<{ Params: { institutionId: string } }>(
-    "/institutions/:institutionId/orders/export",
-    async (request, reply) => {
-      const user = await requireSession(request)
-      await assertCanManageInstitution(user, request.params.institutionId)
-      const { filename, csv } = await service.getInstitutionOrdersCsv(request.params.institutionId)
-      reply.header("Content-Type", "text/csv; charset=utf-8")
-      reply.header("Content-Disposition", `attachment; filename="${encodeURIComponent(filename)}"`)
-      return "\uFEFF" + csv
-    }
-  )
 }

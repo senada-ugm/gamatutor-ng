@@ -7,7 +7,6 @@ import type { ContractCourse } from "@workspace/contracts/domain"
 import { CourseThumbnail } from "./course-thumbnail"
 import { PageHeader } from "@/components/_shared/page-header"
 import { APP_ORIGIN } from "@/lib/env"
-import { formatRupiah } from "@/lib/format"
 import { LEVEL_LABELS } from "@/lib/labels"
 
 /**
@@ -28,8 +27,8 @@ export function CourseDetail({ course, institutionName }: { course: ContractCour
           title={course.title}
           description={course.shortDescription}
           actions={
-            <Badge variant={course.price ? "secondary" : "outline"} className="text-sm">
-              {course.price ? formatRupiah(course.price) : "Gratis"}
+            <Badge variant="outline" className="text-sm">
+              Gratis
             </Badge>
           }
         />
@@ -84,7 +83,7 @@ export function CourseDetail({ course, institutionName }: { course: ContractCour
 
       <div className="flex flex-wrap gap-3 pt-4">
         <NativeAnchor href={`${APP_ORIGIN}/courses/${course.id}`} size="lg" className="px-6">
-          {course.price ? "Daftar & Bayar" : "Daftar Sekarang"}
+          Daftar Sekarang
         </NativeAnchor>
         <NativeAnchor href={`${APP_ORIGIN}/login`} variant="outline" size="lg" className="px-6">
           Masuk

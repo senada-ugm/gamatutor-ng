@@ -135,12 +135,6 @@ const institutionParticipantsRoute = createRoute({
   component: lazyRouteComponent(() => import("@/routes/institution/participants"), "InstitutionParticipantsPage"),
 })
 
-const institutionOrdersRoute = createRoute({
-  getParentRoute: () => institutionRoute,
-  path: "/pembayaran",
-  component: lazyRouteComponent(() => import("@/routes/institution/orders"), "InstitutionOrdersPage"),
-})
-
 const instructorRoute = createRoute({
   getParentRoute: () => managementRoute,
   path: "/instructor",
@@ -200,12 +194,6 @@ const editorAttendanceRoute = createRoute({
   component: lazyRouteComponent(() => import("@/routes/instructor/editor-attendance"), "EditorAttendanceTab"),
 })
 
-const editorPaymentsRoute = createRoute({
-  getParentRoute: () => editorLayoutRoute,
-  path: "/pembayaran",
-  component: lazyRouteComponent(() => import("@/routes/instructor/editor-payments"), "EditorPaymentsTab"),
-})
-
 const editorCertificatesRoute = createRoute({
   getParentRoute: () => editorLayoutRoute,
   path: "/sertifikat",
@@ -228,12 +216,6 @@ const editorReportRoute = createRoute({
   getParentRoute: () => editorLayoutRoute,
   path: "/laporan",
   component: lazyRouteComponent(() => import("@/routes/instructor/editor-report"), "EditorReportTab"),
-})
-
-const editorCouponsRoute = createRoute({
-  getParentRoute: () => editorLayoutRoute,
-  path: "/kupon",
-  component: lazyRouteComponent(() => import("@/routes/instructor/editor-coupons"), "EditorCouponsTab"),
 })
 
 const notificationsRoute = createRoute({
@@ -293,18 +275,6 @@ const courseDetailRoute = createRoute({
   getParentRoute: () => learnerRoute,
   path: "/courses/$courseId",
   component: lazyRouteComponent(() => import("@/routes/courses/$courseId"), "CourseDetailPage"),
-})
-
-const wishlistRoute = createRoute({
-  getParentRoute: () => learnerRoute,
-  path: "/wishlist",
-  component: lazyRouteComponent(() => import("@/routes/wishlist"), "WishlistPage"),
-})
-
-const myOrdersRoute = createRoute({
-  getParentRoute: () => learnerRoute,
-  path: "/orders",
-  component: lazyRouteComponent(() => import("@/routes/orders"), "MyOrdersPage"),
 })
 
 const certificateViewRoute = createRoute({
@@ -429,8 +399,6 @@ const routeTree = rootRoute.addChildren([
       notificationsRoute,
       courseCatalogRoute,
       courseDetailRoute,
-      wishlistRoute,
-      myOrdersRoute,
       assessmentsRoute,
       profileRoute,
       institutionRequestsRoute,
@@ -445,7 +413,7 @@ const routeTree = rootRoute.addChildren([
         adminAssessmentsRoute,
         adminAuditRoute,
       ]),
-      institutionRoute.addChildren([institutionOverviewRoute, institutionParticipantsRoute, institutionOrdersRoute]),
+      institutionRoute.addChildren([institutionOverviewRoute, institutionParticipantsRoute]),
       instructorRoute.addChildren([
         instructorIndexRoute,
         instructorNewCourseRoute,
@@ -456,12 +424,10 @@ const routeTree = rootRoute.addChildren([
           editorQuizzesRoute,
           editorAssessmentsRoute,
           editorAttendanceRoute,
-          editorPaymentsRoute,
           editorCertificatesRoute,
           editorInstructorsRoute,
           editorAnnouncementsRoute,
           editorReportRoute,
-          editorCouponsRoute,
         ]),
       ]),
     ]),

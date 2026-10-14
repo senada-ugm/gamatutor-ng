@@ -22,7 +22,6 @@ const STAMP = Date.now()
 const INSTITUTION = `Institusi Smoke ${STAMP}`
 const FREE_COURSE = `Pelatihan Gratis ${STAMP}`
 const PAID_COURSE = `Pelatihan Berbayar ${STAMP}`
-const PRICE = 150000
 let failures = 0
 
 async function expect(name, fn) {
@@ -69,8 +68,7 @@ const freeCourse = await post("/courses", {
 const paidCourse = await post("/courses", {
   title: PAID_COURSE,
   institutionId: institution.id,
-  courseType: "online",
-  price: PRICE,
+  courseType: "offline",
   isDisabilityFriendly: false,
   supportedDisabilityTypes: [],
 })
@@ -82,8 +80,7 @@ for (const id of [freeCourse.id, paidCourse.id]) {
 
 const enrollment = await post("/enrollments", { courseId: freeCourse.id })
 await page.request.patch(`${API}/v1/enrollments/${enrollment.id}`, { data: { status: "selected" } })
-const order = await post("/orders", { courseId: paidCourse.id })
-await page.request.post(`${API}/v1/orders/${order.id}/confirm-payment`)
+await post("/enrollments", { courseId: paidCourse.id })
 
 // ================= The scope gate =================
 // The switcher persists its pick, so a previous run would leave this
@@ -111,14 +108,6 @@ await expect("the per-course table lists both seeded courses", async () => {
   await page.getByRole("cell", { name: FREE_COURSE }).waitFor({ timeout: 10000 })
   await page.getByRole("cell", { name: PAID_COURSE }).waitFor({ timeout: 10000 })
 })
-await expect("the paid order shows up as institution revenue", async () => {
-  // formatRupiah renders "Rp\u00a0150.000" — match the digits, not the
-  // currency prefix's locale-specific spacing.
-  await page
-    .getByText(/150\.000/)
-    .first()
-    .waitFor({ timeout: 10000 })
-})
 
 // ================= Participants =================
 await page
@@ -137,16 +126,6 @@ await expect("filtering by status narrows the list", async () => {
   await page.getByText(ADMIN.email).first().waitFor({ timeout: 10000 })
 })
 
-// ================= Orders =================
-await page
-  .locator('[data-sidebar="menu-button"]')
-  .filter({ hasText: /^Pembayaran$/ })
-  .click()
-await expect("the order book lists the paid order for the right course", async () => {
-  await page.waitForURL("**/institution/pembayaran", { timeout: 10000 })
-  await page.getByRole("link", { name: PAID_COURSE }).waitFor({ timeout: 15000 })
-  await page.getByRole("cell", { name: "Lunas" }).first().waitFor({ timeout: 10000 })
-})
 
 // ================= The ownership gate =================
 await page.getByRole("button", { name: "Menu Akun" }).click()
@@ -160,10 +139,6 @@ await expect("an account that does not own the institution is refused its report
 })
 await expect("and cannot list its enrollments either", async () => {
   const res = await page.request.get(`${API}/v1/enrollments?institutionId=${institution.id}`)
-  if (res.status() !== 403) throw new Error(`expected 403, got ${res.status()}`)
-})
-await expect("or its orders", async () => {
-  const res = await page.request.get(`${API}/v1/orders?institutionId=${institution.id}`)
   if (res.status() !== 403) throw new Error(`expected 403, got ${res.status()}`)
 })
 

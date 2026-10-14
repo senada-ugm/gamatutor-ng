@@ -66,8 +66,6 @@ namespace Lms {
     finalGrade?: int32;
     certificateIssued?: boolean;
     certificateId?: string;
-    /** True if the course is free, or if this enrollment's user holds a paid order for this course. */
-    isPaid?: boolean;
   }
 
   enum ParticipantGender {

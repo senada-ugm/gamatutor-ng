@@ -14,8 +14,6 @@ import "./discussions.tsp";
 import "./certificates.tsp";
 import "./certificate-settings.tsp";
 import "./uploads.tsp";
-import "./payments.tsp";
-import "./wishlist.tsp";
 import "./announcements.tsp";
 import "./platform-settings.tsp";
 import "./notifications.tsp";

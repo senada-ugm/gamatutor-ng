@@ -14,7 +14,7 @@ import type { ContractCourse } from "@workspace/contracts/domain"
 
 /**
  * Lean course write form covering the fields a course author actually
- * needs day-to-day (identity, type, level, price, capacity). Contract
+ * needs day-to-day (identity, type, level, capacity). Contract
  * exotics (funding source, contact person, city, …) stay server-defaulted
  * until a surface needs them — collecting them here without a consumer
  * would just be noise.
@@ -42,7 +42,6 @@ export interface CourseFormValues {
   thumbnail: string
   courseType: (typeof COURSE_TYPES)[number]["value"]
   level: (typeof LEVELS)[number]["value"]
-  price: string
   participantQuota: string
 }
 
@@ -54,7 +53,6 @@ export function courseFormValuesFromCourse(course: ContractCourse): CourseFormVa
     thumbnail: course.thumbnail ?? "",
     courseType: course.courseType,
     level: course.level ?? "beginner",
-    price: course.price != null ? String(course.price) : "",
     participantQuota: course.participantQuota != null ? String(course.participantQuota) : "",
   }
 }
@@ -67,7 +65,6 @@ export function toCourseWritePayload(values: CourseFormValues) {
     thumbnail: values.thumbnail || null,
     courseType: values.courseType,
     level: values.level,
-    price: values.price ? Number(values.price) : undefined,
     participantQuota: values.participantQuota ? Number(values.participantQuota) : undefined,
     isDisabilityFriendly: false,
     supportedDisabilityTypes: [],
@@ -93,7 +90,6 @@ export function CourseForm({
       thumbnail: "",
       courseType: "online",
       level: "beginner",
-      price: "",
       participantQuota: "",
     }
   )
@@ -234,18 +230,6 @@ export function CourseForm({
                   </NativeSelectOption>
                 ))}
               </NativeSelect>
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="price">Harga (Rupiah)</Label>
-              <Input
-                id="price"
-                type="number"
-                min={0}
-                value={values.price}
-                onChange={(e) => update("price", e.target.value)}
-                placeholder="Kosongkan jika gratis"
-              />
             </div>
 
             <div className="space-y-1.5">

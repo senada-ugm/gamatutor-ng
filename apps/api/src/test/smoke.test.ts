@@ -5,8 +5,6 @@ import { dataResponse, generateId, pagedResponse } from "../lib/response.js"
 import { ilikeContains } from "../lib/search.js"
 import { extractUploadIdFromUrl } from "../modules/uploads/services/uploads.service.js"
 import { assertWithinTimeLimit } from "../modules/quizzes/services/quizzes.service.js"
-import { createHmac } from "node:crypto"
-import { verifyWebhookSignature } from "../lib/stripe.js"
 
 describe("API Core Utilities & Security Helpers", () => {
   describe("generateId", () => {
@@ -106,29 +104,6 @@ describe("API Core Utilities & Security Helpers", () => {
 
       assert.equal(extractUploadIdFromUrl(null), null)
       assert.equal(extractUploadIdFromUrl("not-a-url"), null)
-    })
-  })
-
-  describe("stripe webhook signature", () => {
-    const secret = "whsec_test"
-    const payload = JSON.stringify({ id: "evt_1", type: "checkout.session.completed" })
-    const t = Math.floor(Date.now() / 1000).toString()
-    const good = createHmac("sha256", secret).update(`${t}.${payload}`).digest("hex")
-
-    it("accepts a correctly signed payload", () => {
-      assert.equal(verifyWebhookSignature(payload, `t=${t},v1=${good}`, secret), true)
-    })
-
-    it("rejects a tampered body, wrong secret, and missing header", () => {
-      assert.equal(verifyWebhookSignature(payload + "x", `t=${t},v1=${good}`, secret), false)
-      assert.equal(verifyWebhookSignature(payload, `t=${t},v1=${good}`, "whsec_other"), false)
-      assert.equal(verifyWebhookSignature(payload, undefined, secret), false)
-    })
-
-    it("rejects stale timestamps (replay protection)", () => {
-      const oldT = Math.floor(Date.now() / 1000) - 3600
-      const oldSig = createHmac("sha256", secret).update(`${oldT}.${payload}`).digest("hex")
-      assert.equal(verifyWebhookSignature(payload, `t=${oldT},v1=${oldSig}`, secret), false)
     })
   })
 })

@@ -98,20 +98,6 @@ const envSchema = z
     GOOGLE_CLIENT_ID: z.string().optional().default(""),
     GOOGLE_CLIENT_SECRET: z.string().optional().default(""),
 
-    // Stripe-compatible payment gateway — unset PAYMENT_SECRET_KEY disables
-    // it entirely (paid courses then run on manual-transfer confirmation).
-    // See lib/stripe.ts; PAYMENT_API_BASE exists so Stripe-compatible
-    // processors (or stripe-mock in tests) can be pointed at.
-    PAYMENT_SECRET_KEY: z.string().optional().default(""),
-    PAYMENT_WEBHOOK_SECRET: z.string().optional().default(""),
-    PAYMENT_API_BASE: z.string().default("https://api.stripe.com"),
-    // ISO 4217 lowercase. Zero-decimal currencies (idr) send unit_amount
-    // as-is; two-decimal currencies would need *100 before creating the
-    // checkout session.
-    PAYMENT_CURRENCY: z.string().default("idr"),
-    PAYMENT_SUCCESS_URL: z.string().optional().default(""),
-    PAYMENT_CANCEL_URL: z.string().optional().default(""),
-
     // Uploads — local disk storage (see src/lib/storage.ts) with an orphan
     // sweep. TTL is env-overridable so the sweep is testable without
     // waiting the real default out. API_PUBLIC_URL is kept separate from

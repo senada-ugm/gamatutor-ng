@@ -11,14 +11,13 @@ using Lms.Common;
  * Read-only aggregates for the manager dashboards: one call per course
  * with every participant's funnel/progress/attendance row (the data the
  * ParticipantsPanel and attendance records view currently assemble
- * client-side), plus the platform-wide money summary for the admin
- * financial widgets (replacing lib/mock/financial.ts).
+ * client-side), plus platform/institution totals for the admin and owner
+ * dashboards.
  *
- * The CSV export of a course's participant table and an institution's
- * order book live OUTSIDE this contract (GET /v1/courses/{id}/participants/export,
- * GET /v1/institutions/{id}/orders/export, text/csv) — same operational-endpoint
- * precedent as POST /uploads/sweep: the data is fully described here; only the
- * file formatting is operational.
+ * The CSV export of a course's participant table lives OUTSIDE this
+ * contract (GET /v1/courses/{id}/participants/export, text/csv) — same
+ * operational-endpoint precedent as POST /uploads/sweep: the data is
+ * fully described here; only the file formatting is operational.
  */
 namespace Lms {
   model ReportUser {
@@ -55,27 +54,6 @@ namespace Lms {
     totalLessons: int32;
     totalSessions: int32;
     participants: CourseReportParticipant[];
-  }
-
-  model FinancialSummaryCourseRow {
-    courseId: ResourceId;
-    courseTitle: string;
-    institutionId: ResourceId;
-    paidOrders: int32;
-    /** Sum of finalAmount over paid orders, integer Rupiah. */
-    revenue: int32;
-    /** Sum of discountAmount over paid orders. */
-    discountGiven: int32;
-    pendingOrders: int32;
-  }
-
-  model FinancialSummary {
-    totalRevenue: int32;
-    totalDiscountGiven: int32;
-    paidOrders: int32;
-    pendingOrders: int32;
-    refundedOrders: int32;
-    byCourse: FinancialSummaryCourseRow[];
   }
 
   @route("/courses/{courseId}/report")
@@ -115,16 +93,13 @@ namespace Lms {
     registrantCount: int32;
     participantCount: int32;
     graduatedCount: int32;
-    paidOrders: int32;
-    /** Sum of finalAmount over this course's paid orders. */
-    revenue: int32;
   }
 
   /**
-   * One institution's funnel and money in a single call - the owner's
-   * equivalent of AdminOverview, scoped to what they own. Counts follow
-   * the same definitions the course-level report uses: a registrant is
-   * any enrollment that was not canceled or failed, a participant is
+   * One institution's funnel in a single call - the owner's equivalent
+   * of AdminOverview, scoped to what they own. Counts follow the same
+   * definitions the course-level report uses: a registrant is any
+   * enrollment that was not canceled or failed, a participant is
    * selected or graduated.
    */
   model InstitutionReport {
@@ -137,17 +112,13 @@ namespace Lms {
     graduatedCount: int32;
     /** graduated as a percent of selected+graduated, rounded; 0 when none. */
     completionRate: int32;
-    /** Sum of finalAmount over paid orders for this institution's courses. */
-    totalRevenue: int32;
-    paidOrders: int32;
-    pendingOrders: int32;
     byCourse: InstitutionReportCourseRow[];
   }
 
   @route("/institutions/{institutionId}/report")
   @tag("Reports")
   interface InstitutionReportsApi {
-    /** Funnel + money for one institution, broken down by course. The
+    /** Funnel for one institution, broken down by course. The
      *  institution's owners and admins only. */
     @get
     get(@path institutionId: ResourceId): DataResponse<InstitutionReport> | ErrorResponse;
@@ -161,11 +132,4 @@ namespace Lms {
     get(): DataResponse<AdminOverview> | ErrorResponse;
   }
 
-  @route("/admin/financial-summary")
-  @tag("Reports")
-  interface FinancialReportsApi {
-    /** Platform money summary from paid/pending orders. Admin only. */
-    @get
-    get(): DataResponse<FinancialSummary> | ErrorResponse;
-  }
 }

@@ -26,7 +26,6 @@ import { decryptPii, encryptPii, maskPii } from "../../../lib/pii.js"
 import { generateId } from "../../../lib/response.js"
 import { issueCertificate } from "../../certificates/services/certificates.service.js"
 import { visibleCourseScope } from "../../courses/services/courses.service.js"
-import { getPaidOrdersSet, hasPaidOrder } from "../../payments/services/payments.service.js"
 import { orderByClause } from "../../../lib/order.js"
 
 /** Per-course lesson totals and per-(user, course) completion counts for
@@ -114,24 +113,11 @@ async function loadLessonStats(rows: { userId: string; courseId: string }[]) {
     }
   }
 
-  const coursePriceRows =
-    courseIds.length > 0
-      ? await db.select({ id: courses.id, price: courses.price }).from(courses).where(inArray(courses.id, courseIds))
-      : []
-  const coursePrices = new Map(coursePriceRows.map((c) => [c.id, c.price ?? 0]))
-  const paidOrders = await getPaidOrdersSet(rows)
-  const paidByUserCourse = new Map<string, boolean>()
-  for (const r of rows) {
-    const price = coursePrices.get(r.courseId) ?? 0
-    paidByUserCourse.set(`${r.userId}:${r.courseId}`, price === 0 || paidOrders.has(`${r.userId}:${r.courseId}`))
-  }
-
   return {
     totalsByCourse,
     completedByUserCourse,
     completedQuizzesByUserCourse,
     completedAssignmentsByUserCourse,
-    paidByUserCourse,
   }
 }
 
@@ -142,7 +128,6 @@ function toEnrollmentFromStats(
   extra?: {
     completedQuizzes?: Map<string, number>
     completedAssignments?: Map<string, number>
-    isPaid?: Map<string, boolean>
   }
 ): Enrollment {
   const totalLessons = totalsByCourse.get(row.courseId) ?? 0
@@ -170,7 +155,6 @@ function toEnrollmentFromStats(
     finalGrade: row.finalGrade ?? undefined,
     certificateIssued: row.certificateIssued,
     certificateId: row.certificateId ?? undefined,
-    isPaid: extra?.isPaid?.get(`${row.userId}:${row.courseId}`) ?? true,
   }
 }
 
@@ -179,7 +163,6 @@ async function toEnrollment(row: typeof enrollments.$inferSelect): Promise<Enrol
   return toEnrollmentFromStats(row, stats.totalsByCourse, stats.completedByUserCourse, {
     completedQuizzes: stats.completedQuizzesByUserCourse,
     completedAssignments: stats.completedAssignmentsByUserCourse,
-    isPaid: stats.paidByUserCourse,
   })
 }
 
@@ -214,7 +197,6 @@ async function mapRowsToEnrollments(rows: (typeof enrollments.$inferSelect)[]): 
     toEnrollmentFromStats(row, stats.totalsByCourse, stats.completedByUserCourse, {
       completedQuizzes: stats.completedQuizzesByUserCourse,
       completedAssignments: stats.completedAssignmentsByUserCourse,
-      isPaid: stats.paidByUserCourse,
     })
   )
 }
@@ -348,7 +330,7 @@ export async function enroll(
       )
       .limit(1)
 
-    const isFreeOnline = course.courseType === "online" && (course.price ?? 0) === 0
+    const isFreeOnline = course.courseType === "online"
     const initialStatus = isFreeOnline ? "selected" : "registered"
     const nowTimestamp = new Date()
 
@@ -474,17 +456,6 @@ export async function updateEnrollment(id: string, input: EnrollmentUpdate): Pro
       }
       const [row] = await tx.update(enrollments).set(patch).where(eq(enrollments.id, id)).returning()
       if (target === "graduated") {
-        const [course] = await tx
-          .select({ price: courses.price })
-          .from(courses)
-          .where(eq(courses.id, current.courseId))
-          .limit(1)
-        if ((course?.price ?? 0) > 0) {
-          const paid = await hasPaidOrder(current.userId, current.courseId, tx)
-          if (!paid) {
-            throw new ForbiddenError("Peserta belum melunasi pembayaran untuk pelatihan berbayar ini")
-          }
-        }
         await issueCertificate(row!.courseId, { enrollmentId: row!.id }, tx)
       }
       const [refreshed] = await tx.select().from(enrollments).where(eq(enrollments.id, id)).limit(1)

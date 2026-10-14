@@ -111,10 +111,6 @@ namespace Lms {
     modules: Module[];
     @visibility(Lifecycle.Read)
     updatedAt?: utcDateTime;
-    /** Mockup-only: price in Rupiah. Absent/null means free — the real
-     *  product has this feature-flagged off (see courses.ts's fixture
-     *  comment). */
-    price?: int32;
   }
 
   /**
@@ -154,8 +150,6 @@ namespace Lms {
     trainingBudget?: int32;
     contactPersonName?: string;
     contactPersonPhone?: string;
-    /** Mockup-only: price in Rupiah. Absent/null means free. */
-    price?: int32;
   }
 
   /**

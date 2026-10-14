@@ -1,17 +1,15 @@
 import { useQuery } from "@tanstack/react-query"
 
 import { Button } from "@workspace/ui/components/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@workspace/ui/components/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@workspace/ui/components/card"
 import { Skeleton } from "@workspace/ui/components/skeleton"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@workspace/ui/components/table"
 import { Download } from "lucide-react"
 
 import { EmptyState } from "@/components/composed/_shared/empty-state"
 import { ErrorState } from "@/components/composed/_shared/error-state"
 import { PageHeader } from "@/components/composed/_shared/page-header"
 import { apiGet } from "@/lib/api"
-import { formatRupiah } from "@/lib/format"
-import type { ContractAdminOverview, ContractFinancialSummary, ContractHealthStatus } from "@workspace/contracts/domain"
+import type { ContractAdminOverview, ContractHealthStatus } from "@workspace/contracts/domain"
 
 /** A top-level stat gets its own card; one nested inside a card is a
  *  plain figure, so a ring never sits inside a ring. */
@@ -39,10 +37,6 @@ export function AdminDashboardPage() {
     queryKey: ["admin-overview"],
     queryFn: () => apiGet<ContractAdminOverview>("/admin/overview"),
   })
-  const financial = useQuery({
-    queryKey: ["admin-financial"],
-    queryFn: () => apiGet<ContractFinancialSummary>("/admin/financial-summary"),
-  })
   const health = useQuery({
     queryKey: ["admin-health"],
     queryFn: () => apiGet<ContractHealthStatus>("/health"),
@@ -55,7 +49,7 @@ export function AdminDashboardPage() {
     <div className="space-y-6">
       <PageHeader
         title="Admin Overview"
-        description="Platform statistics, financial flows, and research telemetry."
+        description="Platform statistics and research telemetry."
         actions={
           <div className="flex flex-wrap items-center gap-2">
             <Button
@@ -115,51 +109,6 @@ export function AdminDashboardPage() {
                 <StatFigure label="Tingkat Penyelesaian" value={`${o.completionRate}%`} />
                 <StatFigure label="Pengguna Baru (30 hari)" value={o.growth30d.newUsers} />
               </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Ringkasan Keuangan</CardTitle>
-              <CardDescription>Dihitung dari pesanan lunas dan tertunda.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {financial.isLoading ? (
-                <Skeleton className="h-16 w-full" />
-              ) : financial.data ? (
-                <>
-                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                    <StatFigure label="Pendapatan" value={formatRupiah(financial.data.totalRevenue)} />
-                    <StatFigure label="Diskon Diberikan" value={formatRupiah(financial.data.totalDiscountGiven)} />
-                    <StatFigure label="Pesanan Lunas" value={financial.data.paidOrders} />
-                    <StatFigure label="Menunggu Bayar" value={financial.data.pendingOrders} />
-                  </div>
-                  {financial.data.byCourse.length > 0 ? (
-                    <div className="overflow-hidden rounded-xl border">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Pelatihan</TableHead>
-                            <TableHead>Lunas</TableHead>
-                            <TableHead>Pendapatan</TableHead>
-                            <TableHead>Tertunda</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {financial.data.byCourse.map((row) => (
-                            <TableRow key={row.courseId}>
-                              <TableCell className="font-medium">{row.courseTitle}</TableCell>
-                              <TableCell>{row.paidOrders}</TableCell>
-                              <TableCell>{formatRupiah(row.revenue)}</TableCell>
-                              <TableCell>{row.pendingOrders}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  ) : null}
-                </>
-              ) : null}
             </CardContent>
           </Card>
         </>

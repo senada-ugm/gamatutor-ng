@@ -10,7 +10,6 @@ import { EmptyState } from "@/components/composed/_shared/empty-state"
 import { ErrorState } from "@/components/composed/_shared/error-state"
 import { PageHeader } from "@/components/composed/_shared/page-header"
 import { EnrollPanel } from "@/components/composed/student/enroll-panel"
-import { WishlistButton } from "@/components/composed/student/wishlist-button"
 import { useSession } from "@/lib/session"
 import { apiGet } from "@/lib/api"
 import { COURSE_TYPE_LABELS, LEVEL_LABELS } from "@/lib/labels"
@@ -131,7 +130,6 @@ export function CourseDetailPage() {
 
         <div className="space-y-3">
           <EnrollPanel course={c} enrollment={myEnrollment.data ?? null} />
-          <WishlistButton courseId={c.id} />
         </div>
       </div>
     </div>

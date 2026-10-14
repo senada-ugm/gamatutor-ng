@@ -387,17 +387,6 @@ export const zCertificateSettings = z.object({
 });
 
 /**
- * A hosted Stripe-compatible checkout the learner is redirected to.
- * Only available when the gateway is configured (PAYMENT_SECRET_KEY);
- * otherwise 503 and the manual-transfer flow applies.
- */
-export const zCheckoutSession = z.object({
-    orderId: zCommonResourceId,
-    sessionId: z.string(),
-    url: z.string()
-});
-
-/**
  * Metadata envelope included in all API responses.
  */
 export const zCommonResponseMeta = z.object({
@@ -449,87 +438,6 @@ export const zCommonWarning = z.object({
     sunsetDate: z.iso.datetime().optional(),
     alternative: z.string().optional(),
     documentationUrl: z.string().optional()
-});
-
-export const zCouponDiscountType = z.enum(['percentage', 'fixed']);
-
-export const zCouponCreate = z.object({
-    code: z.string(),
-    description: z.string().optional(),
-    discountType: zCouponDiscountType,
-    discountValue: z.int().gte(1).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    maxDiscountAmount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    courseId: zCommonResourceId.optional(),
-    institutionId: zCommonResourceId.optional(),
-    maxUses: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    maxUsesPerUser: z.int().gte(1).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    isActive: z.boolean().optional(),
-    startsAt: z.iso.datetime().optional(),
-    expiresAt: z.iso.datetime().optional()
-});
-
-export const zCouponPricing = z.object({
-    originalPrice: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    discountAmount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    finalPrice: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' })
-});
-
-/**
- * Computed alongside the stored row — the admin list embeds these per
- * coupon (one grouped query, not N+1).
- */
-export const zCouponStats = z.object({
-    totalUses: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    uniqueUsers: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    totalDiscountGiven: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    remainingUses: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional()
-});
-
-export const zCoupon = z.object({
-    id: zCommonResourceId,
-    code: z.string(),
-    description: z.string().optional(),
-    discountType: zCouponDiscountType,
-    discountValue: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    maxDiscountAmount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    courseId: zCommonResourceId.optional(),
-    institutionId: zCommonResourceId.optional(),
-    maxUses: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    maxUsesPerUser: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    currentUses: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).readonly(),
-    isActive: z.boolean(),
-    startsAt: z.iso.datetime().optional(),
-    expiresAt: z.iso.datetime().optional(),
-    stats: zCouponStats.readonly(),
-    createdAt: z.iso.datetime().readonly()
-});
-
-export const zCouponUpdate = z.object({
-    description: z.string().optional(),
-    discountType: zCouponDiscountType.optional(),
-    discountValue: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    maxDiscountAmount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    maxUses: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    maxUsesPerUser: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    isActive: z.boolean().optional(),
-    startsAt: z.iso.datetime().optional(),
-    expiresAt: z.iso.datetime().optional()
-});
-
-/**
- * What the learner's coupon box calls: price a course with a code,
- * without creating anything.
- */
-export const zCouponValidate = z.object({
-    courseId: zCommonResourceId,
-    code: z.string()
-});
-
-export const zCouponValidation = z.object({
-    valid: z.boolean(),
-    message: z.string().optional(),
-    coupon: zCoupon.optional(),
-    pricing: zCouponPricing.optional()
 });
 
 /**
@@ -752,8 +660,7 @@ export const zEnrollment = z.object({
     completedAt: z.iso.datetime().optional(),
     finalGrade: z.int().gte(0).lte(100).optional(),
     certificateIssued: z.boolean().optional(),
-    certificateId: z.string().optional(),
-    isPaid: z.boolean().optional()
+    certificateId: z.string().optional()
 });
 
 /**
@@ -771,25 +678,6 @@ export const zEnrollmentUpdate = z.object({
     failureReason: zFailureReasonCode.optional(),
     failureNotes: z.string().optional(),
     finalGrade: z.int().gte(0).lte(100).optional()
-});
-
-export const zFinancialSummaryCourseRow = z.object({
-    courseId: zCommonResourceId,
-    courseTitle: z.string(),
-    institutionId: zCommonResourceId,
-    paidOrders: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    revenue: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    discountGiven: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    pendingOrders: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' })
-});
-
-export const zFinancialSummary = z.object({
-    totalRevenue: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    totalDiscountGiven: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    paidOrders: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    pendingOrders: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    refundedOrders: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    byCourse: z.array(zFinancialSummaryCourseRow)
 });
 
 export const zFundingSource = z.enum([
@@ -868,16 +756,14 @@ export const zInstitutionReportCourseRow = z.object({
     status: zCourseStatus,
     registrantCount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
     participantCount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    graduatedCount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    paidOrders: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    revenue: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' })
+    graduatedCount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' })
 });
 
 /**
- * One institution's funnel and money in a single call - the owner's
- * equivalent of AdminOverview, scoped to what they own. Counts follow
- * the same definitions the course-level report uses: a registrant is
- * any enrollment that was not canceled or failed, a participant is
+ * One institution's funnel in a single call - the owner's equivalent
+ * of AdminOverview, scoped to what they own. Counts follow the same
+ * definitions the course-level report uses: a registrant is any
+ * enrollment that was not canceled or failed, a participant is
  * selected or graduated.
  */
 export const zInstitutionReport = z.object({
@@ -889,9 +775,6 @@ export const zInstitutionReport = z.object({
     participantCount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
     graduatedCount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
     completionRate: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    totalRevenue: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    paidOrders: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    pendingOrders: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
     byCourse: z.array(zInstitutionReportCourseRow)
 });
 
@@ -1010,54 +893,6 @@ export const zNotification = z.object({
     link: z.string().optional(),
     readAt: z.iso.datetime().readonly().optional(),
     createdAt: z.iso.datetime().readonly()
-});
-
-export const zOrderConfirmPayment = z.object({
-    paymentReference: z.string().optional(),
-    note: z.string().optional(),
-    proofUrl: z.string().optional()
-});
-
-export const zOrderCreate = z.object({
-    courseId: zCommonResourceId,
-    couponCode: z.string().optional()
-});
-
-export const zOrderRefund = z.object({
-    reason: z.string()
-});
-
-export const zOrderStatus = z.enum([
-    'pending',
-    'paid',
-    'canceled',
-    'refunded'
-]);
-
-export const zOrder = z.object({
-    id: zCommonResourceId,
-    userId: zCommonResourceId,
-    courseId: zCommonResourceId,
-    couponId: zCommonResourceId.optional(),
-    couponCode: z.string().optional(),
-    originalPrice: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    discountAmount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    finalAmount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    status: zOrderStatus,
-    paymentMethod: z.string(),
-    createdAt: z.iso.datetime().readonly(),
-    paidAt: z.iso.datetime().readonly().optional(),
-    confirmedByUserId: zCommonResourceId.readonly().optional(),
-    paymentReference: z.string().optional(),
-    confirmationNotes: z.string().optional(),
-    proofUrl: z.string().optional(),
-    refundedAt: z.iso.datetime().readonly().optional(),
-    refundReason: z.string().optional()
-});
-
-export const zOrderSubmitProof = z.object({
-    paymentReference: z.string(),
-    proofUrl: z.string().optional()
 });
 
 export const zParticipantGender = z.enum(['male', 'female']);
@@ -1419,8 +1254,7 @@ export const zCourse = z.object({
     institution: zCourseInstitutionSummary.readonly(),
     instructor: zCourseInstructorSummary,
     modules: z.array(zModule),
-    updatedAt: z.iso.datetime().readonly().optional(),
-    price: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional()
+    updatedAt: z.iso.datetime().readonly().optional()
 });
 
 /**
@@ -1460,7 +1294,6 @@ export const zCourseCreate = z.object({
     trainingBudget: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
     contactPersonName: z.string().optional(),
     contactPersonPhone: z.string().optional(),
-    price: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
     institutionId: zCommonResourceId
 });
 
@@ -1500,8 +1333,7 @@ export const zCourseUpdate = z.object({
     customFundingSource: z.string().optional(),
     trainingBudget: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
     contactPersonName: z.string().optional(),
-    contactPersonPhone: z.string().optional(),
-    price: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional()
+    contactPersonPhone: z.string().optional()
 });
 
 export const zUploadStatus = z.enum(['unclaimed', 'claimed']);
@@ -1555,34 +1387,6 @@ export const zUser = z.object({
 
 export const zUserSuspend = z.object({
     reason: z.string()
-});
-
-export const zWishlistAdd = z.object({
-    courseId: zCommonResourceId
-});
-
-/**
- * Just what the wishlist cards render — not the full Course (no
- * module tree, no pricing detail).
- */
-export const zWishlistCourseSummary = z.object({
-    id: zCommonResourceId,
-    title: z.string(),
-    shortDescription: z.string().optional(),
-    thumbnail: z.string().optional(),
-    courseType: z.string(),
-    level: z.string(),
-    status: z.string(),
-    institutionId: zCommonResourceId,
-    price: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional()
-});
-
-export const zWishlistItem = z.object({
-    id: zCommonResourceId,
-    userId: zCommonResourceId,
-    courseId: zCommonResourceId,
-    course: zWishlistCourseSummary.readonly().optional(),
-    createdAt: z.iso.datetime().readonly()
 });
 
 export const zAnnouncementWritable = z.object({
@@ -1666,29 +1470,6 @@ export const zCertificateSettingsWritable = z.object({
     signatures: z.array(zCertificateSignature)
 });
 
-export const zCouponWritable = z.object({
-    id: zCommonResourceId,
-    code: z.string(),
-    description: z.string().optional(),
-    discountType: zCouponDiscountType,
-    discountValue: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    maxDiscountAmount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    courseId: zCommonResourceId.optional(),
-    institutionId: zCommonResourceId.optional(),
-    maxUses: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    maxUsesPerUser: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    isActive: z.boolean(),
-    startsAt: z.iso.datetime().optional(),
-    expiresAt: z.iso.datetime().optional()
-});
-
-export const zCouponValidationWritable = z.object({
-    valid: z.boolean(),
-    message: z.string().optional(),
-    coupon: zCouponWritable.optional(),
-    pricing: zCouponPricing.optional()
-});
-
 export const zCourseWritable = z.object({
     id: zCommonResourceId,
     slug: z.string(),
@@ -1722,8 +1503,7 @@ export const zCourseWritable = z.object({
     status: zCourseStatus,
     institutionId: zCommonResourceId,
     instructor: zCourseInstructorSummary,
-    modules: z.array(zModule),
-    price: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional()
+    modules: z.array(zModule)
 });
 
 export const zCourseInstructorWritable = z.object({
@@ -1780,8 +1560,7 @@ export const zEnrollmentWritable = z.object({
     completedAt: z.iso.datetime().optional(),
     finalGrade: z.int().gte(0).lte(100).optional(),
     certificateIssued: z.boolean().optional(),
-    certificateId: z.string().optional(),
-    isPaid: z.boolean().optional()
+    certificateId: z.string().optional()
 });
 
 /**
@@ -1828,23 +1607,6 @@ export const zNotificationWritable = z.object({
     title: z.string(),
     body: z.string().optional(),
     link: z.string().optional()
-});
-
-export const zOrderWritable = z.object({
-    id: zCommonResourceId,
-    userId: zCommonResourceId,
-    courseId: zCommonResourceId,
-    couponId: zCommonResourceId.optional(),
-    couponCode: z.string().optional(),
-    originalPrice: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    discountAmount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    finalAmount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    status: zOrderStatus,
-    paymentMethod: z.string(),
-    paymentReference: z.string().optional(),
-    confirmationNotes: z.string().optional(),
-    proofUrl: z.string().optional(),
-    refundReason: z.string().optional()
 });
 
 export const zPlatformSettingsWritable = z.object({
@@ -1931,12 +1693,6 @@ export const zUserWritable = z.object({
     role: zUserRole
 });
 
-export const zWishlistItemWritable = z.object({
-    id: zCommonResourceId,
-    userId: zCommonResourceId,
-    courseId: zCommonResourceId
-});
-
 /**
  * Sort order configuration matching standard patterns (e.g. `createdAt:desc`).
  */
@@ -1961,15 +1717,6 @@ export const zCommonSearchParamQ = z.string();
  * Query string matching wildcard terms.
  */
 export const zCommonSearchParamSearch = z.string();
-
-/**
- * Standard single resource response envelope.
- */
-export const zFinancialReportsApiGetResponse = z.object({
-    data: zFinancialSummary,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
 
 /**
  * Standard single resource response envelope.
@@ -2305,86 +2052,6 @@ export const zCertificatesApiGetPath = z.object({
  */
 export const zCertificatesApiGetResponse = z.object({
     data: zCertificate,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zCouponsApiListQuery = z.object({
-    page: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(1),
-    pageSize: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(50),
-    orderBy: z.string().optional(),
-    search: z.string().optional(),
-    q: z.string().optional(),
-    isActive: z.boolean().optional(),
-    institutionId: zCommonResourceId.optional(),
-    courseId: zCommonResourceId.optional()
-});
-
-/**
- * Standard page-based paginated response envelope.
- */
-export const zCouponsApiListResponse = z.object({
-    data: z.array(zCoupon),
-    pagination: zCommonPagePagination,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zCouponsApiCreateBody = zCouponCreate;
-
-/**
- * Standard single resource response envelope.
- */
-export const zCouponsApiCreateResponse = z.object({
-    data: zCoupon,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zCouponsApiValidateBody = zCouponValidate;
-
-/**
- * Standard single resource response envelope.
- */
-export const zCouponsApiValidateResponse = z.object({
-    data: zCouponValidation,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zCouponsApiDeletePath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * There is no content to send for this request, but the headers may be useful.
- */
-export const zCouponsApiDeleteResponse = z.void();
-
-export const zCouponsApiGetPath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zCouponsApiGetResponse = z.object({
-    data: zCoupon,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zCouponsApiUpdateBody = zCouponUpdate;
-
-export const zCouponsApiUpdatePath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zCouponsApiUpdateResponse = z.object({
-    data: zCoupon,
     meta: zCommonResponseMeta,
     warnings: z.array(zCommonWarning).optional()
 });
@@ -3308,121 +2975,6 @@ export const zNotificationsApiMarkReadResponse = z.object({
     warnings: z.array(zCommonWarning).optional()
 });
 
-export const zOrdersApiListQuery = z.object({
-    page: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(1),
-    pageSize: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(50),
-    orderBy: z.string().optional(),
-    courseId: zCommonResourceId.optional(),
-    institutionId: zCommonResourceId.optional(),
-    userId: zCommonResourceId.optional(),
-    status: zOrderStatus.optional()
-});
-
-/**
- * Standard page-based paginated response envelope.
- */
-export const zOrdersApiListResponse = z.object({
-    data: z.array(zOrder),
-    pagination: zCommonPagePagination,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zOrdersApiCreateBody = zOrderCreate;
-
-/**
- * Standard single resource response envelope.
- */
-export const zOrdersApiCreateResponse = z.object({
-    data: zOrder,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zOrdersApiGetPath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zOrdersApiGetResponse = z.object({
-    data: zOrder,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zOrdersApiCancelPath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zOrdersApiCancelResponse = z.object({
-    data: zOrder,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zOrdersApiCreateCheckoutPath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zOrdersApiCreateCheckoutResponse = z.object({
-    data: zCheckoutSession,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zOrdersApiConfirmPaymentBody = zOrderConfirmPayment;
-
-export const zOrdersApiConfirmPaymentPath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zOrdersApiConfirmPaymentResponse = z.object({
-    data: zOrder,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zOrdersApiRefundBody = zOrderRefund;
-
-export const zOrdersApiRefundPath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zOrdersApiRefundResponse = z.object({
-    data: zOrder,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zOrdersApiSubmitProofBody = zOrderSubmitProof;
-
-export const zOrdersApiSubmitProofPath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zOrdersApiSubmitProofResponse = z.object({
-    data: zOrder,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
 export const zParticipantProfilesApiListQuery = z.object({
     userIds: z.string()
 });
@@ -3765,39 +3317,3 @@ export const zUsersApiSuspendResponse = z.object({
     meta: zCommonResponseMeta,
     warnings: z.array(zCommonWarning).optional()
 });
-
-export const zWishlistApiListQuery = z.object({
-    page: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(1),
-    pageSize: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(50),
-    orderBy: z.string().optional()
-});
-
-/**
- * Standard page-based paginated response envelope.
- */
-export const zWishlistApiListResponse = z.object({
-    data: z.array(zWishlistItem),
-    pagination: zCommonPagePagination,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zWishlistApiAddBody = zWishlistAdd;
-
-/**
- * Standard single resource response envelope.
- */
-export const zWishlistApiAddResponse = z.object({
-    data: zWishlistItem,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zWishlistApiRemovePath = z.object({
-    courseId: zCommonResourceId
-});
-
-/**
- * There is no content to send for this request, but the headers may be useful.
- */
-export const zWishlistApiRemoveResponse = z.void();
