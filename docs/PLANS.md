@@ -6,7 +6,7 @@
 > **Contract Value:** IDR 35,000,000 (Fixed Price, Non-VAT/Non-PKP)  
 > **Timeline:** 16 Calendar Weeks (4 Months)  
 > **Lead Software Architect & Tech Lead:** Ariefan Dipokusumo Wibowo, S.Kom., M.Cs.
-> **Last Updated:** 2026-10-15 — added scope-trim & gap-closure execution checklist (Phases 0–6) after the PKS-vs-implementation audit
+> **Last Updated:** 2026-10-15 — Phase 5 rescoped to a single-tenant frontend over retained backend multi-tenancy (full collapse kept as a deferred fallback)
 
 ---
 
@@ -215,12 +215,21 @@ Nothing in the PKS or the 15 review notes asks for commerce, classroom attendanc
 
 **Phase 4 complete.** The interactive course is now data, not code: the deck ships as a server-managed manifest per course, the player resolves it by courseId (title heuristic deleted), the post-test is graded and recorded by the real quiz engine with unlimited retakes, and instructors import new deck manifests through the editor — the planned AMD/DME follow-up courses need a JSON file, a thumbnail, and zero deploys.
 
-#### Phase 5 — Single-Tenant Collapse & 3-Role RBAC ⚠ needs explicit go-ahead (invasive)
-The PKS names exactly three roles (Admin, Instruktur, Dokter Peserta) and one customer. The institutions layer (requests, ownerships, switcher, owner shell) is multi-tenancy the contract never asked for; review #11's "instansi" is a profile *field*, which already exists.
-- [ ] 5.1 Remove institution-request + ownership surfaces: `/institution-requests`, `/admin/institutions` queue, owner shell pages (`/institution/*`), `InstitutionSwitcher`, `lib/authoring-institution.ts`, dashboard "Institusi Saya" section, `lib/institution-ownership.ts` cache
-- [ ] 5.2 Refactor access gates: `course-access.ts` + course create/edit/certificate gates move from institution-ownership to admin | instructor-membership; `ManagementShell` sidebar groups collapse (no scope switcher); `UserRole` stays `user | admin` (membership rule in AGENTS.md unchanged)
-- [ ] 5.3 Decide the `institutions` table's fate — recommendation: keep exactly one seeded row ("FK-KMK UGM") as display name/logo source for courses + certificates, drop the rest of the surface
-- [ ] 5.4 Contracts regen (`institutions.tsp` trim), ownership-based smoke tests rewritten, seed reset, AGENTS.md refreshed
+#### Phase 5 — Single-Tenant Frontend (backend multi-tenancy retained)
+The PKS names exactly three roles (Admin, Instruktur, Dokter Peserta) and one customer, so the *user-facing* platform must read as single-tenant: no institution switcher, no self-service institution requests, no "which institution?" chrome. The **backend keeps the full multi-tenant model** (institutions table, ownership grants, request queue, `course-access.ts` gates) untouched — decided 2026-10-15 as the low-risk cut:
+
+- **Zero backend churn** — no schema migration, no contract edits (parity stays green), no access-gate rewrite, no data re-seed beyond one platform-settings default.
+- **Permissions unchanged** — ownership stays the enforced authority; nothing becomes less secure.
+- **Reversible** — if a second institution ever materializes (another faculty, a GamaTutor sibling), the model already supports it; only the removed UI would need rebuilding.
+- **A strict subset of the full collapse** — if the deeper trim is ever wanted, everything here is exactly the prep (see the fallback note below).
+
+Rules of execution: **delete, never hide** (hidden UI is dead code), and keep the admin console's institutions page as the ops escape hatch for ownership grants and the request queue.
+
+- [ ] 5.1 **Remove the tenant-switching UI**: delete `InstitutionSwitcher`, the `lms.authoring-institution` localStorage scope, and `useAuthoringScope()`; replace with a direct "my institution" resolution (first ownership grant, admins falling back to the first institution in the DB) used by `InstitutionScoped`, the instructor index, and `/instructor/courses/new`; owner pages (`/institution/*`) keep rendering but implicitly scoped — the sidebar loses the switcher header and the "Per Institusi" scope hints. Behavior note: admins who authored under the "Semua institusi" scope now land on the single seeded institution — with one row in the DB, indistinguishable in practice.
+- [ ] 5.2 **Remove the self-service institution surfaces**: the learner `/institution-requests` route + its "Ajukan Institusi" menu item, the dashboard's "Institusi Saya" section, and flip `allowInstitutionRequests` to `false` in the seed so the dormant API matches the UI. The admin `/admin/institutions` page stays (ops escape hatch, admin-only chrome).
+- [ ] 5.3 **Smoke + hygiene**: rewrite `smoke-app-institution.mjs` off the switcher-gate assertions (its opening check asserts the "Semua institusi" scope refusal, which no longer exists) onto direct single-institution resolution; re-run the editor/player/teaching regression suites; refresh AGENTS.md's institutions bullets with the single-tenant-frontend decision.
+
+**Fallback (deferred, only if ever needed): full backend collapse.** The original invasive variant — rip out `institution-ownerships`/`institution-requests` modules + contracts + tables, move `course-access.ts` gates to admin | instructor-membership, keep one seeded `institutions` row as the display-name source, rewrite ownership-based smokes, regenerate contracts. Everything in 5.1–5.3 is a prerequisite of this anyway; do not attempt it without a concrete second-institution-negative reason (maintenance cost alone hasn't justified it).
 
 #### Phase 6 — Optional Trims (each pending confirmation; default = keep)
 - [ ] 6.1 Assignments domain (quizzes already cover essay + instructor grading via `pending_review`)
