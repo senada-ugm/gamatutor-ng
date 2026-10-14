@@ -1011,6 +1011,12 @@ export const zInstitutionRequest = z.object({
     rejectionReason: z.string().readonly().optional()
 });
 
+export const zTelemetryDailyPoint = z.object({
+    date: z.string(),
+    dwellSeconds: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    activeLearners: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' })
+});
+
 export const zTelemetryEvent = z.object({
     id: zCommonResourceId,
     userId: zCommonResourceId,
@@ -1029,6 +1035,29 @@ export const zTelemetryEventCreate = z.object({
     eventType: z.string(),
     dwellTimeSeconds: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
     interactionData: z.record(z.string(), z.unknown()).optional()
+});
+
+export const zTelemetryParticipantRow = z.object({
+    user: zReportUser,
+    totalDwellSeconds: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    events: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    lastActiveAt: z.iso.datetime().optional()
+});
+
+/**
+ * Aggregated study-time analytics for one course, computed from the
+ * raw event log (Review note #15: "lama belajar dan waktu yang sering
+ * modulnya diakses"). All bucketing uses WIB (Asia/Jakarta) — the
+ * platform's audience is Indonesian primary-care doctors.
+ */
+export const zCourseTelemetrySummary = z.object({
+    courseId: zCommonResourceId,
+    totalDwellSeconds: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    medianParticipantDwellSeconds: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    activeParticipants: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    heatmapDwellSeconds: z.array(z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' })),
+    trend30d: z.array(zTelemetryDailyPoint),
+    byParticipant: z.array(zTelemetryParticipantRow)
 });
 
 export const zTrainingType = z.enum([
@@ -1990,6 +2019,19 @@ export const zCourseReportsApiGetPath = z.object({
  */
 export const zCourseReportsApiGetResponse = z.object({
     data: zCourseReport,
+    meta: zCommonResponseMeta,
+    warnings: z.array(zCommonWarning).optional()
+});
+
+export const zCourseTelemetryApiGetPath = z.object({
+    courseId: zCommonResourceId
+});
+
+/**
+ * Standard single resource response envelope.
+ */
+export const zCourseTelemetryApiGetResponse = z.object({
+    data: zCourseTelemetrySummary,
     meta: zCommonResponseMeta,
     warnings: z.array(zCommonWarning).optional()
 });

@@ -1,6 +1,7 @@
 import type { FastifyInstance } from "fastify"
 import type { TelemetryEventCreate } from "@workspace/contracts"
 import { requireSession } from "../../../lib/require-session.js"
+import { assertCanManageCourse } from "../../../lib/course-access.js"
 import { dataResponse } from "../../../lib/response.js"
 import * as service from "../services/telemetry.service.js"
 
@@ -10,6 +11,12 @@ export function telemetryRoutes(app: FastifyInstance) {
     const result = await service.recordTelemetryEvent(user.id, request.body)
     reply.status(201)
     return dataResponse(result, request.id)
+  })
+
+  app.get<{ Params: { courseId: string } }>("/courses/:courseId/telemetry-summary", async (request) => {
+    const user = await requireSession(request)
+    await assertCanManageCourse(user, request.params.courseId)
+    return dataResponse(await service.getCourseTelemetrySummary(request.params.courseId), request.id)
   })
 
   /**

@@ -1590,6 +1590,49 @@ paths:
                 $ref: '#/components/schemas/Common.ErrorResponse'
       tags:
         - Reports
+  /courses/{courseId}/telemetry-summary:
+    get:
+      operationId: CourseTelemetryApi_get
+      description: |-
+        Study-time aggregates for the course report view. Course managers
+        only — same gate as the course report itself.
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/Common.ResourceId'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                  - meta
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CourseTelemetrySummary'
+                    description: The raw payload representation.
+                  meta:
+                    $ref: '#/components/schemas/Common.ResponseMeta'
+                    description: Trace metadata.
+                  warnings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Common.Warning'
+                    description: Minor warning list.
+                description: Standard single resource response envelope.
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Common.ErrorResponse'
+      tags:
+        - Telemetry
   /courses/{id}:
     get:
       operationId: CoursesApi_get
@@ -5282,6 +5325,56 @@ components:
         - published
         - archived
         - under_review
+    CourseTelemetrySummary:
+      type: object
+      required:
+        - courseId
+        - totalDwellSeconds
+        - medianParticipantDwellSeconds
+        - activeParticipants
+        - heatmapDwellSeconds
+        - trend30d
+        - byParticipant
+      properties:
+        courseId:
+          $ref: '#/components/schemas/Common.ResourceId'
+        totalDwellSeconds:
+          type: integer
+          format: int32
+        medianParticipantDwellSeconds:
+          type: integer
+          format: int32
+          description: |-
+            Median of the per-participant total dwell; 0 when nobody has
+            studied yet.
+        activeParticipants:
+          type: integer
+          format: int32
+          description: Distinct learners with at least one logged event.
+        heatmapDwellSeconds:
+          type: array
+          items:
+            type: integer
+            format: int32
+          description: |-
+            7 x 24 dwell seconds, day-major and Monday-first (index =
+            dayOfWeek * 24 + hourOfDay, WIB).
+        trend30d:
+          type: array
+          items:
+            $ref: '#/components/schemas/TelemetryDailyPoint'
+          description: |-
+            Last 30 WIB calendar days, oldest first — zero-filled so charts
+            render a continuous axis.
+        byParticipant:
+          type: array
+          items:
+            $ref: '#/components/schemas/TelemetryParticipantRow'
+      description: |-
+        Aggregated study-time analytics for one course, computed from the
+        raw event log (Review note #15: "lama belajar dan waktu yang sering
+        modulnya diakses"). All bucketing uses WIB (Asia/Jakarta) — the
+        platform's audience is Indonesian primary-care doctors.
     CourseType:
       type: string
       enum:
@@ -6590,6 +6683,23 @@ components:
         email:
           type: string
       description: Display copy of the requesting account, denormalized.
+    TelemetryDailyPoint:
+      type: object
+      required:
+        - date
+        - dwellSeconds
+        - activeLearners
+      properties:
+        date:
+          type: string
+          description: WIB calendar date, `yyyy-MM-dd`.
+        dwellSeconds:
+          type: integer
+          format: int32
+        activeLearners:
+          type: integer
+          format: int32
+          description: Distinct learners with at least one event this day.
     TelemetryEvent:
       type: object
       required:
@@ -6642,6 +6752,25 @@ components:
         interactionData:
           type: object
           unevaluatedProperties: {}
+    TelemetryParticipantRow:
+      type: object
+      required:
+        - user
+        - totalDwellSeconds
+        - events
+      properties:
+        user:
+          $ref: '#/components/schemas/ReportUser'
+        totalDwellSeconds:
+          type: integer
+          format: int32
+        events:
+          type: integer
+          format: int32
+          description: Logged events (slide views + heartbeats) — the interaction count.
+        lastActiveAt:
+          type: string
+          format: date-time
     TrainingType:
       type: string
       enum:

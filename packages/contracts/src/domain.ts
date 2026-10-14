@@ -110,6 +110,9 @@ import type {
   PlatformSettingsUpdate,
   TelemetryEvent,
   TelemetryEventCreate,
+  TelemetryDailyPoint,
+  TelemetryParticipantRow,
+  CourseTelemetrySummary,
 } from "../gen/types.gen.js"
 
 /** Global account role — ownership is a join, not a role (see institutions.tsp). */
@@ -296,6 +299,9 @@ export type ContractPlatformSettings = PlatformSettings
 export type ContractPlatformSettingsUpdate = PlatformSettingsUpdate
 export type ContractTelemetryEvent = TelemetryEvent
 export type ContractTelemetryEventCreate = TelemetryEventCreate
+export type ContractTelemetryDailyPoint = TelemetryDailyPoint
+export type ContractTelemetryParticipantRow = TelemetryParticipantRow
+export type ContractCourseTelemetrySummary = CourseTelemetrySummary
 export { CertificateSignaturePlacement } from "../gen/types.gen.js"
 export { QuizQuestionType, QuizAttemptStatus } from "../gen/types.gen.js"
 export { AssignmentSubmissionStatus } from "../gen/types.gen.js"

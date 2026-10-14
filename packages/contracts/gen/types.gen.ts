@@ -665,6 +665,37 @@ export const CourseStatus = {
 
 export type CourseStatus = typeof CourseStatus[keyof typeof CourseStatus];
 
+/**
+ * Aggregated study-time analytics for one course, computed from the
+ * raw event log (Review note #15: "lama belajar dan waktu yang sering
+ * modulnya diakses"). All bucketing uses WIB (Asia/Jakarta) — the
+ * platform's audience is Indonesian primary-care doctors.
+ */
+export type CourseTelemetrySummary = {
+    courseId: CommonResourceId;
+    totalDwellSeconds: number;
+    /**
+     * Median of the per-participant total dwell; 0 when nobody has
+     * studied yet.
+     */
+    medianParticipantDwellSeconds: number;
+    /**
+     * Distinct learners with at least one logged event.
+     */
+    activeParticipants: number;
+    /**
+     * 7 x 24 dwell seconds, day-major and Monday-first (index =
+     * dayOfWeek * 24 + hourOfDay, WIB).
+     */
+    heatmapDwellSeconds: Array<number>;
+    /**
+     * Last 30 WIB calendar days, oldest first — zero-filled so charts
+     * render a continuous axis.
+     */
+    trend30d: Array<TelemetryDailyPoint>;
+    byParticipant: Array<TelemetryParticipantRow>;
+};
+
 export const CourseType = {
     ONLINE: 'online',
     OFFLINE: 'offline',
@@ -1364,6 +1395,18 @@ export type RequesterInfo = {
     email: string;
 };
 
+export type TelemetryDailyPoint = {
+    /**
+     * WIB calendar date, `yyyy-MM-dd`.
+     */
+    date: string;
+    dwellSeconds: number;
+    /**
+     * Distinct learners with at least one event this day.
+     */
+    activeLearners: number;
+};
+
 export type TelemetryEvent = {
     id: CommonResourceId;
     userId: CommonResourceId;
@@ -1384,6 +1427,16 @@ export type TelemetryEventCreate = {
     interactionData?: {
         [key: string]: unknown;
     };
+};
+
+export type TelemetryParticipantRow = {
+    user: ReportUser;
+    totalDwellSeconds: number;
+    /**
+     * Logged events (slide views + heartbeats) — the interaction count.
+     */
+    events: number;
+    lastActiveAt?: string;
 };
 
 export const TrainingType = {
@@ -3298,6 +3351,46 @@ export type CourseReportsApiGetResponses = {
 };
 
 export type CourseReportsApiGetResponse = CourseReportsApiGetResponses[keyof CourseReportsApiGetResponses];
+
+export type CourseTelemetryApiGetData = {
+    body?: never;
+    path: {
+        courseId: CommonResourceId;
+    };
+    query?: never;
+    url: '/courses/{courseId}/telemetry-summary';
+};
+
+export type CourseTelemetryApiGetErrors = {
+    /**
+     * An unexpected error response.
+     */
+    default: CommonErrorResponse;
+};
+
+export type CourseTelemetryApiGetError = CourseTelemetryApiGetErrors[keyof CourseTelemetryApiGetErrors];
+
+export type CourseTelemetryApiGetResponses = {
+    /**
+     * Standard single resource response envelope.
+     */
+    200: {
+        /**
+         * The raw payload representation.
+         */
+        data: CourseTelemetrySummary;
+        /**
+         * Trace metadata.
+         */
+        meta: CommonResponseMeta;
+        /**
+         * Minor warning list.
+         */
+        warnings?: Array<CommonWarning>;
+    };
+};
+
+export type CourseTelemetryApiGetResponse = CourseTelemetryApiGetResponses[keyof CourseTelemetryApiGetResponses];
 
 export type CoursesApiGetData = {
     body?: never;
