@@ -15,12 +15,15 @@ apps/
                       features are served directly by apps/app and apps/api.
   api/              - Fastify backend, real Postgres via Drizzle (health,
                       institutions, users, courses, course-content,
-                      course-instructors, enrollments, attendance,
-                      certificates, certificate-settings, discussions,
-                      quizzes, assignments, uploads, payments,
-                      notifications, announcements, reports, references,
-                      wishlist, platform-settings, audit — contract/API
-                      parity enforced by scripts/check-api-contract-parity.mjs)
+                      course-instructors, enrollments, certificates,
+                      certificate-settings, quizzes, assignments, uploads,
+                      notifications, announcements, reports, telemetry,
+                      platform-settings, audit — contract/API parity
+                      enforced by scripts/check-api-contract-parity.mjs).
+                      Scope note (docs/PLANS.md Phase 1, 2026-10-15): the
+                      payments/wishlist, attendance, discussions, and
+                      standalone-assessment domains were REMOVED as out of
+                      PKS scope — do not reintroduce them.
 packages/
   contracts/        - TypeSpec API contracts (source of truth for shapes)
   ui/               - Shared UI: shadcn primitives + authored composed blocks (@workspace/ui)
@@ -80,7 +83,7 @@ packages/
   and renders nothing itself; beneath it the tree forks into **three
   shells**:
   - `id: "learner"` -> `WorkspaceShell`, a top nav. Dashboard, catalog,
-    course detail, wishlist, orders, assessments, certificates,
+    course detail, certificates,
     notifications, institution requests.
   - `id: "management"` -> `ManagementShell`, a sidebar. `/instructor/**`
     and `/admin/**`. The sidebar header carries the institution scope
@@ -161,7 +164,7 @@ packages/
   bodies/queries with the generated Zod schemas via `src/lib/validation.ts`.
   Errors always emit the `Common.ErrorResponse` envelope. `institutions` and
   `users` still serve in-memory fixtures; `courses`/`course-instructors`/
-  `enrollments`/`references` have contracts but no serving module yet — add
+  `enrollments` have contracts but no serving module yet — add
   each domain's `apps/api/src/modules/<name>/` alongside its `.tsp` when
   that happens, so contract and serving skeleton land together.
 
@@ -192,9 +195,10 @@ packages/
   check-api-contract-parity.mjs` (run after the contracts build) fails if
   a contracted operation has no serving route, or a registered route has
   no contract entry. The ONLY sanctioned uncontracted routes are the
-  five on the script's INTENTIONAL_EXCLUSIONS list (payments webhook,
-  upload byte-serving, upload sweep, the /v1/health alias, participants
-  CSV export) — each is documented in its spec file's header, which is
+  seven on the script's INTENTIONAL_EXCLUSIONS list (upload
+  byte-serving, upload sweep, the /v1/health alias, participants CSV
+  export, telemetry CSV export, dev status/reset-seed) — each is
+  documented in its spec file's header, which is
   what makes it "intentional". Adding a route without a contract entry,
   or a spec op without a route, must either fix the drift or add a
   documented exclusion.
@@ -416,9 +420,9 @@ packages/
   editor`) resolved the course via `lib/mock/courses.ts`'s `getCourseById()`
   (404s on any real `crs_`-prefixed id) and every one of its 9 tabs
   read/wrote local `useState`; `CoursePlayer` (`/learn/[courseId]/**`) was
-  the same story for lesson progress, quizzes, assignments, attendance,
-  and discussions. Both now resolve the real course via `coursesApiGet`
-  and every tab/route is real. Six domains got built from scratch — schema
+  the same story for lesson progress, quizzes, and assignments. Both
+  now resolve the real course via `coursesApiGet` and every tab/route is
+  real. The domains that got built from scratch — schema
   → `.tsp` → `apps/api` module → frontend wiring, in this order, each
   verified via Playwright before the next started:
   - **Course content** (`course-content.tsp`): `course_modules`/
@@ -439,24 +443,6 @@ packages/
     served, plus per-action routes matching ParticipantsPanel's distinct
     buttons (`/interview`, `/select`, `/fail`, `/graduate`, `/cancel`).
     `graduate` auto-issues a certificate (see below).
-  - **Attendance, with real QR + geolocation** — not a simulated
-    check-in button. `attendance_sessions`/`attendance_records` tables;
-    a session's geofence (`latitude`/`longitude`/`radiusMeters`) is
-    independent of its `verificationMethod` (`none | code | qr`) — if
-    coordinates are configured, check-in requires the client's own
-    coordinates and the server enforces a haversine-distance check
-    regardless of method. apps/app carries the jsqr dep for this:
-    `qrcode` (instructor side — `AttendancePanel`/`QRDisplay` render the
-    session's `qrToken` as a scannable image via `QRCode.toDataURL`) and
-    `jsqr` (student side — `AttendanceCheckIn` opens the camera via
-    `getUserMedia`, draws frames to an offscreen `<canvas>`, and decodes
-    with `jsQR`; falls back to manual 6-digit code entry, the default
-    input mode, if the session doesn't support/require the camera).
-    `codeExpirySeconds`/`qrTokenExpiresAt` bound how long a generated
-    code/token stays valid; `lateThresholdMinutes` drives
-    present-vs-late computation server-side (`computeStatus()` in
-    `attendance.service.ts`) — never client-side, since the client's
-    clock isn't trusted for this.
   - **Certificates + certificate settings**: server stores structured
     metadata only (number, verification code, signatures, custom fields)
     — no server-side PDF pipeline; the existing client-side
@@ -464,28 +450,11 @@ packages/
     print/export, just fed by `certificatesApiGet`/`Verify` now instead of
     a mock lookup. `certificate_settings` is its own table (one domain,
     one module, not a JSONB column bolted onto `courses`).
-    `QuizQuestion.correctAnswers` and `AttendanceSession.verificationCode`/
-    `qrToken` all use the same pattern for a field that must never reach
-    an unauthorized caller: one model, one optional field marked
-    `@visibility(Lifecycle.Read)`, populated server-side only when the
-    caller is authorized — never a separate "public" vs "authoring" model
-    variant.
-  - **Discussions**: `discussions.tsp` — pin/close/resolve gated by
-    `assertCanManageCourse` OR the original author; create/reply gated by
-    enrollment (managers bypass). `DiscussionThread` is **self-sufficient**
-    — it fetches its own data and owns its mutations directly via SDK
-    calls, rather than relying on parent-supplied callback props; this
-    pattern (also used by `QuizTake`) was adopted after discovering the
-    old mock version's callback props were declared but never actually
-    wired by the parent page, so the buttons silently did nothing.
-  - **Quizzes**: `quizzes.tsp` — `single_choice | multiple_choice |
-    true_false | short_answer | essay`. Grading is always server-side
-    (`isAnswerCorrect()`/`submitAttempt()` in `quizzes.service.ts`), never
-    client-side — `QuizTake`'s local answer-checking helpers exist only to
-    highlight correct/incorrect in the post-result breakdown, not to
-    compute the score. An attempt containing an essay question lands in
-    `pending_review` until an instructor grades it via a dedicated
-    endpoint (`QuizAttemptApi.grade`).
+    `QuizQuestion.correctAnswers` uses this pattern for a field that must
+    never reach an unauthorized caller: one model, one optional field
+    marked `@visibility(Lifecycle.Read)`, populated server-side only
+    when the caller is authorized — never a separate "public" vs
+    "authoring" model variant.
   - **Assignments**: `assignments.tsp` — resubmission rule is "overwrite
     until graded": a `submitted` submission can be freely overwritten, but
     once `graded`, a new submission is rejected (409) until the instructor
@@ -499,17 +468,16 @@ packages/
 
   New shared permission helpers, `apps/api/src/lib/course-access.ts`:
   `assertCanManageCourse` (broad — admin, institution owner, or active
-  course-instructor; used by content/quiz/assignment/attendance/
-  certificate/discussion-moderation routes), `assertCanManageCourseInstructors`
+  course-instructor; used by content/quiz/assignment/certificate
+  routes), `assertCanManageCourseInstructors`
   (narrow — admin-or-institution-owner only, invite/remove/role-change
   routes), `assertIsEnrolledParticipant` (requires a non-canceled/failed
   enrollment row; used by every student-facing CoursePlayer mutation —
-  mark-lesson-complete, quiz attempts, assignment submission, attendance
-  check-in — managers bypass it automatically).
+  mark-lesson-complete, quiz attempts, assignment submission — managers
+  bypass it automatically).
 
   Test coverage: `tests/smoke-course-content-contract.mjs`,
-  `smoke-attendance-contract.mjs`, `smoke-certificates-contract.mjs`,
-  `smoke-discussions-contract.mjs`, `smoke-quizzes-contract.mjs`,
+  `smoke-certificates-contract.mjs`, `smoke-quizzes-contract.mjs`,
   `smoke-assignments-contract.mjs` (new), plus
   `smoke-courses-contract.mjs`/`smoke-course-instructors-contract.mjs`/
   `smoke-enrollments-contract.mjs` (rewritten off the now-closed mock

@@ -21,7 +21,7 @@ const LEARNER = { email: "user@lms.dev", password: "correcthorsebatterystaple" }
 const STAMP = Date.now()
 const INSTITUTION = `Institusi Smoke ${STAMP}`
 const FREE_COURSE = `Pelatihan Gratis ${STAMP}`
-const PAID_COURSE = `Pelatihan Berbayar ${STAMP}`
+const PAID_COURSE = `Pelatihan Kedua ${STAMP}`
 let failures = 0
 
 async function expect(name, fn) {
@@ -65,22 +65,22 @@ const freeCourse = await post("/courses", {
   isDisabilityFriendly: false,
   supportedDisabilityTypes: [],
 })
-const paidCourse = await post("/courses", {
+const secondCourse = await post("/courses", {
   title: PAID_COURSE,
   institutionId: institution.id,
-  courseType: "offline",
+  courseType: "online",
   isDisabilityFriendly: false,
   supportedDisabilityTypes: [],
 })
 // Publishing is its own action route, not a writable `status` field.
-for (const id of [freeCourse.id, paidCourse.id]) {
+for (const id of [freeCourse.id, secondCourse.id]) {
   const res = await page.request.post(`${API}/v1/courses/${id}/publish`)
   if (!res.ok()) throw new Error(`publish failed: ${res.status()} ${await res.text()}`)
 }
 
 const enrollment = await post("/enrollments", { courseId: freeCourse.id })
 await page.request.patch(`${API}/v1/enrollments/${enrollment.id}`, { data: { status: "selected" } })
-await post("/enrollments", { courseId: paidCourse.id })
+await post("/enrollments", { courseId: secondCourse.id })
 
 // ================= The scope gate =================
 // The switcher persists its pick, so a previous run would leave this
