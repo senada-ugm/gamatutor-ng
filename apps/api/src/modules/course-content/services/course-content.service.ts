@@ -12,6 +12,7 @@ import { db } from "../../../db/index.js"
 import { courseLessons, courseModules, lessonProgress } from "../../../db/app-schema.js"
 import { NotFoundError } from "../../../lib/errors.js"
 import { generateId } from "../../../lib/response.js"
+import { claimUpload, extractUploadIdFromUrl, releaseUpload } from "../../uploads/services/uploads.service.js"
 
 function toLesson(row: typeof courseLessons.$inferSelect): Lesson {
   return {
@@ -143,7 +144,7 @@ export async function getLessonCourseId(lessonId: string): Promise<string> {
 }
 
 export async function createLesson(moduleId: string, input: LessonCreate): Promise<Lesson> {
-  await getModuleRow(moduleId)
+  const module = await getModuleRow(moduleId)
   const rows = await db
     .select({ position: courseLessons.position })
     .from(courseLessons)
@@ -166,10 +167,18 @@ export async function createLesson(moduleId: string, input: LessonCreate): Promi
       position: nextPosition,
     })
     .returning()
+
+  // A lesson's media may be an upload URL — claim it under the owning
+  // course (same lifecycle as Course.thumbnail) so the orphan sweep
+  // can't delete a file a saved lesson references.
+  const uploadId = extractUploadIdFromUrl(row!.url)
+  if (uploadId) await claimUpload(uploadId, "course", module.courseId)
+
   return toLesson(row!)
 }
 
 export async function updateLesson(lessonId: string, input: LessonUpdate): Promise<Lesson> {
+  const existing = await getLessonRow(lessonId)
   const [row] = await db
     .update(courseLessons)
     .set({
@@ -185,12 +194,25 @@ export async function updateLesson(lessonId: string, input: LessonUpdate): Promi
     .where(eq(courseLessons.id, lessonId))
     .returning()
   if (!row) throw new NotFoundError("Lesson", lessonId)
+
+  // Swapping the media reference releases the old upload back to the
+  // orphan pool and claims the new one — mirrors courses.service.ts's
+  // thumbnail handling.
+  const oldUploadId = extractUploadIdFromUrl(existing.url)
+  const newUploadId = extractUploadIdFromUrl(row.url)
+  if (oldUploadId && oldUploadId !== newUploadId) await releaseUpload(oldUploadId)
+  if (newUploadId && newUploadId !== oldUploadId) {
+    await claimUpload(newUploadId, "course", await getModuleCourseId(row.moduleId))
+  }
+
   return toLesson(row)
 }
 
 export async function deleteLesson(lessonId: string): Promise<void> {
-  await getLessonRow(lessonId)
+  const lesson = await getLessonRow(lessonId)
+  const uploadId = extractUploadIdFromUrl(lesson.url)
   await db.delete(courseLessons).where(eq(courseLessons.id, lessonId))
+  if (uploadId) await releaseUpload(uploadId)
 }
 
 function toLessonProgress(row: typeof lessonProgress.$inferSelect): LessonProgress {

@@ -15,6 +15,7 @@ import { Textarea } from "@workspace/ui/components/textarea"
 import { apiSend } from "@/lib/api"
 import { EmptyState } from "@/components/composed/_shared/empty-state"
 import { useConfirm } from "@/components/composed/_shared/confirm-dialog"
+import { LessonMediaUpload } from "@/components/composed/courses/_atoms/lesson-media-upload"
 import type { ContractLesson, ContractModule } from "@workspace/contracts/domain"
 
 /**
@@ -433,14 +434,28 @@ function LessonForm({
           />
         </div>
       ) : (
-        <div className="space-y-1.5">
-          <Label htmlFor="lesson-url">URL {values.contentType === "video" ? "Video" : "Dokumen"}</Label>
-          <Input
-            id="lesson-url"
+        <div className="space-y-2">
+          <Label>
+            Media {values.contentType === "video" ? "Video" : values.contentType === "audio" ? "Audio" : "Dokumen"}
+          </Label>
+          <LessonMediaUpload
+            contentType={values.contentType}
             value={values.url}
-            onChange={(e) => update("url", e.target.value)}
-            placeholder="https://..."
+            onChange={(url) => update("url", url)}
+            disabled={submitting}
           />
+          <div className="space-y-1.5">
+            <Label htmlFor="lesson-url">atau URL eksternal</Label>
+            <Input
+              id="lesson-url"
+              value={values.url}
+              onChange={(e) => update("url", e.target.value)}
+              placeholder={values.contentType === "video" ? "https://www.youtube.com/..." : "https://..."}
+            />
+            <p className="text-xs text-muted-foreground">
+              Isi salah satu — unggah file, atau tempel URL (YouTube/Vimeo untuk video).
+            </p>
+          </div>
         </div>
       )}
       <label className="flex items-center gap-2 text-sm">
