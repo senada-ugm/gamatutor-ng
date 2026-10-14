@@ -16,6 +16,7 @@ import { apiSend } from "@/lib/api"
 import { EmptyState } from "@/components/composed/_shared/empty-state"
 import { useConfirm } from "@/components/composed/_shared/confirm-dialog"
 import { LessonMediaUpload } from "@/components/composed/courses/_atoms/lesson-media-upload"
+import { DeckUploadCard } from "@/components/composed/courses/_atoms/deck-upload-card"
 import type { ContractLesson, ContractModule } from "@workspace/contracts/domain"
 
 /**
@@ -56,27 +57,19 @@ export function ContentEditor({ courseId, modules }: { courseId: string; modules
     onError: (err) => toast.error(err instanceof Error ? err.message : "Gagal menghapus modul"),
   })
 
-  if (modules.length === 0 && !showAddModule) {
-    return (
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-medium">Konten Pelatihan</h2>
-          <Button onClick={() => setShowAddModule(true)}>+ Tambah Modul</Button>
-        </div>
-        <EmptyState
-          title="Belum ada modul"
-          description="Tambahkan modul pertama untuk mulai membangun pelatihan Anda."
-        />
-      </div>
-    )
-  }
-
   return (
     <div className="space-y-4">
+      <DeckUploadCard courseId={courseId} />
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-medium">Konten Pelatihan</h2>
         <Button onClick={() => setShowAddModule((v) => !v)}>+ Tambah Modul</Button>
       </div>
+      {modules.length === 0 && !showAddModule ? (
+        <EmptyState
+          title="Belum ada modul"
+          description="Tambahkan modul pertama untuk mulai membangun pelatihan Anda."
+        />
+      ) : null}
 
       {showAddModule ? (
         <ModuleForm
