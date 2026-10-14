@@ -5,7 +5,8 @@
 > **Contract Reference:** Cooperation Agreement No. 001/PKS-TGI/VIII/2026 & 818/UN.1/FK-KMK.2/MT2/KS/2026  
 > **Contract Value:** IDR 35,000,000 (Fixed Price, Non-VAT/Non-PKP)  
 > **Timeline:** 16 Calendar Weeks (4 Months)  
-> **Lead Software Architect & Tech Lead:** Ariefan Dipokusumo Wibowo, S.Kom., M.Cs.  
+> **Lead Software Architect & Tech Lead:** Ariefan Dipokusumo Wibowo, S.Kom., M.Cs.
+> **Last Updated:** 2026-10-15 — added scope-trim & gap-closure execution checklist (Phases 0–6) after the PKS-vs-implementation audit
 
 ---
 
@@ -98,7 +99,7 @@ flowchart TD
 
 ## 4. Comprehensive Per-Page & Per-Feature Curriculum Blueprint
 
-The entire DRIVE-Learn curriculum consists of **6 Modules and 31 Interactive Slides/Pages**:
+The entire DRIVE-Learn curriculum consists of **6 Modules and 33 Interactive Slides/Pages** (numbered 1–32, with a second page on slide 17):
 
 | No | Page ID | Slide | Type | Title / Topic | Specific Interactive Features |
 |:--:|:---|:---:|:---:|:---|:---|
@@ -138,29 +139,22 @@ The entire DRIVE-Learn curriculum consists of **6 Modules and 31 Interactive Sli
 
 ---
 
-## 5. Proposed Codebase Changes by Package
+## 5. Implementation State by Package (verified 2026-10-15)
 
-### 1. `packages/ui` (Design Tokens & Theming)
-- **`packages/ui/src/styles/globals.css`:** Inject DRIVE clinical colors into the Tailwind v4 / shadcn token theme:
-  - `--clinical-navy: #173a5e;`
-  - `--clinical-blue: #2d77c2;`
-  - `--retina-teal: #5bb4b2;`
-  - `--clinical-wrong: #c0392b;`
-  - `--clinical-correct: #2c7a4b;`
+### 1. `packages/ui` (Design Tokens & Theming) — DONE
+- DRIVE clinical colors are merged into the custom theme (Tailwind v4 / shadcn tokens, `packages/ui/src/styles/globals.css`); the SPA landing/workspace chrome already renders on it.
 
-### 2. `apps/api` (Database & Backend Services)
-- **`apps/api/src/db/app-schema.ts`:**
-  - Enhance `participantProfiles` with `profession`, `institutionName`, `strNumber`, `phone`, `birthDate`.
-  - Add `learningTelemetryLogs` table (`id`, `userId`, `courseId`, `moduleId`, `slideId`, `enteredAt`, `exitedAt`, `durationSeconds`, `audioListenedSeconds`, `interactedElements`, `createdAt`).
-- **`apps/api/src/modules/telemetry/`:**
-  - `POST /v1/telemetry/heartbeat`: Ingests background beacons via `navigator.sendBeacon`.
-  - `GET /v1/reports/telemetry/csv`: Generates and streams raw CSV telemetry reports for FK-KMK researchers.
+### 2. `apps/api` (Database & Backend Services) — core DONE, gaps below
+- `participantProfiles` already carries `profession`, `institutionName`, `strNumber`, `phone`, `birthDate` (+ education/experience/certifications JSONB) — served at `/participant-profiles`.
+- `learningTelemetryLogs` table exists (`enteredAt`, `exitedAt`, `durationSeconds`, `audioListenedSeconds`, `interactedElements`, `sessionId`), fed by `POST /telemetry/events` (view/heartbeats from `use-slide-telemetry`) and exported via `GET /reports/telemetry/export` (CSV, joined with participant profession/institution/STR for FK-KMK research).
+- **Remaining gaps:** no aggregate telemetry endpoint (in-app charts are mocked client-side → Task 3.1); uploads service accepts images only — no PDF/PPT/Word/video/audio magic-byte detection or purposes (→ Task 2.1).
 
-### 3. `apps/app` (Frontend Application & Player Components)
-- **`apps/app/src/routes/register.tsx`:** Updated registration form collecting full doctor metadata.
-- **`apps/app/src/components/composed/player/clinical-fundus-grading.tsx`:** Fundus grader replacing circular pins with **SVG Arrow Pointers** and styling incorrect selections with **Crimson Red background**.
-- **`apps/app/src/components/composed/player/interactive-slide-viewer.tsx`:** Core player supporting fit-to-screen viewports, 2-column auto-reveal animated lists, sequential 1-8 pulse guide, clean paragraph transcripts, audio narration bar, and 2D/3D anatomy viewer.
-- **`apps/app/src/components/composed/player/completion-retake-card.tsx`:** Post-test completion screen offering score confirmation, retake trigger, and automated certificate issuance.
+### 3. `apps/app` (Frontend Application & Player Components) — player DONE, gaps below
+- `routes/register.tsx` collects full doctor metadata (name+titles, DOB, phone, profession, instansi, provinsi/kabupaten, STR) — review #11.
+- `clinical-fundus-grading.tsx` renders **SVG arrow pointers** (lesions never covered) and **crimson-red wrong-answer boxes** — reviews #7–8.
+- `interactive-slide-viewer.tsx` supports fit-to-screen viewport, 2-column audio-synced auto-reveal lists, sequential 1–8 pulse guide, paragraph transcripts + audio narration bar, 2D anatomy stage — reviews #1, #3–6, #12.
+- The satisfaction prompt + retake and locked-name certificate claim live in `clinical-quiz-runner.tsx` (there is no separate `completion-retake-card.tsx`) — reviews #9–10.
+- **Remaining gaps:** generic (non-DRIVE) lesson player renders `text`/`video` only — `audio`/`document` lessons hit an `EmptyState` (→ Task 2.3); the content editor's document/video fields are URL-only text inputs with no upload (→ Task 2.2); the registration profile is staged through `localStorage` and PATCHed on first login with failures swallowed — silent data-loss path (→ Task 2.5); the DRIVE course content is a hardcoded TS module selected by a course-title heuristic, not server-managed content (→ Tasks 4.1–4.2).
 
 ---
 
@@ -168,11 +162,84 @@ The entire DRIVE-Learn curriculum consists of **6 Modules and 31 Interactive Sli
 
 | Phase / Milestone | Deliverables Scope | Duration | Weight | Value (IDR) |
 |---|---|:---:|:---:|---:|
-| **Milestone 1 (Down Payment)** | SRS Document, Medical Design Tokens, Telemetry & Multi-Course DB Schema, 31-Slide Wireframes | Weeks 1 - 4 | 30% | IDR 10,500,000 |
+| **Milestone 1 (Down Payment)** | SRS Document, Medical Design Tokens, Telemetry & Multi-Course DB Schema, 33-Slide Wireframes | Weeks 1 - 4 | 30% | IDR 10,500,000 |
 | **Milestone 2** | Full Doctor Registration, Centered Fit-to-Screen Player, Module 1-2 Slide Engine, 2-Col Audio List, Audio Narration Bar | Weeks 5 - 8 | 30% | IDR 10,500,000 |
 | **Milestone 3** | Fundus Grader (Arrow Pins & Red Error Box), Pre/Post Evaluation Engine, Retake Trigger, Locked Name Certificate, Telemetry Logging & CSV Export | Weeks 9 - 12 | 25% | IDR 8,750,000 |
 | **Milestone 4 (Final)** | UAT with FK-KMK DRIVE Team, Dedicated Cloud VPS Deployment (Ubuntu 2 vCPU / 8 GB RAM / NVMe), 2 Online Training Sessions, User Manual & Final BAST | Weeks 13 - 16 | 15% | IDR 5,250,000 |
 | **TOTAL** | **Full Completion of All PKS No. 001/PKS-TGI/VIII/2026 Deliverables** | **16 Weeks** | **100%** | **IDR 35,000,000** |
+
+### 6.1 Task Checklist & Update Convention
+
+> **How to use this checklist:** it is the single source of execution truth. Mark a task `- [x]` **immediately after completing it**, appending the completion date (and commit hash when handy). Statuses: `[ ]` pending · `[x]` done · `[~]` in progress · `[-]` dropped (state the reason). Tasks are ordered so each phase lands independently green (`pnpm validate` + parity script + smoke suites).
+
+**Guiding rule (from the 2026-10-15 audit):** the PKS contracts three pillars — auth/RBAC, course & content management, interactive learning + quiz/assessment. Everything else is only justified by an explicit review note. The platform currently serves ~22 API modules where the contract justifies ~10; Phases 1–6 close that gap.
+
+#### Phase 0 — Audit & Housekeeping
+- [x] 0.1 Replace auth page background with customer-provided artwork (`apps/app/public/images/eyeball-auth-bg.jpg`, referenced by `auth-page.tsx:47`) — 2026-10-15
+- [x] 0.2 Scope audit vs PKS Pasal 3 + review CSV: full endpoint/feature inventory, removal candidates, gap list (source of Phases 1–6) — 2026-10-15
+- [x] 0.3 Delete unused auth background alternates (`abstract-eye-auth-bg.jpg`, `indonesia-auth-bg.jpg`, `ophthalmologist-auth-bg.jpg`) — 2026-10-15
+- [ ] 0.4 Purge stale `references`-domain comments (`app-schema.ts` auditLog header, `audit.tsp` header) — the domain no longer exists anywhere
+
+#### Phase 1 — Out-of-Scope Removals (safe, mechanical)
+Nothing in the PKS or the 15 review notes asks for commerce, classroom attendance, psychometric assessments, or a forum. Removal order per domain: frontend routes/components → contracts `.tsp` → regenerate (`pnpm --filter @workspace/contracts build`) → API module + Drizzle tables + migration → reports/seed/smoke-test references → parity script green → `pnpm validate`.
+
+- [ ] 1.1 **Payments & commerce**: remove `routes/orders.tsx`, `routes/wishlist.tsx`, `components/composed/payments/*` (payments panel, coupon manager, order badge), `enroll-panel.tsx` checkout/coupon funnel (keep instant free `POST /enrollments`), editor tabs `editor-payments.tsx`/`editor-coupons.tsx`, `routes/institution/orders.tsx`, admin financial widgets + `/admin/financial-summary`, `lib/format.ts` `formatRupiah`; API `modules/payments`, `modules/wishlist`, `lib/stripe.ts`, `coupons`/`orders` tables; contracts `payments.tsp`, `wishlist.tsp`; parity exclusion entry `POST /payments/webhook`; institution revenue + orders CSV export in reports; seed + smoke tests
+- [ ] 1.2 **Attendance (QR + geofence)**: remove `routes/learn/attendance.tsx`, `routes/attendance-display.tsx`, `components/composed/attendance/*`, `attendance-manager.tsx` + `editor-attendance.tsx`, deps `jsqr`/`qrcode`; API `modules/attendance`, `attendanceSessions`/`attendanceRecords` tables, attendance columns in course report + `CourseReportPanel` H/T/A columns; contracts `attendance.tsp`; seed + smoke tests
+- [ ] 1.3 **Standalone assessments** (`/assessments`, `/admin/assessments`, RIASEC-style): remove routes + `QuizManager` assessment scope; drop the quizzes `courseId = null` branch and per-category scoring (`category`, `optionWeights`, `categoryScores`) after verifying no remaining consumer
+- [ ] 1.4 **Discussions**: remove `routes/learn/discussions.tsx`, `components/composed/discussions/*`, player nav links; API `modules/discussions`, `discussions`/`discussionReplies` tables; contracts `discussions.tsp`; seed + smoke tests
+- [ ] 1.5 **Post-removal hygiene**: contracts regenerated, `node scripts/check-api-contract-parity.mjs` green, `pnpm validate` green, pruned smoke suites pass, `/dev/reset-seed` verified in browser
+
+#### Phase 2 — PKS Gap Closure (contracted features, additive)
+- [ ] 2.1 **Upload service extensions**: magic-byte detection + purposes for `document` (PDF/PPT/Word), `video`, `audio` in `uploads.service.ts` (currently image-only; media would store as `application/octet-stream`); size caps per kind
+- [ ] 2.2 **Content editor uploads**: wire `FileUploadWidget` into `content-editor.tsx` for document/audio/video lesson types (replace URL-only text input; keep URL option for YouTube/Vimeo embeds)
+- [ ] 2.3 **Generic lesson player rendering**: render `document` lessons (PDF inline via `<iframe>`/`<object>` + download link; PPT/Word as download card) and `audio` lessons (native player) in `routes/learn/lesson.tsx` — both currently fall through to an `EmptyState`
+- [ ] 2.4 **Video streaming check**: verify uploaded mp4 playback through the uploads byte route; add HTTP `Range` support if seeking/streaming breaks
+- [ ] 2.5 **Registration atomicity**: replace the `localStorage` `pending_doctor_profile` handoff (PATCHed on first login at `login.tsx:42-51`, failures swallowed = silent data loss) with atomic server-side profile creation at signup (Better Auth hook or guaranteed retry)
+
+#### Phase 3 — Real Learning Analytics (Review #15)
+- [ ] 3.1 **Aggregate telemetry endpoint**: `GET /courses/{courseId}/telemetry-summary` — dwell by hour-of-day/day-of-week, median + total study time, per-participant totals — computed from `learningTelemetryLogs`; contract it (reports.tsp or telemetry.tsp)
+- [ ] 3.2 **Replace mocked report visuals**: `course-report-panel.tsx` heatmap (lines ~29–41), 30-day trend (~46–52), and hardcoded "Median Waktu / 48 menit" (~172) switch to real endpoint data
+- [ ] 3.3 **Admin dashboard study-time widgets**: replace the removed financial summary with platform-wide study-time/engagement stats
+
+#### Phase 4 — Multi-Course Readiness (Review #13) & Server-Side Post-Test
+- [ ] 4.1 **Server-managed slide content**: move `DRIVE_RETINOPATHY_COURSE` out of the hardcoded `lib/content/drive-retinopati-data.ts` TS module into per-course server-managed content (JSON manifest on the course or a dedicated table); assets stay in public/ or uploads
+- [ ] 4.2 **Kill the title heuristic**: replace the `"drive"/"retinopati"` course-title check (`routes/learn/lesson.tsx:56-59`) with courseId/content-type-based resolution
+- [ ] 4.3 **Server-side post-test**: route the evaluasi module through the real quiz engine (`quiz_attempts` persisted, server-side grading, scores visible in course reports) while preserving the review-#9 satisfaction/retake UX (`maxAttempts = 0` = unlimited)
+- [ ] 4.4 **Minimum authoring path for new courses**: manifest import + thumbnail so the DRIVE team can add the planned AMD/DME follow-up courses without code changes
+
+#### Phase 5 — Single-Tenant Collapse & 3-Role RBAC ⚠ needs explicit go-ahead (invasive)
+The PKS names exactly three roles (Admin, Instruktur, Dokter Peserta) and one customer. The institutions layer (requests, ownerships, switcher, owner shell) is multi-tenancy the contract never asked for; review #11's "instansi" is a profile *field*, which already exists.
+- [ ] 5.1 Remove institution-request + ownership surfaces: `/institution-requests`, `/admin/institutions` queue, owner shell pages (`/institution/*`), `InstitutionSwitcher`, `lib/authoring-institution.ts`, dashboard "Institusi Saya" section, `lib/institution-ownership.ts` cache
+- [ ] 5.2 Refactor access gates: `course-access.ts` + course create/edit/certificate gates move from institution-ownership to admin | instructor-membership; `ManagementShell` sidebar groups collapse (no scope switcher); `UserRole` stays `user | admin` (membership rule in AGENTS.md unchanged)
+- [ ] 5.3 Decide the `institutions` table's fate — recommendation: keep exactly one seeded row ("FK-KMK UGM") as display name/logo source for courses + certificates, drop the rest of the surface
+- [ ] 5.4 Contracts regen (`institutions.tsp` trim), ownership-based smoke tests rewritten, seed reset, AGENTS.md refreshed
+
+#### Phase 6 — Optional Trims (each pending confirmation; default = keep)
+- [ ] 6.1 Assignments domain (quizzes already cover essay + instructor grading via `pending_review`)
+- [ ] 6.2 Announcements + notifications email fanout (candidate: keep in-app only, drop transactional email)
+- [ ] 6.3 Audit log module
+- [ ] 6.4 Enrollment funnel simplification (drop the `interviewed` stage → enrolled/graduated/failed)
+- [ ] 6.5 Multi-instructor management (`/instruktur` tab, invites, co-instructor roles) → single instructor per course
+
+### 6.2 Review Note Disposition (verified 2026-10-15)
+
+| # | Note (abridged) | Status | Evidence / Remaining work |
+|:--:|---|---|---|
+| 1 | Transcript readability | ✅ Implemented | `transcript-viewer.tsx` + per-page `transcript`; future tweaks are content-data edits |
+| 2 | 2D-only anatomy | ✅ Implemented | `eye-anatomy-viewer.tsx` 2D SVG stage; 3D slot reserved, not built (correct) |
+| 3 | Centered layout | ✅ Implemented | viewport-clamped player container |
+| 4 | Clearer slide instructions | ✅ Implemented | instruction banner + sequential 1–8 pulse guide (`sequential-hotspot-viewer.tsx`) |
+| 5 | Auto-reveal synced to narration | ✅ Implemented | `animated-reveal-list.tsx`, cue-time based |
+| 6 | Two-column item lists | ✅ Implemented | slide 7 grid layout |
+| 7 | Arrows instead of circle markers | ✅ Implemented | `clinical-fundus-grading.tsx` SVG arrows, offset labels |
+| 8 | Red wrong-answer box | ✅ Implemented | crimson styling on incorrect selections |
+| 9 | Satisfaction prompt + retake for all | ✅ Implemented (client-side) | `clinical-quiz-runner.tsx:146-171`; server-side persistence → Task 4.3 |
+| 10 | Certificate name from login | ✅ Implemented | `certificates.service.ts:111` from `users.name`; no freeform input anywhere |
+| 11 | Richer registration fields | ✅ Implemented | `register.tsx` + `participant_profiles`; atomicity gap → Task 2.5 |
+| 12 | Fit-to-screen typography | ✅ Implemented | player viewport clamp, no vertical scroll |
+| 13 | Multi-course (AMD, DME) readiness | ⚠ Partial | hardcoded TS content + title heuristic → Tasks 4.1–4.4 |
+| 14 | DRIVE-recorded voiceover | ◻ Infra ready | per-slide mp3 pipeline shipped; final audio awaited from DRIVE team |
+| 15 | Timestamp / study-duration analytics | ⚠ Partial | telemetry collection + research CSV real; in-app heatmap/trend/median are client-side mocks → Tasks 3.1–3.3 |
 
 ---
 
