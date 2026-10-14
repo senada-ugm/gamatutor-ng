@@ -13,7 +13,6 @@ import { Button } from "@workspace/ui/components/button"
 import { ManagementShell } from "@/components/composed/workspace/management-shell"
 import { WorkspaceShell } from "@/components/composed/workspace/workspace-shell"
 import { getSession } from "@/lib/auth"
-import { WEB_ORIGIN } from "@/lib/env"
 import { DashboardPage } from "@/routes/dashboard"
 
 /**
@@ -49,11 +48,7 @@ const rootRoute = createRootRoute({
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
-  beforeLoad: async () => {
-    const session = await getSession()
-    if (session) throw redirect({ to: "/dashboard" })
-    throw redirect({ href: WEB_ORIGIN })
-  },
+  component: lazyRouteComponent(() => import("@/routes/landing"), "LandingPage"),
 })
 
 const loginRoute = createRoute({
@@ -319,7 +314,7 @@ const certificateViewRoute = createRoute({
 })
 
 const certificateVerifyRoute = createRoute({
-  getParentRoute: () => learnerRoute,
+  getParentRoute: () => rootRoute,
   path: "/certificates/verify",
   validateSearch: (search: Record<string, unknown>): { code?: string } => ({
     code: typeof search.code === "string" ? search.code : undefined,
@@ -426,6 +421,7 @@ const routeTree = rootRoute.addChildren([
   registerRoute,
   forgotPasswordRoute,
   resetPasswordRoute,
+  certificateVerifyRoute,
   attendanceDisplayRoute,
   workspaceRoute.addChildren([
     learnerRoute.addChildren([
@@ -439,7 +435,6 @@ const routeTree = rootRoute.addChildren([
       profileRoute,
       institutionRequestsRoute,
       certificateViewRoute,
-      certificateVerifyRoute,
     ]),
     managementRoute.addChildren([
       adminRoute.addChildren([

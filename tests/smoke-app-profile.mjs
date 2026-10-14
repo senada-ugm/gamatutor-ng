@@ -132,7 +132,7 @@ await expect("an ongoing role stores no end year", async () => {
 // --- A different account only ever sees the masked tail ---
 await page.getByRole("button", { name: "Menu Akun" }).click()
 await page.getByRole("menuitem", { name: "Keluar" }).click()
-await page.waitForURL("**/login", { timeout: 10000 })
+await page.waitForURL((url) => url.pathname === "/" || url.pathname === "", { timeout: 10000 })
 await login(page, ADMIN)
 
 await expect("an admin reading the same profile gets the masked tail", async () => {
@@ -171,7 +171,7 @@ await expect("the caller's own row comes back unmasked in a batch", async () => 
 await expect("an account with no claim on the ids gets an empty batch", async () => {
   await page.getByRole("button", { name: "Menu Akun" }).click()
   await page.getByRole("menuitem", { name: "Keluar" }).click()
-  await page.waitForURL("**/login", { timeout: 10000 })
+  await page.waitForURL((url) => url.pathname === "/" || url.pathname === "", { timeout: 10000 })
   await login(page, LEARNER)
   const usersRes = await page.request.get(`${API}/v1/users?pageSize=100`)
   if (usersRes.ok()) throw new Error("the learner should not be able to list users at all")

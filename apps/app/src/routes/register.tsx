@@ -2,68 +2,93 @@ import { Link, useNavigate } from "@tanstack/react-router"
 import { useRef, useState } from "react"
 import { toast } from "sonner"
 import { Button } from "@workspace/ui/components/button"
+import { Checkbox } from "@workspace/ui/components/checkbox"
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@workspace/ui/components/field"
 import { Input } from "@workspace/ui/components/input"
 import { NativeSelect, NativeSelectOption } from "@workspace/ui/components/native-select"
 
 import { AuthPage } from "@/components/composed/_shared/auth-page"
 import { signUp } from "@/lib/auth"
+import { CLINICAL_PROFESSIONS, INDONESIA_PROVINCES } from "@/lib/clinical-options"
 
 export function RegisterPage() {
   const navigate = useNavigate()
   const nameRef = useRef<HTMLInputElement>(null)
-  const emailRef = useRef<HTMLInputElement>(null)
-  const passwordRef = useRef<HTMLInputElement>(null)
+  const birthDateRef = useRef<HTMLInputElement>(null)
   const phoneRef = useRef<HTMLInputElement>(null)
   const institutionRef = useRef<HTMLInputElement>(null)
-  const strRef = useRef<HTMLInputElement>(null)
-  const birthDateRef = useRef<HTMLInputElement>(null)
-  const [profession, setProfession] = useState("Dokter Umum Puskesmas")
+  const cityRef = useRef<HTMLInputElement>(null)
+  const emailRef = useRef<HTMLInputElement>(null)
+  const passwordRef = useRef<HTMLInputElement>(null)
+  const passwordConfirmRef = useRef<HTMLInputElement>(null)
+
+  const [profession, setProfession] = useState<string>(CLINICAL_PROFESSIONS[0])
+  const [province, setProvince] = useState<string>("DI Yogyakarta")
+  const [consent, setConsent] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   async function handleRegister() {
     if (submitting) return
-    const name = nameRef.current?.value?.trim() ?? ""
+
+    const fullName = nameRef.current?.value?.trim() ?? ""
+    const birthDate = birthDateRef.current?.value?.trim() ?? ""
+    const phone = phoneRef.current?.value?.trim() ?? ""
+    const institution = institutionRef.current?.value?.trim() ?? ""
+    const city = cityRef.current?.value?.trim() ?? ""
     const email = emailRef.current?.value?.trim() ?? ""
     const password = passwordRef.current?.value ?? ""
-    const phone = phoneRef.current?.value?.trim() ?? ""
-    const institutionName = institutionRef.current?.value?.trim() ?? ""
-    const strNumber = strRef.current?.value?.trim() ?? ""
-    const birthDate = birthDateRef.current?.value?.trim() ?? ""
+    const passwordConfirm = passwordConfirmRef.current?.value ?? ""
 
-    if (!name || !email || password.length < 8) {
-      setError("All required fields must be filled (password minimum 8 characters)")
+    if (!fullName || !birthDate || !phone || !institution || !city || !email || !password) {
+      setError("Semua bidang wajib diisi.")
+      return
+    }
+
+    if (password.length < 8) {
+      setError("Kata sandi minimal 8 karakter.")
+      return
+    }
+
+    if (password !== passwordConfirm) {
+      setError("Konfirmasi kata sandi tidak sama.")
+      return
+    }
+
+    if (!consent) {
+      setError("Anda perlu menyetujui penggunaan data untuk pelatihan.")
       return
     }
 
     setSubmitting(true)
     setError(null)
     try {
-      const ok = await signUp(name, email, password)
+      const ok = await signUp(fullName, email, password)
       if (!ok) {
-        setError("This email may already be registered")
+        setError("Email ini mungkin sudah terdaftar.")
         return
       }
 
-      // Stash complete doctor profile to be synced upon session activation
+      // Simpan data profil klinis untuk sinkronisasi profil peserta
       localStorage.setItem(
         "pending_doctor_profile",
         JSON.stringify({
+          fullName,
+          birthDate,
+          phone,
           profession,
-          institutionName,
-          strNumber: strNumber || null,
-          phone: phone || null,
-          birthDate: birthDate || null,
+          institutionName: institution,
+          province,
+          city,
         })
       )
 
-      toast.success("Account created — please check your email for verification before signing in.", {
+      toast.success("Pendaftaran berhasil. Silakan periksa email Anda untuk verifikasi atau masuk langsung.", {
         duration: 8000,
       })
       navigate({ to: "/login" })
     } catch {
-      setError("A network error occurred. Please try again.")
+      setError("Terjadi kesalahan jaringan. Silakan coba lagi.")
     } finally {
       setSubmitting(false)
     }
@@ -71,8 +96,9 @@ export function RegisterPage() {
 
   return (
     <AuthPage
-      title="Doctor Participant Registration"
-      description="Register for Diabetic Retinopathy Screening Training to earn an official accredited certificate."
+      maxWidth="max-w-xl"
+      title="Daftar sebagai peserta"
+      description="Lengkapi data berikut. Nama lengkap akan tercetak pada sertifikat resmi, jadi pastikan penulisan dan gelarnya benar."
     >
       <form
         onSubmit={(e) => {
@@ -83,67 +109,143 @@ export function RegisterPage() {
       >
         <FieldGroup>
           {error ? (
-            <FieldDescription role="alert" className="text-destructive">
+            <div className="rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm font-medium text-destructive">
               {error}
-            </FieldDescription>
+            </div>
           ) : null}
+
+          <div className="border-b pb-2">
+            <h2 className="text-sm font-bold tracking-wide text-foreground uppercase">Data Diri Peserta</h2>
+          </div>
+
           <Field>
-            <FieldLabel htmlFor="name">Full Name & Medical Title</FieldLabel>
-            <Input ref={nameRef} id="name" autoComplete="name" placeholder="e.g. dr. Anisa Rahmawati" required />
+            <FieldLabel htmlFor="fullName">Nama lengkap (beserta gelar)</FieldLabel>
+            <Input
+              ref={nameRef}
+              id="fullName"
+              autoComplete="name"
+              placeholder="contoh: dr. Anisa Rahmawati, Sp.M"
+              required
+            />
+            <FieldDescription>
+              Nama ini dicetak pada sertifikat. Tulis persis seperti yang Anda inginkan.
+            </FieldDescription>
           </Field>
+
           <div className="grid gap-4 sm:grid-cols-2">
             <Field>
-              <FieldLabel htmlFor="profession">Medical Profession</FieldLabel>
+              <FieldLabel htmlFor="birthDate">Tanggal lahir</FieldLabel>
+              <Input ref={birthDateRef} id="birthDate" type="date" required />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="phone">Nomor telepon / WhatsApp</FieldLabel>
+              <Input ref={phoneRef} id="phone" type="tel" placeholder="0812xxxxxxx" required />
+            </Field>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field>
+              <FieldLabel htmlFor="profession">Profesi</FieldLabel>
               <NativeSelect id="profession" value={profession} onChange={(e) => setProfession(e.target.value)} required>
-                <NativeSelectOption value="Puskesmas / Community Health Physician">
-                  Puskesmas / Community Health Physician
-                </NativeSelectOption>
-                <NativeSelectOption value="Primary Clinic Physician">Primary Clinic Physician</NativeSelectOption>
-                <NativeSelectOption value="Specialist Physician">Specialist Physician</NativeSelectOption>
-                <NativeSelectOption value="Resident Physician">Resident Physician</NativeSelectOption>
-                <NativeSelectOption value="Other Healthcare Professional">
-                  Other Healthcare Professional
-                </NativeSelectOption>
+                {CLINICAL_PROFESSIONS.map((p) => (
+                  <NativeSelectOption key={p} value={p}>
+                    {p}
+                  </NativeSelectOption>
+                ))}
               </NativeSelect>
             </Field>
             <Field>
-              <FieldLabel htmlFor="institution">Institution / Health Center</FieldLabel>
-              <Input ref={institutionRef} id="institution" placeholder="e.g. Puskesmas Sleman" required />
+              <FieldLabel htmlFor="institution">Instansi / Fasilitas Kesehatan</FieldLabel>
+              <Input
+                ref={institutionRef}
+                id="institution"
+                placeholder="contoh: RS Sardjito, Puskesmas Sleman"
+                required
+              />
             </Field>
           </div>
+
           <div className="grid gap-4 sm:grid-cols-2">
             <Field>
-              <FieldLabel htmlFor="phone">WhatsApp / Mobile Phone</FieldLabel>
-              <Input ref={phoneRef} id="phone" type="tel" placeholder="08123456789" required />
+              <FieldLabel htmlFor="province">Provinsi</FieldLabel>
+              <NativeSelect id="province" value={province} onChange={(e) => setProvince(e.target.value)} required>
+                {INDONESIA_PROVINCES.map((prov) => (
+                  <NativeSelectOption key={prov} value={prov}>
+                    {prov}
+                  </NativeSelectOption>
+                ))}
+              </NativeSelect>
             </Field>
             <Field>
-              <FieldLabel htmlFor="birthDate">Birth Date</FieldLabel>
-              <Input ref={birthDateRef} id="birthDate" type="date" required />
+              <FieldLabel htmlFor="city">Kabupaten / Kota</FieldLabel>
+              <Input ref={cityRef} id="city" placeholder="contoh: Sleman, Yogyakarta" required />
             </Field>
           </div>
-          <Field>
-            <FieldLabel htmlFor="strNumber">Doctor Registration Number (STR)</FieldLabel>
-            <Input ref={strRef} id="strNumber" placeholder="Active STR number (optional)" />
-            <FieldDescription>Recommended for professional verification and certificate metadata.</FieldDescription>
-          </Field>
+
+          <div className="border-b pt-2 pb-2">
+            <h2 className="text-sm font-bold tracking-wide text-foreground uppercase">Informasi Akun</h2>
+          </div>
+
           <Field>
             <FieldLabel htmlFor="email">Email</FieldLabel>
-            <Input ref={emailRef} id="email" type="email" autoComplete="email" required />
+            <Input
+              ref={emailRef}
+              id="email"
+              type="email"
+              autoComplete="email"
+              placeholder="nama@instansi.id"
+              required
+            />
           </Field>
-          <Field>
-            <FieldLabel htmlFor="password">Password</FieldLabel>
-            <Input ref={passwordRef} id="password" type="password" autoComplete="new-password" required />
-            <FieldDescription>Minimum 8 characters.</FieldDescription>
-          </Field>
-          <Field>
-            <Button type="submit" disabled={submitting}>
-              {submitting ? "Processing..." : "Register Now"}
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field>
+              <FieldLabel htmlFor="password">Kata sandi</FieldLabel>
+              <Input
+                ref={passwordRef}
+                id="password"
+                type="password"
+                autoComplete="new-password"
+                placeholder="Minimal 8 karakter"
+                required
+              />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="passwordConfirm">Ulangi kata sandi</FieldLabel>
+              <Input
+                ref={passwordConfirmRef}
+                id="passwordConfirm"
+                type="password"
+                autoComplete="new-password"
+                placeholder="Ketik ulang sandi"
+                required
+              />
+            </Field>
+          </div>
+
+          <div className="flex items-start gap-3 pt-2">
+            <Checkbox
+              id="consent"
+              checked={consent}
+              onCheckedChange={(checked) => setConsent(checked === true)}
+              className="mt-1"
+            />
+            <FieldLabel htmlFor="consent" className="text-xs leading-relaxed font-normal text-muted-foreground">
+              Saya setuju data di atas digunakan untuk penyelenggaraan pelatihan, penerbitan sertifikat resmi, dan
+              evaluasi program oleh tim DRIVE.
+            </FieldLabel>
+          </div>
+
+          <Field className="pt-2">
+            <Button type="submit" disabled={submitting} className="w-full bg-[#173a5e] text-white hover:bg-[#132d47]">
+              {submitting ? "Memproses…" : "Daftar"}
             </Button>
           </Field>
-          <FieldDescription className="text-center">
-            Already have an account?{" "}
-            <Link to="/login" className="underline underline-offset-4">
-              Sign In
+
+          <FieldDescription className="text-center text-xs">
+            Sudah memiliki akun?{" "}
+            <Link to="/login" className="font-semibold text-primary underline underline-offset-4">
+              Masuk di sini
             </Link>
           </FieldDescription>
         </FieldGroup>

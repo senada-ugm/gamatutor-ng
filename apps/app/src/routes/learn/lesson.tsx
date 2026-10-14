@@ -183,7 +183,7 @@ export function LessonPage() {
               className="gap-2"
             >
               <Check className="size-4" />
-              {completeAndAdvance.isPending ? "Saving..." : "Complete & Advance"}
+              {completeAndAdvance.isPending ? "Menyimpan..." : "Selesai & Lanjut"}
             </Button>
           ) : (
             <Button
@@ -191,7 +191,7 @@ export function LessonPage() {
               onClick={() => toggleComplete.mutate()}
               disabled={toggleComplete.isPending}
             >
-              {toggleComplete.isPending ? "Saving..." : isCompleted ? "Mark Incomplete" : "Mark Complete"}
+              {toggleComplete.isPending ? "Menyimpan..." : isCompleted ? "Tandai Belum Selesai" : "Tandai Selesai"}
             </Button>
           )}
         </div>
@@ -203,7 +203,7 @@ export function LessonPage() {
               className="flex min-w-0 items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="size-3.5 shrink-0" />
-              <span className="truncate">Previous</span>
+              <span className="truncate">Sebelumnya</span>
             </Link>
           ) : null}
           {next ? (
@@ -213,7 +213,7 @@ export function LessonPage() {
               className="flex min-w-0 items-center gap-1 text-sm text-primary hover:underline"
               title={next.title}
             >
-              <span className="truncate">Next: {next.title}</span>
+              <span className="truncate">Berikutnya: {next.title}</span>
               <ArrowRight className="size-3.5 shrink-0" />
             </Link>
           ) : null}

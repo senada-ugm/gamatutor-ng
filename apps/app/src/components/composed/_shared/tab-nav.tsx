@@ -48,7 +48,7 @@ export function tabNavItemProps(active: boolean) {
       "focus-visible:ring-3 focus-visible:ring-ring/50",
       "after:absolute after:inset-x-1 after:-bottom-px after:h-0.5 after:rounded-full after:transition-colors",
       active
-        ? "text-foreground after:bg-foreground"
+        ? "font-semibold text-[#0369a1] after:bg-[#0284c7] dark:text-sky-300 dark:after:bg-sky-400"
         : "text-muted-foreground after:bg-transparent hover:text-foreground"
     ),
   }

@@ -1,265 +1,178 @@
-import { Link, Outlet, useMatchRoute, useNavigate } from "@tanstack/react-router"
+import { Link, Outlet, useLocation, useMatchRoute } from "@tanstack/react-router"
 
-import { Avatar, AvatarFallback } from "@workspace/ui/components/avatar"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@workspace/ui/components/dropdown-menu"
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarInset,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@workspace/ui/components/sidebar"
+import { cn } from "@workspace/ui/lib/utils"
 
-import { NotificationBell } from "@/components/composed/notifications/notification-bell"
+import { WorkspaceShell } from "@/components/composed/workspace/workspace-shell"
 import { InstitutionSwitcher } from "@/components/composed/institutions/institution-switcher"
 import { ALL_INSTITUTIONS, useAuthoringScope } from "@/lib/authoring-institution"
 import { useSession } from "@/lib/session"
-import { signOut } from "@/lib/auth"
 
 /**
- * Chrome for the management console (/instructor/**, /admin/**).
+ * Management console shell for /instructor/**, /admin/**, and /institution/**.
  *
- * The learner surfaces keep the top nav: a learner's whole path is
- * catalog -> course -> player and the player owns a sidebar, so a second
- * persistent rail there would be chrome tax on every page; management
- * has a scope and a growing set of destinations, so it gets the rail.
- * Don't collapse the two back into one shell without resolving that.
- *
- * The sidebar header carries the institution scope (see
- * lib/authoring-institution.ts), and its groups mean something:
- * everything above "Platform" is scoped by that switcher, everything
- * under it is admin-wide and ignores the scope.
+ * Implements a unified full-width shell consistent with the learner workspace:
+ * - Shared global Sky Blue header and navigation menu via WorkspaceShell
+ * - Context-aware vertical tab navigation (clean split between Admin platform tools and Instructor authoring)
+ * - Zero unnecessary breadcrumb clutter
  */
-function readSidebarCookie(): boolean {
-  if (typeof document === "undefined") return true
-  const match = document.cookie.match(/(?:^|;\s*)sidebar_state=(true|false)/)
-  return match ? match[1] === "true" : true
-}
-
 export function ManagementShell() {
   const session = useSession()
-  const navigate = useNavigate()
+  const location = useLocation()
   const matchRoute = useMatchRoute()
   const scope = useAuthoringScope()
 
   const user = session.data ?? null
   const isAdmin = user?.role === "admin"
   const isAllInstitutions = scope.scopeId === ALL_INSTITUTIONS
-  const initial = (user?.name ?? user?.email ?? "A").charAt(0).toUpperCase()
 
-  async function handleSignOut() {
-    await signOut()
-    navigate({ to: "/login" })
+  const pathname = location.pathname
+  const isAdminSection = pathname.startsWith("/admin")
+
+  function verticalTabClass(active: boolean) {
+    return cn(
+      "flex w-full items-center justify-between gap-2.5 rounded-lg px-3.5 py-2.5 text-start text-sm font-medium transition-all",
+      active
+        ? "bg-[#0369a1] font-semibold text-white shadow-xs dark:bg-sky-600 dark:text-white"
+        : "text-muted-foreground hover:bg-sky-50 hover:text-[#0369a1] dark:hover:bg-sky-950/40 dark:hover:text-sky-300"
+    )
   }
 
   return (
-    <SidebarProvider defaultOpen={readSidebarCookie()}>
-      <Sidebar collapsible="offcanvas">
-        <SidebarHeader className="gap-2">
-          <Link to="/dashboard" className="px-2 py-1 font-semibold tracking-tight">
-            LMS
-          </Link>
-          <InstitutionSwitcher block />
-        </SidebarHeader>
+    <WorkspaceShell>
+      <div className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 md:px-6 md:py-8">
+        {/* 2-Column Full-Width Vertical Tab Layout */}
+        <div className="flex flex-col gap-8 md:flex-row md:items-start">
+          <aside className="w-full shrink-0 space-y-5 md:w-64 lg:w-72" aria-label="Navigasi Pengelolaan">
+            {isAdminSection ? (
+              /* Platform Admin Vertical Tabs */
+              <div className="space-y-4">
+                <div className="rounded-xl border border-border/70 bg-card p-4 shadow-2xs dark:border-border/50">
+                  <p className="text-xs font-bold tracking-wider text-[#0369a1] uppercase dark:text-sky-400">
+                    Konsol Administrator
+                  </p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">Tata kelola platform &amp; keamanan</p>
+                </div>
 
-        <SidebarContent>
-          {/* Labelled now that it holds four entries: without it the
-              institution's "Ringkasan" and the platform's read as the
-              same destination. The label is also what says these four
-              follow the switcher above them. */}
-          <SidebarGroup>
-            <SidebarGroupLabel>Institusi</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    isActive={!!matchRoute({ to: "/institution" })}
-                    render={<Link to="/institution" />}
+                <div className="space-y-1" data-sidebar="menu">
+                  <Link
+                    to="/admin"
+                    data-sidebar="menu-button"
+                    className={verticalTabClass(!!matchRoute({ to: "/admin", fuzzy: false }))}
                   >
                     <span>Ringkasan</span>
-                    {isAllInstitutions ? (
-                      <span className="ml-auto text-xs font-normal text-muted-foreground">Per Institusi</span>
-                    ) : null}
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    isActive={!!matchRoute({ to: "/instructor", fuzzy: true })}
-                    render={<Link to="/instructor" />}
+                  </Link>
+                  <Link
+                    to="/admin/users"
+                    data-sidebar="menu-button"
+                    className={verticalTabClass(!!matchRoute({ to: "/admin/users" }))}
                   >
-                    Kelola Pelatihan
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    isActive={!!matchRoute({ to: "/institution/peserta" })}
-                    render={<Link to="/institution/peserta" />}
+                    <span>Pengguna</span>
+                  </Link>
+                  <Link
+                    to="/admin/institutions"
+                    data-sidebar="menu-button"
+                    className={verticalTabClass(!!matchRoute({ to: "/admin/institutions" }))}
+                  >
+                    <span>Institusi</span>
+                  </Link>
+                  <Link
+                    to="/admin/assessments"
+                    data-sidebar="menu-button"
+                    className={verticalTabClass(!!matchRoute({ to: "/admin/assessments" }))}
+                  >
+                    <span>Asesmen</span>
+                  </Link>
+                  <Link
+                    to="/admin/settings"
+                    data-sidebar="menu-button"
+                    className={verticalTabClass(!!matchRoute({ to: "/admin/settings" }))}
+                  >
+                    <span>Pengaturan</span>
+                  </Link>
+                  <Link
+                    to="/admin/audit"
+                    data-sidebar="menu-button"
+                    className={verticalTabClass(!!matchRoute({ to: "/admin/audit" }))}
+                  >
+                    <span>Log Audit</span>
+                  </Link>
+                </div>
+
+                <div className="border-t border-border/50 pt-3">
+                  <Link
+                    to="/instructor"
+                    className="flex items-center justify-between rounded-md px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-[#0369a1] dark:hover:text-sky-300"
+                  >
+                    <span>Ke Menu Instruktur</span>
+                    <span className="text-xs">➔</span>
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              /* Instructor & Institution Authoring Vertical Tabs */
+              <div className="space-y-4">
+                <div className="rounded-xl border border-border/70 bg-card p-3 shadow-2xs dark:border-border/50">
+                  <p className="mb-2 px-1 text-[11px] font-bold tracking-wider text-muted-foreground uppercase">
+                    Cakupan Institusi
+                  </p>
+                  <InstitutionSwitcher block />
+                </div>
+
+                <div className="space-y-1" data-sidebar="menu">
+                  <Link
+                    to="/instructor"
+                    data-sidebar="menu-button"
+                    className={verticalTabClass(!!matchRoute({ to: "/instructor", fuzzy: true }))}
+                  >
+                    <span>Kelola Pelatihan</span>
+                  </Link>
+                  <Link
+                    to="/institution"
+                    data-sidebar="menu-button"
+                    className={verticalTabClass(!!matchRoute({ to: "/institution" }))}
+                  >
+                    <span>Ringkasan Institusi</span>
+                    {isAllInstitutions ? <span className="text-[10px] opacity-75">Per Institusi</span> : null}
+                  </Link>
+                  <Link
+                    to="/institution/peserta"
+                    data-sidebar="menu-button"
+                    className={verticalTabClass(!!matchRoute({ to: "/institution/peserta" }))}
                   >
                     <span>Peserta</span>
-                    {isAllInstitutions ? (
-                      <span className="ml-auto text-xs font-normal text-muted-foreground">Per Institusi</span>
-                    ) : null}
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    isActive={!!matchRoute({ to: "/institution/pembayaran" })}
-                    render={<Link to="/institution/pembayaran" />}
+                    {isAllInstitutions ? <span className="text-[10px] opacity-75">Per Institusi</span> : null}
+                  </Link>
+                  <Link
+                    to="/institution/pembayaran"
+                    data-sidebar="menu-button"
+                    className={verticalTabClass(!!matchRoute({ to: "/institution/pembayaran" }))}
                   >
                     <span>Pembayaran</span>
-                    {isAllInstitutions ? (
-                      <span className="ml-auto text-xs font-normal text-muted-foreground">Per Institusi</span>
-                    ) : null}
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
+                    {isAllInstitutions ? <span className="text-[10px] opacity-75">Per Institusi</span> : null}
+                  </Link>
+                </div>
 
-          {isAdmin ? (
-            <SidebarGroup>
-              <SidebarGroupLabel>Platform</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      isActive={!!matchRoute({ to: "/admin", fuzzy: false })}
-                      render={<Link to="/admin" />}
+                {isAdmin ? (
+                  <div className="border-t border-border/50 pt-3">
+                    <Link
+                      to="/admin"
+                      className="flex items-center justify-between rounded-md px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-[#0369a1] dark:hover:text-sky-300"
                     >
-                      Ringkasan
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      isActive={!!matchRoute({ to: "/admin/users" })}
-                      render={<Link to="/admin/users" />}
-                    >
-                      Pengguna
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      isActive={!!matchRoute({ to: "/admin/institutions" })}
-                      render={<Link to="/admin/institutions" />}
-                    >
-                      Institusi
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      isActive={!!matchRoute({ to: "/admin/assessments" })}
-                      render={<Link to="/admin/assessments" />}
-                    >
-                      Asesmen
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      isActive={!!matchRoute({ to: "/admin/settings" })}
-                      render={<Link to="/admin/settings" />}
-                    >
-                      Pengaturan
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      isActive={!!matchRoute({ to: "/admin/audit" })}
-                      render={<Link to="/admin/audit" />}
-                    >
-                      Audit
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          ) : null}
+                      <span>Ke Konsol Admin</span>
+                      <span className="text-xs">➔</span>
+                    </Link>
+                  </div>
+                ) : null}
+              </div>
+            )}
+          </aside>
 
-          {/* Leaving the console is a nav destination, not a setting.
-              Following one of these swaps back to the top-nav shell,
-              which the group label is there to telegraph. */}
-          <SidebarGroup>
-            <SidebarGroupLabel>Belajar</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton render={<Link to="/dashboard" />}>Dasbor</SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton render={<Link to="/courses" />}>Katalog</SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton render={<Link to="/wishlist" />}>Wishlist</SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton render={<Link to="/orders" />}>Pesanan Saya</SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton render={<Link to="/assessments" />}>Asesmen</SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton render={<Link to="/certificates/verify" />}>
-                    Verifikasi Sertifikat
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        </SidebarContent>
-
-        <SidebarFooter>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <DropdownMenu>
-                <DropdownMenuTrigger render={<SidebarMenuButton size="lg" aria-label="Menu Akun" />}>
-                  <Avatar className="size-8">
-                    <AvatarFallback className="text-xs font-medium">{initial}</AvatarFallback>
-                  </Avatar>
-                  <span className="min-w-0 flex-1 text-start">
-                    <span className="block truncate text-sm font-medium">{user?.name ?? "Akun"}</span>
-                    <span className="block truncate text-xs text-muted-foreground">
-                      {isAdmin ? "Administrator" : (user?.email ?? "")}
-                    </span>
-                  </span>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" side="top" className="w-56">
-                  <DropdownMenuItem render={<Link to="/profile" />}>Profil Saya</DropdownMenuItem>
-                  <DropdownMenuItem render={<Link to="/wishlist" />}>Wishlist</DropdownMenuItem>
-                  <DropdownMenuItem render={<Link to="/orders" />}>Pesanan Saya</DropdownMenuItem>
-                  <DropdownMenuItem render={<Link to="/assessments" />}>Asesmen</DropdownMenuItem>
-                  <DropdownMenuItem render={<Link to="/certificates/verify" />}>Verifikasi Sertifikat</DropdownMenuItem>
-                  <DropdownMenuItem render={<Link to="/institution-requests" />}>Ajukan Institusi</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => void handleSignOut()}>Keluar</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarFooter>
-      </Sidebar>
-
-      <SidebarInset>
-        <header className="flex h-14 shrink-0 items-center justify-between gap-2 border-b px-4 md:px-6">
-          <SidebarTrigger />
-          <NotificationBell />
-        </header>
-        <div className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 md:px-6">
-          <Outlet />
+          {/* Main Content Area */}
+          <main className="w-full min-w-0 flex-1">
+            <Outlet />
+          </main>
         </div>
-      </SidebarInset>
-    </SidebarProvider>
+      </div>
+    </WorkspaceShell>
   )
 }

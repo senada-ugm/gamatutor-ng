@@ -89,7 +89,7 @@ await expect("the Likert type badge renders on the saved question", async () => 
 // ================= AS THE LEARNER: take it =================
 await page.getByRole("button", { name: "Menu Akun" }).click()
 await page.getByRole("menuitem", { name: "Keluar" }).click()
-await page.waitForURL("**/login", { timeout: 10000 })
+await page.waitForURL((url) => url.pathname === "/" || url.pathname === "", { timeout: 10000 })
 await login(page, LEARNER)
 
 await page.goto(`${BASE}/assessments`, { timeout: 30000 })

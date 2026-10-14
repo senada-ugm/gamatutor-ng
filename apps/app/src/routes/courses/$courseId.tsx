@@ -38,8 +38,8 @@ export function CourseDetailPage() {
   })
 
   const myEnrollment = useQuery({
-    queryKey: ["my-enrollment", courseId],
-    queryFn: () => apiGet<ContractEnrollment[]>(`/enrollments?courseId=${courseId}&pageSize=10`),
+    queryKey: ["my-enrollment", courseId, user?.id],
+    queryFn: () => apiGet<ContractEnrollment[]>(`/enrollments?courseId=${courseId}&userId=${user?.id}&pageSize=10`),
     enabled: user != null,
     select: (rows) => rows.find((row) => row.userId === user?.id) ?? null,
   })

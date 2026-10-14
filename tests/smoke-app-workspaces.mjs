@@ -112,7 +112,7 @@ const freeCourseRes = await page.request.post(`${API}/v1/courses`, {
   data: {
     title: `Smoke WS Free ${STAMP}`,
     institutionId,
-    courseType: "online",
+    courseType: "offline",
     isDisabilityFriendly: false,
     supportedDisabilityTypes: [],
   },
@@ -158,7 +158,7 @@ await page.request.post(`${API}/v1/courses/${freeCourseId}/announcements`, {
 // ================= LEARNER FUNNEL =================
 await page.getByRole("button", { name: "Menu Akun" }).click()
 await page.getByRole("menuitem", { name: "Keluar" }).click()
-await page.waitForURL("**/login", { timeout: 8000 })
+await page.waitForURL((url) => url.pathname === "/" || url.pathname === "", { timeout: 8000 })
 await login(page, LEARNER)
 
 await page.goto(`${BASE}/courses`, { timeout: 30000 })
@@ -218,7 +218,7 @@ await expect("assessments page renders", async () => {
 // ================= BACK AS ADMIN: report, player announcement, certificate =================
 await page.getByRole("button", { name: "Menu Akun" }).click()
 await page.getByRole("menuitem", { name: "Keluar" }).click()
-await page.waitForURL("**/login", { timeout: 8000 })
+await page.waitForURL((url) => url.pathname === "/" || url.pathname === "", { timeout: 8000 })
 await login(page, ADMIN)
 
 // Approve the learner so the report/roster has a participant

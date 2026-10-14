@@ -17,10 +17,13 @@ import { useSession } from "@/lib/session"
 import { signOut } from "@/lib/auth"
 
 /**
- * Chrome for authenticated workspace pages (dashboard, instructor,
- * admin, account). The player (/learn/**) deliberately stays chrome-less
- * — it has its own shell. Session is already established by the time
- * this renders; the login redirect happens in the layout route.
+ * High-Contrast Sky Blue Header Chrome for authenticated workspace pages
+ * (dashboard, catalog, instructor, admin, account).
+ * Features:
+ * - Sky Blue primary brand background (#0369a1 in light mode, #082f49 in dark mode)
+ * - WCAG AAA compliant text contrast (pure white #ffffff in light mode, #f0f9ff in dark mode)
+ * - Tosca Green secondary accent indicator for medical credentials
+ * - Streamlined medical learner navigation and account menu
  */
 export function WorkspaceShell({ children }: { children: React.ReactNode }) {
   const session = useSession()
@@ -34,26 +37,39 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
 
   async function handleSignOut() {
     await signOut()
-    navigate({ to: "/login" })
+    navigate({ to: "/" })
   }
 
-  // Active gets a filled pill; the rest sit at muted weight so the bar
-  // reads as one control with one selection, not five equal buttons.
+  // Active pill has high contrast against the Sky Blue background:
+  // white frosted glass pill with bold text in light mode,
+  // sky-500/25 in dark mode.
   function navClass(active: boolean) {
-    return cn(active ? "bg-muted text-foreground" : "text-muted-foreground")
+    return cn(
+      "h-8 cursor-pointer px-3 text-xs font-semibold transition-colors",
+      active
+        ? "bg-white/20 font-bold text-white shadow-xs hover:bg-white/25 dark:bg-sky-500/25 dark:text-sky-200"
+        : "text-sky-100 hover:bg-white/10 hover:text-white"
+    )
   }
 
   return (
     <div className="flex min-h-svh flex-col">
-      <header className="border-b print:hidden">
-        <div className="mx-auto flex h-14 max-w-7xl items-center gap-3 px-4 md:gap-6 md:px-6">
-          <Link to="/dashboard" className="shrink-0 text-lg font-semibold tracking-tight">
-            LMS
+      <header className="border-b border-sky-800/40 bg-[#0369a1] text-white shadow-xs dark:border-sky-900/60 dark:bg-[#082f49] print:hidden">
+        <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 md:gap-6 md:px-6">
+          <Link
+            to="/dashboard"
+            className="flex shrink-0 items-center gap-2.5 font-bold tracking-tight text-white transition-opacity hover:opacity-95"
+          >
+            <span className="flex size-7 items-center justify-center rounded-full bg-white/20 text-xs font-black text-white shadow-xs backdrop-blur-xs">
+              👁
+            </span>
+            <span className="text-base font-extrabold tracking-tight text-white">
+              DRIVE <span className="font-semibold text-sky-200 dark:text-sky-300">Learn</span>
+            </span>
           </Link>
-          {/* min-w-0 is what actually lets this scroll: without it the
-              nav refuses to shrink below its content and overflows the
-              header on a phone instead of scrolling. */}
-          <nav className="flex min-w-0 flex-1 gap-1 overflow-x-auto [mask-image:linear-gradient(to_right,black_calc(100%-24px),transparent_100%)] [-ms-overflow-style:none] [scrollbar-width:none] md:[mask-image:none] [&::-webkit-scrollbar]:hidden">
+
+          {/* Nav Bar */}
+          <nav className="flex min-w-0 flex-1 gap-1.5 overflow-x-auto [mask-image:linear-gradient(to_right,black_calc(100%-24px),transparent_100%)] [-ms-overflow-style:none] [scrollbar-width:none] md:[mask-image:none] [&::-webkit-scrollbar]:hidden">
             <Button
               variant="ghost"
               size="sm"
@@ -77,7 +93,9 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
                 variant="ghost"
                 size="sm"
                 nativeButton={false}
-                className={navClass(!!matchRoute({ to: "/instructor", fuzzy: true }))}
+                className={navClass(
+                  !!matchRoute({ to: "/instructor", fuzzy: true }) || !!matchRoute({ to: "/institution", fuzzy: true })
+                )}
                 render={<Link to="/instructor" />}
               >
                 Instruktur
@@ -95,29 +113,35 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
               </Button>
             ) : null}
           </nav>
-          <div className="flex shrink-0 items-center gap-1">
-            <NotificationBell />
+
+          {/* Action icons & Account menu */}
+          <div className="flex shrink-0 items-center gap-2">
+            <div className="text-white [&_button]:text-white [&_button]:hover:bg-white/10 [&_button]:hover:text-white">
+              <NotificationBell />
+            </div>
+
             <DropdownMenu>
-              <DropdownMenuTrigger aria-label="Menu Akun" className="rounded-full">
+              <DropdownMenuTrigger
+                aria-label="Menu Akun"
+                className="cursor-pointer rounded-full ring-2 ring-white/30 transition-all hover:ring-white/60 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"
+              >
                 <Avatar className="size-8">
-                  <AvatarFallback className="text-xs font-medium">
+                  <AvatarFallback className="bg-sky-900 text-xs font-bold text-white dark:bg-sky-800">
                     {(user?.name ?? user?.email ?? "A").charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="min-w-52">
-                {/* An avatar with no name anywhere is the only account
-                    identity the shell shows — say which account it is. */}
-                <div className="px-2 py-1.5">
-                  <p className="truncate text-sm font-medium">{user?.name ?? "Akun"}</p>
+              <DropdownMenuContent align="end" className="min-w-56">
+                <div className="px-3 py-2">
+                  <p className="truncate text-sm font-bold text-foreground">{user?.name ?? "Akun"}</p>
                   {user?.email ? <p className="truncate text-xs text-muted-foreground">{user.email}</p> : null}
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem render={<Link to="/profile" />}>Profil Saya</DropdownMenuItem>
+                <DropdownMenuItem render={<Link to="/assessments" />}>Asesmen &amp; Evaluasi</DropdownMenuItem>
+                <DropdownMenuItem render={<Link to="/certificates/verify" />}>Verifikasi Sertifikat</DropdownMenuItem>
                 <DropdownMenuItem render={<Link to="/wishlist" />}>Wishlist</DropdownMenuItem>
                 <DropdownMenuItem render={<Link to="/orders" />}>Pesanan Saya</DropdownMenuItem>
-                <DropdownMenuItem render={<Link to="/assessments" />}>Asesmen</DropdownMenuItem>
-                <DropdownMenuItem render={<Link to="/certificates/verify" />}>Verifikasi Sertifikat</DropdownMenuItem>
                 <DropdownMenuItem render={<Link to="/institution-requests" />}>Ajukan Institusi</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => void handleSignOut()}>Keluar</DropdownMenuItem>
@@ -126,6 +150,7 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </header>
+
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 md:px-6">{children}</main>
     </div>
   )

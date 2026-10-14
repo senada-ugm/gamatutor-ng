@@ -37,7 +37,6 @@ export function ClinicalQuizRunner({
     if (currentIndex < totalCount - 1) {
       setCurrentIndex(currentIndex + 1)
     } else {
-      // Calculate score and finish
       finishQuiz()
     }
   }
@@ -91,25 +90,23 @@ export function ClinicalQuizRunner({
             variant="outline"
             className={`px-3 py-1 font-mono text-xs uppercase ${
               passed
-                ? "border-emerald-300 bg-emerald-500/10 text-emerald-800"
-                : "border-amber-300 bg-amber-500/10 text-amber-800"
+                ? "border-emerald-300 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300"
+                : "border-amber-300 bg-amber-500/10 text-amber-800 dark:text-amber-300"
             }`}
           >
-            {passed ? "Evaluation Passed" : "Needs Improvement"}
+            {passed ? "Lulus Evaluasi" : "Perlu Remediasi"}
           </Badge>
-          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-            Post-Test Evaluation Results
-          </h2>
+          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">Hasil Evaluasi Post-Test</h2>
           <p className="text-sm text-muted-foreground">
-            You scored <strong className="text-foreground">{scorePct}%</strong> ({correctCount} of {totalCount}{" "}
-            questions correct). Passing threshold is {Math.round(passingScore * 100)}%.
+            Anda memperoleh nilai <strong className="text-foreground">{scorePct}%</strong> ({correctCount} dari{" "}
+            {totalCount} soal dijawab dengan benar). Batas kelulusan minimum adalah {Math.round(passingScore * 100)}%.
           </p>
         </div>
 
         {/* Detailed Review Breakdown */}
         <div className="space-y-3 rounded-xl border bg-muted/20 p-4 text-left">
           <h4 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-            Question Review Breakdown:
+            Pembahasan Soal Evaluasi:
           </h4>
           <div className="space-y-2">
             {questions.map((q, idx) => {
@@ -135,7 +132,8 @@ export function ClinicalQuizRunner({
                       {idx + 1}. {q.question}
                     </p>
                     <p className="opacity-90">
-                      Your answer: <strong>{userAns || "Unanswered"}</strong> • Correct: <strong>{q.correct}</strong>
+                      Jawaban Anda: <strong>{userAns || "Belum dijawab"}</strong> • Kunci Jawaban:{" "}
+                      <strong>{q.correct}</strong>
                     </p>
                     {!isCorrect && <p className="mt-1 text-[11px] italic">{q.explanation}</p>}
                   </div>
@@ -145,30 +143,30 @@ export function ClinicalQuizRunner({
           </div>
         </div>
 
-        {/* Review #9: Explicit Confirmation Prompt & Unrestricted Retake Option */}
+        {/* Review Note #9: Satisfaction Prompt & Retake Option */}
         <div className="space-y-3 rounded-xl border border-primary/20 bg-primary/5 p-4 text-left">
           <div className="flex items-center gap-2">
             <HelpCircle className="h-5 w-5 text-primary" />
-            <span className="text-sm font-bold text-foreground">Are you satisfied with your test score?</span>
+            <span className="text-sm font-bold text-foreground">Apakah Anda sudah puas dengan nilai Anda?</span>
           </div>
           <p className="text-xs text-muted-foreground">
-            You may retake the post-test without any restrictions to reinforce your diagnostic knowledge and improve
-            your certified accreditation record.
+            Anda dapat mengulang evaluasi post-test tanpa batas untuk memperdalam pemahaman diagnostik retinopati dan
+            memperbaiki catatan akreditasi klinis Anda.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-          {/* Unrestricted Retake Button (Review #9) */}
+          {/* Unrestricted Retake Button (Review Note #9) */}
           <Button variant="outline" onClick={handleRetakeTest} className="gap-2">
             <RotateCcw className="h-4 w-4" />
-            Retake Evaluation Module
+            Ulangi Evaluasi (Retake)
           </Button>
 
           {/* Certificate Claim if Passed */}
           {passed && onClaimCertificate && (
             <Button onClick={onClaimCertificate} className="gap-2 font-semibold shadow-sm">
               <ShieldCheck className="h-4 w-4" />
-              Claim Official Certificate
+              Klaim Sertifikat Resmi
             </Button>
           )}
         </div>
@@ -184,14 +182,14 @@ export function ClinicalQuizRunner({
       {/* Header and Progress */}
       <div className="flex items-center justify-between border-b pb-4">
         <div>
-          <span className="font-mono text-xs font-bold text-primary">STANDARDIZED CLINICAL QUIZ</span>
+          <span className="font-mono text-xs font-bold text-primary">EVALUASI KLINIS TERSTANDAR</span>
           <h3 className="mt-0.5 text-lg font-bold text-foreground">
-            Question {currentIndex + 1} of {totalCount}
+            Soal {currentIndex + 1} dari {totalCount}
           </h3>
         </div>
 
         <Badge variant="outline" className="font-mono text-xs">
-          {Math.round(((currentIndex + 1) / totalCount) * 100)}% Complete
+          {Math.round(((currentIndex + 1) / totalCount) * 100)}% Selesai
         </Badge>
       </div>
 
@@ -232,11 +230,11 @@ export function ClinicalQuizRunner({
       {/* Nav Controls */}
       <div className="flex items-center justify-between border-t pt-4">
         <Button size="sm" variant="outline" disabled={currentIndex === 0} onClick={handlePrev}>
-          Previous
+          Sebelumnya
         </Button>
 
         <Button size="sm" disabled={!isCurrentAnswered} onClick={handleNext} className="gap-1.5 font-semibold">
-          <span>{currentIndex === totalCount - 1 ? "Finish Evaluation" : "Next Question"}</span>
+          <span>{currentIndex === totalCount - 1 ? "Selesaikan Evaluasi" : "Soal Berikutnya"}</span>
           <ArrowRight className="h-4 w-4" />
         </Button>
       </div>

@@ -98,7 +98,7 @@ await expect("sign-in works with the new password", async () => {
 const logBytes2 = readFileSync(API_LOG, "utf-8").length
 await page.getByRole("button", { name: "Menu Akun" }).click()
 await page.getByRole("menuitem", { name: "Keluar" }).click()
-await page.waitForURL("**/login", { timeout: 8000 })
+await page.waitForURL((url) => url.pathname === "/" || url.pathname === "", { timeout: 8000 })
 await page.goto(`${BASE}/forgot-password`)
 await page.locator("#email").fill(EMAIL)
 await page.getByRole("button", { name: "Kirim Tautan Pemulihan" }).click()
@@ -111,15 +111,16 @@ for (let i = 0; i < 30 && !link2; i++) {
 if (!link2) throw new Error("second reset link not found")
 const token2 = new URL(link2).pathname.split("/").pop()
 await page.goto(`${BASE}/reset-password?token=${encodeURIComponent(token2)}`, { timeout: 30000 })
+await page.getByText("Atur Kata Sandi Baru").first().waitFor({ timeout: 8000 })
 await page.locator("#password").fill(ORIGINAL_PASSWORD)
 await page.locator("#confirm").fill(ORIGINAL_PASSWORD)
 await page.getByRole("button", { name: "Simpan Kata Sandi Baru" }).click()
 await expect("original password restored", async () => {
-  await page.waitForURL("**/login", { timeout: 8000 })
-  await page.locator("#password").fill(ORIGINAL_PASSWORD)
+  await page.waitForURL(/\/login/, { timeout: 8000 })
   await page.locator("#email").fill(EMAIL)
+  await page.locator("#password").fill(ORIGINAL_PASSWORD)
   await page.getByRole("button", { name: "Masuk", exact: true }).click()
-  await page.waitForURL("**/dashboard", { timeout: 8000 })
+  await page.waitForURL(/\/dashboard/, { timeout: 8000 })
 })
 
 await browser.close()

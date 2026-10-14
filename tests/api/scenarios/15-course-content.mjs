@@ -67,4 +67,31 @@ export async function run(ctx) {
     200
   )
   check("completion carries an id", !!done?.data?.id)
+
+  // telemetry events
+  status(
+    "admin records a telemetry event",
+    await admin.post("/v1/telemetry/events", {
+      json: {
+        courseId: ids.course,
+        moduleId: ids.module,
+        slideId: "slide-1",
+        eventType: "slide_view",
+        dwellTimeSeconds: 15,
+      },
+    }),
+    201
+  )
+  status(
+    "anon cannot record telemetry",
+    await anon.post("/v1/telemetry/events", {
+      json: {
+        courseId: ids.course,
+        moduleId: ids.module,
+        slideId: "slide-1",
+        eventType: "slide_view",
+      },
+    }),
+    401
+  )
 }

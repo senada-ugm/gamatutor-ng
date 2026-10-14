@@ -50,7 +50,7 @@ const courseRes = await page.request.post(`${API}/v1/courses`, {
   data: {
     title: `Smoke Account Course ${STAMP}`,
     institutionId,
-    courseType: "online",
+    courseType: "offline",
     isDisabilityFriendly: false,
     supportedDisabilityTypes: [],
   },
@@ -61,7 +61,7 @@ await page.request.post(`${API}/v1/courses/${courseId}/publish`)
 // ================= LEARNER: my-learning + request flow =================
 await page.getByRole("button", { name: "Menu Akun" }).click()
 await page.getByRole("menuitem", { name: "Keluar" }).click()
-await page.waitForURL("**/login", { timeout: 8000 })
+await page.waitForURL((url) => url.pathname === "/" || url.pathname === "", { timeout: 8000 })
 await login(page, LEARNER)
 
 // Enroll through the catalog so my-learning has a fresh row
@@ -97,7 +97,7 @@ await expect("my-requests shows the pending submission", async () => {
 // ================= ADMIN: approve =================
 await page.getByRole("button", { name: "Menu Akun" }).click()
 await page.getByRole("menuitem", { name: "Keluar" }).click()
-await page.waitForURL("**/login", { timeout: 8000 })
+await page.waitForURL((url) => url.pathname === "/" || url.pathname === "", { timeout: 8000 })
 await login(page, ADMIN)
 
 await page.goto(`${BASE}/admin/institutions`, { timeout: 30000 })
@@ -129,7 +129,7 @@ if (!approved) {
 // ================= LEARNER: owner view =================
 await page.getByRole("button", { name: "Menu Akun" }).click()
 await page.getByRole("menuitem", { name: "Keluar" }).click()
-await page.waitForURL("**/login", { timeout: 8000 })
+await page.waitForURL((url) => url.pathname === "/" || url.pathname === "", { timeout: 8000 })
 await login(page, LEARNER)
 
 await expect("the newly approved institution appears in Institusi Saya", async () => {

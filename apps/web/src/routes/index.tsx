@@ -102,11 +102,14 @@ function LandingPage() {
 
           {/* Catalogue Section Grouped by Topic (matches gamatutor-ng .topic catalogue) */}
           <section className="mt-10 space-y-4">
-            <div className="flex items-center gap-2.5">
-              <span className="h-5 w-1.5 rounded-full bg-[#5bb4b2]" />
-              <h2 className="text-lg font-bold tracking-tight text-[#173a5e] dark:text-foreground">
-                Topik: Retina &amp; Oftalmologi
-              </h2>
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b pb-2">
+              <div className="flex items-center gap-2.5">
+                <span className="h-5 w-1.5 rounded-full bg-[#5bb4b2]" />
+                <h2 className="text-lg font-bold tracking-tight text-[#173a5e] dark:text-foreground">
+                  Topik: Retina &amp; Oftalmologi
+                </h2>
+              </div>
+              <p className="text-xs text-muted-foreground">Pelatihan kerja dari institusi mitra resmi</p>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">

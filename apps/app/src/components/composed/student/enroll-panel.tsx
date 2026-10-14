@@ -141,20 +141,20 @@ export function EnrollPanel({ course, enrollment }: { course: ContractCourse; en
   } else if (status === "registered" || status === "interviewed") {
     body = (
       <div className="space-y-2">
-        <Badge variant="secondary">Awaiting approval</Badge>
-        <p className="text-sm text-muted-foreground">You are registered. Awaiting approval from the organizer.</p>
+        <Badge variant="secondary">Menunggu persetujuan</Badge>
+        <p className="text-sm text-muted-foreground">Anda sudah terdaftar, menunggu disetujui sebagai peserta.</p>
         <Button variant="outline" size="sm" disabled={busy} onClick={() => void cancelEnrollment()}>
-          Cancel Registration
+          Batalkan Pendaftaran
         </Button>
       </div>
     )
   } else if (status === "canceled") {
     body = (
       <div className="space-y-2">
-        <p className="text-sm text-muted-foreground">Your enrollment was cancelled.</p>
+        <p className="text-sm text-muted-foreground">Pendaftaran Anda dibatalkan.</p>
         {!isRegisteredClosed && !isRegisteredNotOpen ? (
           <Button disabled={busy} onClick={() => (isFree ? void enroll() : setShowPaidConfirm(true))}>
-            Re-enroll
+            Daftar Ulang
           </Button>
         ) : null}
       </div>
@@ -162,21 +162,21 @@ export function EnrollPanel({ course, enrollment }: { course: ContractCourse; en
   } else if (status === "failed") {
     body = (
       <p className="text-sm text-muted-foreground">
-        You were not selected for this cohort. Please apply to the next cohort.
+        Anda belum terpilih untuk angkatan ini. Silakan mendaftar pada angkatan berikutnya.
       </p>
     )
   } else if (isRegisteredClosed || isFull) {
-    body = <Button disabled>{isFull ? "Cohort Full" : "Registration Closed"}</Button>
+    body = <Button disabled>{isFull ? "Kuota Penuh" : "Pendaftaran Ditutup"}</Button>
   } else if (isRegisteredNotOpen) {
     body = (
       <Button disabled variant="secondary">
-        Registration Not Yet Open
+        Pendaftaran Belum Dibuka
       </Button>
     )
   } else {
     body = (
       <Button disabled={busy} onClick={() => (isFree ? void enroll() : setShowPaidConfirm(true))}>
-        {busy ? "Enrolling..." : "Enroll Now"}
+        {busy ? "Mendaftar…" : "Daftar"}
       </Button>
     )
   }
@@ -202,7 +202,7 @@ export function EnrollPanel({ course, enrollment }: { course: ContractCourse; en
                 id="coupon"
                 value={couponCode}
                 onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                placeholder="Coupon code (optional)"
+                placeholder="Kode kupon (opsional)"
                 className="font-mono uppercase"
                 disabled={appliedCoupon?.valid === true}
               />
@@ -215,7 +215,7 @@ export function EnrollPanel({ course, enrollment }: { course: ContractCourse; en
                     setCouponCode("")
                   }}
                 >
-                  Remove
+                  Hapus
                 </Button>
               ) : (
                 <Button
@@ -224,13 +224,13 @@ export function EnrollPanel({ course, enrollment }: { course: ContractCourse; en
                   disabled={!couponCode.trim() || couponValidating}
                   onClick={() => void validateCoupon()}
                 >
-                  {couponValidating ? "Checking..." : "Apply"}
+                  {couponValidating ? "Memeriksa..." : "Terapkan"}
                 </Button>
               )}
             </div>
             {appliedCoupon?.valid && appliedCoupon.coupon ? (
               <p className="text-xs text-primary">
-                Coupon &ldquo;{appliedCoupon.coupon.code}&rdquo; applied
+                Kupon &ldquo;{appliedCoupon.coupon.code}&rdquo; diterapkan
                 {appliedCoupon.coupon.description ? ` — ${appliedCoupon.coupon.description}` : ""}.
               </p>
             ) : null}
@@ -242,15 +242,15 @@ export function EnrollPanel({ course, enrollment }: { course: ContractCourse; en
               {appliedCoupon?.valid && appliedCoupon.pricing ? (
                 <>
                   <div className="flex items-center justify-between">
-                    <span>Regular Price</span>
+                    <span>Harga Normal</span>
                     <span className="line-through">{formatRupiah(appliedCoupon.pricing.originalPrice)}</span>
                   </div>
                   <div className="mt-1 flex items-center justify-between text-primary">
-                    <span>Discount</span>
+                    <span>Diskon</span>
                     <span>-{formatRupiah(appliedCoupon.pricing.discountAmount)}</span>
                   </div>
                   <div className="mt-2 flex items-center justify-between border-t pt-2">
-                    <span className="font-medium">Total Amount</span>
+                    <span className="font-medium">Total Bayar</span>
                     <span className="text-lg font-bold text-primary">
                       {formatRupiah(appliedCoupon.pricing.finalPrice)}
                     </span>
@@ -258,7 +258,7 @@ export function EnrollPanel({ course, enrollment }: { course: ContractCourse; en
                 </>
               ) : (
                 <div className="flex items-center justify-between">
-                  <span className="font-medium">Total Amount</span>
+                  <span className="font-medium">Total Bayar</span>
                   <span className="text-lg font-bold text-primary">{formatRupiah(course.price ?? 0)}</span>
                 </div>
               )}
@@ -266,10 +266,10 @@ export function EnrollPanel({ course, enrollment }: { course: ContractCourse; en
 
             <div className="flex gap-2">
               <Button disabled={busy} onClick={() => void enroll()}>
-                {busy ? "Processing..." : "Confirm Enrollment"}
+                {busy ? "Memproses..." : "Konfirmasi Pendaftaran"}
               </Button>
               <Button variant="outline" onClick={() => setShowPaidConfirm(false)}>
-                Cancel
+                Batal
               </Button>
             </div>
           </div>
@@ -277,18 +277,18 @@ export function EnrollPanel({ course, enrollment }: { course: ContractCourse; en
 
         {createdOrder ? (
           <div className="w-full space-y-3 rounded-lg border border-primary/30 bg-primary/5 p-3">
-            <p className="text-sm font-medium">Complete Payment</p>
+            <p className="text-sm font-medium">Selesaikan Pembayaran</p>
             <p className="text-2xl font-bold text-primary">{formatRupiah(createdOrder.finalAmount)}</p>
             <p className="text-xs leading-relaxed text-muted-foreground">
-              Transfer the exact amount above to the organizer account, then await confirmation. Once verified, all
-              training materials will be unlocked automatically.
+              Transfer sesuai jumlah di atas ke rekening penyelenggara, lalu tunggu konfirmasi. Setelah lunas dan Anda
+              disetujui sebagai peserta, materi pelatihan terbuka otomatis.
             </p>
             <div className="flex gap-2">
               <Button size="sm" nativeButton={false} render={<Link to="/orders" />}>
-                View My Orders
+                Lihat Pesanan Saya
               </Button>
               <Button size="sm" variant="outline" onClick={() => setCreatedOrder(null)}>
-                Close
+                Tutup
               </Button>
             </div>
           </div>

@@ -5,8 +5,10 @@
   "scripts": {
     "build": "turbo build",
     "build:contracts": "pnpm --filter @workspace/contracts build",
-    "dev": "turbo dev",
+    "dev": "turbo dev --filter api --filter app",
+    "dev:all": "turbo dev",
     "dev:api": "pnpm --filter api dev",
+    "dev:app": "pnpm --filter app dev",
     "env:compose": "node scripts/generate-compose-env.mjs",
     "env:compose:check": "node scripts/generate-compose-env.mjs --check",
     "format": "prettier --write .",

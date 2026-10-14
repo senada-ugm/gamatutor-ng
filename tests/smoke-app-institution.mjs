@@ -151,7 +151,7 @@ await expect("the order book lists the paid order for the right course", async (
 // ================= The ownership gate =================
 await page.getByRole("button", { name: "Menu Akun" }).click()
 await page.getByRole("menuitem", { name: "Keluar" }).click()
-await page.waitForURL("**/login", { timeout: 10000 })
+await page.waitForURL((url) => url.pathname === "/" || url.pathname === "", { timeout: 10000 })
 await login(page, LEARNER)
 
 await expect("an account that does not own the institution is refused its report", async () => {

@@ -45,10 +45,17 @@ export function PlayerShell({
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex items-center gap-2 border-b px-4 lg:px-6">
+        <header className="flex items-center gap-2 border-b border-sky-800/40 bg-[#0369a1] px-4 text-white lg:px-6 dark:border-sky-900/60 dark:bg-[#082f49]">
           <Sheet open={outlineOpen} onOpenChange={setOutlineOpen}>
             <SheetTrigger
-              render={<Button variant="ghost" size="icon-sm" aria-label="Course Outline" className="lg:hidden" />}
+              render={
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  aria-label="Course Outline"
+                  className="text-white hover:bg-white/10 hover:text-white lg:hidden"
+                />
+              }
             >
               <Menu />
             </SheetTrigger>
@@ -60,13 +67,13 @@ export function PlayerShell({
             </SheetContent>
           </Sheet>
 
-          <TabNav className="flex-1 border-b-0">
+          <TabNav className="flex-1 border-b-0 [&_[aria-current=page]]:text-white [&_[aria-current=page]]:after:bg-white [&_a]:text-sky-100 [&_a:hover]:text-white">
             <Link
               to="/learn/$courseId"
               params={params}
               {...tabNavItemProps(!!matchRoute({ to: "/learn/$courseId", params, fuzzy: false }))}
             >
-              Lessons
+              Pelajaran
             </Link>
             <Link
               to="/learn/$courseId/quizzes"
@@ -79,7 +86,7 @@ export function PlayerShell({
                 })
               )}
             >
-              Quizzes
+              Kuis
             </Link>
             <Link
               to="/learn/$courseId/assignments"
@@ -92,7 +99,7 @@ export function PlayerShell({
                 })
               )}
             >
-              Assignments
+              Tugas
             </Link>
             <Link
               to="/learn/$courseId/attendance"
@@ -105,7 +112,7 @@ export function PlayerShell({
                 })
               )}
             >
-              Attendance
+              Presensi
             </Link>
             <Link
               to="/learn/$courseId/discussions"
@@ -118,7 +125,7 @@ export function PlayerShell({
                 })
               )}
             >
-              Discussions
+              Diskusi
             </Link>
             <Link
               to="/learn/$courseId/pengumuman"
@@ -131,7 +138,7 @@ export function PlayerShell({
                 })
               )}
             >
-              Announcements
+              Pengumuman
             </Link>
           </TabNav>
         </header>
@@ -152,17 +159,23 @@ function CourseOutline({ course, completedLessonIds }: { course: ContractCourse;
   return (
     <>
       <div className="space-y-3 p-4 pe-12 lg:pe-4">
-        <BackLink to="/dashboard" label="Back to Dashboard" />
-        <div className="flex items-center gap-2 text-xs font-bold tracking-wider text-primary uppercase">
-          <span className="flex size-5 items-center justify-center rounded-full bg-primary/10 text-xs">👁</span>
-          <span>DRIVE Initiative</span>
+        <BackLink to="/dashboard" label="Kembali ke Dasbor" />
+        <div className="flex items-center gap-2 text-xs font-bold tracking-wider uppercase">
+          <span className="flex size-5 items-center justify-center rounded-full bg-[#0d9488]/15 text-xs text-[#0d9488] dark:text-[#14b8a6]">
+            👁
+          </span>
+          <span className="font-extrabold text-[#0369a1] dark:text-sky-400">DRIVE Initiative</span>
         </div>
         <h2 className="line-clamp-2 leading-snug font-semibold">{course.title}</h2>
         {totalLessons > 0 ? (
           <div className="space-y-1.5 pt-1">
-            <Progress value={percent} aria-label="Course progress" className="h-2" />
+            <Progress
+              value={percent}
+              aria-label="Course progress"
+              className="h-2 [&_[data-slot=progress-indicator]]:bg-[#0d9488]"
+            />
             <p className="text-xs text-muted-foreground">
-              {completed.size} of {totalLessons} lessons completed ({percent}%)
+              {completed.size} dari {totalLessons} pelajaran selesai ({percent}%)
             </p>
           </div>
         ) : null}

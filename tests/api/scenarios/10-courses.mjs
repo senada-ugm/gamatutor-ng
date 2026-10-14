@@ -42,7 +42,7 @@ export async function run(ctx) {
     json: {
       title: `Journey Course ${stamp}`,
       institutionId: ids.institution,
-      courseType: "online",
+      courseType: "offline",
       isDisabilityFriendly: false,
       supportedDisabilityTypes: [],
     },
@@ -87,7 +87,7 @@ export async function run(ctx) {
     await admin.patch(`/v1/courses/${ids.course}`, {
       json: {
         title: `Journey Course ${stamp}`,
-        courseType: "online",
+        courseType: "offline",
         isDisabilityFriendly: false,
         supportedDisabilityTypes: [],
       },

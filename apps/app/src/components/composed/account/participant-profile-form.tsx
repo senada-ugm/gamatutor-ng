@@ -13,6 +13,7 @@ import { Textarea } from "@workspace/ui/components/textarea"
 
 import { EmptyState } from "@/components/composed/_shared/empty-state"
 import { apiSend } from "@/lib/api"
+import { CLINICAL_PROFESSIONS } from "@/lib/clinical-options"
 import { EDUCATION_LEVELS, MARITAL_STATUSES, RELIGIONS } from "@/lib/labels"
 import type {
   ContractCertificationEntry,
@@ -230,28 +231,25 @@ export function ParticipantProfileForm({ profile }: { profile: ContractParticipa
     <form onSubmit={handleSubmit} className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Personal Information & Medical Credentials</CardTitle>
+          <CardTitle>Data Pribadi & Kredensial Medis</CardTitle>
           <CardDescription>
-            Used during clinical screening registration and official certificate generation.
+            Data ini digunakan untuk penyelenggaraan pelatihan dan pencetakan sertifikat resmi. Perubahan data berlaku
+            untuk sertifikat berikutnya; sertifikat yang sudah terbit tidak berubah.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 sm:grid-cols-2">
-          <Field id="profile-profession" label="Medical Profession">
+          <Field id="profile-profession" label="Profesi Tenaga Medis">
             <NativeSelect
               id="profile-profession"
               value={values.profession}
               onChange={(e) => update("profession", e.target.value)}
             >
-              <NativeSelectOption value="">Select profession</NativeSelectOption>
-              <NativeSelectOption value="Puskesmas / Community Health Physician">
-                Puskesmas / Community Health Physician
-              </NativeSelectOption>
-              <NativeSelectOption value="Primary Clinic Physician">Primary Clinic Physician</NativeSelectOption>
-              <NativeSelectOption value="Specialist Physician">Specialist Physician</NativeSelectOption>
-              <NativeSelectOption value="Resident Physician">Resident Physician</NativeSelectOption>
-              <NativeSelectOption value="Other Healthcare Professional">
-                Other Healthcare Professional
-              </NativeSelectOption>
+              <NativeSelectOption value="">Pilih profesi</NativeSelectOption>
+              {CLINICAL_PROFESSIONS.map((p) => (
+                <NativeSelectOption key={p} value={p}>
+                  {p}
+                </NativeSelectOption>
+              ))}
             </NativeSelect>
           </Field>
           <Field id="profile-institution" label="Institution / Health Center">

@@ -139,8 +139,8 @@ await expect("participant roster shows the enrollee as Terdaftar", async () => {
 
 await page.getByRole("button", { name: "Terima" }).click()
 await expect("accepting moves the enrollment to Peserta", async () => {
-  // Scoped to the roster table — the editor's "Peserta" tab would match bare text.
-  await page.getByRole("table").getByText("Peserta", { exact: true }).waitFor({ timeout: 8000 })
+  // Scoped to the roster table tbody — the TableHead also contains 'Peserta'.
+  await page.getByRole("table").locator("tbody").getByText("Peserta", { exact: true }).waitFor({ timeout: 8000 })
 })
 
 await page.getByRole("button", { name: "Luluskan" }).click()

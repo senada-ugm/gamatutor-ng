@@ -233,7 +233,7 @@ export function CheckInCard({ session, dateLabel }: CheckInCardProps) {
         {inputMode === "manual" ? (
           <div className="flex max-w-sm gap-2">
             <Input
-              placeholder="Masukkan kode 6-digit"
+              placeholder="Masukkan 6-digit kode"
               value={verificationCode}
               onChange={(e) => setVerificationCode(e.target.value.toUpperCase())}
               maxLength={6}
@@ -243,7 +243,7 @@ export function CheckInCard({ session, dateLabel }: CheckInCardProps) {
               onClick={() => handleCheckIn({ code: verificationCode })}
               disabled={isSubmitting || verificationCode.trim().length === 0}
             >
-              {isSubmitting ? "Memproses..." : "Hadir"}
+              {isSubmitting ? "Memproses..." : "Check-In"}
             </Button>
           </div>
         ) : (

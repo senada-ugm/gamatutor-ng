@@ -92,25 +92,21 @@ export function SequentialHotspotViewer({
           <div className="mt-0.5 shrink-0 rounded-full bg-primary/10 p-2 text-primary">
             <Info className="h-5 w-5" />
           </div>
-          <div className="flex-1 space-y-1">
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-semibold text-foreground">
-                Sequential Pathophysiology Flow (Steps 1 → 8)
-              </span>
-              <Badge variant="outline" className="bg-background text-xs">
-                Step {currentStep + 1} of {page.points.length}
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-semibold text-foreground">Alur Patofisiologi Berurutan (Langkah 1 → 8)</span>
+            <Badge variant="outline" className="bg-background text-xs">
+              Langkah {currentStep + 1} dari {page.points.length}
+            </Badge>
+            {allCompleted && (
+              <Badge variant="outline" className="border-teal-300 bg-teal-50 text-xs text-teal-800">
+                Semua Langkah Telah Dipelajari
               </Badge>
-              {allCompleted && (
-                <Badge variant="outline" className="border-teal-300 bg-teal-50 text-xs text-teal-800">
-                  All Steps Explored
-                </Badge>
-              )}
-            </div>
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              Please click the numbered hotspots sequentially (1 through 8) to trace the microvascular progression from
-              chronic hyperglycemia to severe proliferative neovascularization.
-            </p>
+            )}
           </div>
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            Silakan klik nomor secara berurutan 1–8 untuk mengetahui patofisiologi retinopati diabetika dari
+            hiperglikemia kronik hingga neovaskularisasi proliferatif.
+          </p>
         </div>
 
         {/* Step Progress Nodes */}
@@ -213,11 +209,11 @@ export function SequentialHotspotViewer({
                 <div>
                   <div className="flex items-center gap-1.5">
                     <span className="font-mono text-xs font-bold text-primary">
-                      CASCADE STEP #{currentStep + 1} OF {page.points.length}
+                      TAHAP KASKADE #{currentStep + 1} DARI {page.points.length}
                     </span>
                     {visited[currentStep] && (
                       <Badge variant="outline" className="border-teal-300 bg-teal-50 text-[10px] text-teal-700">
-                        Visited
+                        Sudah Dipelajari
                       </Badge>
                     )}
                   </div>
@@ -228,7 +224,7 @@ export function SequentialHotspotViewer({
                   variant="ghost"
                   className="h-8 w-8 p-0 text-muted-foreground hover:text-primary"
                   onClick={() => handleSpeak(activePoint)}
-                  title="Listen to clinical rationale"
+                  title="Dengarkan penjelasan klinis"
                 >
                   <Volume2 className="h-4 w-4" />
                 </Button>
@@ -240,14 +236,14 @@ export function SequentialHotspotViewer({
               <div className="border-t pt-2">
                 {!isLastStep ? (
                   <Button onClick={handleAdvance} className="w-full gap-2 shadow-sm">
-                    <span>Proceed to Step {currentStep + 2}</span>
+                    <span>Lanjut ke Langkah {currentStep + 2}</span>
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 ) : (
                   <div className="rounded-lg border border-teal-500/20 bg-teal-500/10 p-3 text-center text-xs text-teal-800 dark:text-teal-300">
                     <CheckCircle className="mx-auto mb-1 h-4 w-4 text-teal-600" />
-                    <strong>Cascade Complete!</strong> You have reviewed the complete microvascular pathophysiology
-                    progression.
+                    <strong>Kaskade Lengkap!</strong> Anda telah mempelajari seluruh perkembangan patofisiologi
+                    retinopati diabetika.
                   </div>
                 )}
               </div>

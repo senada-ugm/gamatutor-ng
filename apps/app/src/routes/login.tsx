@@ -59,7 +59,7 @@ export function LoginPage() {
   }
 
   return (
-    <AuthPage title="Sign In" description="Sign in to continue your clinical training.">
+    <AuthPage title="Masuk" description="Masuk ke platform untuk melanjutkan pelatihan klinis Anda.">
       <form
         onSubmit={(e) => {
           e.preventDefault()
@@ -79,16 +79,16 @@ export function LoginPage() {
           </Field>
           <Field>
             <div className="flex items-center">
-              <FieldLabel htmlFor="password">Password</FieldLabel>
+              <FieldLabel htmlFor="password">Kata Sandi</FieldLabel>
               <Link to="/forgot-password" className="ms-auto text-sm underline-offset-4 hover:underline">
-                Forgot password?
+                Lupa kata sandi?
               </Link>
             </div>
             <Input ref={passwordRef} id="password" type="password" autoComplete="current-password" required />
           </Field>
           <Field>
-            <Button type="submit" disabled={submitting}>
-              {submitting ? "Signing in..." : "Sign In"}
+            <Button type="submit" disabled={submitting} className="w-full bg-[#173a5e] text-white hover:bg-[#132d47]">
+              {submitting ? "Memproses…" : "Masuk"}
             </Button>
           </Field>
           <DevModeBar
@@ -97,10 +97,10 @@ export function LoginPage() {
             }}
             submitting={submitting}
           />
-          <FieldDescription className="text-center">
-            Don't have an account?{" "}
-            <Link to="/register" className="underline underline-offset-4">
-              Register
+          <FieldDescription className="text-center text-xs">
+            Belum punya akun?{" "}
+            <Link to="/register" className="font-semibold text-primary underline underline-offset-4">
+              Daftar sebagai peserta
             </Link>
           </FieldDescription>
         </FieldGroup>
