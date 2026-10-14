@@ -467,12 +467,6 @@ export const quizQuestions = pgTable("quiz_questions", {
   points: integer("points").notNull().default(10),
   explanation: text("explanation"),
   displayOrder: integer("display_order").notNull().default(0),
-  /** Assessment-only: groups questions for per-category scoring (e.g.
-   *  RIASEC "R"/"I"/"A"/"S"/"E"/"C", or "grammar"/"vocabulary"/etc). */
-  category: text("category"),
-  /** Assessment-only: per-option Likert weight, parallel to `options`,
-   *  used by questionType "likert" instead of correctAnswers. */
-  optionWeights: jsonb("option_weights").$type<number[]>(),
 })
 
 export const quizAttempts = pgTable(
@@ -492,13 +486,6 @@ export const quizAttempts = pgTable(
     startedAt: timestamp("started_at").defaultNow().notNull(),
     submittedAt: timestamp("submitted_at"),
     gradedAt: timestamp("graded_at"),
-    /** Assessment-only: per-category aggregate scores (percent-correct or
-     *  weighted Likert average, depending on question type). */
-    categoryScores: jsonb("category_scores").$type<Record<string, number>>(),
-    /** Assessment-only: opaque report data (e.g. RIASEC topTypes, CEFR
-     *  level) computed once from categoryScores - the quiz engine persists
-     *  and returns it but doesn't interpret it. */
-    reportMeta: jsonb("report_meta").$type<Record<string, unknown>>(),
   },
   (table) => [
     uniqueIndex("quiz_attempts_quiz_user_attempt_idx").on(table.quizId, table.userId, table.attemptNumber),

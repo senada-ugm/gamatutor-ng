@@ -57,6 +57,13 @@
       "when": 1791999246675,
       "tag": "0007_previous_blacklash",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1791999704110,
+      "tag": "0008_aspiring_shotgun",
+      "breakpoints": true
     }
   ]
 }

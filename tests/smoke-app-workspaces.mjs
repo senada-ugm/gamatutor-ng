@@ -175,12 +175,6 @@ await expect("notifications inbox renders", async () => {
   await page.getByRole("heading", { name: "Notifikasi" }).first().waitFor({ timeout: 8000 })
 })
 
-// --- Assessments page renders ---
-await page.goto(`${BASE}/assessments`, { timeout: 30000 })
-await expect("assessments page renders", async () => {
-  await page.getByRole("heading", { name: "Asesmen" }).waitFor({ timeout: 8000 })
-})
-
 // ================= BACK AS ADMIN: report, player announcement, certificate =================
 await page.getByRole("button", { name: "Menu Akun" }).click()
 await page.getByRole("menuitem", { name: "Keluar" }).click()

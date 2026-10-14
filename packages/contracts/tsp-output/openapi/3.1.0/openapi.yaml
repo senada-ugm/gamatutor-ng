@@ -233,91 +233,6 @@ paths:
                 $ref: '#/components/schemas/Common.ErrorResponse'
       tags:
         - Announcements
-  /assessments:
-    get:
-      operationId: AssessmentsApi_list
-      description: Lists platform-wide assessments — course-less quizzes such as RIASEC.
-      parameters:
-        - $ref: '#/components/parameters/Common.PageParams.page'
-        - $ref: '#/components/parameters/Common.PageParams.pageSize'
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - data
-                  - pagination
-                  - meta
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Quiz'
-                    description: The list of resources for the current page.
-                  pagination:
-                    $ref: '#/components/schemas/Common.PagePagination'
-                    description: Pagination details and navigation links.
-                  meta:
-                    $ref: '#/components/schemas/Common.ResponseMeta'
-                    description: Response tracing metadata.
-                  warnings:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Common.Warning'
-                    description: Minor warning list.
-                description: Standard page-based paginated response envelope.
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Common.ErrorResponse'
-      tags:
-        - Quizzes
-    post:
-      operationId: AssessmentsApi_create
-      description: Creates a platform-wide assessment. Admin-only.
-      parameters: []
-      responses:
-        '201':
-          description: The request has succeeded and a new resource has been created as a result.
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - data
-                  - meta
-                properties:
-                  data:
-                    $ref: '#/components/schemas/Quiz'
-                    description: The raw payload representation.
-                  meta:
-                    $ref: '#/components/schemas/Common.ResponseMeta'
-                    description: Trace metadata.
-                  warnings:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Common.Warning'
-                    description: Minor warning list.
-                description: Standard single resource response envelope.
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Common.ErrorResponse'
-      tags:
-        - Quizzes
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/QuizCreate'
   /assignment-submissions/{id}:
     get:
       operationId: AssignmentSubmissionApi_get
@@ -7005,20 +6920,6 @@ components:
           type: string
           format: date-time
           readOnly: true
-        categoryScores:
-          type: object
-          unevaluatedProperties:
-            type: integer
-            format: int32
-          description: 'Assessment-only: per-category aggregate scores.'
-          readOnly: true
-        reportMeta:
-          type: object
-          unevaluatedProperties: {}
-          description: |-
-            Assessment-only: opaque report data (e.g. RIASEC topTypes, CEFR
-            level) - computed once, just persisted and returned.
-          readOnly: true
     QuizAttemptGrade:
       type: object
       required:
@@ -7153,19 +7054,6 @@ components:
         displayOrder:
           type: integer
           format: int32
-        category:
-          type: string
-          description: 'Assessment-only: groups this question for per-category scoring.'
-        optionWeights:
-          type: array
-          items:
-            type: integer
-            format: int32
-          description: |-
-            Assessment-only: per-option Likert weight, parallel to `options`.
-            Same visibility gate as correctAnswers - never sent to a student
-            taking the assessment.
-          readOnly: true
     QuizQuestionCreate:
       type: object
       required:
@@ -7192,13 +7080,6 @@ components:
         displayOrder:
           type: integer
           format: int32
-        category:
-          type: string
-        optionWeights:
-          type: array
-          items:
-            type: integer
-            format: int32
     QuizQuestionType:
       type: string
       enum:
@@ -7207,7 +7088,6 @@ components:
         - true_false
         - short_answer
         - essay
-        - likert
     QuizQuestionUpdate:
       type: object
       properties:
@@ -7231,13 +7111,6 @@ components:
         displayOrder:
           type: integer
           format: int32
-        category:
-          type: string
-        optionWeights:
-          type: array
-          items:
-            type: integer
-            format: int32
     QuizUpdate:
       type: object
       properties:

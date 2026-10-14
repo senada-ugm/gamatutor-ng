@@ -9,23 +9,12 @@ using Lms.Common;
 
 /**
  * Quiz domain: instructor-authored quizzes with auto-gradable question
- * types (single/multiple choice, true/false, short answer, Likert) plus
+ * types (single/multiple choice, true/false, short answer) plus
  * essay questions that need manual grading. `QuizQuestion.correctAnswers`
  * is populated only for callers who manage the course - one model, not
  * a separate authoring type, so a
  * student attempting the quiz never receives answers over the wire
  * regardless of what the UI does with them.
- *
- * `Quiz.courseId` is optional: a quiz with no course is a standalone
- * assessment (career/psychometric test, served at /assessments instead
- * of /courses/{courseId}/quizzes). `courseId` presence is the only
- * discriminator - there is deliberately no separate "kind" field.
- * Assessment-only questions use `category` (e.g. RIASEC "R"/"I"/.../"C",
- * or "grammar"/"vocabulary") to group per-category scoring, and
- * `questionType: likert` scores by summing `optionWeights` per category
- * instead of comparing against `correctAnswers`. The resulting
- * `QuizAttempt.categoryScores`/`reportMeta` are opaque to the quiz engine
- * - just persisted and handed back for the UI to render.
  */
 namespace Lms {
   enum QuizQuestionType {
@@ -34,7 +23,6 @@ namespace Lms {
     trueFalse: "true_false";
     shortAnswer: "short_answer";
     essay: "essay";
-    likert: "likert";
   }
 
   enum QuizAttemptStatus {
@@ -112,13 +100,6 @@ namespace Lms {
     points: int32;
     explanation?: string;
     displayOrder: int32;
-    /** Assessment-only: groups this question for per-category scoring. */
-    category?: string;
-    /** Assessment-only: per-option Likert weight, parallel to `options`.
-     *  Same visibility gate as correctAnswers - never sent to a student
-     *  taking the assessment. */
-    @visibility(Lifecycle.Read)
-    optionWeights?: int32[];
   }
 
   model QuizQuestionCreate {
@@ -129,8 +110,6 @@ namespace Lms {
     points?: int32;
     explanation?: string;
     displayOrder?: int32;
-    category?: string;
-    optionWeights?: int32[];
   }
 
   model QuizQuestionUpdate {
@@ -141,8 +120,6 @@ namespace Lms {
     points?: int32;
     explanation?: string;
     displayOrder?: int32;
-    category?: string;
-    optionWeights?: int32[];
   }
 
   model QuizDetail extends Quiz {
@@ -175,13 +152,6 @@ namespace Lms {
     submittedAt?: utcDateTime;
     @visibility(Lifecycle.Read)
     gradedAt?: utcDateTime;
-    /** Assessment-only: per-category aggregate scores. */
-    @visibility(Lifecycle.Read)
-    categoryScores?: Record<int32>;
-    /** Assessment-only: opaque report data (e.g. RIASEC topTypes, CEFR
-     *  level) - computed once, just persisted and returned. */
-    @visibility(Lifecycle.Read)
-    reportMeta?: Record<unknown>;
   }
 
   model QuizAttemptSubmit {
@@ -205,27 +175,6 @@ namespace Lms {
     /** Creates a quiz inside a course. Course-management only. */
     @post
     create(@path courseId: ResourceId, @body body: QuizCreate): {
-      @statusCode statusCode: 201;
-      @body body: DataResponse<Quiz>;
-    } | ErrorResponse;
-  }
-
-  /** Standalone (course-less) quizzes - career/psychometric assessments.
-   *  Same underlying quiz engine as CourseQuizzesApi, just without a
-   *  courseId path segment; authoring/attempting an assessment is gated
-   *  by assertCanManageAssessment/assertCanAttemptAssessment instead of
-   *  course-management/enrollment. */
-  @route("/assessments")
-  @tag("Quizzes")
-  interface AssessmentsApi {
-    /** Lists platform-wide assessments — course-less quizzes such as RIASEC. */
-    @get
-    @list
-    list(...PageParams): PagedResponse<Quiz> | ErrorResponse;
-
-    /** Creates a platform-wide assessment. Admin-only. */
-    @post
-    create(@body body: QuizCreate): {
       @statusCode statusCode: 201;
       @body body: DataResponse<Quiz>;
     } | ErrorResponse;

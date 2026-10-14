@@ -77,8 +77,6 @@ function toQuestion(row: QuestionRow, includeAnswers: boolean): QuizQuestion {
     points: row.points,
     explanation: row.explanation ?? undefined,
     displayOrder: row.displayOrder,
-    category: row.category ?? undefined,
-    optionWeights: includeAnswers ? (row.optionWeights ?? undefined) : undefined,
   }
 }
 
@@ -97,17 +95,6 @@ export async function listQuizzes(courseId: string): Promise<Quiz[]> {
     .select()
     .from(quizzes)
     .where(and(eq(quizzes.courseId, courseId), isNull(quizzes.deletedAt)))
-  const counts = await countQuestionsBatch(rows.map((r) => r.id))
-  return rows.map((row) => toQuiz(row, counts.get(row.id) ?? 0))
-}
-
-/** Standalone (course-less) quizzes — assessments. Same query shape as
- *  listQuizzes, just filtered by courseId IS NULL instead of a course. */
-export async function listAssessments(): Promise<Quiz[]> {
-  const rows = await db
-    .select()
-    .from(quizzes)
-    .where(and(isNull(quizzes.courseId), isNull(quizzes.deletedAt)))
   const counts = await countQuestionsBatch(rows.map((r) => r.id))
   return rows.map((row) => toQuiz(row, counts.get(row.id) ?? 0))
 }
@@ -175,8 +162,6 @@ export async function createQuestion(quizId: string, input: QuizQuestionCreate):
       points: input.points ?? 10,
       explanation: input.explanation,
       displayOrder: input.displayOrder ?? 0,
-      category: input.category,
-      optionWeights: input.optionWeights,
     })
     .returning()
   return toQuestion(row!, true)
@@ -190,7 +175,6 @@ export async function updateQuestion(id: string, input: QuizQuestionUpdate): Pro
   const touchesProtected =
     input.correctAnswers !== undefined ||
     input.points !== undefined ||
-    input.optionWeights !== undefined ||
     input.questionType !== undefined ||
     input.options !== undefined
   if (touchesProtected) {
@@ -213,8 +197,6 @@ export async function updateQuestion(id: string, input: QuizQuestionUpdate): Pro
   if (input.points !== undefined) patch.points = input.points
   if (input.explanation !== undefined) patch.explanation = input.explanation
   if (input.displayOrder !== undefined) patch.displayOrder = input.displayOrder
-  if (input.category !== undefined) patch.category = input.category
-  if (input.optionWeights !== undefined) patch.optionWeights = input.optionWeights
   const [row] = await db.update(quizQuestions).set(patch).where(eq(quizQuestions.id, id)).returning()
   return toQuestion(row!, true)
 }
@@ -238,8 +220,6 @@ function toAttempt(row: AttemptRow): Omit<QuizAttempt, "user"> {
     startedAt: row.startedAt.toISOString(),
     submittedAt: row.submittedAt?.toISOString(),
     gradedAt: row.gradedAt?.toISOString(),
-    categoryScores: row.categoryScores ?? undefined,
-    reportMeta: row.reportMeta ?? undefined,
   }
 }
 
@@ -299,8 +279,7 @@ async function expireStaleAttempts(quiz: QuizRow, userId: string): Promise<void>
 export async function startAttempt(quizId: string, userId: string): Promise<QuizAttempt> {
   const quiz = await getQuizRow(quizId)
   await expireStaleAttempts(quiz, userId)
-  // maxAttempts === 0 means unlimited (used by assessments like RIASEC
-  // that allow indefinite retakes). Expired attempts still count —
+  // maxAttempts === 0 means unlimited retakes. Expired attempts still count —
   // otherwise abandoning a started attempt would peek at questions free.
   // Claim the next attemptNumber via onConflictDoNothing against the
   // (quizId, userId, attemptNumber) unique index — concurrent starts
@@ -359,62 +338,6 @@ export function isAnswerCorrect(question: QuestionRow, given: string[]): boolean
   return given.length === 1 && expected.includes(given[0]!)
 }
 
-const RIASEC_KEYS = new Set(["R", "I", "A", "S", "E", "C"])
-
-/** Assessment-only: aggregates categorized questions into a 0-100
- *  per-category score - percent-correct for ordinary choice questions,
- *  weighted-average-of-optionWeights (normalized to the category's max
- *  possible weight) for `likert` questions. Categories mix freely; each
- *  question contributes to exactly one bucket. Returns undefined when no
- *  question in the quiz has a `category` set (ordinary course quizzes). */
-function computeCategoryScores(
-  questionRows: QuestionRow[],
-  answers: Record<string, string[]>
-): Record<string, number> | undefined {
-  const categorized = questionRows.filter((q) => q.category)
-  if (categorized.length === 0) return undefined
-
-  const totals = new Map<string, { sum: number; max: number }>()
-  for (const q of categorized) {
-    const bucket = totals.get(q.category!) ?? { sum: 0, max: 0 }
-    const given = answers[q.id] ?? []
-    if (q.questionType === "likert") {
-      const weights = q.optionWeights ?? []
-      const options = q.options as Array<{ text: string }>
-      const selectedIndex = options.findIndex((o) => o.text === given[0])
-      const weight = selectedIndex >= 0 ? (weights[selectedIndex] ?? 0) : 0
-      const maxWeight = weights.length > 0 ? Math.max(...weights) : 0
-      bucket.sum += weight
-      bucket.max += maxWeight
-    } else {
-      bucket.sum += isAnswerCorrect(q, given) ? 1 : 0
-      bucket.max += 1
-    }
-    totals.set(q.category!, bucket)
-  }
-
-  const scores: Record<string, number> = {}
-  for (const [category, { sum, max }] of totals) {
-    scores[category] = max > 0 ? Math.round((sum / max) * 100) : 0
-  }
-  return scores
-}
-
-/** Assessment-only: when every scored category is a RIASEC letter,
- *  surface the Holland top-3 code for the result UI. Opaque to the quiz
- *  engine otherwise - other assessment types (language/skills/psych) just
- *  get categoryScores with no reportMeta. */
-function computeReportMeta(categoryScores: Record<string, number> | undefined): Record<string, unknown> | undefined {
-  if (!categoryScores) return undefined
-  const keys = Object.keys(categoryScores)
-  if (keys.length === 0 || !keys.every((k) => RIASEC_KEYS.has(k))) return undefined
-  const topTypes = [...keys]
-    .sort((a, b) => categoryScores[b]! - categoryScores[a]!)
-    .slice(0, 3)
-    .map((type) => ({ type, score: categoryScores[type]! }))
-  return { topTypes }
-}
-
 /** Time limit is authored in minutes; 0/null means no limit. A submit
  *  arriving after the limit (plus a small grace that absorbs network
  *  latency between the learner's submit click and the server's clock) is
@@ -443,34 +366,25 @@ export async function submitAttempt(id: string, userId: string, input: QuizAttem
   const questionRows = await db.select().from(quizQuestions).where(eq(quizQuestions.quizId, attempt.quizId))
   const answers = input.answers as unknown as Record<string, string[]>
 
-  // `likert` questions have no correct/incorrect answer - they feed
-  // categoryScores instead, so they're excluded from the overall
-  // score/maxScore the same way essay questions are (until graded).
-  const maxScore = questionRows.reduce((sum, q) => sum + (q.questionType === "likert" ? 0 : q.points), 0)
+  const maxScore = questionRows.reduce((sum, q) => sum + q.points, 0)
   const hasEssay = questionRows.some((q) => q.questionType === "essay")
   const autoScore = questionRows
-    .filter((q) => q.questionType !== "essay" && q.questionType !== "likert")
+    .filter((q) => q.questionType !== "essay")
     .reduce((sum, q) => sum + (isAnswerCorrect(q, answers[q.id] ?? []) ? q.points : 0), 0)
 
   const quiz = await getQuizRow(attempt.quizId)
   assertWithinTimeLimit(attempt.startedAt, quiz.timeLimit)
-  const categoryScores = computeCategoryScores(questionRows, answers)
   const patch: Partial<AttemptRow> = {
     answers,
     submittedAt: new Date(),
     maxScore,
-    categoryScores,
-    reportMeta: computeReportMeta(categoryScores),
   }
   if (hasEssay) {
     patch.status = "pending_review"
   } else {
     patch.status = "graded"
     patch.score = autoScore
-    // maxScore === 0 means every question was likert/category-only (e.g.
-    // a personality test) - there's no pass/fail concept, so it trivially
-    // passes rather than always failing.
-    patch.passed = maxScore === 0 ? true : (autoScore / maxScore) * 100 >= quiz.passingScore
+    patch.passed = (autoScore / maxScore) * 100 >= quiz.passingScore
     patch.gradedAt = new Date()
   }
 
@@ -503,9 +417,8 @@ export async function gradeAttempt(id: string, input: QuizAttemptGrade): Promise
     }
     return sum + (isAnswerCorrect(q, answers[q.id] ?? []) ? q.points : 0)
   }, 0)
-  const maxScore =
-    attempt.maxScore ?? questionRows.reduce((sum, q) => sum + (q.questionType === "likert" ? 0 : q.points), 0)
-  const passed = maxScore === 0 ? true : (totalScore / maxScore) * 100 >= quiz.passingScore
+  const maxScore = attempt.maxScore ?? questionRows.reduce((sum, q) => sum + q.points, 0)
+  const passed = (totalScore / maxScore) * 100 >= quiz.passingScore
 
   const [row] = await db
     .update(quizAttempts)

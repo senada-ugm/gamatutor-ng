@@ -247,12 +247,6 @@ const adminSettingsRoute = createRoute({
   component: lazyRouteComponent(() => import("@/routes/admin/settings"), "AdminSettingsPage"),
 })
 
-const adminAssessmentsRoute = createRoute({
-  getParentRoute: () => adminRoute,
-  path: "/assessments",
-  component: lazyRouteComponent(() => import("@/routes/admin/assessments"), "AdminAssessmentsPage"),
-})
-
 const adminAuditRoute = createRoute({
   getParentRoute: () => adminRoute,
   path: "/audit",
@@ -284,12 +278,6 @@ const certificateVerifyRoute = createRoute({
     code: typeof search.code === "string" ? search.code : undefined,
   }),
   component: lazyRouteComponent(() => import("@/routes/certificates"), "CertificateVerifyPage"),
-})
-
-const assessmentsRoute = createRoute({
-  getParentRoute: () => learnerRoute,
-  path: "/assessments",
-  component: lazyRouteComponent(() => import("@/routes/assessments"), "AssessmentsPage"),
 })
 
 const profileRoute = createRoute({
@@ -378,7 +366,6 @@ const routeTree = rootRoute.addChildren([
       notificationsRoute,
       courseCatalogRoute,
       courseDetailRoute,
-      assessmentsRoute,
       profileRoute,
       institutionRequestsRoute,
       certificateViewRoute,
@@ -389,7 +376,6 @@ const routeTree = rootRoute.addChildren([
         adminUsersRoute,
         adminInstitutionsRoute,
         adminSettingsRoute,
-        adminAssessmentsRoute,
         adminAuditRoute,
       ]),
       institutionRoute.addChildren([institutionOverviewRoute, institutionParticipantsRoute]),

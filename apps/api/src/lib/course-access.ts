@@ -138,15 +138,3 @@ export async function assertCanAccessCourse(user: ActingUser, courseId: string) 
   if (await isCourseManager(user, courseId)) return
   await assertIsEnrolledParticipant(user, courseId)
 }
-
-/** Standalone (course-less) quizzes are platform-wide assessments, not
- *  scoped to an institution - only admins author them. */
-export async function assertCanManageAssessment(user: ActingUser) {
-  if (user.role !== "admin") throw new ForbiddenError("You do not manage assessments")
-}
-
-/** Any signed-in user may attempt an assessment - there is no enrollment
- *  concept for a course-less quiz. Session presence is already enforced
- *  by requireSession before this is called; this exists only so call
- *  sites read symmetrically with assertIsEnrolledParticipant. */
-export async function assertCanAttemptAssessment(): Promise<void> {}

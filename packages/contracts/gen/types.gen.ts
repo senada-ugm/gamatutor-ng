@@ -1248,19 +1248,6 @@ export type QuizAttempt = {
     readonly startedAt: string;
     readonly submittedAt?: string;
     readonly gradedAt?: string;
-    /**
-     * Assessment-only: per-category aggregate scores.
-     */
-    readonly categoryScores?: {
-        [key: string]: unknown;
-    };
-    /**
-     * Assessment-only: opaque report data (e.g. RIASEC topTypes, CEFR
-     * level) - computed once, just persisted and returned.
-     */
-    readonly reportMeta?: {
-        [key: string]: unknown;
-    };
 };
 
 /**
@@ -1337,16 +1324,6 @@ export type QuizQuestion = {
     points: number;
     explanation?: string;
     displayOrder: number;
-    /**
-     * Assessment-only: groups this question for per-category scoring.
-     */
-    category?: string;
-    /**
-     * Assessment-only: per-option Likert weight, parallel to `options`.
-     * Same visibility gate as correctAnswers - never sent to a student
-     * taking the assessment.
-     */
-    readonly optionWeights?: Array<number>;
 };
 
 export type QuizQuestionCreate = {
@@ -1357,8 +1334,6 @@ export type QuizQuestionCreate = {
     points?: number;
     explanation?: string;
     displayOrder?: number;
-    category?: string;
-    optionWeights?: Array<number>;
 };
 
 export const QuizQuestionType = {
@@ -1366,8 +1341,7 @@ export const QuizQuestionType = {
     MULTIPLE_CHOICE: 'multiple_choice',
     TRUE_FALSE: 'true_false',
     SHORT_ANSWER: 'short_answer',
-    ESSAY: 'essay',
-    LIKERT: 'likert'
+    ESSAY: 'essay'
 } as const;
 
 export type QuizQuestionType = typeof QuizQuestionType[keyof typeof QuizQuestionType];
@@ -1380,8 +1354,6 @@ export type QuizQuestionUpdate = {
     points?: number;
     explanation?: string;
     displayOrder?: number;
-    category?: string;
-    optionWeights?: Array<number>;
 };
 
 export type QuizUpdate = {
@@ -1838,10 +1810,6 @@ export type QuizQuestionWritable = {
     points: number;
     explanation?: string;
     displayOrder: number;
-    /**
-     * Assessment-only: groups this question for per-category scoring.
-     */
-    category?: string;
 };
 
 /**
@@ -2104,95 +2072,6 @@ export type AnnouncementApiUnpinResponses = {
 };
 
 export type AnnouncementApiUnpinResponse = AnnouncementApiUnpinResponses[keyof AnnouncementApiUnpinResponses];
-
-export type AssessmentsApiListData = {
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * The page index to retrieve (default: 1).
-         */
-        page?: number;
-        /**
-         * The maximum number of records to return on a page (default: 50).
-         */
-        pageSize?: number;
-    };
-    url: '/assessments';
-};
-
-export type AssessmentsApiListErrors = {
-    /**
-     * An unexpected error response.
-     */
-    default: CommonErrorResponse;
-};
-
-export type AssessmentsApiListError = AssessmentsApiListErrors[keyof AssessmentsApiListErrors];
-
-export type AssessmentsApiListResponses = {
-    /**
-     * Standard page-based paginated response envelope.
-     */
-    200: {
-        /**
-         * The list of resources for the current page.
-         */
-        data: Array<Quiz>;
-        /**
-         * Pagination details and navigation links.
-         */
-        pagination: CommonPagePagination;
-        /**
-         * Response tracing metadata.
-         */
-        meta: CommonResponseMeta;
-        /**
-         * Minor warning list.
-         */
-        warnings?: Array<CommonWarning>;
-    };
-};
-
-export type AssessmentsApiListResponse = AssessmentsApiListResponses[keyof AssessmentsApiListResponses];
-
-export type AssessmentsApiCreateData = {
-    body: QuizCreate;
-    path?: never;
-    query?: never;
-    url: '/assessments';
-};
-
-export type AssessmentsApiCreateErrors = {
-    /**
-     * An unexpected error response.
-     */
-    default: CommonErrorResponse;
-};
-
-export type AssessmentsApiCreateError = AssessmentsApiCreateErrors[keyof AssessmentsApiCreateErrors];
-
-export type AssessmentsApiCreateResponses = {
-    /**
-     * Standard single resource response envelope.
-     */
-    201: {
-        /**
-         * The raw payload representation.
-         */
-        data: Quiz;
-        /**
-         * Trace metadata.
-         */
-        meta: CommonResponseMeta;
-        /**
-         * Minor warning list.
-         */
-        warnings?: Array<CommonWarning>;
-    };
-};
-
-export type AssessmentsApiCreateResponse = AssessmentsApiCreateResponses[keyof AssessmentsApiCreateResponses];
 
 export type AssignmentSubmissionApiGetData = {
     body?: never;

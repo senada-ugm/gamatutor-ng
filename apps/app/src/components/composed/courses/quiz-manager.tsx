@@ -59,38 +59,25 @@ interface QuizSummary {
  * downstream — `/quizzes/{id}`, its questions, its attempts — is already
  * course-less and serves both.
  */
-export type QuizScope = { kind: "course"; courseId: string } | { kind: "assessment" }
-
 const SCOPE_COPY = {
-  course: {
-    heading: "Kuis",
-    create: "Kuis Baru",
-    submit: "Buat Kuis",
-    created: "Kuis dibuat",
-    emptyTitle: "Belum ada kuis",
-    emptyBody: "Buat kuis pertama untuk pelatihan ini.",
-    deleteTitle: "Hapus kuis?",
-  },
-  assessment: {
-    heading: "Asesmen",
-    create: "Asesmen Baru",
-    submit: "Buat Asesmen",
-    created: "Asesmen dibuat",
-    emptyTitle: "Belum ada asesmen",
-    emptyBody: "Asesmen berlaku lintas pelatihan — buat yang pertama untuk platform ini.",
-    deleteTitle: "Hapus asesmen?",
-  },
+  heading: "Kuis",
+  create: "Kuis Baru",
+  submit: "Buat Kuis",
+  created: "Kuis dibuat",
+  emptyTitle: "Belum ada kuis",
+  emptyBody: "Buat kuis pertama untuk pelatihan ini.",
+  deleteTitle: "Hapus kuis?",
 } as const
 
-export function QuizManager({ scope }: { scope: QuizScope }) {
+export function QuizManager({ courseId }: { courseId: string }) {
   const queryClient = useQueryClient()
   const confirm = useConfirm()
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [showCreate, setShowCreate] = useState(false)
 
-  const copy = SCOPE_COPY[scope.kind]
-  const collectionPath = scope.kind === "course" ? `/courses/${scope.courseId}/quizzes` : "/assessments"
-  const queryKey = scope.kind === "course" ? ["quizzes", scope.courseId] : ["assessments"]
+  const copy = SCOPE_COPY
+  const collectionPath = `/courses/${courseId}/quizzes`
+  const queryKey = ["quizzes", courseId]
 
   const quizzes = useQuery({
     queryKey,
@@ -373,10 +360,6 @@ const QUESTION_TYPES: { value: ContractQuizQuestionType; label: string }[] = [
   { value: "essay", label: "Esai" },
 ]
 
-/** Assessment-only, so it is appended rather than living in the shared
- *  list — a course quiz has nothing to do with Likert weighting. */
-const LIKERT_TYPE = { value: "likert", label: "Skala Likert" } as const
-
 function QuizBuilder({ quizId, onBack }: { quizId: string; onBack: () => void }) {
   const queryClient = useQueryClient()
   const confirm = useConfirm()
@@ -439,15 +422,12 @@ function QuizBuilder({ quizId, onBack }: { quizId: string; onBack: () => void })
   }
 
   const q = quiz.data
-  // courseId presence is the API's only discriminator between a course
-  // quiz and a standalone assessment — there is deliberately no "kind".
-  const isAssessment = q.courseId == null
 
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <BackLink onClick={onBack} label={isAssessment ? "Kembali ke Asesmen" : "Kembali ke Kuis"} />
+          <BackLink onClick={onBack} label="Kembali ke Kuis" />
           <h2 className="text-lg font-medium">{q.title}</h2>
         </div>
         <div className="flex gap-2">
@@ -477,7 +457,6 @@ function QuizBuilder({ quizId, onBack }: { quizId: string; onBack: () => void })
 
         {showQuestionForm ? (
           <QuestionForm
-            isAssessment={isAssessment}
             submitting={addQuestion.isPending}
             onSubmit={(payload) => addQuestion.mutate(payload)}
             onCancel={() => setShowQuestionForm(false)}
@@ -486,7 +465,6 @@ function QuizBuilder({ quizId, onBack }: { quizId: string; onBack: () => void })
         {editingQuestion ? (
           <QuestionForm
             initial={questionPayloadFromQuestion(editingQuestion)}
-            isAssessment={isAssessment}
             submitting={updateQuestion.isPending}
             onSubmit={(payload) => updateQuestion.mutate({ id: editingQuestion.id, payload })}
             onCancel={() => setEditingQuestion(null)}
@@ -494,11 +472,7 @@ function QuizBuilder({ quizId, onBack }: { quizId: string; onBack: () => void })
         ) : null}
 
         {q.questions.length === 0 ? (
-          <EmptyState
-            compact
-            title="Belum ada pertanyaan"
-            description={`Tambahkan pertanyaan pertama untuk ${isAssessment ? "asesmen" : "kuis"} ini.`}
-          />
+          <EmptyState compact title="Belum ada pertanyaan" description="Tambahkan pertanyaan pertama untuk kuis ini." />
         ) : (
           q.questions.map((question, i) => (
             <Card key={question.id}>
@@ -531,8 +505,7 @@ function QuizBuilder({ quizId, onBack }: { quizId: string; onBack: () => void })
                 </div>
                 <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                   <Badge variant="outline">
-                    {[...QUESTION_TYPES, LIKERT_TYPE].find((t) => t.value === question.questionType)?.label ??
-                      question.questionType}
+                    {QUESTION_TYPES.find((t) => t.value === question.questionType)?.label ?? question.questionType}
                   </Badge>
                   <span>{question.points} poin</span>
                 </div>
@@ -569,10 +542,6 @@ interface QuestionPayload {
   options: Array<{ text: string }>
   correctAnswers?: string[]
   points: number
-  /** Assessment-only: groups the question for per-category scoring. */
-  category?: string
-  /** Assessment-only: parallel to `options`, summed per category. */
-  optionWeights?: number[]
 }
 
 function questionPayloadFromQuestion(question: ContractQuizQuestion): QuestionPayload {
@@ -582,21 +551,16 @@ function questionPayloadFromQuestion(question: ContractQuizQuestion): QuestionPa
     options: question.options.map((o) => ({ text: o.text })),
     correctAnswers: question.correctAnswers ?? [],
     points: question.points ?? 1,
-    category: question.category ?? undefined,
-    optionWeights: question.optionWeights ? [...question.optionWeights] : undefined,
   }
 }
 
 function QuestionForm({
   initial,
-  isAssessment = false,
   submitting,
   onSubmit,
   onCancel,
 }: {
   initial?: QuestionPayload
-  /** Unlocks the two assessment-only fields and the Likert type. */
-  isAssessment?: boolean
   submitting: boolean
   onSubmit: (payload: QuestionPayload) => void
   onCancel: () => void
@@ -606,14 +570,6 @@ function QuestionForm({
   const [options, setOptions] = useState<string[]>(initial?.options.map((o) => o.text) ?? ["", "", "", ""])
   const [correctAnswers, setCorrectAnswers] = useState<string[]>(initial?.correctAnswers ?? [])
   const [points, setPoints] = useState(String(initial?.points ?? 1))
-  const [category, setCategory] = useState(initial?.category ?? "")
-  // Kept parallel to `options` by index and zipped back together on
-  // save, so a blank option never shifts the weights under it.
-  const [weights, setWeights] = useState<string[]>(
-    initial?.optionWeights?.map(String) ?? initial?.options.map(() => "") ?? ["", "", "", ""]
-  )
-
-  const scoresByWeight = questionType === "likert"
 
   function handleTypeChange(type: ContractQuizQuestionType) {
     setQuestionType(type)
@@ -645,31 +601,21 @@ function QuestionForm({
       return
     }
     const needsOptions = questionType !== "essay" && questionType !== "short_answer"
-    // Zip before filtering: dropping blank options separately from their
-    // weights would misalign the two arrays the server reads in parallel.
-    const pairs = options
-      .map((text, i) => ({ text: text.trim(), weight: weights[i] ?? "" }))
-      .filter((pair) => pair.text !== "")
+    const pairs = options.map((text) => ({ text: text.trim() })).filter((pair) => pair.text !== "")
     if (needsOptions && pairs.length < 2) {
       toast.error("Mohon tambahkan setidaknya 2 opsi")
       return
     }
-    if (needsOptions && !scoresByWeight && correctAnswers.length === 0) {
+    if (needsOptions && correctAnswers.length === 0) {
       toast.error("Mohon pilih setidaknya satu jawaban benar")
-      return
-    }
-    if (scoresByWeight && pairs.some((pair) => pair.weight.trim() === "")) {
-      toast.error("Setiap opsi Likert membutuhkan bobot")
       return
     }
     onSubmit({
       question: question.trim(),
       questionType,
       options: needsOptions ? pairs.map((pair) => ({ text: pair.text })) : [],
-      correctAnswers: needsOptions && !scoresByWeight ? correctAnswers : undefined,
+      correctAnswers: needsOptions ? correctAnswers : undefined,
       points: Number(points) || 1,
-      category: isAssessment && category.trim() !== "" ? category.trim() : undefined,
-      optionWeights: scoresByWeight ? pairs.map((pair) => Number(pair.weight) || 0) : undefined,
     })
   }
 
@@ -691,60 +637,31 @@ function QuestionForm({
               value={questionType}
               onChange={(e) => handleTypeChange(e.target.value as ContractQuizQuestionType)}
             >
-              {[...QUESTION_TYPES, ...(isAssessment ? [LIKERT_TYPE] : [])].map((t) => (
+              {QUESTION_TYPES.map((t) => (
                 <NativeSelectOption key={t.value} value={t.value}>
                   {t.label}
                 </NativeSelectOption>
               ))}
             </NativeSelect>
           </div>
-          {scoresByWeight ? null : (
-            <div className="space-y-1.5">
-              <Label htmlFor="question-points">Poin</Label>
-              <Input
-                id="question-points"
-                type="number"
-                min={1}
-                value={points}
-                onChange={(e) => setPoints(e.target.value)}
-              />
-            </div>
-          )}
-        </div>
-
-        {isAssessment ? (
           <div className="space-y-1.5">
-            <Label htmlFor="question-category">Kategori</Label>
+            <Label htmlFor="question-points">Poin</Label>
             <Input
-              id="question-category"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              placeholder="mis. R, I, A, S, E, C — atau grammar, vocabulary"
+              id="question-points"
+              type="number"
+              min={1}
+              value={points}
+              onChange={(e) => setPoints(e.target.value)}
             />
-            <p className="text-xs text-muted-foreground">
-              Mengelompokkan pertanyaan untuk skor per kategori. Jika semua kategori berupa huruf RIASEC, hasil
-              ditampilkan sebagai kode Holland tiga huruf.
-            </p>
           </div>
-        ) : null}
+        </div>
 
         {needsOptions ? (
           <div className="space-y-2">
             <Label>Opsi Jawaban</Label>
             {options.map((opt, idx) => (
               <div key={idx} className="flex items-center gap-2">
-                {scoresByWeight ? (
-                  <Input
-                    type="number"
-                    className="w-20 shrink-0"
-                    aria-label={`Bobot opsi ${String.fromCharCode(65 + idx)}`}
-                    value={weights[idx] ?? ""}
-                    onChange={(e) => setWeights((prev) => prev.map((w, i) => (i === idx ? e.target.value : w)))}
-                    placeholder="Bobot"
-                  />
-                ) : (
-                  <Checkbox checked={correctAnswers.includes(opt)} onCheckedChange={() => toggleCorrect(opt)} />
-                )}
+                <Checkbox checked={correctAnswers.includes(opt)} onCheckedChange={() => toggleCorrect(opt)} />
                 <Input
                   value={opt}
                   onChange={(e) => handleOptionChange(idx, e.target.value)}
@@ -759,7 +676,6 @@ function QuestionForm({
                     onClick={() => {
                       const removed = options[idx] ?? ""
                       setOptions((prev) => prev.filter((_, i) => i !== idx))
-                      setWeights((prev) => prev.filter((_, i) => i !== idx))
                       setCorrectAnswers((prev) => prev.filter((a) => a !== removed))
                     }}
                   >
@@ -769,23 +685,11 @@ function QuestionForm({
               </div>
             ))}
             {questionType !== "true_false" ? (
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                onClick={() => {
-                  setOptions((prev) => [...prev, ""])
-                  setWeights((prev) => [...prev, ""])
-                }}
-              >
+              <Button type="button" size="sm" variant="outline" onClick={() => setOptions((prev) => [...prev, ""])}>
                 + Tambah Opsi
               </Button>
             ) : null}
-            <p className="text-xs text-muted-foreground">
-              {scoresByWeight
-                ? "Setiap opsi membawa bobot yang dijumlahkan per kategori — tidak ada jawaban benar."
-                : "Centang opsi yang merupakan jawaban benar."}
-            </p>
+            <p className="text-xs text-muted-foreground">Centang opsi yang merupakan jawaban benar.</p>
           </div>
         ) : (
           <p className="text-sm text-muted-foreground">

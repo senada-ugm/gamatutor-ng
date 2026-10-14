@@ -18,8 +18,6 @@ import type { FastifyInstance } from "fastify"
 import { z } from "zod"
 import {
   assertCanAccessCourse,
-  assertCanAttemptAssessment,
-  assertCanManageAssessment,
   assertCanManageCourse,
   assertIsEnrolledParticipant,
 } from "../../../lib/course-access.js"
@@ -37,23 +35,9 @@ const pageQuerySchema = z.object({
 
 type ActingUser = { id: string; role?: string | null; email?: string | null }
 
-/** A quiz with courseId null is a standalone assessment - gated by the
- *  admin-only assertCanManageAssessment instead of course management. */
-async function assertCanManageQuiz(user: ActingUser, courseId: string | null): Promise<void> {
-  if (courseId) await assertCanManageCourse(user, courseId)
-  else await assertCanManageAssessment(user)
-}
-
-/** Same courseId-presence branch for the student-facing side: enrollment
- *  for a course quiz, any signed-in user for an assessment. */
-async function assertCanAttemptQuiz(user: ActingUser, courseId: string | null): Promise<void> {
-  if (courseId) await assertIsEnrolledParticipant(user, courseId)
-  else await assertCanAttemptAssessment()
-}
-
-async function canManage(user: ActingUser, courseId: string | null): Promise<boolean> {
+async function canManage(user: ActingUser, courseId: string): Promise<boolean> {
   try {
-    await assertCanManageQuiz(user, courseId)
+    await assertCanManageCourse(user, courseId)
     return true
   } catch {
     return false
@@ -81,32 +65,12 @@ export function quizzesRoutes(app: FastifyInstance) {
     }
   )
 
-  app.get("/assessments", async (request) => {
-    await requireSession(request)
-    const query = pageQuerySchema.parse(request.query)
-    const items = await service.listAssessments()
-    return paginate(items, request.id, { page: query.page, pageSize: query.pageSize })
-  })
-
-  app.post<{ Body: QuizCreate }>(
-    "/assessments",
-    { preValidation: [validateBody(zQuizCreate)] },
-    async (request, reply) => {
-      const user = await requireSession(request)
-      await assertCanManageAssessment(user)
-      const created = await service.createQuiz(null, request.body)
-      reply.status(201)
-      return dataResponse(created, request.id)
-    }
-  )
-
   app.get<{ Params: { id: string } }>("/quizzes/:id", async (request) => {
     const user = await requireSession(request)
     const quiz = await service.getQuizRow(request.params.id)
-    // Course quizzes are visible to managers and active participants only;
-    // standalone assessments stay readable by any signed-in account.
-    if (quiz.courseId) await assertCanAccessCourse(user, quiz.courseId)
-    const manages = await canManage(user, quiz.courseId)
+    // Quizzes are visible to course managers and active participants only.
+    await assertCanAccessCourse(user, quiz.courseId!)
+    const manages = await canManage(user, quiz.courseId!)
     const includeAnswers =
       manages || (quiz.showCorrectAnswers && (await service.hasCompletedAttempt(request.params.id, user.id)))
     return dataResponse(await service.getQuizDetail(request.params.id, includeAnswers), request.id)
@@ -118,7 +82,7 @@ export function quizzesRoutes(app: FastifyInstance) {
     async (request) => {
       const user = await requireSession(request)
       const quiz = await service.getQuizRow(request.params.id)
-      await assertCanManageQuiz(user, quiz.courseId)
+      await assertCanManageCourse(user, quiz.courseId!)
       return dataResponse(await service.updateQuiz(request.params.id, request.body), request.id)
     }
   )
@@ -126,7 +90,7 @@ export function quizzesRoutes(app: FastifyInstance) {
   app.delete<{ Params: { id: string } }>("/quizzes/:id", async (request, reply) => {
     const user = await requireSession(request)
     const quiz = await service.getQuizRow(request.params.id)
-    await assertCanManageQuiz(user, quiz.courseId)
+    await assertCanManageCourse(user, quiz.courseId!)
     await service.deleteQuiz(request.params.id)
     reply.status(204)
     return null
@@ -138,7 +102,7 @@ export function quizzesRoutes(app: FastifyInstance) {
     async (request, reply) => {
       const user = await requireSession(request)
       const quiz = await service.getQuizRow(request.params.quizId)
-      await assertCanManageQuiz(user, quiz.courseId)
+      await assertCanManageCourse(user, quiz.courseId!)
       const created = await service.createQuestion(request.params.quizId, request.body)
       reply.status(201)
       return dataResponse(created, request.id)
@@ -152,7 +116,7 @@ export function quizzesRoutes(app: FastifyInstance) {
       const user = await requireSession(request)
       const question = await service.getQuestionRow(request.params.id)
       const quiz = await service.getQuizRow(question.quizId)
-      await assertCanManageQuiz(user, quiz.courseId)
+      await assertCanManageCourse(user, quiz.courseId!)
       return dataResponse(await service.updateQuestion(request.params.id, request.body), request.id)
     }
   )
@@ -161,7 +125,7 @@ export function quizzesRoutes(app: FastifyInstance) {
     const user = await requireSession(request)
     const question = await service.getQuestionRow(request.params.id)
     const quiz = await service.getQuizRow(question.quizId)
-    await assertCanManageQuiz(user, quiz.courseId)
+    await assertCanManageCourse(user, quiz.courseId!)
     await service.deleteQuestion(request.params.id)
     reply.status(204)
     return null
@@ -174,7 +138,7 @@ export function quizzesRoutes(app: FastifyInstance) {
     // stays the caller's own attempts (QuizTake's attempts-remaining).
     if ((request.query as Record<string, unknown>)["scope"] === "all") {
       const quiz = await service.getQuizRow(request.params.quizId)
-      await assertCanManageQuiz(user, quiz.courseId)
+      await assertCanManageCourse(user, quiz.courseId!)
       const items = await service.listAllAttempts(request.params.quizId)
       return paginate(items, request.id, { page: query.page, pageSize: query.pageSize })
     }
@@ -185,7 +149,7 @@ export function quizzesRoutes(app: FastifyInstance) {
   app.post<{ Params: { quizId: string } }>("/quizzes/:quizId/attempts", async (request, reply) => {
     const user = await requireSession(request)
     const quiz = await service.getQuizRow(request.params.quizId)
-    await assertCanAttemptQuiz(user, quiz.courseId)
+    await assertIsEnrolledParticipant(user, quiz.courseId!)
     const created = await service.startAttempt(request.params.quizId, user.id)
     reply.status(201)
     return dataResponse(created, request.id)
@@ -196,7 +160,7 @@ export function quizzesRoutes(app: FastifyInstance) {
     const attempt = await service.getAttemptRow(request.params.id)
     if (attempt.userId !== user.id) {
       const quiz = await service.getQuizRow(attempt.quizId)
-      await assertCanManageQuiz(user, quiz.courseId)
+      await assertCanManageCourse(user, quiz.courseId!)
     }
     return dataResponse(await service.getAttempt(request.params.id), request.id)
   })
@@ -217,7 +181,7 @@ export function quizzesRoutes(app: FastifyInstance) {
       const user = await requireSession(request)
       const attempt = await service.getAttemptRow(request.params.id)
       const quiz = await service.getQuizRow(attempt.quizId)
-      await assertCanManageQuiz(user, quiz.courseId)
+      await assertCanManageCourse(user, quiz.courseId!)
       const graded = await service.gradeAttempt(request.params.id, request.body)
       await notifyUserById(attempt.userId, {
         type: "quiz_graded",
@@ -233,7 +197,7 @@ export function quizzesRoutes(app: FastifyInstance) {
     const user = await requireSession(request)
     const attempt = await service.getAttemptRow(request.params.id)
     const quiz = await service.getQuizRow(attempt.quizId)
-    await assertCanManageQuiz(user, quiz.courseId)
+    await assertCanManageCourse(user, quiz.courseId!)
     await service.deleteAttempt(request.params.id)
     reply.status(204)
     return null

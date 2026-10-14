@@ -914,9 +914,7 @@ export const zQuizAttempt = z.object({
     status: zQuizAttemptStatus,
     startedAt: z.iso.datetime().readonly(),
     submittedAt: z.iso.datetime().readonly().optional(),
-    gradedAt: z.iso.datetime().readonly().optional(),
-    categoryScores: z.record(z.string(), z.unknown()).readonly().optional(),
-    reportMeta: z.record(z.string(), z.unknown()).readonly().optional()
+    gradedAt: z.iso.datetime().readonly().optional()
 });
 
 export const zQuizCreate = z.object({
@@ -941,8 +939,7 @@ export const zQuizQuestionType = z.enum([
     'multiple_choice',
     'true_false',
     'short_answer',
-    'essay',
-    'likert'
+    'essay'
 ]);
 
 export const zQuizQuestion = z.object({
@@ -954,9 +951,7 @@ export const zQuizQuestion = z.object({
     correctAnswers: z.array(z.string()).readonly().optional(),
     points: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
     explanation: z.string().optional(),
-    displayOrder: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    category: z.string().optional(),
-    optionWeights: z.array(z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' })).readonly().optional()
+    displayOrder: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' })
 });
 
 export const zQuizDetail = zQuiz.and(z.object({
@@ -970,9 +965,7 @@ export const zQuizQuestionCreate = z.object({
     correctAnswers: z.array(z.string()).optional(),
     points: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
     explanation: z.string().optional(),
-    displayOrder: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    category: z.string().optional(),
-    optionWeights: z.array(z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' })).optional()
+    displayOrder: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional()
 });
 
 export const zQuizQuestionUpdate = z.object({
@@ -982,9 +975,7 @@ export const zQuizQuestionUpdate = z.object({
     correctAnswers: z.array(z.string()).optional(),
     points: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
     explanation: z.string().optional(),
-    displayOrder: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    category: z.string().optional(),
-    optionWeights: z.array(z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' })).optional()
+    displayOrder: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional()
 });
 
 export const zQuizUpdate = z.object({
@@ -1517,8 +1508,7 @@ export const zQuizQuestionWritable = z.object({
     options: z.array(zQuizOption),
     points: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
     explanation: z.string().optional(),
-    displayOrder: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    category: z.string().optional()
+    displayOrder: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' })
 });
 
 export const zQuizDetailWritable = zQuizWritable.and(z.object({
@@ -1634,32 +1624,6 @@ export const zAnnouncementApiUnpinPath = z.object({
  */
 export const zAnnouncementApiUnpinResponse = z.object({
     data: zAnnouncement,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zAssessmentsApiListQuery = z.object({
-    page: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(1),
-    pageSize: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(50)
-});
-
-/**
- * Standard page-based paginated response envelope.
- */
-export const zAssessmentsApiListResponse = z.object({
-    data: z.array(zQuiz),
-    pagination: zCommonPagePagination,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zAssessmentsApiCreateBody = zQuizCreate;
-
-/**
- * Standard single resource response envelope.
- */
-export const zAssessmentsApiCreateResponse = z.object({
-    data: zQuiz,
     meta: zCommonResponseMeta,
     warnings: z.array(zCommonWarning).optional()
 });

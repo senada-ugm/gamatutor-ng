@@ -76,13 +76,6 @@ export function ManagementShell() {
                     <span>Institusi</span>
                   </Link>
                   <Link
-                    to="/admin/assessments"
-                    data-sidebar="menu-button"
-                    className={verticalTabClass(!!matchRoute({ to: "/admin/assessments" }))}
-                  >
-                    <span>Asesmen</span>
-                  </Link>
-                  <Link
                     to="/admin/settings"
                     data-sidebar="menu-button"
                     className={verticalTabClass(!!matchRoute({ to: "/admin/settings" }))}
