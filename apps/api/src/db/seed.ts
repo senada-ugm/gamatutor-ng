@@ -399,7 +399,6 @@ export async function resetAndSeedDatabase() {
       enrollments,
       course_modules,
       courses,
-      discussions,
       institution_requests,
       institution_ownerships,
       institutions,
@@ -412,7 +411,6 @@ export async function resetAndSeedDatabase() {
       verifications,
       users,
       assignment_submissions,
-      discussion_replies,
       quiz_attempts,
       learning_telemetry_logs,
       participant_profiles

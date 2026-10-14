@@ -388,45 +388,6 @@ export const certificates = pgTable(
   (table) => [index("certificates_course_idx").on(table.courseId), index("certificates_user_idx").on(table.userId)]
 )
 
-export const discussions = pgTable(
-  "discussions",
-  {
-    id: text("id").primaryKey(),
-    courseId: text("course_id")
-      .notNull()
-      .references(() => courses.id, { onDelete: "cascade" }),
-    lessonId: text("lesson_id").references(() => courseLessons.id, { onDelete: "set null" }),
-    title: text("title").notNull(),
-    content: text("content").notNull(),
-    userId: text("user_id").notNull(),
-    isPinned: boolean("is_pinned").notNull().default(false),
-    isClosed: boolean("is_closed").notNull().default(false),
-    isResolved: boolean("is_resolved").notNull().default(false),
-    viewCount: integer("view_count").notNull().default(0),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at").defaultNow().notNull(),
-  },
-  (table) => [index("discussions_course_idx").on(table.courseId)]
-)
-
-export const discussionReplies = pgTable(
-  "discussion_replies",
-  {
-    id: text("id").primaryKey(),
-    discussionId: text("discussion_id")
-      .notNull()
-      .references(() => discussions.id, { onDelete: "cascade" }),
-    parentReplyId: text("parent_reply_id"),
-    content: text("content").notNull(),
-    userId: text("user_id").notNull(),
-    isDeleted: boolean("is_deleted").notNull().default(false),
-    deletedAt: timestamp("deleted_at"),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at").defaultNow().notNull(),
-  },
-  (table) => [index("discussion_replies_discussion_idx").on(table.discussionId)]
-)
-
 /** courseId is nullable: a quiz with no course is a standalone assessment
  *  (career/psychometric test) - see quizzes.tsp's top comment. courseId
  *  IS NULL is the only discriminator; there is deliberately no separate

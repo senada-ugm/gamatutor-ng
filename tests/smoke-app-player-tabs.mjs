@@ -7,7 +7,7 @@
  * Signs in as the seeded admin, seeds a course + assignment via the
  * real API, then drives everything through the SPA: assignment submit
  * (text + a real file upload) and grade-view with the graded-
- * resubmission block; discussion create -> reply -> resolve moderation.
+ * resubmission block.
  */
 import { chromium } from "playwright"
 
@@ -19,9 +19,6 @@ const TITLE = `Smoke App Tabs ${Date.now()}`
 const ASSIGNMENT_TITLE = "Tugas Esai Pembuka"
 const ASSIGNMENT_ANSWER = "Ini jawaban saya untuk tugas ini."
 const ATTACHMENT_NAME = "smoke-answer.pdf"
-const DISCUSSION_TITLE = "Diskusi Perkenalan"
-const DISCUSSION_CONTENT = "Halo, mari berkenalan!"
-const REPLY_TEXT = "Halo! Salam kenal juga."
 let failures = 0
 
 async function expect(name, fn) {
@@ -139,34 +136,6 @@ await expect("graded submission shows score + feedback and blocks resubmission",
   await page.getByText("Nilai: 85").first().waitFor({ timeout: 8000 })
   await page.getByText("Jawaban bagus, lanjutkan.").waitFor({ timeout: 8000 })
   await page.getByText(/sudah dinilai/i).waitFor({ timeout: 8000 })
-})
-
-// ================= DISCUSSIONS =================
-await page.goto(`${BASE}/learn/${courseId}/discussions`, { timeout: 30000 })
-await page.getByRole("button", { name: "Diskusi Baru" }).click()
-await page.locator("#discussion-title").fill(DISCUSSION_TITLE)
-await page.locator("#discussion-content").fill(DISCUSSION_CONTENT)
-await page.getByRole("button", { name: "Buat Diskusi" }).click()
-await expect("creating a discussion through the form shows it in the board", async () => {
-  await page.getByText(DISCUSSION_TITLE).waitFor({ timeout: 8000 })
-})
-
-await page.getByText(DISCUSSION_TITLE).click()
-await expect("thread detail renders author content", async () => {
-  await page.getByText(DISCUSSION_CONTENT).waitFor({ timeout: 8000 })
-})
-
-await page.getByPlaceholder("Tulis balasan Anda...").fill(REPLY_TEXT)
-await page.getByRole("button", { name: "Kirim Balasan" }).click()
-await expect("replying appends the reply to the thread", async () => {
-  await page.getByText(REPLY_TEXT).waitFor({ timeout: 8000 })
-  await page.getByText("Balasan (1)").waitFor({ timeout: 8000 })
-})
-
-// Admin is a course manager, so moderation buttons must be available
-await page.getByRole("button", { name: "Selesaikan" }).click()
-await expect("resolving marks the thread with a badge", async () => {
-  await page.getByText("Diselesaikan").waitFor({ timeout: 8000 })
 })
 
 await browser.close()

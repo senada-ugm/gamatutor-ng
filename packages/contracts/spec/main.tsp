@@ -9,7 +9,6 @@ import "./course-instructors.tsp";
 import "./enrollments.tsp";
 import "./quizzes.tsp";
 import "./assignments.tsp";
-import "./discussions.tsp";
 import "./certificates.tsp";
 import "./certificate-settings.tsp";
 import "./uploads.tsp";

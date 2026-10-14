@@ -419,56 +419,6 @@ export const zCourseType = z.enum([
     'hybrid'
 ]);
 
-export const zDiscussionCreate = z.object({
-    lessonId: zCommonResourceId.optional(),
-    title: z.string(),
-    content: z.string()
-});
-
-export const zDiscussionReplyCreate = z.object({
-    content: z.string(),
-    parentReplyId: zCommonResourceId.optional()
-});
-
-export const zDiscussionUser = z.object({
-    id: zCommonResourceId,
-    name: z.string(),
-    email: z.string()
-});
-
-export const zDiscussion = z.object({
-    id: zCommonResourceId,
-    courseId: zCommonResourceId,
-    lessonId: zCommonResourceId.optional(),
-    title: z.string(),
-    content: z.string(),
-    isPinned: z.boolean(),
-    isClosed: z.boolean(),
-    isResolved: z.boolean(),
-    viewCount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).readonly(),
-    replyCount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).readonly(),
-    lastReplyAt: z.iso.datetime().readonly().optional(),
-    createdAt: z.iso.datetime().readonly(),
-    updatedAt: z.iso.datetime().readonly(),
-    user: zDiscussionUser,
-    lastReplyByUser: zDiscussionUser.optional()
-});
-
-export const zDiscussionReply = z.object({
-    id: zCommonResourceId,
-    discussionId: zCommonResourceId,
-    parentReplyId: zCommonResourceId.optional(),
-    content: z.string(),
-    isDeleted: z.boolean(),
-    createdAt: z.iso.datetime().readonly(),
-    updatedAt: z.iso.datetime().readonly(),
-    user: zDiscussionUser
-});
-
-export const zDiscussionDetail = zDiscussion.and(z.object({
-    replies: z.array(zDiscussionReply)
-}));
-
 export const zEducationEntry = z.object({
     degree: z.string(),
     fieldOfStudy: z.string().optional(),
@@ -1369,32 +1319,6 @@ export const zCourseInstructorWritable = z.object({
     user: zCourseInstructorUser
 });
 
-export const zDiscussionWritable = z.object({
-    id: zCommonResourceId,
-    courseId: zCommonResourceId,
-    lessonId: zCommonResourceId.optional(),
-    title: z.string(),
-    content: z.string(),
-    isPinned: z.boolean(),
-    isClosed: z.boolean(),
-    isResolved: z.boolean(),
-    user: zDiscussionUser,
-    lastReplyByUser: zDiscussionUser.optional()
-});
-
-export const zDiscussionReplyWritable = z.object({
-    id: zCommonResourceId,
-    discussionId: zCommonResourceId,
-    parentReplyId: zCommonResourceId.optional(),
-    content: z.string(),
-    isDeleted: z.boolean(),
-    user: zDiscussionUser
-});
-
-export const zDiscussionDetailWritable = zDiscussionWritable.and(z.object({
-    replies: z.array(zDiscussionReplyWritable)
-}));
-
 export const zEnrollmentWritable = z.object({
     id: zCommonResourceId,
     userId: zCommonResourceId,
@@ -2008,41 +1932,6 @@ export const zCourseCertificatesApiIssueResponse = z.object({
     warnings: z.array(zCommonWarning).optional()
 });
 
-export const zCourseDiscussionsApiListPath = z.object({
-    courseId: zCommonResourceId
-});
-
-export const zCourseDiscussionsApiListQuery = z.object({
-    lessonId: zCommonResourceId.optional(),
-    page: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(1),
-    pageSize: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(50)
-});
-
-/**
- * Standard page-based paginated response envelope.
- */
-export const zCourseDiscussionsApiListResponse = z.object({
-    data: z.array(zDiscussion),
-    pagination: zCommonPagePagination,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zCourseDiscussionsApiCreateBody = zDiscussionCreate;
-
-export const zCourseDiscussionsApiCreatePath = z.object({
-    courseId: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zCourseDiscussionsApiCreateResponse = z.object({
-    data: zDiscussionDetail,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
 export const zCourseModulesApiCreateBody = zModuleCreate;
 
 export const zCourseModulesApiCreatePath = z.object({
@@ -2155,131 +2044,6 @@ export const zCoursesApiUnpublishPath = z.object({
  */
 export const zCoursesApiUnpublishResponse = z.object({
     data: zCourse,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zDiscussionRepliesApiDeletePath = z.object({
-    discussionId: zCommonResourceId,
-    id: zCommonResourceId
-});
-
-/**
- * There is no content to send for this request, but the headers may be useful.
- */
-export const zDiscussionRepliesApiDeleteResponse = z.void();
-
-export const zDiscussionsApiDeletePath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * There is no content to send for this request, but the headers may be useful.
- */
-export const zDiscussionsApiDeleteResponse = z.void();
-
-export const zDiscussionsApiGetPath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zDiscussionsApiGetResponse = z.object({
-    data: zDiscussionDetail,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zDiscussionsApiClosePath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zDiscussionsApiCloseResponse = z.object({
-    data: zDiscussion,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zDiscussionsApiPinPath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zDiscussionsApiPinResponse = z.object({
-    data: zDiscussion,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zDiscussionsApiReopenPath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zDiscussionsApiReopenResponse = z.object({
-    data: zDiscussion,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zDiscussionsApiReplyBody = zDiscussionReplyCreate;
-
-export const zDiscussionsApiReplyPath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zDiscussionsApiReplyResponse = z.object({
-    data: zDiscussionReply,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zDiscussionsApiResolvePath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zDiscussionsApiResolveResponse = z.object({
-    data: zDiscussion,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zDiscussionsApiUnpinPath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zDiscussionsApiUnpinResponse = z.object({
-    data: zDiscussion,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zDiscussionsApiUnresolvePath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zDiscussionsApiUnresolveResponse = z.object({
-    data: zDiscussion,
     meta: zCommonResponseMeta,
     warnings: z.array(zCommonWarning).optional()
 });

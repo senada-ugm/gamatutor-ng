@@ -16,7 +16,6 @@ import { certificatesModule } from "./modules/certificates/index.js"
 import { courseContentModule } from "./modules/course-content/index.js"
 import { courseInstructorsModule } from "./modules/course-instructors/index.js"
 import { coursesModule } from "./modules/courses/index.js"
-import { discussionsModule } from "./modules/discussions/index.js"
 import { enrollmentsModule } from "./modules/enrollments/index.js"
 import { healthRoutes } from "./modules/health/index.js"
 import { institutionsModule } from "./modules/institutions/index.js"
@@ -112,7 +111,6 @@ export async function buildApp() {
   await app.register(enrollmentsModule, { prefix: "/v1" })
   await app.register(assignmentsModule, { prefix: "/v1" })
   await app.register(certificatesModule, { prefix: "/v1" })
-  await app.register(discussionsModule, { prefix: "/v1" })
   await app.register(quizzesModule, { prefix: "/v1" })
   await app.register(uploadsModule, { prefix: "/v1" })
   await app.register(notificationsModule, { prefix: "/v1" })

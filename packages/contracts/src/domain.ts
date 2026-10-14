@@ -57,12 +57,6 @@ import type {
   CourseStatus,
   CourseType,
   CourseUpdate,
-  Discussion,
-  DiscussionCreate,
-  DiscussionDetail,
-  DiscussionReply,
-  DiscussionReplyCreate,
-  DiscussionUser,
   EducationEntry,
   Enrollment,
   EnrollmentStatus,
@@ -196,15 +190,6 @@ export type ContractCertificateCourse = CertificateCourse
 export type ContractCertificateInstitution = CertificateInstitution
 export type ContractCertificate = Certificate
 export type ContractCertificateIssue = CertificateIssue
-
-// --- Discussion domain (spec/discussions.tsp) -----------------------------
-
-export type ContractDiscussionUser = DiscussionUser
-export type ContractDiscussion = Discussion
-export type ContractDiscussionCreate = DiscussionCreate
-export type ContractDiscussionReply = DiscussionReply
-export type ContractDiscussionReplyCreate = DiscussionReplyCreate
-export type ContractDiscussionDetail = DiscussionDetail
 
 // --- Quiz domain (spec/quizzes.tsp) ---------------------------------------
 

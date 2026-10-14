@@ -224,8 +224,7 @@ function toAttempt(row: AttemptRow): Omit<QuizAttempt, "user"> {
 }
 
 /** Batch-joins the attempt owners' display info — the grading queue
- *  shows names next to answers (same denormalized-join pattern the
- *  discussion domain uses). */
+ *  shows names next to answers. */
 async function attachUsers(attempts: Array<Omit<QuizAttempt, "user">>): Promise<QuizAttempt[]> {
   if (attempts.length === 0) return []
   const ids = [...new Set(attempts.map((a) => a.userId))]

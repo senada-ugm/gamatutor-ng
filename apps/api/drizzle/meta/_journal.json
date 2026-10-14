@@ -64,6 +64,13 @@
       "when": 1791999704110,
       "tag": "0008_aspiring_shotgun",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1792000036030,
+      "tag": "0009_flat_pride",
+      "breakpoints": true
     }
   ]
 }

@@ -335,18 +335,6 @@ const learnAssignmentDetailRoute = createRoute({
   component: lazyRouteComponent(() => import("@/routes/learn/assignments"), "AssignmentDetailPage"),
 })
 
-const learnDiscussionsRoute = createRoute({
-  getParentRoute: () => learnLayoutRoute,
-  path: "/discussions",
-  component: lazyRouteComponent(() => import("@/routes/learn/discussions"), "DiscussionBoardPage"),
-})
-
-const learnDiscussionThreadRoute = createRoute({
-  getParentRoute: () => learnLayoutRoute,
-  path: "/discussions/$discussionId",
-  component: lazyRouteComponent(() => import("@/routes/learn/discussions"), "DiscussionThreadPage"),
-})
-
 const learnAnnouncementsRoute = createRoute({
   getParentRoute: () => learnLayoutRoute,
   path: "/pengumuman",
@@ -403,8 +391,6 @@ const routeTree = rootRoute.addChildren([
     learnQuizDetailRoute,
     learnAssignmentsRoute,
     learnAssignmentDetailRoute,
-    learnDiscussionsRoute,
-    learnDiscussionThreadRoute,
     learnAnnouncementsRoute,
   ]),
 ])

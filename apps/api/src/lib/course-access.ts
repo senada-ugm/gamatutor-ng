@@ -47,8 +47,7 @@ async function getCourseInstitutionId(courseId: string): Promise<string> {
 
 /** Broad "can manage this course" check: admin, institution owner, or an
  *  active course-instructor. Used by content/quiz/assignment/
- *  certificate/discussion-moderation routes across every course-scoped
- *  module. */
+ *  certificate routes across every course-scoped module. */
 export async function assertCanManageCourse(user: ActingUser, courseId: string) {
   if (user.role === "admin") return
   const institutionId = await getCourseInstitutionId(courseId)
@@ -131,7 +130,7 @@ export async function assertIsEnrolledParticipant(user: ActingUser, courseId: st
 }
 
 /** Read gate for a course-scoped list/detail a learner consumes inside
- *  CoursePlayer (quizzes, assignments, discussions):
+ *  CoursePlayer (quizzes, assignments):
  *  course managers and active participants only — not "any signed-in
  *  account", which would leak draft-course material to outsiders. */
 export async function assertCanAccessCourse(user: ActingUser, courseId: string) {
