@@ -10,9 +10,19 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { EnrollmentStatusBadge } from "@/components/composed/_shared/enrollment-status-badge"
 import { EmptyState } from "@/components/composed/_shared/empty-state"
 import { API_URL, apiGet } from "@/lib/api"
-import type { ContractCourseReport } from "@workspace/contracts/domain"
+import type { ContractCourseReport, ContractCourseTelemetrySummary } from "@workspace/contracts/domain"
 
 const DAYS = ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"]
+
+/** "48 menit" / "1 jam 12 menit" — the report's study-time display form. */
+function formatStudyDuration(seconds: number): string {
+  if (seconds <= 0) return "0 menit"
+  const minutes = Math.round(seconds / 60)
+  if (minutes < 60) return `${minutes} menit`
+  const hours = Math.floor(minutes / 60)
+  const rest = minutes % 60
+  return rest > 0 ? `${hours} jam ${rest} menit` : `${hours} jam`
+}
 
 function heatColor(v: number, max: number): string {
   if (!v || !max) return "var(--muted)"
@@ -26,32 +36,34 @@ export function CourseReportPanel({ courseId }: { courseId: string }) {
     queryFn: () => apiGet<ContractCourseReport>(`/courses/${courseId}/report`),
   })
 
-  // Mock-fallback heatmap data derived from participant count for visualization
+  // Real study-time aggregates (Review note #15) — same manager gate as
+  // the report itself.
+  const telemetry = useQuery({
+    queryKey: ["course-telemetry", courseId],
+    queryFn: () => apiGet<ContractCourseTelemetrySummary>(`/courses/${courseId}/telemetry-summary`),
+  })
+
+  // 7x24 dwell minutes, day-major Monday-first, from the 168-cell summary.
   const heatmapData = useMemo(() => {
-    const pCount = report.data?.participantCount ?? 0
+    const cells = telemetry.data?.heatmapDwellSeconds
+    if (!cells) return null
     return DAYS.map((_, dayIdx) =>
-      Array.from({ length: 24 }, (__, hour) => {
-        // Higher activity during morning 08-11 and night 19-21 WIB
-        const isPeak = (hour >= 8 && hour <= 11) || (hour >= 19 && hour <= 21)
-        const isWeekend = dayIdx >= 5
-        const base = isPeak ? (isWeekend ? 3 : 5) : 1
-        return pCount > 0 ? Math.round(base * Math.min(pCount, 4) * (0.8 + ((dayIdx + hour) % 5) * 0.1)) : 0
-      })
+      Array.from({ length: 24 }, (__, hour) => Math.round((cells[dayIdx * 24 + hour] ?? 0) / 60))
     )
-  }, [report.data?.participantCount])
+  }, [telemetry.data?.heatmapDwellSeconds])
 
-  const heatMax = useMemo(() => Math.max(1, ...heatmapData.flat()), [heatmapData])
+  const heatMax = useMemo(() => (heatmapData ? Math.max(1, ...heatmapData.flat()) : 1), [heatmapData])
 
-  // Mock-fallback 30-day activity trend
-  const dailyActivity = useMemo(() => {
-    const pCount = report.data?.participantCount ?? 0
-    return Array.from({ length: 30 }, (_, i) => ({
-      day: i + 1,
-      activeLearners: pCount > 0 ? Math.max(1, Math.round(pCount * 0.6 + ((i * 7) % Math.max(pCount, 2)))) : 0,
-    }))
-  }, [report.data?.participantCount])
+  const dailyActivity = useMemo(() => telemetry.data?.trend30d ?? null, [telemetry.data?.trend30d])
+  const dailyMax = useMemo(
+    () => (dailyActivity ? Math.max(1, ...dailyActivity.map((d) => d.activeLearners)) : 1),
+    [dailyActivity]
+  )
 
-  const dailyMax = useMemo(() => Math.max(1, ...dailyActivity.map((d) => d.activeLearners)), [dailyActivity])
+  const dwellByUser = useMemo(
+    () => new Map((telemetry.data?.byParticipant ?? []).map((row) => [row.user.id, row])),
+    [telemetry.data?.byParticipant]
+  )
 
   if (report.isLoading) {
     return <Skeleton className="h-96 w-full" />
@@ -168,8 +180,14 @@ export function CourseReportPanel({ courseId }: { courseId: string }) {
             <Flame className="size-4 text-[#137a77]" />
             <span>Median Waktu</span>
           </div>
-          <div className="mt-2 text-2xl font-bold text-[#137a77]">48 menit</div>
-          <div className="text-[11px] text-muted-foreground">durasi belajar aktif</div>
+          <div className="mt-2 text-2xl font-bold text-[#137a77]">
+            {telemetry.data ? formatStudyDuration(telemetry.data.medianParticipantDwellSeconds) : "…"}
+          </div>
+          <div className="text-[11px] text-muted-foreground">
+            {telemetry.data && telemetry.data.activeParticipants > 0
+              ? `durasi belajar aktif · ${telemetry.data.activeParticipants} peserta tercatat`
+              : "durasi belajar aktif"}
+          </div>
         </Card>
       </div>
 
@@ -185,43 +203,51 @@ export function CourseReportPanel({ courseId }: { courseId: string }) {
           </p>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse text-[11px]">
-              <thead>
-                <tr>
-                  <th className="p-1 text-left font-bold text-muted-foreground">Hari</th>
-                  {Array.from({ length: 24 }, (_, h) => (
-                    <th key={h} className="p-1 text-center font-mono text-[10px] text-muted-foreground">
-                      {String(h).padStart(2, "0")}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {heatmapData.map((row, dayIdx) => (
-                  <tr key={dayIdx}>
-                    <td className="p-1 font-semibold text-muted-foreground">{DAYS[dayIdx]}</td>
-                    {row.map((val, hour) => {
-                      const isDark = val / heatMax > 0.55
-                      return (
-                        <td
-                          key={hour}
-                          title={`${DAYS[dayIdx]} ${String(hour).padStart(2, "0")}:00 WIB — ${val} menit aktif`}
-                          className="h-6 min-w-[22px] border border-white text-center font-mono text-[10px] dark:border-background"
-                          style={{
-                            backgroundColor: heatColor(val, heatMax),
-                            color: isDark ? "#ffffff" : "var(--foreground)",
-                          }}
-                        >
-                          {val > 0 ? val : ""}
-                        </td>
-                      )
-                    })}
+          {heatmapData ? (
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse text-[11px]">
+                <thead>
+                  <tr>
+                    <th className="p-1 text-left font-bold text-muted-foreground">Hari</th>
+                    {Array.from({ length: 24 }, (_, h) => (
+                      <th key={h} className="p-1 text-center font-mono text-[10px] text-muted-foreground">
+                        {String(h).padStart(2, "0")}
+                      </th>
+                    ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {heatmapData.map((row, dayIdx) => (
+                    <tr key={dayIdx}>
+                      <td className="p-1 font-semibold text-muted-foreground">{DAYS[dayIdx]}</td>
+                      {row.map((val, hour) => {
+                        const isDark = val / heatMax > 0.55
+                        return (
+                          <td
+                            key={hour}
+                            title={`${DAYS[dayIdx]} ${String(hour).padStart(2, "0")}:00 WIB — ${val} menit aktif`}
+                            className="h-6 min-w-[22px] border border-white text-center font-mono text-[10px] dark:border-background"
+                            style={{
+                              backgroundColor: heatColor(val, heatMax),
+                              color: isDark ? "#ffffff" : "var(--foreground)",
+                            }}
+                          >
+                            {val > 0 ? val : ""}
+                          </td>
+                        )
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <EmptyState
+              compact
+              title="Belum ada data waktu belajar"
+              description="Heatmap terisi setelah peserta mulai membuka materi pelatihan."
+            />
+          )}
         </CardContent>
       </Card>
 
@@ -236,21 +262,31 @@ export function CourseReportPanel({ courseId }: { courseId: string }) {
           </p>
         </CardHeader>
         <CardContent>
-          <div className="flex h-28 items-end gap-1 pt-4">
-            {dailyActivity.map((d) => (
-              <div
-                key={d.day}
-                title={`Hari ke-${d.day}: ${d.activeLearners} peserta aktif`}
-                className="flex-1 rounded-t-sm bg-[#5bb4b2] transition-colors hover:bg-[#137a77]"
-                style={{ height: `${(d.activeLearners / dailyMax) * 100}%`, minHeight: "2px" }}
-              />
-            ))}
-          </div>
-          <div className="flex justify-between pt-2 text-[11px] text-muted-foreground">
-            <span>30 hari lalu</span>
-            <span>Maksimal {dailyMax} peserta / hari</span>
-            <span>Hari ini</span>
-          </div>
+          {dailyActivity ? (
+            <>
+              <div className="flex h-28 items-end gap-1 pt-4">
+                {dailyActivity.map((d) => (
+                  <div
+                    key={d.date}
+                    title={`${d.date}: ${d.activeLearners} peserta aktif`}
+                    className="flex-1 rounded-t-sm bg-[#5bb4b2] transition-colors hover:bg-[#137a77]"
+                    style={{ height: `${(d.activeLearners / dailyMax) * 100}%`, minHeight: "2px" }}
+                  />
+                ))}
+              </div>
+              <div className="flex justify-between pt-2 text-[11px] text-muted-foreground">
+                <span>30 hari lalu</span>
+                <span>Maksimal {dailyMax} peserta / hari</span>
+                <span>Hari ini</span>
+              </div>
+            </>
+          ) : (
+            <EmptyState
+              compact
+              title="Belum ada data akses"
+              description="Grafik terisi setelah peserta mulai membuka materi pelatihan."
+            />
+          )}
         </CardContent>
       </Card>
 
@@ -267,6 +303,7 @@ export function CourseReportPanel({ courseId }: { courseId: string }) {
                   <TableHead>Peserta & Kontak</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Progres Materi</TableHead>
+                  <TableHead>Waktu Belajar</TableHead>
                   <TableHead>Nilai Evaluasi</TableHead>
                 </TableRow>
               </TableHeader>
@@ -284,6 +321,13 @@ export function CourseReportPanel({ courseId }: { courseId: string }) {
                       <div className="flex items-center gap-2">
                         <span className="font-semibold">{participant.progressPercent}%</span>
                       </div>
+                    </TableCell>
+                    <TableCell>
+                      {dwellByUser.has(participant.user.id) ? (
+                        formatStudyDuration(dwellByUser.get(participant.user.id)!.totalDwellSeconds)
+                      ) : (
+                        <span className="text-muted-foreground">—</span>
+                      )}
                     </TableCell>
                     <TableCell>
                       {participant.finalGrade != null ? (
