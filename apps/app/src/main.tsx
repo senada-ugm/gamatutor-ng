@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { router } from "@/router"
 import { ConfirmProvider } from "@/components/composed/_shared/confirm-dialog"
 import { Toaster } from "@/components/composed/_shared/toaster"
-import "@/lib/api-client"
 // Imported (not <link>ed) so the @tailwindcss/vite plugin compiles it —
 // a raw stylesheet link ships preflight only, with zero utilities.
 import "@workspace/ui/globals.css"

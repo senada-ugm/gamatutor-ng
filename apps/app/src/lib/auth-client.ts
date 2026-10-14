@@ -1,7 +1,5 @@
 import { createAuthClient } from "better-auth/react"
 
-import "@/lib/api-client"
-
 /**
  * Better Auth client for apps/app. In a plain Vite SPA, the proxy-based
  * client works correctly (no SSR transform to break it). Same session

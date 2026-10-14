@@ -30,9 +30,7 @@
   "exports": {
     ".": "./gen/index.ts",
     "./domain": "./src/domain.ts",
-    "./sdk": "./gen/sdk.gen.ts",
     "./zod": "./gen/zod.gen.ts",
-    "./client": "./gen/client.gen.ts",
     "./openapi": "./tsp-output/openapi/3.1.0/openapi.yaml"
   }
 }

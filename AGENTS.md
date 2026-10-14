@@ -155,7 +155,9 @@ packages/
   `ContractPagedResponse<T>`) because OpenAPI inlines generics per path.
   Generated artifacts are also exported as subpaths: `@workspace/contracts`
   (all types), `/zod` (runtime schemas — used by apps/api preValidation),
-  `/sdk`, `/client`, `/openapi` (raw YAML).
+  `/openapi` (raw YAML). Only types + zod are generated — the hey-api
+  SDK/client plugins were removed (the fetch client's path interpolation
+  is broken under Vite and no consumer ever used it).
 
 - `apps/api` is the Fastify backend (skeleton adapted from vamios-core):
   `pnpm dev:api` boots it on :8000, docs at `/docs`. Modules live under
