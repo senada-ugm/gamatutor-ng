@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from "@tanstack/react-router"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { ArrowLeft, ArrowRight, Check } from "lucide-react"
 import { Button } from "@workspace/ui/components/button"
@@ -10,8 +10,8 @@ import { EmptyState } from "@/components/composed/_shared/empty-state"
 import { InteractiveSlideViewer } from "@/components/composed/player/interactive-slide-viewer"
 import { AudioLessonPlayer, DocumentLessonViewer } from "@/components/composed/player/_atoms/media-renderers"
 import { apiGet, apiSend } from "@/lib/api"
-import { DRIVE_RETINOPATHY_COURSE } from "@/lib/content/drive-retinopati-data"
-import type { ContractCertificate, ContractEnrollment } from "@workspace/contracts/domain"
+import type { CourseDefinition } from "@/lib/content/course-types"
+import type { ContractCertificate, ContractEnrollment, ContractSlideDeck } from "@workspace/contracts/domain"
 
 interface VideoEmbed {
   kind: "iframe" | "video"
@@ -54,10 +54,20 @@ export function LessonPage() {
   const lesson = course.modules.flatMap((m) => m.lessons).find((l) => l.id === lessonId)
   const isCompleted = completedLessonIds.includes(lessonId)
 
-  const isDriveCourse =
-    course.title.toLowerCase().includes("retinopati") ||
-    course.title.toLowerCase().includes("drive") ||
-    course.id.toLowerCase().includes("drive")
+  // A course with an attached interactive slide deck renders that deck
+  // for its lessons (404 = plain lesson content). The manifest's shape
+  // is owned by the player's course-types; a schemaVersion the player
+  // can't render falls back to plain content rather than crashing.
+  const slideDeck = useQuery({
+    queryKey: ["slide-deck", course.id],
+    queryFn: () => apiGet<ContractSlideDeck>(`/courses/${course.id}/slide-deck`),
+    retry: false,
+    staleTime: 5 * 60 * 1000,
+  })
+  const deckCourse: CourseDefinition | null =
+    slideDeck.data && slideDeck.data.schemaVersion === 1
+      ? (slideDeck.data.manifest as unknown as CourseDefinition)
+      : null
 
   const toggleComplete = useMutation({
     mutationFn: () =>
@@ -133,9 +143,9 @@ export function LessonPage() {
       </div>
 
       <div className="min-h-64">
-        {isDriveCourse ? (
+        {deckCourse ? (
           <InteractiveSlideViewer
-            course={DRIVE_RETINOPATHY_COURSE}
+            course={deckCourse}
             onCompleteModule={() => {
               if (!isCompleted) {
                 completeAndAdvance.mutate()
