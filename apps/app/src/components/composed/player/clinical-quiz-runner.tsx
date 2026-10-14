@@ -1,21 +1,37 @@
 import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 import { Award, CheckCircle2, RotateCcw, XCircle, ArrowRight, HelpCircle, ShieldCheck } from "lucide-react"
+import { toast } from "sonner"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
+import { apiGet, apiSend } from "@/lib/api"
 import type { QuizPage } from "@/lib/content/course-types"
+import type { ContractQuizAttempt, ContractQuizDetail } from "@workspace/contracts/domain"
 
 interface ClinicalQuizRunnerProps {
   questions: QuizPage[]
   passingScore?: number // e.g. 0.6 or 0.7 (70%)
+  /** The server-side quiz backing this post-test. When present, attempts
+   *  are created, graded, and recorded through the quiz engine (visible
+   *  in instructor reports); absent it, scoring falls back to local
+   *  evaluation for decks without a linked quiz. */
+  quizId?: string
   onComplete?: (scorePct: number, passed: boolean) => void
   onRetake?: () => void
   onClaimCertificate?: () => void
   className?: string
 }
 
+interface PostTestResult {
+  scorePct: number
+  passed: boolean
+  correctCount: number
+}
+
 export function ClinicalQuizRunner({
   questions,
   passingScore = 0.7,
+  quizId,
   onComplete,
   onRetake,
   onClaimCertificate,
@@ -23,13 +39,25 @@ export function ClinicalQuizRunner({
 }: ClinicalQuizRunnerProps) {
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
-  const [isFinished, setIsFinished] = useState<boolean>(false)
+  const [result, setResult] = useState<PostTestResult | null>(null)
+  const [submitting, setSubmitting] = useState(false)
+
+  // The server quiz's questions (option text, no answer key for
+  // students) — used to translate the runner's letter answers into the
+  // attempt payload. Question text is the join key: the deck's quiz
+  // pages and the seeded quiz questions come from the same manifest.
+  const quiz = useQuery({
+    queryKey: ["quiz", quizId],
+    queryFn: () => apiGet<ContractQuizDetail>(`/quizzes/${quizId}`),
+    enabled: quizId != null,
+    staleTime: 5 * 60 * 1000,
+  })
 
   const currentQ = questions[currentIndex]
   const totalCount = questions.length
 
   function handleSelect(letter: string) {
-    if (isFinished) return
+    if (result) return
     setAnswers((prev) => ({ ...prev, [currentQ.id]: letter }))
   }
 
@@ -37,7 +65,7 @@ export function ClinicalQuizRunner({
     if (currentIndex < totalCount - 1) {
       setCurrentIndex(currentIndex + 1)
     } else {
-      finishQuiz()
+      void finishQuiz()
     }
   }
 
@@ -47,35 +75,67 @@ export function ClinicalQuizRunner({
     }
   }
 
-  function finishQuiz() {
-    setIsFinished(true)
+  function localResult(): PostTestResult {
     let correctCount = 0
     for (const q of questions) {
-      if (answers[q.id] === q.correct) {
-        correctCount++
-      }
+      if (answers[q.id] === q.correct) correctCount++
     }
-    const pct = Math.round((correctCount / totalCount) * 100)
-    const passed = correctCount / totalCount >= passingScore
-    onComplete?.(pct, passed)
+    return {
+      scorePct: Math.round((correctCount / totalCount) * 100),
+      passed: correctCount / totalCount >= passingScore,
+      correctCount,
+    }
+  }
+
+  async function finishQuiz() {
+    setSubmitting(true)
+    try {
+      if (quizId && quiz.data) {
+        // Server-graded path: one attempt per run, unlimited retakes
+        // (quiz.maxAttempts = 0). Letters map to option text via the
+        // page's own options, keyed to server questions by question text.
+        const attempt = await apiSend<ContractQuizAttempt>("POST", `/quizzes/${quizId}/attempts`)
+        const payload: Record<string, string[]> = {}
+        for (const page of questions) {
+          const serverQuestion = quiz.data.questions.find((q) => q.question === page.question)
+          if (!serverQuestion) continue
+          const letter = answers[page.id]
+          const text = page.options.find((o) => o.letter === letter)?.text
+          if (text) payload[serverQuestion.id] = [text]
+        }
+        const graded = await apiSend<ContractQuizAttempt>("POST", `/quiz-attempts/${attempt.id}/submit`, {
+          answers: payload,
+        })
+        const maxScore = graded.maxScore ?? 0
+        const outcome: PostTestResult = {
+          scorePct: maxScore > 0 ? Math.round(((graded.score ?? 0) / maxScore) * 100) : 0,
+          passed: graded.passed === true,
+          correctCount: maxScore > 0 ? Math.round(((graded.score ?? 0) / maxScore) * totalCount) : 0,
+        }
+        setResult(outcome)
+        onComplete?.(outcome.scorePct, outcome.passed)
+      } else {
+        // Deck without a linked quiz — local evaluation only.
+        const outcome = localResult()
+        setResult(outcome)
+        onComplete?.(outcome.scorePct, outcome.passed)
+      }
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Gagal mengirim evaluasi — coba lagi")
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   function handleRetakeTest() {
     setAnswers({})
     setCurrentIndex(0)
-    setIsFinished(false)
+    setResult(null)
     onRetake?.()
   }
 
-  if (isFinished) {
-    let correctCount = 0
-    for (const q of questions) {
-      if (answers[q.id] === q.correct) {
-        correctCount++
-      }
-    }
-    const scorePct = Math.round((correctCount / totalCount) * 100)
-    const passed = correctCount / totalCount >= passingScore
+  if (result) {
+    const { scorePct, passed, correctCount } = result
 
     return (
       <div
@@ -156,13 +216,14 @@ export function ClinicalQuizRunner({
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-          {/* Unrestricted Retake Button (Review Note #9) */}
+          {/* Unrestricted Retake Button (Review Note #9) — each retake is a
+              fresh server attempt (maxAttempts = 0). */}
           <Button variant="outline" onClick={handleRetakeTest} className="gap-2">
             <RotateCcw className="h-4 w-4" />
             Ulangi Evaluasi (Retake)
           </Button>
 
-          {/* Certificate Claim if Passed */}
+          {/* Certificate Claim if Passed — server-graded pass only */}
           {passed && onClaimCertificate && (
             <Button onClick={onClaimCertificate} className="gap-2 font-semibold shadow-sm">
               <ShieldCheck className="h-4 w-4" />
@@ -233,8 +294,15 @@ export function ClinicalQuizRunner({
           Sebelumnya
         </Button>
 
-        <Button size="sm" disabled={!isCurrentAnswered} onClick={handleNext} className="gap-1.5 font-semibold">
-          <span>{currentIndex === totalCount - 1 ? "Selesaikan Evaluasi" : "Soal Berikutnya"}</span>
+        <Button
+          size="sm"
+          disabled={!isCurrentAnswered || submitting}
+          onClick={handleNext}
+          className="gap-1.5 font-semibold"
+        >
+          <span>
+            {submitting ? "Menilai..." : currentIndex === totalCount - 1 ? "Selesaikan Evaluasi" : "Soal Berikutnya"}
+          </span>
           <ArrowRight className="h-4 w-4" />
         </Button>
       </div>

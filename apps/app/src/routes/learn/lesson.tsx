@@ -146,6 +146,7 @@ export function LessonPage() {
         {deckCourse ? (
           <InteractiveSlideViewer
             course={deckCourse}
+            postTestQuizId={slideDeck.data?.postTestQuizId}
             onCompleteModule={() => {
               if (!isCompleted) {
                 completeAndAdvance.mutate()

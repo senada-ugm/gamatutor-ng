@@ -30,6 +30,9 @@ interface InteractiveSlideViewerProps {
   onSlideChange?: (index: number, page: SlidePage) => void
   onCompleteModule?: (moduleId: string) => void
   onClaimCertificate?: () => void
+  /** Server-side quiz backing the evaluasi section (PLANS 4.3) — attempts
+   *  are graded and recorded through the quiz engine. */
+  postTestQuizId?: string
   className?: string
 }
 
@@ -39,6 +42,7 @@ export function InteractiveSlideViewer({
   onSlideChange,
   onCompleteModule,
   onClaimCertificate,
+  postTestQuizId,
   className = "",
 }: InteractiveSlideViewerProps) {
   // Flatten all pages across all modules into a linear slide sequence
@@ -136,6 +140,7 @@ export function InteractiveSlideViewer({
         {page.type === "image-grading" && <ClinicalFundusGrading page={page} onNext={handleNext} />}
         {page.type === "quiz" && (
           <ClinicalQuizRunner
+            quizId={postTestQuizId}
             questions={
               (course.modules
                 .find((m) => m.id === "evaluasi")
