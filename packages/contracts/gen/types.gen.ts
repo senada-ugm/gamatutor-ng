@@ -30,6 +30,19 @@ export type AdminOverview = {
      */
     completionRate: number;
     growth30d: AdminGrowth30d;
+    /**
+     * Platform-wide study-time aggregates (Review note #15).
+     */
+    studyTime: AdminStudyTime;
+};
+
+export type AdminStudyTime = {
+    totalDwellSeconds: number;
+    dwell30dSeconds: number;
+    /**
+     * Distinct learners with at least one logged event in the last 30 days.
+     */
+    activeLearners30d: number;
 };
 
 export type Announcement = {

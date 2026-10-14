@@ -4233,6 +4233,7 @@ components:
         - graduatedParticipants
         - completionRate
         - growth30d
+        - studyTime
       properties:
         totalUsers:
           type: integer
@@ -4259,6 +4260,26 @@ components:
           description: graduated as a percent of selected+graduated, rounded.
         growth30d:
           $ref: '#/components/schemas/AdminGrowth30d'
+        studyTime:
+          $ref: '#/components/schemas/AdminStudyTime'
+          description: 'Platform-wide study-time aggregates (Review note #15).'
+    AdminStudyTime:
+      type: object
+      required:
+        - totalDwellSeconds
+        - dwell30dSeconds
+        - activeLearners30d
+      properties:
+        totalDwellSeconds:
+          type: integer
+          format: int32
+        dwell30dSeconds:
+          type: integer
+          format: int32
+        activeLearners30d:
+          type: integer
+          format: int32
+          description: Distinct learners with at least one logged event in the last 30 days.
     Announcement:
       type: object
       required:

@@ -7,6 +7,7 @@ import {
   courses,
   enrollments,
   institutions,
+  learningTelemetryLogs,
   lessonProgress,
 } from "../../../db/app-schema.js"
 import { users as userTable } from "../../../db/auth-schema.js"
@@ -95,7 +96,8 @@ export async function getCourseReport(courseId: string): Promise<CourseReport> {
 }
 
 /** Admin dashboard aggregates: platform totals, participant funnel
- *  split, and 30-day growth — plain COUNTs, one round trip each. */
+ *  split, 30-day growth, and platform-wide study time — plain COUNTs,
+ *  one round trip each. */
 export async function getAdminOverview(): Promise<{
   totalUsers: number
   totalInstitutions: number
@@ -105,9 +107,10 @@ export async function getAdminOverview(): Promise<{
   graduatedParticipants: number
   completionRate: number
   growth30d: { newUsers: number; newCourses: number; newEnrollments: number; newInstitutions: number }
+  studyTime: { totalDwellSeconds: number; dwell30dSeconds: number; activeLearners30d: number }
 }> {
   const cutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
-  const [userTableCounts, institutionCounts, courseCounts, enrollmentCounts, growth] = await Promise.all([
+  const [userTableCounts, institutionCounts, courseCounts, enrollmentCounts, studyTimeCounts] = await Promise.all([
     db
       .select({
         total: sql<number>`count(*)::int`,
@@ -134,7 +137,13 @@ export async function getAdminOverview(): Promise<{
         graduated: sql<number>`count(*) filter (where ${enrollments.status} = 'graduated')::int`,
       })
       .from(enrollments),
-    Promise.resolve(null),
+    db
+      .select({
+        totalDwell: sql<number>`coalesce(sum(${learningTelemetryLogs.durationSeconds}), 0)::int`,
+        dwell30d: sql<number>`coalesce(sum(${learningTelemetryLogs.durationSeconds}) filter (where ${learningTelemetryLogs.createdAt} >= ${cutoff}), 0)::int`,
+        learners30d: sql<number>`count(distinct ${learningTelemetryLogs.userId}) filter (where ${learningTelemetryLogs.createdAt} >= ${cutoff})::int`,
+      })
+      .from(learningTelemetryLogs),
   ])
 
   const active = enrollmentCounts[0]?.active ?? 0
@@ -153,6 +162,11 @@ export async function getAdminOverview(): Promise<{
       newCourses: courseCounts[0]?.recent ?? 0,
       newEnrollments: enrollmentCounts[0]?.recent ?? 0,
       newInstitutions: institutionCounts[0]?.recent ?? 0,
+    },
+    studyTime: {
+      totalDwellSeconds: studyTimeCounts[0]?.totalDwell ?? 0,
+      dwell30dSeconds: studyTimeCounts[0]?.dwell30d ?? 0,
+      activeLearners30d: studyTimeCounts[0]?.learners30d ?? 0,
     },
   }
 }

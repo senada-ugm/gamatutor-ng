@@ -53,6 +53,13 @@ namespace Lms {
     get(@path courseId: ResourceId): DataResponse<CourseReport> | ErrorResponse;
   }
 
+  model AdminStudyTime {
+    totalDwellSeconds: int32;
+    dwell30dSeconds: int32;
+    /** Distinct learners with at least one logged event in the last 30 days. */
+    activeLearners30d: int32;
+  }
+
   model AdminOverview {
     totalUsers: int32;
     totalInstitutions: int32;
@@ -64,6 +71,8 @@ namespace Lms {
     /** graduated as a percent of selected+graduated, rounded. */
     completionRate: int32;
     growth30d: AdminGrowth30d;
+    /** Platform-wide study-time aggregates (Review note #15). */
+    studyTime: AdminStudyTime;
   }
 
   model AdminGrowth30d {

@@ -3,13 +3,19 @@ import { useQuery } from "@tanstack/react-query"
 import { Button } from "@workspace/ui/components/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@workspace/ui/components/card"
 import { Skeleton } from "@workspace/ui/components/skeleton"
-import { Download } from "lucide-react"
+import { Clock, Download } from "lucide-react"
 
 import { EmptyState } from "@/components/composed/_shared/empty-state"
 import { ErrorState } from "@/components/composed/_shared/error-state"
 import { PageHeader } from "@/components/composed/_shared/page-header"
 import { apiGet } from "@/lib/api"
 import type { ContractAdminOverview, ContractHealthStatus } from "@workspace/contracts/domain"
+
+/** Hours with one decimal ("12,5 jam") — the admin study-time display form. */
+function formatStudyHours(seconds: number): string {
+  const hours = seconds / 3600
+  return `${hours.toLocaleString("id-ID", { maximumFractionDigits: 1 })} jam`
+}
 
 /** A top-level stat gets its own card; one nested inside a card is a
  *  plain figure, so a ring never sits inside a ring. */
@@ -108,6 +114,22 @@ export function AdminDashboardPage() {
                 <StatFigure label="Lulusan" value={o.graduatedParticipants} />
                 <StatFigure label="Tingkat Penyelesaian" value={`${o.completionRate}%`} />
                 <StatFigure label="Pengguna Baru (30 hari)" value={o.growth30d.newUsers} />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Clock className="size-4 text-[#137a77]" />
+                Waktu Belajar Platform
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <StatFigure label="Total Jam Belajar" value={formatStudyHours(o.studyTime.totalDwellSeconds)} />
+                <StatFigure label="Jam Belajar (30 hari)" value={formatStudyHours(o.studyTime.dwell30dSeconds)} />
+                <StatFigure label="Peserta Belajar (30 hari)" value={o.studyTime.activeLearners30d} />
               </div>
             </CardContent>
           </Card>
