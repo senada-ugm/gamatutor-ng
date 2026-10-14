@@ -1,0 +1,181 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  quality:
+    name: Lint, typecheck, unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm lint
+      - run: pnpm typecheck
+      # one pass from the repo root: the per-package scripts can't see
+      # files no workspace owns (tests/, scripts/, root configs)
+      - run: pnpm format:check
+      # every contracted op must be served; every extra route must be an
+      # documented intentional exclusion (see the script's header)
+      - run: pnpm --filter @workspace/contracts build
+      - run: node scripts/check-api-contract-parity.mjs
+      # unit tests import service modules that validate env at import time
+      - run: pnpm --filter api test
+        env:
+          DATABASE_URL: postgres://ci:ci@localhost:5432/ci
+          BETTER_AUTH_SECRET: ci-only-secret-never-used-in-production
+
+  api-journey:
+    name: API journey (all endpoints, all personas)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: lms
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/lms
+      BETTER_AUTH_SECRET: ci-only-secret-never-use-in-production
+      # The journey's many real sign-ins (personas + re-auth after
+      # suspension) trip the default limiter; CI has no abusive clients.
+      RATE_LIMIT_ENABLED: "false"
+      # Everything else defaults (see apps/api/src/env.ts): PORT 8000,
+      # CORS_ORIGIN http://localhost:3030 (matches the journey personas'
+      # Origin header / Better Auth trustedOrigins), rate limiting off.
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Apply migrations and seed accounts
+        run: |
+          pnpm --filter api db:migrate
+          pnpm --filter api db:seed
+
+      - name: Start API
+        run: |
+          pnpm --filter api exec tsx src/index.ts > api.log 2>&1 &
+          for i in $(seq 1 60); do
+            if curl -sf http://localhost:8000/health > /dev/null; then
+              echo "API is up"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "API did not become healthy within 60s"
+          cat api.log
+          exit 1
+
+      - name: Run API journey (personas x scenarios x contract coverage)
+        run: pnpm test:api
+
+      - name: Print API log on failure
+        if: failure()
+        run: tail -200 api.log
+
+  ui-suites:
+    name: UI suites (Playwright, all 3 apps live)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: lms
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/lms
+      BETTER_AUTH_SECRET: ci-only-secret-never-use-in-production
+      # Better Auth's internal limiter would throttle the suites' many
+      # real sign-ins; matches the api-journey job's posture.
+      RATE_LIMIT_ENABLED: "false"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browser
+        run: pnpm exec playwright install chromium --with-deps
+
+      - name: Apply migrations and seed accounts
+        run: |
+          pnpm --filter api db:migrate
+          pnpm --filter api db:seed
+
+      - name: Start the full stack (api :8000, app :3030, web :3020)
+        run: |
+          pnpm --filter api exec tsx src/index.ts > "$RUNNER_TEMP/api-dev.log" 2>&1 &
+          pnpm --filter app dev > "$RUNNER_TEMP/app-dev.log" 2>&1 &
+          pnpm --filter web dev > "$RUNNER_TEMP/web-dev.log" 2>&1 &
+          for i in $(seq 1 90); do
+            if curl -sf http://localhost:8000/health > /dev/null                && curl -sf -o /dev/null http://localhost:3030/login                && curl -sf -o /dev/null http://localhost:3020/; then
+              echo "stack is up"; exit 0
+            fi
+            sleep 2
+          done
+          echo "stack did not come up"; tail -50 "$RUNNER_TEMP"/*.log; exit 1
+
+      # The password-recovery suite reads the API's console-fallback
+      # email log to recover the reset link (no RESEND_API_KEY in CI).
+      - name: Run UI suites
+        env:
+          SMOKE_API_LOG: ${{ runner.temp }}/api-dev.log
+        run: |
+          set -e
+          for t in player player-tabs instructor teaching editor-tabs workspaces account password; do
+            echo "::group::smoke-app-$t"
+            node "tests/smoke-app-$t.mjs"
+            echo "::endgroup::"
+          done
+          echo "::group::smoke-web-marketing"
+          node tests/smoke-web-marketing.mjs
+          echo "::endgroup::"
+
+      - name: Print app logs on failure
+        if: failure()
+        run: tail -150 "$RUNNER_TEMP"/*.log

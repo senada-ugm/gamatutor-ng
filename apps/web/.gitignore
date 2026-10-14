@@ -1,5 +1,1 @@
-.next/
-.data/
-storage/
-next-env.d.ts
-*.tsbuildinfo
+.tanstack/

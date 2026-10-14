@@ -1,0 +1,59 @@
+{
+  "name": "api",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --out-dir dist --clean --target node20",
+    "start": "node dist/index.js",
+    "db:backup": "tsx scripts/backup-db.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:seed": "tsx src/db/seed.ts",
+    "db:studio": "drizzle-kit studio",
+    "dev": "tsx watch src/index.ts",
+    "format": "prettier --ignore-path ../../.prettierignore --write .",
+    "format:check": "prettier --ignore-path ../../.prettierignore --check .",
+    "lint": "eslint",
+    "test": "tsx --test \"src/test/**/*.test.ts\"",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1146.0",
+    "@aws-sdk/lib-storage": "^3.1146.0",
+    "@fastify/cors": "^11.3.0",
+    "@fastify/helmet": "^13.1.1",
+    "@fastify/multipart": "^10.1.1",
+    "@fastify/rate-limit": "^11.2.0",
+    "@prometheus-io/client": "^0.16.1",
+    "@scalar/fastify-api-reference": "^1.69.0",
+    "@workspace/contracts": "workspace:*",
+    "better-auth": "^1.7.5",
+    "dotenv": "^17.4.2",
+    "drizzle-orm": "^0.45.2",
+    "fastify": "^5.12.5",
+    "fastify-plugin": "^6.0.0",
+    "ioredis": "^6.0.0",
+    "nodemailer": "^10.0.15",
+    "pg": "^8.23.0",
+    "resend": "^6.28.1",
+    "yaml": "^2.9.1",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.3",
+    "@types/nodemailer": "^8.0.2",
+    "@types/pg": "^8.23.1",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "drizzle-kit": "^0.31.10",
+    "eslint": "^9.39.5",
+    "tsup": "^8.5.1",
+    "tsx": "^4.23.13",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

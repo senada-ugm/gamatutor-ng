@@ -1,3 +1,17 @@
 packages:
-  - 'packages/*'
-  - 'apps/*'
+  - "apps/*"
+  - "packages/*"
+
+allowBuilds:
+  esbuild: true
+  lightningcss: true
+  sharp: true
+  unrs-resolver: true
+  msw: false
+
+overrides:
+  # pnpm 10 reads overrides here, not package.json's "pnpm" field (which
+  # it now ignores with a warning). Kept from the original package.json
+  # block: one physical React + one physical Base UI across every app —
+  # duplicate copies are what broke legacy's dropdown event dispatch.
+  "@base-ui/react": "1.8.0"

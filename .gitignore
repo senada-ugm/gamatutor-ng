@@ -1,7 +1,57 @@
-drive_scorm.zip
-node_modules/
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+coverage
+
+# next.js
+.next/
 out/
-dist/
+
+# production
+build
+dist
+
+# turbo
+.turbo
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+!.env.example
+!.env*.example
+
+# vercel
+.vercel
+
+# typescript
 *.tsbuildinfo
-__pycache__/
-*.pyc
+next-env.d.ts
+
+# apps/api local file storage (uploads) — dev/test only, never committed
+apps/api/storage/
+
+# The repo root's .gitignore has a blanket `uploads/` rule (for the parent
+# solokerja app's own upload storage dir) that would otherwise also catch
+# this lms subtree's apps/api/src/modules/uploads/ source directory, since
+# gitignore patterns without a leading slash match at any depth.
+!apps/api/src/modules/uploads/
+# Abandoned frozen copy of the UI package — kept on disk as reference only.

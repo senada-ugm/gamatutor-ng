@@ -1,0 +1,41 @@
+services:
+  # High-performance, lightweight Rust-based S3-compatible object storage
+  rustfs:
+    image: rustfs/rustfs:latest
+    container_name: lms-rustfs
+    restart: unless-stopped
+    ports:
+      - "9000:9000" # S3 API
+      - "9001:9001" # Web Console
+    environment:
+      - RUSTFS_ACCESS_KEY=rustfsadmin
+      - RUSTFS_SECRET_KEY=rustfsadmin
+    volumes:
+      - rustfs_data:/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "exec 3<>/dev/tcp/127.0.0.1/9000 && echo -e 'GET /minio/health/live HTTP/1.1\\r\\nHost: localhost\\r\\n\\r\\n' >&3 || exit 1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for shared rate limiting and abuse defense across instances
+  redis:
+    image: redis:7-alpine
+    container_name: lms-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --maxmemory 128mb --maxmemory-policy allkeys-lru --save "" --appendonly no
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  rustfs_data:
+    name: lms_rustfs_data

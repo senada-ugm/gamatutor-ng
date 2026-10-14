@@ -1,0 +1,12 @@
+# TypeSpec project config. `pnpm --filter @workspace/contracts build` emits
+# OpenAPI 3.1 to tsp-output/ (committed — regenerate after any .tsp edit;
+# never hand-edit the output) then runs hey-api openapi-ts to regenerate
+# gen/*.gen.ts (types + Zod schemas + fetch SDK).
+output-dir: "{cwd}/tsp-output"
+emit:
+  - "@typespec/openapi3"
+options:
+  "@typespec/openapi3":
+    emitter-output-dir: "{output-dir}/openapi/3.1.0"
+    openapi-versions:
+      - "3.1.0"

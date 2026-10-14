@@ -1,1 +1,0 @@
-ALTER TABLE "users" ADD COLUMN "identity_verified_at" timestamp with time zone;
