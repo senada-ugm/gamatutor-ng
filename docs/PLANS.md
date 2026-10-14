@@ -178,7 +178,7 @@ The entire DRIVE-Learn curriculum consists of **6 Modules and 33 Interactive Sli
 - [x] 0.1 Replace auth page background with customer-provided artwork (`apps/app/public/images/eyeball-auth-bg.jpg`, referenced by `auth-page.tsx:47`) — 2026-10-15
 - [x] 0.2 Scope audit vs PKS Pasal 3 + review CSV: full endpoint/feature inventory, removal candidates, gap list (source of Phases 1–6) — 2026-10-15
 - [x] 0.3 Delete unused auth background alternates (`abstract-eye-auth-bg.jpg`, `indonesia-auth-bg.jpg`, `ophthalmologist-auth-bg.jpg`) — 2026-10-15
-- [ ] 0.4 Purge stale `references`-domain comments (`app-schema.ts` auditLog header, `audit.tsp` header) — the domain no longer exists anywhere
+- [x] 0.4 Purge stale `references`-domain comments (`app-schema.ts` auditLog header, `audit.tsp` header) — the domain no longer exists anywhere — 2026-10-15 (only the `app-schema.ts` block existed; `audit.tsp` had none)
 
 #### Phase 1 — Out-of-Scope Removals (safe, mechanical)
 Nothing in the PKS or the 15 review notes asks for commerce, classroom attendance, psychometric assessments, or a forum. Removal order per domain: frontend routes/components → contracts `.tsp` → regenerate (`pnpm --filter @workspace/contracts build`) → API module + Drizzle tables + migration → reports/seed/smoke-test references → parity script green → `pnpm validate`.

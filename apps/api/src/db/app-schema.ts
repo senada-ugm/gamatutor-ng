@@ -629,10 +629,6 @@ export const assignmentSubmissions = pgTable(
   ]
 )
 
-/** A single admin-managed lookup/master-data entry (e.g. one disability
- *  type, one institution type). Mirrors packages/contracts/spec/
- *  references.tsp's Reference. (category, code) is unique. */
-
 export const auditLog = pgTable(
   "audit_log",
   {
