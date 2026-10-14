@@ -80,8 +80,7 @@ export function CourseReportPanel({ courseId }: { courseId: string }) {
             </h2>
           </div>
           <p className="text-xs text-muted-foreground">
-            {r.registrantCount} pendaftar · {r.participantCount} peserta diterima · {r.totalLessons} materi pelajaran ·{" "}
-            {r.totalSessions} sesi presensi
+            {r.registrantCount} pendaftar · {r.participantCount} peserta diterima · {r.totalLessons} materi pelajaran
           </p>
         </div>
 
@@ -268,7 +267,6 @@ export function CourseReportPanel({ courseId }: { courseId: string }) {
                   <TableHead>Peserta & Kontak</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Progres Materi</TableHead>
-                  <TableHead>Presensi Sesi</TableHead>
                   <TableHead>Nilai Evaluasi</TableHead>
                 </TableRow>
               </TableHeader>
@@ -286,13 +284,6 @@ export function CourseReportPanel({ courseId }: { courseId: string }) {
                       <div className="flex items-center gap-2">
                         <span className="font-semibold">{participant.progressPercent}%</span>
                       </div>
-                    </TableCell>
-                    <TableCell>
-                      <span className="font-medium">{participant.attendance.attendancePercent}%</span>{" "}
-                      <span className="text-xs text-muted-foreground">
-                        ({participant.attendance.present}H / {participant.attendance.late}T /{" "}
-                        {participant.attendance.absent}A)
-                      </span>
                     </TableCell>
                     <TableCell>
                       {participant.finalGrade != null ? (

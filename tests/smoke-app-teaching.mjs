@@ -4,12 +4,10 @@
  *   pnpm --filter api dev          # CORS_ORIGIN=http://localhost:3030
  *   pnpm --filter app dev
  *   node tests/smoke-app-teaching.mjs
- * Signs in as the seeded admin and drives the editor's Kuis, Penilaian,
- * and Presensi tabs end to end: builds a quiz through the UI and takes
- * it in the player (server-graded pass), creates an assignment and
- * grades a submission through the UI, and activates an attendance
- * session through the UI then checks in from the player with the code
- * the UI displayed — proving the whole instructor/student loop.
+ * Signs in as the seeded admin and drives the editor's Kuis and Penilaian
+ * tabs end to end: builds a quiz through the UI and takes it in the
+ * player (server-graded pass), creates an assignment and grades a
+ * submission through the UI — proving the whole instructor/student loop.
  */
 import { chromium } from "playwright"
 
@@ -24,7 +22,6 @@ const CORRECT_OPTION = "Jakarta"
 const WRONG_OPTION = "Bandung"
 const ASSIGNMENT_TITLE = "Tugas Refleksi"
 const ASSIGNMENT_ANSWER = "Refleksi saya tentang materi ini."
-const SESSION_TITLE = "Pertemuan Sinkron"
 let failures = 0
 
 async function expect(name, fn) {
@@ -49,7 +46,7 @@ await expect("login reaches the dashboard", async () => {
 })
 
 // --- Seed: institution -> course -> self-enroll (then select, so the
-// attendance roster includes us) ---
+// participant lists include us) ---
 let institutionId = (await (await page.request.get(`${API}/v1/institutions?pageSize=1`)).json())?.data?.[0]?.id
 const courseRes = await page.request.post(`${API}/v1/courses`, {
   data: {
@@ -146,52 +143,6 @@ await page.getByRole("button", { name: "Simpan Nilai" }).click()
 await expect("grading saves the score and flips the badge to Dinilai", async () => {
   await page.getByText("Dinilai", { exact: true }).waitFor({ timeout: 8000 })
   await page.getByText("90/100").waitFor({ timeout: 8000 })
-})
-
-// ================= PRESENSI: create + activate + check-in loop =================
-await page.goto(`${BASE}/instructor/courses/${courseId}/editor/presensi`, { timeout: 30000 })
-await page.getByRole("button", { name: "Sesi Baru" }).click()
-await page.locator("#session-title").fill(SESSION_TITLE)
-const now = new Date()
-const pad = (n) => String(n).padStart(2, "0")
-await page
-  .locator("#session-date")
-  .fill(
-    `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`
-  )
-await page.getByRole("button", { name: "Buat Sesi", exact: true }).click()
-await expect("session creation persists as Menunggu", async () => {
-  await page.getByText(SESSION_TITLE).waitFor({ timeout: 8000 })
-  await page.getByText("Menunggu", { exact: true }).waitFor({ timeout: 8000 })
-})
-
-await page.getByRole("button", { name: "Kelola", exact: true }).click()
-await page.locator("#activate-method").selectOption("code")
-await page.getByRole("button", { name: "Aktifkan Sesi" }).click()
-await expect("activation displays the live check-in code", async () => {
-  await page.getByText("Kode check-in saat ini").waitFor({ timeout: 8000 })
-})
-const code = await page.locator("p.font-mono").first().textContent()
-if (!code || !/^\d{6}$/.test(code.trim())) throw new Error(`unexpected code rendered: ${code}`)
-
-// Roster shows us (selected enrollment) as not yet checked in
-await expect("roster lists the selected participant", async () => {
-  await page.getByText("Belum check-in").waitFor({ timeout: 8000 })
-})
-
-// --- Check in from the player with the code the UI displayed ---
-await page.goto(`${BASE}/learn/${courseId}/attendance`, { timeout: 30000 })
-await page.getByPlaceholder("Masukkan 6-digit kode").fill(code.trim())
-await page.getByRole("button", { name: "Check-In", exact: true }).click()
-await expect("player check-in with the instructor-displayed code succeeds", async () => {
-  await page.getByText(/Anda sudah tercatat hadir/i).waitFor({ timeout: 8000 })
-})
-
-// --- Roster reflects it ---
-await page.goto(`${BASE}/instructor/courses/${courseId}/editor/presensi`, { timeout: 30000 })
-await page.getByRole("button", { name: "Kelola", exact: true }).click()
-await expect("roster shows the check-in record", async () => {
-  await page.getByText("Hadir", { exact: true }).first().waitFor({ timeout: 8000 })
 })
 
 // ================= ESSAY GRADING QUEUE (Kuis tab) =================

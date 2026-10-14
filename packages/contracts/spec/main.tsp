@@ -7,7 +7,6 @@ import "./courses.tsp";
 import "./course-content.tsp";
 import "./course-instructors.tsp";
 import "./enrollments.tsp";
-import "./attendance.tsp";
 import "./quizzes.tsp";
 import "./assignments.tsp";
 import "./discussions.tsp";

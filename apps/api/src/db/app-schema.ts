@@ -348,67 +348,6 @@ export const participantProfiles = pgTable("participant_profiles", {
   certifications: jsonb("certifications").$type<Array<Record<string, unknown>>>().notNull().default([]),
 })
 
-/** An instructor-scheduled attendance session for a course. Supports two
- *  independent verification layers: a challenge (`verificationMethod`,
- *  either a rotating numeric code or a rotating QR token) and an optional
- *  geofence (lat/long/radius) that applies regardless of which challenge
- *  is used — see attendance.service.ts's checkIn(). */
-export const attendanceSessions = pgTable(
-  "attendance_sessions",
-  {
-    id: text("id").primaryKey(),
-    courseId: text("course_id")
-      .notNull()
-      .references(() => courses.id, { onDelete: "cascade" }),
-    title: text("title").notNull(),
-    sessionDate: timestamp("session_date").notNull(),
-    startTime: text("start_time"),
-    endTime: text("end_time"),
-    sessionStatus: text("session_status").notNull().default("pending"),
-    verificationMethod: text("verification_method").notNull().default("none"),
-    verificationCode: text("verification_code"),
-    codeGeneratedAt: timestamp("code_generated_at"),
-    codeExpirySeconds: integer("code_expiry_seconds"),
-    qrToken: text("qr_token"),
-    qrTokenExpiresAt: timestamp("qr_token_expires_at"),
-    latitude: real("latitude"),
-    longitude: real("longitude"),
-    radiusMeters: integer("radius_meters").notNull().default(100),
-    lateThresholdMinutes: integer("late_threshold_minutes").notNull().default(15),
-    notes: text("notes"),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-  },
-  (table) => [
-    index("attendance_sessions_course_idx").on(table.courseId),
-    check(
-      "attendance_sessions_status_check",
-      sql`${table.sessionStatus} in ('pending', 'active', 'completed', 'cancelled', 'holiday')`
-    ),
-    check("attendance_sessions_verification_check", sql`${table.verificationMethod} in ('none', 'code', 'qr')`),
-  ]
-)
-
-export const attendanceRecords = pgTable(
-  "attendance_records",
-  {
-    id: text("id").primaryKey(),
-    sessionId: text("session_id")
-      .notNull()
-      .references(() => attendanceSessions.id, { onDelete: "cascade" }),
-    userId: text("user_id").notNull(),
-    status: text("status").notNull(),
-    checkedInAt: timestamp("checked_in_at"),
-    checkedInMethod: text("checked_in_method"),
-    checkedInLatitude: real("checked_in_latitude"),
-    checkedInLongitude: real("checked_in_longitude"),
-    excuseReason: text("excuse_reason"),
-  },
-  (table) => [
-    uniqueIndex("attendance_records_session_user_idx").on(table.sessionId, table.userId),
-    check("attendance_records_status_check", sql`${table.status} in ('present', 'late', 'absent', 'excused')`),
-  ]
-)
-
 /** Per-course certificate template configuration. A dedicated table
  *  (rather than a JSONB column on `courses`) so signature edits don't
  *  touch the course row and the domain gets its own module, same shape as

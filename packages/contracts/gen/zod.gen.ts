@@ -49,77 +49,6 @@ export const zAssignmentSubmissionStatus = z.enum([
     'returned'
 ]);
 
-export const zAttendanceCheckIn = z.object({
-    code: z.string().optional(),
-    qrToken: z.string().optional(),
-    latitude: z.number().optional(),
-    longitude: z.number().optional()
-});
-
-export const zAttendanceRecordStatus = z.enum([
-    'present',
-    'late',
-    'absent',
-    'excused'
-]);
-
-export const zAttendanceRecordManualUpdate = z.object({
-    status: zAttendanceRecordStatus,
-    excuseReason: z.string().optional()
-});
-
-export const zAttendanceSessionCreate = z.object({
-    title: z.string(),
-    sessionDate: z.iso.datetime(),
-    startTime: z.string().optional(),
-    endTime: z.string().optional(),
-    lateThresholdMinutes: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional()
-});
-
-export const zAttendanceSessionStatus = z.enum([
-    'pending',
-    'active',
-    'completed',
-    'cancelled',
-    'holiday'
-]);
-
-export const zAttendanceSessionUpdate = z.object({
-    title: z.string().optional(),
-    sessionStatus: zAttendanceSessionStatus.optional(),
-    startTime: z.string().optional(),
-    endTime: z.string().optional(),
-    lateThresholdMinutes: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    notes: z.string().optional()
-});
-
-export const zAttendanceSummary = z.object({
-    present: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    late: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    absent: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    sessionsCount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    attendancePercent: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' })
-});
-
-export const zAttendanceVerificationMethod = z.enum([
-    'none',
-    'code',
-    'qr'
-]);
-
-/**
- * Activates a session: sets status to active and (re)generates
- * whichever challenge(s) the chosen method needs. Geofence is set here
- * too, independent of method - if latitude/longitude are omitted, any
- * previously-set geofence is cleared.
- */
-export const zAttendanceSessionActivate = z.object({
-    verificationMethod: zAttendanceVerificationMethod,
-    latitude: z.number().optional(),
-    longitude: z.number().optional(),
-    radiusMeters: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional()
-});
-
 export const zCertificateInstitution = z.object({
     name: z.string()
 });
@@ -312,39 +241,6 @@ export const zAssignmentUpdate = z.object({
     maxFileSize: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
     maxFiles: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
     isActive: z.boolean().optional()
-});
-
-export const zAttendanceRecord = z.object({
-    id: zCommonResourceId,
-    sessionId: zCommonResourceId,
-    userId: zCommonResourceId,
-    status: zAttendanceRecordStatus,
-    checkedInAt: z.iso.datetime().optional(),
-    checkedInMethod: z.enum([
-        'manual',
-        'code',
-        'qr'
-    ]).optional(),
-    excuseReason: z.string().optional()
-});
-
-export const zAttendanceSession = z.object({
-    id: zCommonResourceId,
-    courseId: zCommonResourceId,
-    title: z.string(),
-    sessionDate: z.iso.datetime(),
-    startTime: z.string().optional(),
-    endTime: z.string().optional(),
-    sessionStatus: zAttendanceSessionStatus,
-    verificationMethod: zAttendanceVerificationMethod,
-    codeExpirySeconds: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).readonly().optional(),
-    verificationCode: z.string().readonly().optional(),
-    qrToken: z.string().readonly().optional(),
-    latitude: z.number().optional(),
-    longitude: z.number().optional(),
-    radiusMeters: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    lateThresholdMinutes: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    notes: z.string().optional()
 });
 
 export const zAuditLogEntry = z.object({
@@ -579,21 +475,6 @@ export const zEducationEntry = z.object({
     schoolName: z.string(),
     startYear: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
     endYear: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional()
-});
-
-export const zEnrolledStudentUser = z.object({
-    id: zCommonResourceId,
-    name: z.string(),
-    email: z.string()
-});
-
-/**
- * One enrolled student + their record for a given session, if any -
- * the combined roster+record view AttendanceRecords needs.
- */
-export const zEnrolledStudentAttendance = z.object({
-    user: zEnrolledStudentUser,
-    record: zAttendanceRecord.optional()
 });
 
 export const zEnrollmentStatus = z.enum([
@@ -1147,7 +1028,6 @@ export const zCourseReportParticipant = z.object({
     enrollmentStatus: zEnrollmentStatus,
     progressPercent: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
     completedLessons: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    attendance: zAttendanceSummary,
     finalGrade: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
     certificateId: zCommonResourceId.optional()
 });
@@ -1158,7 +1038,6 @@ export const zCourseReport = z.object({
     registrantCount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
     participantCount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
     totalLessons: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    totalSessions: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
     participants: z.array(zCourseReportParticipant)
 });
 
@@ -1428,22 +1307,6 @@ export const zAssignmentSubmissionWritable = z.object({
     feedback: z.string().optional(),
     isLate: z.boolean(),
     user: zAssignmentSubmissionUser
-});
-
-export const zAttendanceSessionWritable = z.object({
-    id: zCommonResourceId,
-    courseId: zCommonResourceId,
-    title: z.string(),
-    sessionDate: z.iso.datetime(),
-    startTime: z.string().optional(),
-    endTime: z.string().optional(),
-    sessionStatus: zAttendanceSessionStatus,
-    verificationMethod: zAttendanceVerificationMethod,
-    latitude: z.number().optional(),
-    longitude: z.number().optional(),
-    radiusMeters: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    lateThresholdMinutes: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    notes: z.string().optional()
 });
 
 export const zAuditLogEntryWritable = z.object({
@@ -1913,106 +1776,6 @@ export const zAssignmentsApiUpdateResponse = z.object({
     warnings: z.array(zCommonWarning).optional()
 });
 
-export const zAttendanceSessionsApiGetPath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zAttendanceSessionsApiGetResponse = z.object({
-    data: zAttendanceSession,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zAttendanceSessionsApiUpdateBody = zAttendanceSessionUpdate;
-
-export const zAttendanceSessionsApiUpdatePath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zAttendanceSessionsApiUpdateResponse = z.object({
-    data: zAttendanceSession,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zAttendanceSessionsApiActivateBody = zAttendanceSessionActivate;
-
-export const zAttendanceSessionsApiActivatePath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zAttendanceSessionsApiActivateResponse = z.object({
-    data: zAttendanceSession,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zAttendanceSessionsApiCheckInBody = zAttendanceCheckIn;
-
-export const zAttendanceSessionsApiCheckInPath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zAttendanceSessionsApiCheckInResponse = z.object({
-    data: zAttendanceRecord,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zAttendanceSessionsApiMyRecordPath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zAttendanceSessionsApiMyRecordResponse = z.object({
-    data: zAttendanceRecord.nullable(),
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zAttendanceSessionsApiMarkRecordBody = zAttendanceRecordManualUpdate;
-
-export const zAttendanceSessionsApiMarkRecordPath = z.object({
-    id: zCommonResourceId,
-    userId: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zAttendanceSessionsApiMarkRecordResponse = z.object({
-    data: zAttendanceRecord,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zAttendanceSessionsApiRosterPath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zAttendanceSessionsApiRosterResponse = z.object({
-    data: z.array(zEnrolledStudentAttendance),
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
 export const zAuditLogApiListQuery = z.object({
     page: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(1),
     pageSize: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(50),
@@ -2234,40 +1997,6 @@ export const zCourseAssignmentsApiCreatePath = z.object({
  */
 export const zCourseAssignmentsApiCreateResponse = z.object({
     data: zAssignment,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zCourseAttendanceSessionsApiListPath = z.object({
-    courseId: zCommonResourceId
-});
-
-export const zCourseAttendanceSessionsApiListQuery = z.object({
-    page: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(1),
-    pageSize: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(50)
-});
-
-/**
- * Standard page-based paginated response envelope.
- */
-export const zCourseAttendanceSessionsApiListResponse = z.object({
-    data: z.array(zAttendanceSession),
-    pagination: zCommonPagePagination,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zCourseAttendanceSessionsApiCreateBody = zAttendanceSessionCreate;
-
-export const zCourseAttendanceSessionsApiCreatePath = z.object({
-    courseId: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zCourseAttendanceSessionsApiCreateResponse = z.object({
-    data: zAttendanceSession,
     meta: zCommonResponseMeta,
     warnings: z.array(zCommonWarning).optional()
 });

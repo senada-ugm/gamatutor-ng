@@ -102,19 +102,6 @@ export function PlayerShell({
               Tugas
             </Link>
             <Link
-              to="/learn/$courseId/attendance"
-              params={params}
-              {...tabNavItemProps(
-                !!matchRoute({
-                  to: "/learn/$courseId/attendance",
-                  params,
-                  fuzzy: true,
-                })
-              )}
-            >
-              Presensi
-            </Link>
-            <Link
               to="/learn/$courseId/discussions"
               params={params}
               {...tabNavItemProps(

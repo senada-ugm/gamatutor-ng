@@ -12,7 +12,6 @@ import { isMaintenanceMode } from "./lib/maintenance.js"
 import { handleError } from "./lib/errors.js"
 import { auditModule } from "./modules/audit/index.js"
 import { assignmentsModule } from "./modules/assignments/index.js"
-import { attendanceModule } from "./modules/attendance/index.js"
 import { certificatesModule } from "./modules/certificates/index.js"
 import { courseContentModule } from "./modules/course-content/index.js"
 import { courseInstructorsModule } from "./modules/course-instructors/index.js"
@@ -112,7 +111,6 @@ export async function buildApp() {
   await app.register(courseInstructorsModule, { prefix: "/v1" })
   await app.register(enrollmentsModule, { prefix: "/v1" })
   await app.register(assignmentsModule, { prefix: "/v1" })
-  await app.register(attendanceModule, { prefix: "/v1" })
   await app.register(certificatesModule, { prefix: "/v1" })
   await app.register(discussionsModule, { prefix: "/v1" })
   await app.register(quizzesModule, { prefix: "/v1" })

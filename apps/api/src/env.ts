@@ -38,16 +38,6 @@ const envSchema = z
     TRUST_PROXY: booleanFromEnvironment(false),
     LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace"]).default("info"),
 
-    // Attendance sessions store wall-clock "HH:MM" times in this timezone —
-    // present/late math must NOT depend on the server process's own TZ
-    // (containers default to UTC; the business runs in Indonesia).
-    BUSINESS_TIMEZONE: z.string().default("Asia/Jakarta"),
-
-    // How long a manually-typed attendance verification code stays valid
-    // after activation (the QR token is a fixed short 20s — scanning is
-    // instant). See attendance.service.ts's checkIn.
-    ATTENDANCE_CODE_EXPIRY_SECONDS: z.coerce.number().int().min(10).max(3600).default(300),
-
     // Shared rate-limit store for multi-instance deployments. Unset =
     // in-memory (per-instance budgets — fine for one node, wrong behind a
     // load balancer). See plugins/rate-limit.ts.

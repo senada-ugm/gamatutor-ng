@@ -46,7 +46,7 @@ async function getCourseInstitutionId(courseId: string): Promise<string> {
 }
 
 /** Broad "can manage this course" check: admin, institution owner, or an
- *  active course-instructor. Used by content/quiz/assignment/attendance/
+ *  active course-instructor. Used by content/quiz/assignment/
  *  certificate/discussion-moderation routes across every course-scoped
  *  module. */
 export async function assertCanManageCourse(user: ActingUser, courseId: string) {
@@ -73,9 +73,8 @@ export async function assertCanManageCourseInstructors(user: ActingUser, courseI
 
 /** The statuses that make an enrollment an active *participant* — the
  *  funnel's participant stage. A mere `registered` applicant has applied
- *  but hasn't been selected yet, so content/quiz/assignment/attendance
- *  access waits for selection (the attendance roster already reports
- *  only these statuses — see attendance.service.ts's getRoster). */
+ *  but hasn't been selected yet, so content/quiz/assignment access
+ *  waits for selection. */
 const PARTICIPANT_STATUSES = ["selected", "graduated"] as const
 
 /** Non-throwing variant of assertCanManageCourse for visibility decisions
@@ -104,11 +103,11 @@ export async function isActiveParticipant(userId: string, courseId: string): Pro
 
 /** Requires the caller to hold a non-canceled/failed enrollment in this
  *  course — the gate for every student-facing CoursePlayer mutation
- *  (lesson-progress, quiz attempts, assignment submission, attendance
- *  check-in). Admins and course managers bypass this (an instructor
+ *  (lesson-progress, quiz attempts, assignment submission). Admins and
+ *  course managers bypass this (an instructor
  *  previewing their own course isn't "enrolled"). Only a selected or
  *  graduated enrollment counts: a `registered` applicant hasn't entered
- *  the course yet (same participant set the attendance roster shows). */
+ *  the course yet. */
 export async function assertIsEnrolledParticipant(user: ActingUser, courseId: string) {
   if (user.role === "admin") return
   const institutionId = await getCourseInstitutionId(courseId)
@@ -132,7 +131,7 @@ export async function assertIsEnrolledParticipant(user: ActingUser, courseId: st
 }
 
 /** Read gate for a course-scoped list/detail a learner consumes inside
- *  CoursePlayer (quizzes, assignments, discussions, attendance sessions):
+ *  CoursePlayer (quizzes, assignments, discussions):
  *  course managers and active participants only — not "any signed-in
  *  account", which would leak draft-course material to outsiders. */
 export async function assertCanAccessCourse(user: ActingUser, courseId: string) {

@@ -188,12 +188,6 @@ const editorAssessmentsRoute = createRoute({
   component: lazyRouteComponent(() => import("@/routes/instructor/editor-assessments"), "EditorAssessmentsTab"),
 })
 
-const editorAttendanceRoute = createRoute({
-  getParentRoute: () => editorLayoutRoute,
-  path: "/presensi",
-  component: lazyRouteComponent(() => import("@/routes/instructor/editor-attendance"), "EditorAttendanceTab"),
-})
-
 const editorCertificatesRoute = createRoute({
   getParentRoute: () => editorLayoutRoute,
   path: "/sertifikat",
@@ -310,14 +304,6 @@ const institutionRequestsRoute = createRoute({
   component: lazyRouteComponent(() => import("@/routes/institution-requests"), "InstitutionRequestsPage"),
 })
 
-// Chrome-less like /learn/** — meant to be opened in its own tab/window
-// and projected for the room, not viewed inside the workspace shell.
-const attendanceDisplayRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/attendance-sessions/$sessionId/display",
-  component: lazyRouteComponent(() => import("@/routes/attendance-display"), "AttendanceDisplayPage"),
-})
-
 // Learn player — layout route with nested children
 const learnLayoutRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -361,12 +347,6 @@ const learnAssignmentDetailRoute = createRoute({
   component: lazyRouteComponent(() => import("@/routes/learn/assignments"), "AssignmentDetailPage"),
 })
 
-const learnAttendanceRoute = createRoute({
-  getParentRoute: () => learnLayoutRoute,
-  path: "/attendance",
-  component: lazyRouteComponent(() => import("@/routes/learn/attendance"), "AttendancePage"),
-})
-
 const learnDiscussionsRoute = createRoute({
   getParentRoute: () => learnLayoutRoute,
   path: "/discussions",
@@ -392,7 +372,6 @@ const routeTree = rootRoute.addChildren([
   forgotPasswordRoute,
   resetPasswordRoute,
   certificateVerifyRoute,
-  attendanceDisplayRoute,
   workspaceRoute.addChildren([
     learnerRoute.addChildren([
       dashboardRoute,
@@ -423,7 +402,6 @@ const routeTree = rootRoute.addChildren([
           editorParticipantsRoute,
           editorQuizzesRoute,
           editorAssessmentsRoute,
-          editorAttendanceRoute,
           editorCertificatesRoute,
           editorInstructorsRoute,
           editorAnnouncementsRoute,
@@ -439,7 +417,6 @@ const routeTree = rootRoute.addChildren([
     learnQuizDetailRoute,
     learnAssignmentsRoute,
     learnAssignmentDetailRoute,
-    learnAttendanceRoute,
     learnDiscussionsRoute,
     learnDiscussionThreadRoute,
     learnAnnouncementsRoute,

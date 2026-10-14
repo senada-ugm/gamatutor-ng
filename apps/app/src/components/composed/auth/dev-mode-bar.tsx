@@ -159,8 +159,8 @@ export function DevModeBar({ onSelectAccount, submitting }: DevModeBarProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>Reset and re-seed demo database?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will wipe all existing courses, student enrollments, attendance check-ins, and telemetry logs,
-              restoring the platform to the initial canonical UGM DRIVE demo state.
+              This will wipe all existing courses, student enrollments, and telemetry logs, restoring the platform to
+              the initial canonical UGM DRIVE demo state.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

@@ -48,7 +48,7 @@ export function pagedResponse<T>(
 
 /** Hex-encoded crypto-random bytes, not Math.random() — these ids back
  *  session rows (auth.ts's Better Auth generateId), certificate
- *  verification codes, and attendance tokens, where a predictable id is
+ *  verification codes, where a predictable id is
  *  a security hole. Hex keeps the id alphanumeric, which uploads' file
  *  route pattern (upl_[a-zA-Z0-9]+) requires. */
 export function generateId(prefix: string): string {

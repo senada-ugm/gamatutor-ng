@@ -2,15 +2,13 @@ import assert from "node:assert/strict"
 import { describe, it } from "node:test"
 
 import { isAnswerCorrect } from "../modules/quizzes/services/quizzes.service.js"
-import { computeStatus, distanceMeters } from "../modules/attendance/services/attendance.service.js"
 import { ALLOWED_TRANSITIONS } from "../modules/enrollments/services/enrollments.service.js"
 import { detectMimeType, looksLikeText } from "../modules/uploads/services/uploads.service.js"
 
 /**
  * Unit tests for the pure business logic — the decisions too small to
  * see in an E2E journey but wrong in expensive ways when they drift:
- * grading, geofencing, late thresholds, status
- * transitions, and content sniffing. These import the SERVICE modules
+ * grading, status transitions, and content sniffing. These import the SERVICE modules
  * (dotenv-backed env loads at import), but only exercise functions with
  * no I/O — the DB is never touched.
  */
@@ -86,62 +84,6 @@ describe("quiz grading — isAnswerCorrect", () => {
   it("essay never auto-grades", () => {
     const question = q({ questionType: "essay" })
     assert.equal(isAnswerCorrect(question, ["anything at all"]), false)
-  })
-})
-
-// ---------------------------------------------------------------------------
-// Attendance geofence + late threshold
-// ---------------------------------------------------------------------------
-describe("attendance geofence — distanceMeters", () => {
-  it("same point is zero", () => {
-    assert.equal(distanceMeters(-6.2, 106.816, -6.2, 106.816), 0)
-  })
-
-  it("known city-scale distance matches the great-circle value", () => {
-    // Jakarta Monas -> Bandung Alun-Alun: ~119.6km great-circle
-    const d = distanceMeters(-6.1754, 106.8272, -6.9218, 107.607)
-    assert.ok(Math.abs(d - 119_600) < 1_000, `expected ~119.6km, got ${d}m`)
-  })
-
-  it("one arcsecond of latitude is ~31 meters", () => {
-    const d = distanceMeters(0, 0, 1 / 3600, 0)
-    assert.ok(Math.abs(d - 30.9) < 0.5, `expected ~30.9m, got ${d}m`)
-  })
-})
-
-type SessionLike = Parameters<typeof computeStatus>[0]
-function session(partial: Partial<SessionLike>): SessionLike {
-  return {
-    id: "att_test",
-    courseId: "crs_test",
-    title: "s",
-    sessionDate: new Date(),
-    sessionStatus: "active",
-    verificationMethod: "code",
-    lateThresholdMinutes: 15,
-    ...partial,
-  } as SessionLike
-}
-
-describe("attendance — computeStatus (present vs late)", () => {
-  it("no configured start time means any check-in is present", () => {
-    assert.equal(computeStatus(session({ startTime: null }), new Date("2026-01-01T23:59:00")), "present")
-  })
-
-  // wallClockMinutes reads the BUSINESS_TIMEZONE (Asia/Jakarta, UTC+7,
-  // no DST) — build instants with that explicit offset so the test is
-  // independent of the runner's local timezone.
-  const atJakarta = (h: number, m: number) =>
-    new Date(`2026-01-01T${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:00+07:00`)
-
-  it("check-in before start + threshold is present", () => {
-    assert.equal(computeStatus(session({ startTime: "09:00", lateThresholdMinutes: 15 }), atJakarta(9, 10)), "present")
-  })
-
-  it("check-in past start + threshold is late (server clock, not client)", () => {
-    assert.equal(computeStatus(session({ startTime: "09:00", lateThresholdMinutes: 15 }), atJakarta(9, 16)), "late")
-    // exactly at the boundary is still present (strictly-greater rule)
-    assert.equal(computeStatus(session({ startTime: "09:00", lateThresholdMinutes: 15 }), atJakarta(9, 15)), "present")
   })
 })
 

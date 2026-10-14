@@ -22,16 +22,6 @@ import type {
   AssignmentSubmissionStatus,
   AssignmentSubmissionUser,
   AssignmentUpdate,
-  AttendanceCheckIn,
-  AttendanceRecord,
-  AttendanceRecordManualUpdate,
-  AttendanceRecordStatus,
-  AttendanceSession,
-  AttendanceSessionActivate,
-  AttendanceSessionCreate,
-  AttendanceSessionStatus,
-  AttendanceSessionUpdate,
-  AttendanceVerificationMethod,
   Certificate,
   CertificateCourse,
   CertificateInstitution,
@@ -45,7 +35,6 @@ import type {
   Announcement,
   AnnouncementCreate,
   AnnouncementPriority,
-  AttendanceSummary,
   CommonErrorDetail,
   CommonErrorObject,
   CommonErrorResponse,
@@ -75,8 +64,6 @@ import type {
   DiscussionReplyCreate,
   DiscussionUser,
   EducationEntry,
-  EnrolledStudentAttendance,
-  EnrolledStudentUser,
   Enrollment,
   EnrollmentStatus,
   EnrollmentType,
@@ -195,21 +182,6 @@ export type ContractExperienceEntry = ExperienceEntry
 export type ContractCertificationEntry = CertificationEntry
 export type ContractParticipantProfile = ParticipantProfile
 
-// --- Attendance domain (spec/attendance.tsp) ------------------------------
-
-export type ContractAttendanceSessionStatus = AttendanceSessionStatus
-export type ContractAttendanceVerificationMethod = AttendanceVerificationMethod
-export type ContractAttendanceRecordStatus = AttendanceRecordStatus
-export type ContractAttendanceSession = AttendanceSession
-export type ContractAttendanceSessionCreate = AttendanceSessionCreate
-export type ContractAttendanceSessionUpdate = AttendanceSessionUpdate
-export type ContractAttendanceSessionActivate = AttendanceSessionActivate
-export type ContractAttendanceRecord = AttendanceRecord
-export type ContractAttendanceCheckIn = AttendanceCheckIn
-export type ContractAttendanceRecordManualUpdate = AttendanceRecordManualUpdate
-export type ContractEnrolledStudentUser = EnrolledStudentUser
-export type ContractEnrolledStudentAttendance = EnrolledStudentAttendance
-
 // --- Certificate-settings domain (spec/certificate-settings.tsp) ---------
 
 export type ContractCertificateSignaturePlacement = CertificateSignaturePlacement
@@ -308,7 +280,6 @@ export { EnrollmentStatus, EnrollmentType, FailureReasonCode, ParticipantGender 
 export type {
   Notification,
   NotificationType,
-  AttendanceSummary,
   CourseReport,
   CourseReportParticipant,
   InstitutionReport,
@@ -322,7 +293,6 @@ export type {
 
 export type ContractNotification = Notification
 export type ContractNotificationType = NotificationType
-export type ContractAttendanceSummary = AttendanceSummary
 export type ContractCourseReport = CourseReport
 export type ContractCourseReportParticipant = CourseReportParticipant
 
@@ -341,7 +311,6 @@ export type ContractPlatformSettings = PlatformSettings
 export type ContractPlatformSettingsUpdate = PlatformSettingsUpdate
 export type ContractTelemetryEvent = TelemetryEvent
 export type ContractTelemetryEventCreate = TelemetryEventCreate
-export { AttendanceSessionStatus, AttendanceVerificationMethod, AttendanceRecordStatus } from "../gen/types.gen.js"
 export { CertificateSignaturePlacement } from "../gen/types.gen.js"
 export { QuizQuestionType, QuizAttemptStatus } from "../gen/types.gen.js"
 export { AssignmentSubmissionStatus } from "../gen/types.gen.js"

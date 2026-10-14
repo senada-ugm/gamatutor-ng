@@ -4,11 +4,10 @@
  *   pnpm --filter api dev          # CORS_ORIGIN=http://localhost:3030
  *   pnpm --filter app dev
  *   node tests/smoke-app-player-tabs.mjs
- * Signs in as the seeded admin, seeds a course + assignment + attendance
- * session via the real API, then drives everything through the SPA:
- * assignment submit (text + a real file upload) and grade-view with the
- * graded-resubmission block; attendance session activation + code
- * check-in persisting; discussion create -> reply -> resolve moderation.
+ * Signs in as the seeded admin, seeds a course + assignment via the
+ * real API, then drives everything through the SPA: assignment submit
+ * (text + a real file upload) and grade-view with the graded-
+ * resubmission block; discussion create -> reply -> resolve moderation.
  */
 import { chromium } from "playwright"
 
@@ -20,7 +19,6 @@ const TITLE = `Smoke App Tabs ${Date.now()}`
 const ASSIGNMENT_TITLE = "Tugas Esai Pembuka"
 const ASSIGNMENT_ANSWER = "Ini jawaban saya untuk tugas ini."
 const ATTACHMENT_NAME = "smoke-answer.pdf"
-const SESSION_TITLE = `Sesi Sinkron ${Date.now()}`
 const DISCUSSION_TITLE = "Diskusi Perkenalan"
 const DISCUSSION_CONTENT = "Halo, mari berkenalan!"
 const REPLY_TEXT = "Halo! Salam kenal juga."
@@ -89,12 +87,6 @@ if (!assignmentRes.ok())
   throw new Error(`assignment create failed: ${assignmentRes.status()} ${await assignmentRes.text()}`)
 const assignmentId = (await assignmentRes.json())?.data?.id
 
-const sessionRes = await page.request.post(`${API}/v1/courses/${courseId}/attendance-sessions`, {
-  data: { title: SESSION_TITLE, sessionDate: new Date().toISOString() },
-})
-if (!sessionRes.ok()) throw new Error(`attendance session create failed: ${sessionRes.status()}`)
-const sessionId = (await sessionRes.json())?.data?.id
-
 // ================= ASSIGNMENTS =================
 await page.goto(`${BASE}/learn/${courseId}/assignments`, { timeout: 30000 })
 await expect("assignment list shows the seeded assignment", async () => {
@@ -147,29 +139,6 @@ await expect("graded submission shows score + feedback and blocks resubmission",
   await page.getByText("Nilai: 85").first().waitFor({ timeout: 8000 })
   await page.getByText("Jawaban bagus, lanjutkan.").waitFor({ timeout: 8000 })
   await page.getByText(/sudah dinilai/i).waitFor({ timeout: 8000 })
-})
-
-// ================= ATTENDANCE =================
-const activateRes = await page.request.post(`${API}/v1/attendance-sessions/${sessionId}/activate`, {
-  data: { verificationMethod: "code" },
-})
-if (!activateRes.ok()) throw new Error(`activate failed: ${activateRes.status()} ${await activateRes.text()}`)
-const sessionGet = await page.request.get(`${API}/v1/attendance-sessions/${sessionId}`)
-const verificationCode = (await sessionGet.json())?.data?.verificationCode
-if (!verificationCode) throw new Error("verificationCode not visible to admin after activate")
-
-await page.goto(`${BASE}/learn/${courseId}/attendance`, { timeout: 30000 })
-await expect("attendance page shows today's active session", async () => {
-  await page.getByText(SESSION_TITLE).first().waitFor({ timeout: 8000 })
-  await page.getByText("Sesi aktif").waitFor({ timeout: 8000 })
-})
-
-await page.getByPlaceholder("Masukkan 6-digit kode").fill(verificationCode)
-await page.getByRole("button", { name: "Check-In", exact: true }).click()
-await expect("code check-in succeeds and persists across reload", async () => {
-  await page.getByText(/Anda sudah tercatat hadir/i).waitFor({ timeout: 8000 })
-  await page.reload()
-  await page.getByText(/Anda sudah tercatat hadir/i).waitFor({ timeout: 8000 })
 })
 
 // ================= DISCUSSIONS =================

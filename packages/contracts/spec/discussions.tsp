@@ -10,8 +10,7 @@ using Lms.Common;
 /**
  * Discussion domain: a course (optionally lesson-scoped) Q&A thread with
  * nested replies. replyCount/lastReplyAt are computed on read, not
- * stored - same "denormalize at read time" approach as
- * EnrolledStudentAttendance. A deleted reply is soft-deleted (content
+ * stored. A deleted reply is soft-deleted (content
  * replaced, isDeleted flagged) so its position in the reply tree survives
  * for any replies nested under it.
  */

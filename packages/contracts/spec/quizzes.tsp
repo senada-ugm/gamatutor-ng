@@ -11,9 +11,8 @@ using Lms.Common;
  * Quiz domain: instructor-authored quizzes with auto-gradable question
  * types (single/multiple choice, true/false, short answer, Likert) plus
  * essay questions that need manual grading. `QuizQuestion.correctAnswers`
- * uses the same "populated only for callers who manage the course"
- * technique as AttendanceSession's verificationCode/qrToken (see
- * attendance.tsp) - one model, not a separate authoring type, so a
+ * is populated only for callers who manage the course - one model, not
+ * a separate authoring type, so a
  * student attempting the quiz never receives answers over the wire
  * regardless of what the UI does with them.
  *

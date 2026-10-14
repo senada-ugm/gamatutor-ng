@@ -1,9 +1,7 @@
-import type { AttendanceSummary, CourseReport, CourseReportParticipant, InstitutionReport } from "@workspace/contracts"
+import type { CourseReport, CourseReportParticipant, InstitutionReport } from "@workspace/contracts"
 import { and, desc, eq, inArray, sql } from "drizzle-orm"
 import { db } from "../../../db/index.js"
 import {
-  attendanceRecords,
-  attendanceSessions,
   courseLessons,
   courseModules,
   courses,
@@ -24,13 +22,10 @@ export async function getCourseReport(courseId: string): Promise<CourseReport> {
   if (!course) throw new NotFoundError("Course", courseId)
 
   // Denominators.
-  const [moduleRows, sessionCountRow] = await Promise.all([
-    db.select({ id: courseModules.id }).from(courseModules).where(eq(courseModules.courseId, courseId)),
-    db
-      .select({ count: sql<number>`count(*)::int` })
-      .from(attendanceSessions)
-      .where(eq(attendanceSessions.courseId, courseId)),
-  ])
+  const moduleRows = await db
+    .select({ id: courseModules.id })
+    .from(courseModules)
+    .where(eq(courseModules.courseId, courseId))
   const moduleIds = moduleRows.map((m) => m.id)
   const [lessonCountRow] = moduleIds.length
     ? await db
@@ -39,7 +34,6 @@ export async function getCourseReport(courseId: string): Promise<CourseReport> {
         .where(inArray(courseLessons.moduleId, moduleIds))
     : [{ count: 0 }]
   const totalLessons = lessonCountRow?.count ?? 0
-  const totalSessions = sessionCountRow[0]?.count ?? 0
 
   // Participants (selected/graduated — the funnel's participant set).
   const enrollmentRows = await db
@@ -60,60 +54,31 @@ export async function getCourseReport(courseId: string): Promise<CourseReport> {
       registrantCount: registrantCountRow?.count ?? 0,
       participantCount: 0,
       totalLessons,
-      totalSessions,
       participants: [],
     }
   }
 
   const userIds = enrollmentRows.map((e) => e.userId)
-  const [accounts, progressRows, attendanceRows] = await Promise.all([
+  const [accounts, progressRows] = await Promise.all([
     db.select().from(userTable).where(inArray(userTable.id, userIds)),
     db
       .select({ userId: lessonProgress.userId, count: sql<number>`count(*)::int` })
       .from(lessonProgress)
       .where(and(inArray(lessonProgress.userId, userIds), eq(lessonProgress.courseId, courseId)))
       .groupBy(lessonProgress.userId),
-    totalSessions > 0
-      ? db
-          .select({
-            userId: attendanceRecords.userId,
-            status: attendanceRecords.status,
-            count: sql<number>`count(*)::int`,
-          })
-          .from(attendanceRecords)
-          .innerJoin(attendanceSessions, eq(attendanceSessions.id, attendanceRecords.sessionId))
-          .where(and(eq(attendanceSessions.courseId, courseId), inArray(attendanceRecords.userId, userIds)))
-          .groupBy(attendanceRecords.userId, attendanceRecords.status)
-      : Promise.resolve([] as { userId: string; status: string; count: number }[]),
   ])
 
   const accountById = new Map(accounts.map((a) => [a.id, a]))
   const completedByUser = new Map(progressRows.map((p) => [p.userId, p.count]))
-  const attendanceByUser = new Map<string, { present: number; late: number; absent: number }>()
-  for (const row of attendanceRows) {
-    const bucket = attendanceByUser.get(row.userId) ?? { present: 0, late: 0, absent: 0 }
-    if (row.status === "present") bucket.present += row.count
-    else if (row.status === "late") bucket.late += row.count
-    else if (row.status === "absent") bucket.absent += row.count
-    attendanceByUser.set(row.userId, bucket)
-  }
 
   const participants: CourseReportParticipant[] = enrollmentRows.map((e) => {
     const account = accountById.get(e.userId)
     const completedLessons = completedByUser.get(e.userId) ?? 0
-    const bucket = attendanceByUser.get(e.userId) ?? { present: 0, late: 0, absent: 0 }
-    const attended = bucket.present + bucket.late
-    const summary: AttendanceSummary = {
-      ...bucket,
-      sessionsCount: totalSessions,
-      attendancePercent: totalSessions > 0 ? Math.round((attended / totalSessions) * 100) : 0,
-    }
     return {
       user: { id: e.userId, name: account?.name ?? e.userId, email: account?.email ?? "" },
       enrollmentStatus: e.status as CourseReportParticipant["enrollmentStatus"],
       progressPercent: totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0,
       completedLessons,
-      attendance: summary,
       finalGrade: e.finalGrade ?? undefined,
       certificateId: e.certificateId ?? undefined,
     }
@@ -125,7 +90,6 @@ export async function getCourseReport(courseId: string): Promise<CourseReport> {
     registrantCount: registrantCountRow?.count ?? 0,
     participantCount: participants.length,
     totalLessons,
-    totalSessions,
     participants,
   }
 }
@@ -275,19 +239,7 @@ export async function getCourseReportCsv(courseId: string): Promise<{ filename: 
     const s = value == null ? "" : String(value)
     return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s
   }
-  const header = [
-    "Nama",
-    "Email",
-    "Status",
-    "Progress (%)",
-    "Lessons Selesai",
-    "Hadir",
-    "Terlambat",
-    "Absen",
-    "Kehadiran (%)",
-    "Nilai Akhir",
-    "Sertifikat",
-  ]
+  const header = ["Nama", "Email", "Status", "Progress (%)", "Lessons Selesai", "Nilai Akhir", "Sertifikat"]
   const lines = [header.join(",")]
   for (const p of report.participants) {
     lines.push(
@@ -297,10 +249,6 @@ export async function getCourseReportCsv(courseId: string): Promise<{ filename: 
         p.enrollmentStatus,
         p.progressPercent,
         p.completedLessons,
-        p.attendance.present,
-        p.attendance.late,
-        p.attendance.absent,
-        p.attendance.attendancePercent,
         p.finalGrade ?? "",
         p.certificateId ?? "",
       ].join(",")

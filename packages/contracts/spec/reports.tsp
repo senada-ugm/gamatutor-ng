@@ -9,10 +9,9 @@ using Lms.Common;
 
 /**
  * Read-only aggregates for the manager dashboards: one call per course
- * with every participant's funnel/progress/attendance row (the data the
- * ParticipantsPanel and attendance records view currently assemble
- * client-side), plus platform/institution totals for the admin and owner
- * dashboards.
+ * with every participant's funnel/progress row (the data the
+ * ParticipantsPanel currently assembles client-side), plus
+ * platform/institution totals for the admin and owner dashboards.
  *
  * The CSV export of a course's participant table lives OUTSIDE this
  * contract (GET /v1/courses/{id}/participants/export, text/csv) — same
@@ -26,22 +25,11 @@ namespace Lms {
     email: string;
   }
 
-  model AttendanceSummary {
-    present: int32;
-    late: int32;
-    absent: int32;
-    /** Sessions that existed when the report ran (denominator). */
-    sessionsCount: int32;
-    /** present + late as a percent of sessionsCount, rounded; 0 when no sessions. */
-    attendancePercent: int32;
-  }
-
   model CourseReportParticipant {
     user: ReportUser;
     enrollmentStatus: EnrollmentStatus;
     progressPercent: int32;
     completedLessons: int32;
-    attendance: AttendanceSummary;
     finalGrade?: int32;
     certificateId?: ResourceId;
   }
@@ -52,7 +40,6 @@ namespace Lms {
     registrantCount: int32;
     participantCount: int32;
     totalLessons: int32;
-    totalSessions: int32;
     participants: CourseReportParticipant[];
   }
 
