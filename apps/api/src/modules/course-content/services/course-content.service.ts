@@ -6,10 +6,12 @@ import type {
   Module,
   ModuleCreate,
   ModuleUpdate,
+  SlideDeck,
+  SlideDeckUpsert,
 } from "@workspace/contracts"
 import { and, asc, eq, inArray } from "drizzle-orm"
 import { db } from "../../../db/index.js"
-import { courseLessons, courseModules, lessonProgress } from "../../../db/app-schema.js"
+import { courseLessons, courseModules, lessonProgress, slideDecks } from "../../../db/app-schema.js"
 import { NotFoundError } from "../../../lib/errors.js"
 import { generateId } from "../../../lib/response.js"
 import { claimUpload, extractUploadIdFromUrl, releaseUpload } from "../../uploads/services/uploads.service.js"
@@ -213,6 +215,48 @@ export async function deleteLesson(lessonId: string): Promise<void> {
   const uploadId = extractUploadIdFromUrl(lesson.url)
   await db.delete(courseLessons).where(eq(courseLessons.id, lessonId))
   if (uploadId) await releaseUpload(uploadId)
+}
+
+function toSlideDeck(row: typeof slideDecks.$inferSelect): SlideDeck {
+  return {
+    courseId: row.courseId,
+    schemaVersion: row.schemaVersion,
+    manifest: (row.manifest ?? {}) as SlideDeck["manifest"],
+    postTestQuizId: row.postTestQuizId ?? undefined,
+    updatedAt: row.updatedAt.toISOString(),
+  }
+}
+
+/** The course's interactive slide deck. Throws NotFoundError when the
+ *  course teaches through plain lessons instead — the player treats
+ *  that as "render the generic lesson content". */
+export async function getSlideDeck(courseId: string): Promise<SlideDeck> {
+  const [row] = await db.select().from(slideDecks).where(eq(slideDecks.courseId, courseId)).limit(1)
+  if (!row) throw new NotFoundError("SlideDeck", courseId)
+  return toSlideDeck(row)
+}
+
+/** Attaches or replaces the deck. The manifest is authored content —
+ *  the server stores it verbatim and never interprets page structure. */
+export async function upsertSlideDeck(courseId: string, input: SlideDeckUpsert): Promise<SlideDeck> {
+  const [row] = await db
+    .insert(slideDecks)
+    .values({
+      id: generateId("dck"),
+      courseId,
+      schemaVersion: input.schemaVersion,
+      manifest: input.manifest as Record<string, unknown>,
+    })
+    .onConflictDoUpdate({
+      target: slideDecks.courseId,
+      set: {
+        schemaVersion: input.schemaVersion,
+        manifest: input.manifest as Record<string, unknown>,
+        updatedAt: new Date(),
+      },
+    })
+    .returning()
+  return toSlideDeck(row!)
 }
 
 function toLessonProgress(row: typeof lessonProgress.$inferSelect): LessonProgress {

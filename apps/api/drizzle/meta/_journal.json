@@ -71,6 +71,13 @@
       "when": 1792000036030,
       "tag": "0009_flat_pride",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1792004181522,
+      "tag": "0010_zippy_tarantula",
+      "breakpoints": true
     }
   ]
 }

@@ -1408,6 +1408,33 @@ export type RequesterInfo = {
     email: string;
 };
 
+/**
+ * An interactive slide deck attached to a course (the DRIVE-style
+ * narrated player). The manifest is deliberately opaque to the
+ * contract: its shape (modules/pages/audio cues/hotspots) is owned by
+ * apps/app's `lib/content/course-types.ts` and evolves with the
+ * player, not with the API — the server stores and serves it, plus a
+ * schemaVersion so consumers can refuse manifests they can't render.
+ * `postTestQuizId` links the deck's evaluation section to a real quiz
+ * so attempts are graded and recorded server-side.
+ */
+export type SlideDeck = {
+    courseId: CommonResourceId;
+    schemaVersion: number;
+    manifest: {
+        [key: string]: unknown;
+    };
+    readonly postTestQuizId?: CommonResourceId;
+    readonly updatedAt: string;
+};
+
+export type SlideDeckUpsert = {
+    schemaVersion: number;
+    manifest: {
+        [key: string]: unknown;
+    };
+};
+
 export type TelemetryDailyPoint = {
     /**
      * WIB calendar date, `yyyy-MM-dd`.
@@ -1825,6 +1852,24 @@ export type RegisteredInstitutionWritable = {
      * returns it verbatim; the schema of the contents is the caller's.
      */
     metadata?: {
+        [key: string]: unknown;
+    };
+};
+
+/**
+ * An interactive slide deck attached to a course (the DRIVE-style
+ * narrated player). The manifest is deliberately opaque to the
+ * contract: its shape (modules/pages/audio cues/hotspots) is owned by
+ * apps/app's `lib/content/course-types.ts` and evolves with the
+ * player, not with the API — the server stores and serves it, plus a
+ * schemaVersion so consumers can refuse manifests they can't render.
+ * `postTestQuizId` links the deck's evaluation section to a real quiz
+ * so attempts are graded and recorded server-side.
+ */
+export type SlideDeckWritable = {
+    courseId: CommonResourceId;
+    schemaVersion: number;
+    manifest: {
         [key: string]: unknown;
     };
 };
@@ -3364,6 +3409,86 @@ export type CourseReportsApiGetResponses = {
 };
 
 export type CourseReportsApiGetResponse = CourseReportsApiGetResponses[keyof CourseReportsApiGetResponses];
+
+export type CourseSlideDecksApiGetData = {
+    body?: never;
+    path: {
+        courseId: CommonResourceId;
+    };
+    query?: never;
+    url: '/courses/{courseId}/slide-deck';
+};
+
+export type CourseSlideDecksApiGetErrors = {
+    /**
+     * An unexpected error response.
+     */
+    default: CommonErrorResponse;
+};
+
+export type CourseSlideDecksApiGetError = CourseSlideDecksApiGetErrors[keyof CourseSlideDecksApiGetErrors];
+
+export type CourseSlideDecksApiGetResponses = {
+    /**
+     * Standard single resource response envelope.
+     */
+    200: {
+        /**
+         * The raw payload representation.
+         */
+        data: SlideDeck;
+        /**
+         * Trace metadata.
+         */
+        meta: CommonResponseMeta;
+        /**
+         * Minor warning list.
+         */
+        warnings?: Array<CommonWarning>;
+    };
+};
+
+export type CourseSlideDecksApiGetResponse = CourseSlideDecksApiGetResponses[keyof CourseSlideDecksApiGetResponses];
+
+export type CourseSlideDecksApiUpsertData = {
+    body: SlideDeckUpsert;
+    path: {
+        courseId: CommonResourceId;
+    };
+    query?: never;
+    url: '/courses/{courseId}/slide-deck';
+};
+
+export type CourseSlideDecksApiUpsertErrors = {
+    /**
+     * An unexpected error response.
+     */
+    default: CommonErrorResponse;
+};
+
+export type CourseSlideDecksApiUpsertError = CourseSlideDecksApiUpsertErrors[keyof CourseSlideDecksApiUpsertErrors];
+
+export type CourseSlideDecksApiUpsertResponses = {
+    /**
+     * Standard single resource response envelope.
+     */
+    200: {
+        /**
+         * The raw payload representation.
+         */
+        data: SlideDeck;
+        /**
+         * Trace metadata.
+         */
+        meta: CommonResponseMeta;
+        /**
+         * Minor warning list.
+         */
+        warnings?: Array<CommonWarning>;
+    };
+};
+
+export type CourseSlideDecksApiUpsertResponse = CourseSlideDecksApiUpsertResponses[keyof CourseSlideDecksApiUpsertResponses];
 
 export type CourseTelemetryApiGetData = {
     body?: never;

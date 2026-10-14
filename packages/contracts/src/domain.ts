@@ -74,6 +74,8 @@ import type {
   InstitutionRequestStatus,
   Lesson,
   LessonContentType,
+  SlideDeck,
+  SlideDeckUpsert,
   Module,
   Notification,
   NotificationType,
@@ -154,6 +156,8 @@ export type ContractTrainingType = TrainingType
 export type ContractFundingSource = FundingSource
 export type ContractLessonContentType = LessonContentType
 export type ContractLesson = Lesson
+export type ContractSlideDeck = SlideDeck
+export type ContractSlideDeckUpsert = SlideDeckUpsert
 export type ContractModule = Module
 export type ContractCourseInstructorSummary = CourseInstructorSummary
 export type ContractCourse = Course

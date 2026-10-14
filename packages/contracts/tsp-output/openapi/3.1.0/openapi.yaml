@@ -1590,6 +1590,98 @@ paths:
                 $ref: '#/components/schemas/Common.ErrorResponse'
       tags:
         - Reports
+  /courses/{courseId}/slide-deck:
+    get:
+      operationId: CourseSlideDecksApi_get
+      description: |-
+        The course's interactive slide deck, if one is attached. Course
+        managers and active participants; 404 when the course teaches
+        through plain lessons instead.
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/Common.ResourceId'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                  - meta
+                properties:
+                  data:
+                    $ref: '#/components/schemas/SlideDeck'
+                    description: The raw payload representation.
+                  meta:
+                    $ref: '#/components/schemas/Common.ResponseMeta'
+                    description: Trace metadata.
+                  warnings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Common.Warning'
+                    description: Minor warning list.
+                description: Standard single resource response envelope.
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Common.ErrorResponse'
+      tags:
+        - Course Content
+    put:
+      operationId: CourseSlideDecksApi_upsert
+      description: |-
+        Attaches or replaces the course's interactive slide deck. Course
+        management only — the manifest is authored content.
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/Common.ResourceId'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                  - meta
+                properties:
+                  data:
+                    $ref: '#/components/schemas/SlideDeck'
+                    description: The raw payload representation.
+                  meta:
+                    $ref: '#/components/schemas/Common.ResponseMeta'
+                    description: Trace metadata.
+                  warnings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Common.Warning'
+                    description: Minor warning list.
+                description: Standard single resource response envelope.
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Common.ErrorResponse'
+      tags:
+        - Course Content
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SlideDeckUpsert'
   /courses/{courseId}/telemetry-summary:
     get:
       operationId: CourseTelemetryApi_get
@@ -6704,6 +6796,50 @@ components:
         email:
           type: string
       description: Display copy of the requesting account, denormalized.
+    SlideDeck:
+      type: object
+      required:
+        - courseId
+        - schemaVersion
+        - manifest
+        - updatedAt
+      properties:
+        courseId:
+          $ref: '#/components/schemas/Common.ResourceId'
+        schemaVersion:
+          type: integer
+          format: int32
+        manifest:
+          type: object
+          unevaluatedProperties: {}
+        postTestQuizId:
+          $ref: '#/components/schemas/Common.ResourceId'
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+      description: |-
+        An interactive slide deck attached to a course (the DRIVE-style
+        narrated player). The manifest is deliberately opaque to the
+        contract: its shape (modules/pages/audio cues/hotspots) is owned by
+        apps/app's `lib/content/course-types.ts` and evolves with the
+        player, not with the API — the server stores and serves it, plus a
+        schemaVersion so consumers can refuse manifests they can't render.
+        `postTestQuizId` links the deck's evaluation section to a real quiz
+        so attempts are graded and recorded server-side.
+    SlideDeckUpsert:
+      type: object
+      required:
+        - schemaVersion
+        - manifest
+      properties:
+        schemaVersion:
+          type: integer
+          format: int32
+        manifest:
+          type: object
+          unevaluatedProperties: {}
     TelemetryDailyPoint:
       type: object
       required:

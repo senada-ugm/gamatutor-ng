@@ -1018,6 +1018,29 @@ export const zInstitutionRequest = z.object({
     rejectionReason: z.string().readonly().optional()
 });
 
+/**
+ * An interactive slide deck attached to a course (the DRIVE-style
+ * narrated player). The manifest is deliberately opaque to the
+ * contract: its shape (modules/pages/audio cues/hotspots) is owned by
+ * apps/app's `lib/content/course-types.ts` and evolves with the
+ * player, not with the API — the server stores and serves it, plus a
+ * schemaVersion so consumers can refuse manifests they can't render.
+ * `postTestQuizId` links the deck's evaluation section to a real quiz
+ * so attempts are graded and recorded server-side.
+ */
+export const zSlideDeck = z.object({
+    courseId: zCommonResourceId,
+    schemaVersion: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    manifest: z.record(z.string(), z.unknown()),
+    postTestQuizId: zCommonResourceId.readonly().optional(),
+    updatedAt: z.iso.datetime().readonly()
+});
+
+export const zSlideDeckUpsert = z.object({
+    schemaVersion: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    manifest: z.record(z.string(), z.unknown())
+});
+
 export const zTelemetryDailyPoint = z.object({
     date: z.string(),
     dwellSeconds: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
@@ -1489,6 +1512,22 @@ export const zRegisteredInstitutionWritable = z.object({
     address: z.string().optional(),
     logo: z.string().nullish(),
     metadata: z.record(z.string(), z.unknown()).optional()
+});
+
+/**
+ * An interactive slide deck attached to a course (the DRIVE-style
+ * narrated player). The manifest is deliberately opaque to the
+ * contract: its shape (modules/pages/audio cues/hotspots) is owned by
+ * apps/app's `lib/content/course-types.ts` and evolves with the
+ * player, not with the API — the server stores and serves it, plus a
+ * schemaVersion so consumers can refuse manifests they can't render.
+ * `postTestQuizId` links the deck's evaluation section to a real quiz
+ * so attempts are graded and recorded server-side.
+ */
+export const zSlideDeckWritable = z.object({
+    courseId: zCommonResourceId,
+    schemaVersion: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    manifest: z.record(z.string(), z.unknown())
 });
 
 export const zUploadWritable = z.object({
@@ -2026,6 +2065,34 @@ export const zCourseReportsApiGetPath = z.object({
  */
 export const zCourseReportsApiGetResponse = z.object({
     data: zCourseReport,
+    meta: zCommonResponseMeta,
+    warnings: z.array(zCommonWarning).optional()
+});
+
+export const zCourseSlideDecksApiGetPath = z.object({
+    courseId: zCommonResourceId
+});
+
+/**
+ * Standard single resource response envelope.
+ */
+export const zCourseSlideDecksApiGetResponse = z.object({
+    data: zSlideDeck,
+    meta: zCommonResponseMeta,
+    warnings: z.array(zCommonWarning).optional()
+});
+
+export const zCourseSlideDecksApiUpsertBody = zSlideDeckUpsert;
+
+export const zCourseSlideDecksApiUpsertPath = z.object({
+    courseId: zCommonResourceId
+});
+
+/**
+ * Standard single resource response envelope.
+ */
+export const zCourseSlideDecksApiUpsertResponse = z.object({
+    data: zSlideDeck,
     meta: zCommonResponseMeta,
     warnings: z.array(zCommonWarning).optional()
 });

@@ -6,6 +6,8 @@
  * authenticated admin session to call the real admin API with yet. Every
  * later admin action goes through the real API.
  */
+import { readFileSync } from "node:fs"
+import { fileURLToPath } from "node:url"
 import { eq, sql } from "drizzle-orm"
 import { auth } from "../auth.js"
 import { db } from "./index.js"
@@ -16,6 +18,7 @@ import {
   institutionOwnerships,
   institutions,
   participantProfiles,
+  slideDecks,
 } from "./app-schema.js"
 import { generateId } from "../lib/response.js"
 import { users } from "./auth-schema.js"
@@ -249,6 +252,7 @@ export async function seedDatabase() {
   }
 
   const [existingDriveCourse] = await db.select().from(courses).where(eq(courses.slug, "drive-retinopati")).limit(1)
+  let driveCourseId = existingDriveCourse?.id
 
   if (!existingDriveCourse) {
     const created = await createCourse(
@@ -336,7 +340,7 @@ export async function seedDatabase() {
         await createLesson(createdMod.id, les)
       }
     }
-    const driveCourseId = created.id
+    driveCourseId = created.id
     console.log(`  → seeded canonical DRIVE course (${driveCourseId}) with slug 'drive-retinopati'`)
 
     // Assign owner@lms.dev as accepted instructor on DRIVE course
@@ -378,6 +382,26 @@ export async function seedDatabase() {
       })
       .onConflictDoNothing()
     console.log(`  → enrolled ${plain.email} into DRIVE course (status=selected)`)
+    // Attach the canonical interactive deck — the manifest is the JSON form
+    // of apps/app's former lib/content/drive-retinopati-data.ts (dumped
+    // verbatim). OUTSIDE the create-if so an already-seeded database (or a
+    // re-seed) converges onto the shipped manifest.
+    const deckManifest = JSON.parse(
+      readFileSync(fileURLToPath(new URL("./seed-data/drive-retinopati.deck.json", import.meta.url)), "utf-8")
+    ) as Record<string, unknown>
+    await db
+      .insert(slideDecks)
+      .values({
+        id: generateId("dck"),
+        courseId: driveCourseId!,
+        schemaVersion: 1,
+        manifest: deckManifest,
+      })
+      .onConflictDoUpdate({
+        target: slideDecks.courseId,
+        set: { manifest: deckManifest, schemaVersion: 1, updatedAt: new Date() },
+      })
+    console.log(`  → interactive slide deck attached (${(deckManifest.modules as unknown[])?.length ?? "?"} modules)`)
   } else {
     console.log(`  → DRIVE course already exists (${existingDriveCourse.id})`)
   }

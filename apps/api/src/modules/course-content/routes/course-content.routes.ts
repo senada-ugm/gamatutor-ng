@@ -1,8 +1,12 @@
-import type { LessonCreate, LessonUpdate, ModuleCreate, ModuleUpdate } from "@workspace/contracts"
-import { zLessonCreate, zLessonUpdate, zModuleCreate, zModuleUpdate } from "@workspace/contracts/zod"
+import type { LessonCreate, LessonUpdate, ModuleCreate, ModuleUpdate, SlideDeckUpsert } from "@workspace/contracts"
+import { zLessonCreate, zLessonUpdate, zModuleCreate, zModuleUpdate, zSlideDeckUpsert } from "@workspace/contracts/zod"
 import type { FastifyInstance } from "fastify"
 import { z } from "zod"
-import { assertCanManageCourse, assertIsEnrolledParticipant } from "../../../lib/course-access.js"
+import {
+  assertCanAccessCourse,
+  assertCanManageCourse,
+  assertIsEnrolledParticipant,
+} from "../../../lib/course-access.js"
 
 import { requireSession } from "../../../lib/require-session.js"
 import { dataResponse, paginate } from "../../../lib/response.js"
@@ -17,6 +21,22 @@ const lessonProgressQuerySchema = z.object({
 })
 
 export function courseContentRoutes(app: FastifyInstance) {
+  app.get<{ Params: { courseId: string } }>("/courses/:courseId/slide-deck", async (request) => {
+    const user = await requireSession(request)
+    await assertCanAccessCourse(user, request.params.courseId)
+    return dataResponse(await service.getSlideDeck(request.params.courseId), request.id)
+  })
+
+  app.put<{ Params: { courseId: string }; Body: SlideDeckUpsert }>(
+    "/courses/:courseId/slide-deck",
+    { preValidation: [validateBody(zSlideDeckUpsert)] },
+    async (request) => {
+      const user = await requireSession(request)
+      await assertCanManageCourse(user, request.params.courseId)
+      return dataResponse(await service.upsertSlideDeck(request.params.courseId, request.body), request.id)
+    }
+  )
+
   app.post<{ Params: { courseId: string }; Body: ModuleCreate }>(
     "/courses/:courseId/modules",
     { preValidation: [validateBody(zModuleCreate)] },

@@ -211,6 +211,28 @@ export const courseLessons = pgTable(
  *  .userId above. courseId is denormalized off the lesson's module chain so
  *  "this user's progress in this course" doesn't need a join through
  *  course_modules. */
+/** A course's interactive slide deck (the DRIVE-style narrated player).
+ *  One per course — the manifest is opaque JSON owned by the player's
+ *  content types (apps/app lib/content/course-types.ts); postTestQuizId
+ *  links the deck's evaluation section to a real quiz for server-side
+ *  grading. */
+export const slideDecks = pgTable(
+  "slide_decks",
+  {
+    id: text("id").primaryKey(),
+    courseId: text("course_id")
+      .notNull()
+      .unique()
+      .references(() => courses.id, { onDelete: "cascade" }),
+    schemaVersion: integer("schema_version").notNull().default(1),
+    manifest: jsonb("manifest").$type<Record<string, unknown>>().notNull(),
+    postTestQuizId: text("post_test_quiz_id"),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [index("slide_decks_course_idx").on(table.courseId)]
+)
+
 export const lessonProgress = pgTable(
   "lesson_progress",
   {

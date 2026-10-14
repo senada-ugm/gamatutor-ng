@@ -68,6 +68,47 @@ namespace Lms {
     ...ModuleCreate;
   }
 
+  /** An interactive slide deck attached to a course (the DRIVE-style
+   *  narrated player). The manifest is deliberately opaque to the
+   *  contract: its shape (modules/pages/audio cues/hotspots) is owned by
+   *  apps/app's `lib/content/course-types.ts` and evolves with the
+   *  player, not with the API — the server stores and serves it, plus a
+   *  schemaVersion so consumers can refuse manifests they can't render.
+   *  `postTestQuizId` links the deck's evaluation section to a real quiz
+   *  so attempts are graded and recorded server-side. */
+  model SlideDeck {
+    courseId: ResourceId;
+    schemaVersion: int32;
+    manifest: Record<unknown>;
+    @visibility(Lifecycle.Read)
+    postTestQuizId?: ResourceId;
+    @visibility(Lifecycle.Read)
+    updatedAt: utcDateTime;
+  }
+
+  model SlideDeckUpsert {
+    schemaVersion: int32;
+    manifest: Record<unknown>;
+  }
+
+  @route("/courses/{courseId}/slide-deck")
+  @tag("Course Content")
+  interface CourseSlideDecksApi {
+    /** The course's interactive slide deck, if one is attached. Course
+     *  managers and active participants; 404 when the course teaches
+     *  through plain lessons instead. */
+    @get
+    get(@path courseId: ResourceId): DataResponse<SlideDeck> | ErrorResponse;
+
+    /** Attaches or replaces the course's interactive slide deck. Course
+     *  management only — the manifest is authored content. */
+    @put
+    upsert(
+      @path courseId: ResourceId,
+      @body body: SlideDeckUpsert
+    ): DataResponse<SlideDeck> | ErrorResponse;
+  }
+
   /** A student's completion mark on one lesson. */
   model LessonProgress {
     @key
