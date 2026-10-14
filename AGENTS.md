@@ -18,7 +18,8 @@ apps/
                       course-instructors, enrollments, certificates,
                       certificate-settings, quizzes, assignments, uploads,
                       notifications, announcements, reports, telemetry,
-                      platform-settings, audit — contract/API parity
+                      platform-settings, audit, plus the slide-deck ops
+                      served by course-content — contract/API parity
                       enforced by scripts/check-api-contract-parity.mjs).
                       Scope note (docs/PLANS.md Phase 1, 2026-10-15): the
                       payments/wishlist, attendance, discussions, and
@@ -436,6 +437,18 @@ packages/
     reorder; `CoursePlayer` seeds `completedLessonIds` from
     `lessonProgressApiList` and persists mark-complete via
     `lessonProgressApiComplete`/`Uncomplete`.
+  - **Interactive slide decks (PLANS 4.x)**: `slide_decks` (one per
+    course, in course-content's contract + module) stores the DRIVE-style
+    player manifest as opaque JSON — its shape is owned by apps/app's
+    `lib/content/course-types.ts`, NOT TypeSpec; `schemaVersion` lets the
+    player refuse unknown versions. GET is manager/participant-gated
+    (404 = plain lesson content — the player resolves decks by courseId,
+    never by title); PUT is manager-only and backs the editor's
+    DeckUploadCard JSON import. `postTestQuizId` links a deck's evaluasi
+    section to a real quiz so post-tests are graded server-side with
+    unlimited retakes; the DRIVE deck ships as
+    `apps/api/src/db/seed-data/drive-retinopati.deck.json` and the seed
+    derives its post-test quiz from the manifest's evaluasi pages.
   - **Course instructors**: `course-instructors.tsp` (already contracted,
     unserved) now has a real `apps/api` module. `course-editor.tsx`'s
     `canManageInstructors` check was rebuilt off real
