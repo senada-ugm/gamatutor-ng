@@ -1,7 +1,7 @@
 import multipart from "@fastify/multipart"
 import type { FastifyInstance } from "fastify"
 import { uploadsRoutes } from "./routes/uploads.routes.js"
-import { MAX_UPLOAD_BYTES } from "./services/uploads.service.js"
+import { MAX_UPLOAD_CEILING_BYTES } from "./services/uploads.service.js"
 
 /**
  * Upload domain module. @fastify/multipart is fastify-plugin-wrapped (it
@@ -14,7 +14,7 @@ import { MAX_UPLOAD_BYTES } from "./services/uploads.service.js"
 export async function uploadsModule(app: FastifyInstance) {
   await app.register(async (scoped) => {
     await scoped.register(multipart, {
-      limits: { fileSize: MAX_UPLOAD_BYTES, files: 1 },
+      limits: { fileSize: MAX_UPLOAD_CEILING_BYTES, files: 1 },
     })
     await scoped.register(uploadsRoutes)
   })

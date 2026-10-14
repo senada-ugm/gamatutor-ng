@@ -3,7 +3,7 @@ import { describe, it } from "node:test"
 
 import { isAnswerCorrect } from "../modules/quizzes/services/quizzes.service.js"
 import { ALLOWED_TRANSITIONS } from "../modules/enrollments/services/enrollments.service.js"
-import { detectMimeType, looksLikeText } from "../modules/uploads/services/uploads.service.js"
+import { detectMimeType, looksLikeText, maxBytesForPurpose } from "../modules/uploads/services/uploads.service.js"
 
 /**
  * Unit tests for the pure business logic — the decisions too small to
@@ -169,5 +169,46 @@ describe("upload sniffing — detectMimeType / looksLikeText", () => {
 
   it("unknown binary without a text claim is octet-stream", () => {
     assert.equal(sniff(Buffer.from([0x01, 0x02, 0x03, 0x04]), ".bin"), "application/octet-stream")
+  })
+
+  it("legacy Office OLE2 compounds refine doc/ppt/xls by extension", () => {
+    const OLE2 = Buffer.from([0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1, 0x00, 0x00])
+    assert.equal(sniff(OLE2, ".doc"), "application/msword")
+    assert.equal(sniff(OLE2, ".ppt"), "application/vnd.ms-powerpoint")
+    assert.equal(sniff(OLE2, ".xls"), "application/vnd.ms-excel")
+    assert.equal(sniff(OLE2, ".ole"), "application/x-ole-storage")
+  })
+
+  it("video containers: MP4 ftyp brand and EBML webm/mkv", () => {
+    assert.equal(sniff(Buffer.from("....ftypisom"), ".mp4"), "video/mp4")
+    assert.equal(sniff(Buffer.from([0x1a, 0x45, 0xdf, 0xa3, 0x9f]), ".webm"), "video/webm")
+    assert.equal(sniff(Buffer.from([0x1a, 0x45, 0xdf, 0xa3, 0x9f]), ".mkv"), "video/x-matroska")
+  })
+
+  it("audio containers: ID3 and frame-sync MP3, WAV, OGG, FLAC", () => {
+    assert.equal(sniff(Buffer.from("ID3 "), ".mp3"), "audio/mpeg")
+    assert.equal(sniff(Buffer.from([0xff, 0xfb, 0x90, 0x00]), ".mp3"), "audio/mpeg")
+    assert.equal(sniff(Buffer.from("RIFF    WAVEfmt "), ".wav"), "audio/wav")
+    assert.equal(sniff(Buffer.from("OggS "), ".ogg"), "audio/ogg")
+    assert.equal(sniff(Buffer.from("fLaC  "), ".flac"), "audio/flac")
+  })
+})
+
+// ---------------------------------------------------------------------------
+// Per-purpose upload caps — documents/audio/video get larger budgets than
+// the default image/misc cap.
+// ---------------------------------------------------------------------------
+describe("upload caps — maxBytesForPurpose", () => {
+  it("media purposes get their own budgets; everything else the default", () => {
+    assert.equal(maxBytesForPurpose("document"), 25 * 1024 * 1024)
+    assert.equal(maxBytesForPurpose("audio"), 50 * 1024 * 1024)
+    assert.equal(maxBytesForPurpose("video"), 200 * 1024 * 1024)
+    assert.equal(maxBytesForPurpose("thumbnail"), 10 * 1024 * 1024)
+    assert.equal(maxBytesForPurpose("course-lesson-media"), 10 * 1024 * 1024)
+  })
+
+  it("purpose matching is case-insensitive", () => {
+    assert.equal(maxBytesForPurpose("Document"), 25 * 1024 * 1024)
+    assert.equal(maxBytesForPurpose("VIDEO"), 200 * 1024 * 1024)
   })
 })

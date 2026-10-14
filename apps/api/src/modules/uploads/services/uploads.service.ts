@@ -11,14 +11,43 @@ import type { Tx } from "../../../db/index.js"
 import { assertCanManageCourse } from "../../../lib/course-access.js"
 import { deleteStoredFile, readStoredFileHeader, statStoredFile, writeStoredFile } from "../../../lib/storage.js"
 
-/** Generic cap for any upload purpose — a single, simple limit rather than
- *  per-purpose configuration this app has no need for yet. Enforced both
- *  by @fastify/multipart's `limits.fileSize` (see modules/uploads/index.ts)
- *  and rechecked here via `part.file.truncated`, which is only accurate
- *  once the stream has finished piping. */
+/** Default cap for images and misc purposes. Media purposes have their
+ *  own larger caps (see maxBytesForPurpose) — the largest of them defines
+ *  the multipart stream ceiling (MAX_UPLOAD_CEILING_BYTES) registered in
+ *  modules/uploads/index.ts, with the per-purpose limit rechecked here
+ *  after the stream has drained (`part.file.truncated` only tells us the
+ *  ceiling was hit, not which purpose cap). */
 export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024
+export const DOCUMENT_MAX_UPLOAD_BYTES = 25 * 1024 * 1024
+export const AUDIO_MAX_UPLOAD_BYTES = 50 * 1024 * 1024
+export const VIDEO_MAX_UPLOAD_BYTES = 200 * 1024 * 1024
+export const MAX_UPLOAD_CEILING_BYTES = VIDEO_MAX_UPLOAD_BYTES
+
+/** Per-purpose size caps — PKS scope: PDF/PPT/Word documents up to 25MB,
+ *  audio narration up to 50MB, video up to 200MB, everything else (images,
+ *  misc) the small default. */
+export function maxBytesForPurpose(purpose: string): number {
+  const normalized = purpose.toLowerCase()
+  if (normalized === "document") return DOCUMENT_MAX_UPLOAD_BYTES
+  if (normalized === "audio") return AUDIO_MAX_UPLOAD_BYTES
+  if (normalized === "video") return VIDEO_MAX_UPLOAD_BYTES
+  return MAX_UPLOAD_BYTES
+}
 
 const UPLOAD_FILE_PATH_PATTERN = /^\/v1\/uploads\/(upl_[a-zA-Z0-9]+)\/file$/
+
+/** What the `document` purpose accepts — the PKS names PDF, PPT, and
+ *  Word; Excel rides along because slide decks often arrive inside
+ *  workbook attachments. */
+const DOCUMENT_MIME_TYPES = new Set([
+  "application/pdf",
+  "application/msword",
+  "application/vnd.ms-powerpoint",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+])
 
 export function fileUrlFor(id: string): string {
   return `${env.API_PUBLIC_URL}/v1/uploads/${id}/file`
@@ -72,6 +101,48 @@ export function detectMimeType(
     if (extension === ".xlsx") return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     if (extension === ".pptx") return "application/vnd.openxmlformats-officedocument.presentationml.presentation"
     return "application/zip"
+  }
+  // Legacy Office binaries are OLE2 compound files — the concrete app
+  // (doc/ppt/xls) only shows up in the extension's directory naming.
+  if (
+    header.length >= 8 &&
+    header[0] === 0xd0 &&
+    header[1] === 0xcf &&
+    header[2] === 0x11 &&
+    header[3] === 0xe0 &&
+    header[4] === 0xa1 &&
+    header[5] === 0xb1 &&
+    header[6] === 0x1a &&
+    header[7] === 0xe1
+  ) {
+    if (extension === ".doc") return "application/msword"
+    if (extension === ".ppt") return "application/vnd.ms-powerpoint"
+    if (extension === ".xls") return "application/vnd.ms-excel"
+    return "application/x-ole-storage"
+  }
+  // MP4 family: bytes 4-8 hold the "ftyp" box brand.
+  if (header.length >= 8 && header.toString("ascii", 4, 8) === "ftyp") {
+    return "video/mp4"
+  }
+  // EBML container: webm (or mkv by extension).
+  if (header.length >= 4 && header[0] === 0x1a && header[1] === 0x45 && header[2] === 0xdf && header[3] === 0xa3) {
+    return extension === ".mkv" ? "video/x-matroska" : "video/webm"
+  }
+  if (header.length >= 12 && header.toString("ascii", 0, 4) === "RIFF" && header.toString("ascii", 8, 12) === "WAVE") {
+    return "audio/wav"
+  }
+  if (header.length >= 4 && header.toString("ascii", 0, 4) === "OggS") {
+    return "audio/ogg"
+  }
+  if (header.length >= 4 && header.toString("ascii", 0, 4) === "fLaC") {
+    return "audio/flac"
+  }
+  // MP3: an ID3v2 tag prefix, or a bare MPEG audio frame sync (0xFF Ex/Fx).
+  if (header.length >= 3 && header.toString("ascii", 0, 3) === "ID3") {
+    return "audio/mpeg"
+  }
+  if (header.length >= 2 && header[0] === 0xff && ((header[1] ?? 0) & 0xe0) === 0xe0) {
+    return "audio/mpeg"
   }
 
   // Text has no magic bytes. A claimed text/* type is honored only when
@@ -134,10 +205,15 @@ export async function storeUpload(params: {
   // truncates silently mid-stream rather than throwing.
   if (params.part.file.truncated) {
     await deleteStoredFile(storageKey)
-    throw new BadRequestError(`File exceeds the ${MAX_UPLOAD_BYTES}-byte limit`)
+    throw new BadRequestError(`File exceeds the ${MAX_UPLOAD_CEILING_BYTES}-byte limit`)
   }
 
   const { size } = await statStoredFile(storageKey)
+  const purposeCap = maxBytesForPurpose(params.purpose)
+  if (size > purposeCap) {
+    await deleteStoredFile(storageKey)
+    throw new BadRequestError(`Purpose '${params.purpose}' accepts at most ${purposeCap} bytes`)
+  }
   const header = await readStoredFileHeader(storageKey, 32)
   const claimed = params.part.mimetype
   // Full read only when a text/* claim needs validating — the header
@@ -147,11 +223,29 @@ export async function storeUpload(params: {
     : Buffer.alloc(0)
   const mimeType = detectMimeType(header, sanitizedExt, { claimedMimeType: claimed, fullRead })
 
-  // Purpose validation (e.g., thumbnail or avatar must be an image)
-  if (["thumbnail", "avatar", "image", "logo"].includes(params.purpose.toLowerCase())) {
+  // Purpose validation: the sniffed type must match what the purpose
+  // promises (the type came from magic bytes, not the client's claim, so
+  // a spoofed Content-Type can't smuggle other bytes past the check).
+  const normalizedPurpose = params.purpose.toLowerCase()
+  if (["thumbnail", "avatar", "image", "logo"].includes(normalizedPurpose)) {
     if (!mimeType.startsWith("image/")) {
       await deleteStoredFile(storageKey)
       throw new BadRequestError(`Purpose '${params.purpose}' requires a valid image file (PNG, JPEG, WEBP, GIF)`)
+    }
+  } else if (normalizedPurpose === "document") {
+    if (!DOCUMENT_MIME_TYPES.has(mimeType)) {
+      await deleteStoredFile(storageKey)
+      throw new BadRequestError(`Purpose '${params.purpose}' requires a document file (PDF, Word, PowerPoint, Excel)`)
+    }
+  } else if (normalizedPurpose === "video") {
+    if (!mimeType.startsWith("video/")) {
+      await deleteStoredFile(storageKey)
+      throw new BadRequestError(`Purpose '${params.purpose}' requires a valid video file (MP4, WebM)`)
+    }
+  } else if (normalizedPurpose === "audio") {
+    if (!mimeType.startsWith("audio/")) {
+      await deleteStoredFile(storageKey)
+      throw new BadRequestError(`Purpose '${params.purpose}' requires a valid audio file (MP3, WAV, OGG, FLAC)`)
     }
   }
 
