@@ -19,7 +19,6 @@ const ROOT = path.resolve(__dirname, "..")
 
 const API_EXAMPLE = path.join(ROOT, "apps", "api", ".env.example")
 const APP_EXAMPLE = path.join(ROOT, "apps", "app", ".env.example")
-const WEB_EXAMPLE = path.join(ROOT, "apps", "web", ".env.example")
 const OUTPUT_FILE = path.join(ROOT, ".env.compose.example")
 
 function readSection(filePath, serviceName, description) {
@@ -51,7 +50,6 @@ function generate() {
   const sections = [
     readSection(API_EXAMPLE, "apps/api", "Backend Core, Secrets & Config (Passed to 'api' service)"),
     readSection(APP_EXAMPLE, "apps/app", "Vite SPA (Passed as build args to 'app' service)"),
-    readSection(WEB_EXAMPLE, "apps/web", "Marketing SSR (Passed to 'web' service)"),
   ]
 
   return `${header}${sections.join("\n\n")}\n`
