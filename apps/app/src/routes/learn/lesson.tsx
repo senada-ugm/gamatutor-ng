@@ -8,6 +8,7 @@ import { Separator } from "@workspace/ui/components/separator"
 import { useCourseContext } from "@/components/composed/player/course-context"
 import { EmptyState } from "@/components/composed/_shared/empty-state"
 import { InteractiveSlideViewer } from "@/components/composed/player/interactive-slide-viewer"
+import { AudioLessonPlayer, DocumentLessonViewer } from "@/components/composed/player/_atoms/media-renderers"
 import { apiGet, apiSend } from "@/lib/api"
 import { DRIVE_RETINOPATHY_COURSE } from "@/lib/content/drive-retinopati-data"
 import type { ContractCertificate, ContractEnrollment } from "@workspace/contracts/domain"
@@ -164,6 +165,10 @@ export function LessonPage() {
               return <video src={media.src} controls className="size-full" />
             })()}
           </div>
+        ) : lesson.contentType === "audio" && lesson.url ? (
+          <AudioLessonPlayer url={lesson.url} title={lesson.title} />
+        ) : lesson.contentType === "document" && lesson.url ? (
+          <DocumentLessonViewer url={lesson.url} title={lesson.title} />
         ) : (
           <EmptyState
             title="Content not yet available"
