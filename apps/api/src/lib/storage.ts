@@ -61,6 +61,22 @@ export async function readStoredFile(storageKey: string): Promise<NodeJS.Readabl
   return createReadStream(storagePathFor(storageKey))
 }
 
+/** Byte-range read for HTTP Range requests (media seeking/streaming).
+ *  `end` is inclusive, matching the Range header's convention. */
+export async function readStoredFileRange(
+  storageKey: string,
+  start: number,
+  end: number
+): Promise<NodeJS.ReadableStream> {
+  if (s3Client && env.S3_BUCKET) {
+    const res = await s3Client.send(
+      new GetObjectCommand({ Bucket: env.S3_BUCKET, Key: storageKey, Range: `bytes=${start}-${end}` })
+    )
+    return res.Body as NodeJS.ReadableStream
+  }
+  return createReadStream(storagePathFor(storageKey), { start, end })
+}
+
 export async function deleteStoredFile(storageKey: string): Promise<void> {
   if (s3Client && env.S3_BUCKET) {
     await s3Client.send(new DeleteObjectCommand({ Bucket: env.S3_BUCKET, Key: storageKey }))

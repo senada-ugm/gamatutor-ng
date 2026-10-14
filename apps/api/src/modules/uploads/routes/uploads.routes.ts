@@ -4,7 +4,7 @@ import { BadRequestError } from "../../../lib/errors.js"
 import { requireAdmin } from "../../../lib/require-admin.js"
 import { getOptionalSession, requireSession } from "../../../lib/require-session.js"
 import { dataResponse } from "../../../lib/response.js"
-import { readStoredFile } from "../../../lib/storage.js"
+import { readStoredFile, readStoredFileRange, statStoredFile } from "../../../lib/storage.js"
 import * as service from "../services/uploads.service.js"
 
 /**
@@ -63,12 +63,37 @@ export function uploadsRoutes(app: FastifyInstance) {
   /** Hand-rolled bytes route rather than @fastify/static: the server must
    *  always send its own DB-recorded, validated Content-Type (never the
    *  client's claimed mimetype — noSniff is set globally in
-   *  plugins/security-headers.ts) and must 404 once a file is swept. */
+   *  plugins/security-headers.ts) and must 404 once a file is swept.
+   *  Honors single-part Range requests so <video>/<audio> can seek and
+   *  stream — without Accept-Ranges, browsers buffer the whole file
+   *  before playing and dragging the timeline re-downloads it. */
   app.get<{ Params: { id: string } }>("/uploads/:id/file", async (request, reply) => {
     const viewer = await getOptionalSession(request)
     const file = await service.getUploadFileForViewer(request.params.id, viewer)
+    const { size } = await statStoredFile(file.storageKey)
+
     reply.header("Content-Type", file.mimeType)
     reply.header("Content-Disposition", `inline; filename="${encodeURIComponent(file.originalFilename)}"`)
+    reply.header("Accept-Ranges", "bytes")
+
+    const rangeHeader = request.headers.range
+    const rangeMatch = rangeHeader?.match(/^bytes=(\d+)-(\d*)$/)
+    if (rangeMatch) {
+      const start = Number(rangeMatch[1])
+      // An omitted end means "through the last byte" (cap at size-1);
+      // an explicit end is clamped to size-1 per RFC 9110.
+      const end = rangeMatch[2] ? Math.min(Number(rangeMatch[2]), size - 1) : size - 1
+      if (start >= size || start > end) {
+        reply.status(416)
+        reply.header("Content-Range", `bytes */${size}`)
+        return reply.send()
+      }
+      reply.status(206)
+      reply.header("Content-Range", `bytes ${start}-${end}/${size}`)
+      reply.header("Content-Length", end - start + 1)
+      return reply.send(await readStoredFileRange(file.storageKey, start, end))
+    }
+
     return reply.send(await readStoredFile(file.storageKey))
   })
 
