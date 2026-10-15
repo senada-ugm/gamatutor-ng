@@ -1,0 +1,48 @@
+# Overrides compose.prod.yaml for the shared komunitech VPS (gamatutor.komunitech.id).
+#
+#   docker compose -p gamatutor --env-file /etc/gamatutor/ng.env \
+#     -f compose.prod.yaml -f deploy/compose.vps.yaml up -d --build
+#
+# The box hosts a dozen other apps: 3000, 8000, 8010 and 9000-9001 are taken,
+# so every host port is moved and bound to loopback; host nginx fronts both
+# containers on one origin (see deploy/nginx/gamatutor.komunitech.id.conf).
+# Secrets come from /etc/gamatutor/ng.env, written by scripts/deploy-vps.sh.
+
+services:
+  rustfs:
+    # Reached only by the api over the compose network.
+    ports: !reset []
+
+  api:
+    ports: !override
+      - "127.0.0.1:8120:8000"
+    environment:
+      - TRUST_PROXY=true
+      - API_PUBLIC_URL=${PUBLIC_ORIGIN}
+      - WEB_PUBLIC_URL=${PUBLIC_ORIGIN}
+      - SMTP_PORT=${SMTP_PORT:-1025}
+      - SMTP_USER=${SMTP_USER:-}
+      - SMTP_PASS=${SMTP_PASS:-}
+      - SMTP_SECURE=${SMTP_SECURE:-false}
+      - RESEND_API_KEY=${RESEND_API_KEY:-}
+      - RESEND_FROM_EMAIL=${RESEND_FROM_EMAIL:-GamaTutor <no-reply@komunitech.id>}
+    depends_on:
+      mailpit:
+        condition: service_started
+    mem_limit: 1g
+
+  app:
+    ports: !override
+      - "127.0.0.1:3120:80"
+
+  # No SMTP relay is configured yet. Until SMTP_HOST/RESEND_API_KEY point at a
+  # real one, mail lands here (UI on 127.0.0.1:8125, reach it over an ssh
+  # tunnel) instead of failing sign-up.
+  mailpit:
+    image: axllent/mailpit:v1.27
+    container_name: lms-mailpit
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8125:8025"
+    networks:
+      - lms-network
