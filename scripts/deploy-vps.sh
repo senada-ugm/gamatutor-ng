@@ -141,6 +141,18 @@ for (const email of ["admin@lms.dev", "owner@lms.dev", "user@lms.dev"]) {
 }
 const demo = await db.query("update courses set status = 'draft' where status = 'published' and slug is distinct from 'drive-retinopati' returning title")
 out.push("", "unpublished seed demo courses: " + demo.rows.map((r) => r.title).join("; "))
+// The seed leaves DRIVE a draft; publish it through the api so its checks run.
+const origin = "https://$DOMAIN"
+const adminPass = out.find((l) => l.startsWith("admin@lms.dev  ")).split("  ")[1]
+const signIn = await fetch("http://api:8000/api/auth/sign-in/email", {
+  method: "POST", headers: { "Content-Type": "application/json", Origin: origin },
+  body: JSON.stringify({ email: "admin@lms.dev", password: adminPass }),
+})
+const cookie = signIn.headers.getSetCookie().map((c) => c.split(";")[0]).join("; ")
+const { rows: [drive] } = await db.query("select id from courses where slug = 'drive-retinopati'")
+const pub = await fetch("http://api:8000/v1/courses/" + drive.id + "/publish", { method: "POST", headers: { Origin: origin, Cookie: cookie } })
+if (!pub.ok) throw new Error("publishing DRIVE failed: " + pub.status)
+out.push("published DRIVE (" + drive.id + ")")
 console.log(out.join("\n"))
 await db.end()
 JS
@@ -185,7 +197,7 @@ docker image prune -f >/dev/null
 SWITCH
 
 say "Smoke test"
-curl -fsS -o /dev/null -w "https://$DOMAIN/          %{http_code}\n" "https://$DOMAIN/"
-curl -fsS -o /dev/null -w "https://$DOMAIN/login     %{http_code}\n" "https://$DOMAIN/login"
-curl -fsS -w "\n" "https://$DOMAIN/health"
-curl -fsS -o /dev/null -w "https://$DOMAIN/v1/courses %{http_code}\n" "https://$DOMAIN/v1/courses"
+# Status codes via printf: Git Bash mangles a newline escape in curl's -w.
+for path in / /login /health /v1/courses; do
+  printf '%-12s %s\n' "$path" "$(curl -sS -o /dev/null -w '%{http_code}' "https://$DOMAIN$path")"
+done
