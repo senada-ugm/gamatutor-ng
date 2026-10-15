@@ -21,7 +21,9 @@ RUN pnpm install --frozen-lockfile --force
 RUN pnpm --filter api build
 
 # Isolate production dependencies
-RUN pnpm --filter=api --prod --legacy deploy /app/pruned
+# --ignore-scripts: no runtime dependency needs one, and the esbuild that
+# better-auth's optional peers drag in would fail its postinstall as above.
+RUN pnpm --filter=api --prod --legacy deploy --ignore-scripts /app/pruned
 RUN cp -r /app/apps/api/dist /app/pruned/dist
 RUN cp -r /app/apps/api/drizzle /app/pruned/drizzle 2>/dev/null || true
 
