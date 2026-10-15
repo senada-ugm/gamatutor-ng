@@ -3,8 +3,6 @@ import { Link, Outlet, useLocation, useMatchRoute } from "@tanstack/react-router
 import { cn } from "@workspace/ui/lib/utils"
 
 import { WorkspaceShell } from "@/components/composed/workspace/workspace-shell"
-import { InstitutionSwitcher } from "@/components/composed/institutions/institution-switcher"
-import { ALL_INSTITUTIONS, useAuthoringScope } from "@/lib/authoring-institution"
 import { useSession } from "@/lib/session"
 
 /**
@@ -19,11 +17,9 @@ export function ManagementShell() {
   const session = useSession()
   const location = useLocation()
   const matchRoute = useMatchRoute()
-  const scope = useAuthoringScope()
 
   const user = session.data ?? null
   const isAdmin = user?.role === "admin"
-  const isAllInstitutions = scope.scopeId === ALL_INSTITUTIONS
 
   const pathname = location.pathname
   const isAdminSection = pathname.startsWith("/admin")
@@ -104,13 +100,6 @@ export function ManagementShell() {
             ) : (
               /* Instructor & Institution Authoring Vertical Tabs */
               <div className="space-y-4">
-                <div className="rounded-xl border border-border/70 bg-card p-3 shadow-2xs dark:border-border/50">
-                  <p className="mb-2 px-1 text-[11px] font-bold tracking-wider text-muted-foreground uppercase">
-                    Cakupan Institusi
-                  </p>
-                  <InstitutionSwitcher block />
-                </div>
-
                 <div className="space-y-1" data-sidebar="menu">
                   <Link
                     to="/instructor"
@@ -125,7 +114,6 @@ export function ManagementShell() {
                     className={verticalTabClass(!!matchRoute({ to: "/institution" }))}
                   >
                     <span>Ringkasan Institusi</span>
-                    {isAllInstitutions ? <span className="text-[10px] opacity-75">Per Institusi</span> : null}
                   </Link>
                   <Link
                     to="/institution/peserta"
@@ -133,7 +121,6 @@ export function ManagementShell() {
                     className={verticalTabClass(!!matchRoute({ to: "/institution/peserta" }))}
                   >
                     <span>Peserta</span>
-                    {isAllInstitutions ? <span className="text-[10px] opacity-75">Per Institusi</span> : null}
                   </Link>
                 </div>
 

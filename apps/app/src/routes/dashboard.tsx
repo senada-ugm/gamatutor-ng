@@ -12,16 +12,14 @@ import { CourseThumbnail } from "@/components/composed/courses/_atoms/course-thu
 import { EnrollmentStatusBadge } from "@/components/composed/_shared/enrollment-status-badge"
 import { EmptyState } from "@/components/composed/_shared/empty-state"
 import { ErrorState } from "@/components/composed/_shared/error-state"
-import { useAuthoringScope } from "@/lib/authoring-institution"
 import { useSession } from "@/lib/session"
 import { hasPendingDoctorProfile, syncPendingDoctorProfile } from "@/lib/pending-profile"
 import { apiGet } from "@/lib/api"
 import { formatCourseDate } from "@/lib/lms-date"
-import type { ContractCourse, ContractEnrollment, ContractRegisteredInstitution } from "@workspace/contracts/domain"
+import type { ContractCourse, ContractEnrollment } from "@workspace/contracts/domain"
 
 export function DashboardPage() {
   const { data: session } = useSession()
-  const authoringScope = useAuthoringScope()
   const user = session ?? null
   const isAdmin = user?.role === "admin"
 
@@ -38,20 +36,6 @@ export function DashboardPage() {
     queryKey: ["my-enrollments", user?.id],
     queryFn: () => apiGet<ContractEnrollment[]>("/enrollments?pageSize=100"),
     enabled: user != null,
-  })
-
-  const ownerships = useQuery({
-    queryKey: ["owned-institutions", user?.id],
-    queryFn: () => apiGet<Array<{ institutionId: string }>>(`/institution-ownerships?userId=${user?.id}&pageSize=100`),
-    enabled: user != null,
-  })
-  const ownedIds = (ownerships.data ?? []).map((o) => o.institutionId)
-
-  const institutions = useQuery({
-    queryKey: ["institutions", "map"],
-    queryFn: () => apiGet<ContractRegisteredInstitution[]>("/institutions?pageSize=100"),
-    enabled: ownedIds.length > 0,
-    select: (list) => list.filter((i) => ownedIds.includes(i.id)),
   })
 
   const courses = useQuery({
@@ -244,65 +228,6 @@ export function DashboardPage() {
           </div>
         )}
       </section>
-
-      {/* Institusi Saya (untuk owner atau admin) */}
-      {!isAdmin || ownedIds.length > 0 ? (
-        <section className="space-y-4">
-          <div className="flex items-center gap-2.5">
-            <div className="h-5 w-1.5 rounded-full bg-[#173a5e]" />
-            <h2 className="text-lg font-bold text-[#173a5e] dark:text-foreground">Institusi Saya</h2>
-          </div>
-
-          {ownerships.isLoading || (ownedIds.length > 0 && institutions.isLoading) ? (
-            <Skeleton className="h-20 w-full" />
-          ) : ownedIds.length === 0 ? (
-            <Card>
-              <CardContent className="flex flex-wrap items-center justify-between gap-3 p-4">
-                <p className="text-sm text-muted-foreground">
-                  Ingin menyelenggarakan pelatihan atas nama fasilitas kesehatan atau institusi Anda?
-                </p>
-                <Button size="sm" variant="outline" nativeButton={false} render={<Link to="/institution-requests" />}>
-                  Ajukan Institusi Baru
-                </Button>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="grid gap-4 sm:grid-cols-2">
-              {(institutions.data ?? []).map((institution) => (
-                <Card key={institution.id}>
-                  <CardContent className="flex items-center justify-between gap-3 p-4">
-                    <div className="min-w-0">
-                      <h3 className="truncate font-semibold">{institution.name}</h3>
-                      <p className="text-xs text-muted-foreground">
-                        {institution.email ?? institution.institutionType}
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        nativeButton={false}
-                        onClick={() => authoringScope.select(institution.id)}
-                        render={<Link to="/institution" />}
-                      >
-                        Ikhtisar
-                      </Button>
-                      <Button
-                        size="sm"
-                        nativeButton={false}
-                        onClick={() => authoringScope.select(institution.id)}
-                        render={<Link to="/instructor" />}
-                      >
-                        Kelola Pelatihan
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </section>
-      ) : null}
     </div>
   )
 }

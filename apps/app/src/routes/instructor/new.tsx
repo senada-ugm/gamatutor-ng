@@ -5,30 +5,21 @@ import { toast } from "sonner"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 
 import { EmptyState } from "@/components/composed/_shared/empty-state"
-import { ErrorState } from "@/components/composed/_shared/error-state"
 import { PageHeader } from "@/components/composed/_shared/page-header"
 import { CourseForm, toCourseWritePayload } from "@/components/composed/courses/course-form"
 import type { CourseFormValues } from "@/components/composed/courses/course-form"
-import { useAuthoringScope } from "@/lib/authoring-institution"
+import { useMyInstitution } from "@/lib/institution-ownership"
 import { apiSend } from "@/lib/api"
 import type { ContractCourse } from "@workspace/contracts/domain"
 
 /**
- * Course creation, scoped to an institution the caller actually chose.
- * This page used to take `ownerships[0]` — for an account owning more
- * than one institution (which the schema has always allowed) that meant
- * the course landed wherever the API's row order put it, with nothing on
- * screen naming the target. The scope is now stated on the page and the
- * form doesn't submit without one.
+ * Course creation, scoped to the account's resolved institution (the
+ * single-tenant frontend's one tenant — PLANS Phase 5). The target is
+ * still stated on the page and the form doesn't submit without one.
  */
 export function NewCoursePage() {
   const navigate = useNavigate()
-  const scope = useAuthoringScope()
-
-  // An admin's default scope is the platform-wide listing view, which is
-  // not a place a course can be created — they pick a real institution
-  // first. Owners always resolve to one of their own.
-  const target = scope.institution
+  const target = useMyInstitution()
 
   const create = useMutation({
     mutationFn: (values: CourseFormValues) => {
@@ -54,19 +45,12 @@ export function NewCoursePage() {
         description="Pelatihan baru dimulai sebagai draf — terbitkan setelah kontennya siap."
       />
 
-      {scope.isLoading ? (
+      {target === undefined ? (
         <Skeleton className="h-96 w-full max-w-3xl" />
-      ) : scope.isError ? (
-        <ErrorState error={scope.error} onRetry={scope.refetch} />
-      ) : scope.institutions.length === 0 ? (
-        <EmptyState
-          title="Belum ada institusi"
-          description="Ajukan institusi terlebih dahulu untuk membuat pelatihan."
-        />
       ) : !target ? (
         <EmptyState
-          title="Pilih institusi"
-          description="Pelatihan dibuat di bawah satu institusi — pilih salah satu di panel samping untuk melanjutkan."
+          title="Institusi belum tersedia"
+          description="Pelatihan dibuat di bawah satu institusi — hubungi admin platform untuk mendapatkan akses."
         />
       ) : (
         <div className="space-y-3">
