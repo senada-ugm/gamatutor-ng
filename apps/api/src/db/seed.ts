@@ -34,108 +34,7 @@ const SEED_PASSWORD = "correcthorsebatterystaple"
  *  surface look broken rather than just empty. Thumbnails are picsum.photos
  *  placeholders keyed by a stable seed string, so re-running this script
  *  always resolves to the same image per course instead of a random one. */
-const SEED_COURSES: Array<{
-  title: string
-  shortDescription: string
-  description: string
-  level: "beginner" | "intermediate" | "advanced" | "expert"
-  courseType: "online" | "offline" | "hybrid"
-  thumbnailSeed: string
-  modules: Array<{
-    title: string
-    lessons: Array<Pick<LessonCreate, "title" | "contentType" | "textContent" | "isPreview">>
-  }>
-}> = [
-  {
-    title: "Dasar-Dasar React untuk Pemula",
-    shortDescription: "Pelajari fondasi React dari nol hingga siap kerja.",
-    description: "Pelatihan ini membahas komponen, state, dan hooks dengan studi kasus nyata.",
-    level: "beginner",
-    courseType: "online",
-    thumbnailSeed: "lms-react-dasar",
-    modules: [
-      {
-        title: "Pengenalan React",
-        lessons: [
-          {
-            title: "Apa itu React?",
-            contentType: "text",
-            textContent: "React adalah library UI berbasis komponen.",
-            isPreview: true,
-          },
-          {
-            title: "Menyiapkan proyek pertama",
-            contentType: "text",
-            textContent: "Instalasi dan struktur folder dasar.",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    title: "Manajemen Proyek Tingkat Lanjut",
-    shortDescription: "Kelola proyek lintas tim dengan kerangka kerja yang teruji.",
-    description: "Membahas perencanaan, risiko, dan eksekusi proyek untuk manajer berpengalaman.",
-    level: "advanced",
-    courseType: "hybrid",
-    thumbnailSeed: "lms-manajemen-proyek",
-    modules: [
-      {
-        title: "Perencanaan Proyek",
-        lessons: [
-          {
-            title: "Menyusun ruang lingkup proyek",
-            contentType: "text",
-            textContent: "Teknik menetapkan scope yang realistis.",
-            isPreview: true,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    title: "Digital Marketing untuk UMKM",
-    shortDescription: "Strategi pemasaran digital dengan anggaran terbatas.",
-    description: "Dari media sosial hingga iklan berbayar, disesuaikan untuk usaha kecil.",
-    level: "intermediate",
-    courseType: "offline",
-    thumbnailSeed: "lms-digital-marketing",
-    modules: [
-      {
-        title: "Media Sosial untuk Bisnis",
-        lessons: [
-          {
-            title: "Memilih platform yang tepat",
-            contentType: "text",
-            textContent: "Menentukan platform sesuai target pasar.",
-            isPreview: true,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    title: "Keselamatan Kerja di Lingkungan Industri",
-    shortDescription: "Standar K3 dasar untuk pekerja lapangan.",
-    description: "Pelatihan wajib mencakup identifikasi bahaya dan prosedur tanggap darurat.",
-    level: "beginner",
-    courseType: "offline",
-    thumbnailSeed: "lms-k3-industri",
-    modules: [
-      {
-        title: "Identifikasi Bahaya",
-        lessons: [
-          {
-            title: "Jenis-jenis bahaya di tempat kerja",
-            contentType: "text",
-            textContent: "Bahaya fisik, kimia, dan ergonomis.",
-            isPreview: true,
-          },
-        ],
-      },
-    ],
-  },
-]
+const SEED_COURSES: Array<any> = []
 
 async function upsertSeedUser(email: string, name: string) {
   const existing = await db.query.users.findFirst({ where: eq(users.email, email) })
@@ -276,64 +175,21 @@ export async function seedDatabase() {
     // Ensure human-readable slug 'drive-retinopati' so route /courses/drive-retinopati always matches
     await db.update(courses).set({ slug: "drive-retinopati" }).where(eq(courses.id, created.id))
 
-    const driveModules = [
-      {
-        title: "Pengantar & Overview Pelatihan",
-        lessons: [
-          {
-            title: "Pengantar Program DRIVE & Cakupan Materi",
-            contentType: "text" as const,
-            textContent:
-              "Selamat datang di Modul 1 Pelatihan Skrining Retinopati Diabetika dalam program DRIVE (Diabetic Retinopathy Initiatives). Modul ini membekali dokter layanan primer dengan pemahaman komprehensif mengenai diabetes mellitus dan komplikasinya di retina.",
-            isPreview: true,
-          },
-        ],
-      },
-      {
-        title: "Bab 1: Diabetes Mellitus",
-        lessons: [
-          {
-            title: "Definisi, Epidemiologi, Klasifikasi, dan Komplikasi DM",
-            contentType: "text" as const,
-            textContent:
-              "Membahas definisi DM menurut PERKENI 2021, data IDF Atlas 11th Ed 2025, patogenesis Egregious Eleven, kriteria diagnosis glukosa/HbA1c, dan komplikasi mikrovaskular.",
-          },
-        ],
-      },
-      {
-        title: "Bab 2: Retinopati Diabetika",
-        lessons: [
-          {
-            title: "Anatomi Mata, Definisi RD, Patofisiologi Sequential, dan Faktor Risiko",
-            contentType: "text" as const,
-            textContent:
-              "Eksplorasi anatomi mata 2D, definisi RD, alur patofisiologi sequential 1-8, faktor risiko, dan latihan matching pair interaktif.",
-          },
-        ],
-      },
-      {
-        title: "Bab 3: Skrining dan Tatalaksana RD",
-        lessons: [
-          {
-            title: "Skrining FKTP, Natural History, Kriteria ECIM, dan Rujukan",
-            contentType: "text" as const,
-            textContent:
-              "Konsep skrining vs deteksi dini, kriteria WHO ECIM, jadwal kontrol berkala, 4 pilar tatalaksana, dan peran dokter layanan primer.",
-          },
-        ],
-      },
-      {
-        title: "Simulasi Grading Fundus & Evaluasi Akhir",
-        lessons: [
-          {
-            title: "Simulasi Grading 5 Kasus Fundus & Standardized Clinical Post-Test",
-            contentType: "text" as const,
-            textContent:
-              "Simulasi grading lesi fundus interaktif dengan penanda retikel non-obscuring dan post-test 5 soal terstandar untuk klaim sertifikat kelulusan.",
-          },
-        ],
-      },
-    ]
+    const deckManifest = JSON.parse(
+      readFileSync(fileURLToPath(new URL("./seed-data/drive-retinopati.deck.json", import.meta.url)), "utf-8")
+    ) as Record<string, unknown>
+
+    const driveModules = ((deckManifest.modules as Array<Record<string, unknown>>) || [])
+      .filter((m) => Array.isArray(m.pages) && m.pages.length > 0)
+      .map((m) => ({
+        title: (m.label as string) || (m.title as string) || (m.id as string),
+        lessons: ((m.pages as Array<Record<string, unknown>>) || []).map((p) => ({
+          title: (p.title as string) || (p.kicker as string) || (p.id as string),
+          contentType: "text" as const,
+          textContent: (p.transcript as string) || (p.body as string) || (p.title as string) || (p.id as string),
+          isPreview: m.id === "pengantar",
+        })),
+      }))
 
     for (const mod of driveModules) {
       const createdMod = await createModule(created.id, { title: mod.title })
@@ -342,7 +198,10 @@ export async function seedDatabase() {
       }
     }
     driveCourseId = created.id
-    console.log(`  → seeded canonical DRIVE course (${driveCourseId}) with slug 'drive-retinopati'`)
+    await publishCourse(driveCourseId, { id: admin.id })
+    console.log(
+      `  → seeded canonical DRIVE course (${driveCourseId}) with slug 'drive-retinopati' and status 'published'`
+    )
 
     // Assign owner@lms.dev as accepted instructor on DRIVE course
     await db
@@ -387,9 +246,6 @@ export async function seedDatabase() {
     // of apps/app's former lib/content/drive-retinopati-data.ts (dumped
     // verbatim). OUTSIDE the create-if so an already-seeded database (or a
     // re-seed) converges onto the shipped manifest.
-    const deckManifest = JSON.parse(
-      readFileSync(fileURLToPath(new URL("./seed-data/drive-retinopati.deck.json", import.meta.url)), "utf-8")
-    ) as Record<string, unknown>
     await db
       .insert(slideDecks)
       .values({

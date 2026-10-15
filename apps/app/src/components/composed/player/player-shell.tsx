@@ -139,11 +139,13 @@ export function PlayerShell({
         <main
           className={
             deckCourse
-              ? "flex-1 overflow-y-auto bg-[#eef1f4] p-4 pt-12 md:p-6 lg:pt-6 dark:bg-background"
+              ? "flex flex-1 flex-col overflow-y-auto bg-[#eef1f4] p-4 pt-12 md:p-[26px_30px] lg:pt-[26px] dark:bg-background"
               : "flex-1 overflow-y-auto"
           }
         >
-          <div className={deckCourse ? "mx-auto max-w-5xl" : "mx-auto max-w-5xl px-4 py-8 lg:px-6"}>{children}</div>
+          <div className={deckCourse ? "flex w-full flex-1 flex-col" : "mx-auto max-w-5xl px-4 py-8 lg:px-6"}>
+            {children}
+          </div>
         </main>
       </div>
     </div>

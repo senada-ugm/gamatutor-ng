@@ -269,6 +269,17 @@ const profileRoute = createRoute({
 })
 
 // Learn player — layout route with nested children
+const belajarRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/belajar/$courseId",
+  beforeLoad: ({ params }) => {
+    throw redirect({
+      to: "/learn/$courseId",
+      params: { courseId: params.courseId },
+    })
+  },
+})
+
 const learnLayoutRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/learn/$courseId",
@@ -312,6 +323,7 @@ const routeTree = rootRoute.addChildren([
   forgotPasswordRoute,
   resetPasswordRoute,
   certificateVerifyRoute,
+  belajarRoute,
   workspaceRoute.addChildren([
     learnerRoute.addChildren([
       dashboardRoute,

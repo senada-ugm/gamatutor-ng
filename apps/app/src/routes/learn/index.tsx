@@ -18,8 +18,15 @@ export function LearnIndex() {
   const completed = new Set(completedLessonIds)
   const allLessons = course.modules.flatMap((m) => m.lessons)
   const totalLessons = allLessons.length
-  const nextLesson = allLessons.find((lesson) => !completed.has(lesson.id))
+  const nextLesson = allLessons.find((lesson) => !completed.has(lesson.id)) || allLessons[0]
   const started = completed.size > 0
+
+  // For interactive slide deck courses, jump straight into the player lesson stage
+  // so learners don't see a detached syllabus index
+  if (nextLesson) {
+    window.location.replace(`/learn/${course.id}/lesson/${nextLesson.id}`)
+    return null
+  }
 
   if (totalLessons === 0) {
     return (
@@ -45,7 +52,7 @@ export function LearnIndex() {
               render={
                 <Link
                   to="/learn/$courseId/lesson/$lessonId"
-                  params={{ courseId: course.id, lessonId: nextLesson.id }}
+                  params={{ courseId: course.id, lessonId: (nextLesson as { id: string }).id }}
                 />
               }
             >

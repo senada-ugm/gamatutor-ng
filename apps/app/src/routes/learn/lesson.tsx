@@ -136,13 +136,15 @@ export function LessonPage() {
   const next = allLessons[idx + 1]
 
   return (
-    <article className="space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">{lesson.title}</h1>
-        {lesson.description ? <p className="text-sm text-muted-foreground">{lesson.description}</p> : null}
-      </div>
+    <article className={deckCourse ? "flex flex-1 flex-col space-y-0" : "space-y-6"}>
+      {!deckCourse && (
+        <div className="space-y-1">
+          <h1 className="text-2xl font-semibold tracking-tight">{lesson.title}</h1>
+          {lesson.description ? <p className="text-sm text-muted-foreground">{lesson.description}</p> : null}
+        </div>
+      )}
 
-      <div className="min-h-64">
+      <div className={deckCourse ? "flex w-full flex-1 flex-col" : "min-h-64"}>
         {deckCourse ? (
           <InteractiveSlideViewer
             course={deckCourse}
@@ -188,53 +190,57 @@ export function LessonPage() {
         )}
       </div>
 
-      <Separator />
+      {!deckCourse && (
+        <>
+          <Separator />
 
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          {!isCompleted && next ? (
-            <Button
-              onClick={() => completeAndAdvance.mutate()}
-              disabled={completeAndAdvance.isPending}
-              className="gap-2"
-            >
-              <Check className="size-4" />
-              {completeAndAdvance.isPending ? "Menyimpan..." : "Selesai & Lanjut"}
-            </Button>
-          ) : (
-            <Button
-              variant={isCompleted ? "outline" : "default"}
-              onClick={() => toggleComplete.mutate()}
-              disabled={toggleComplete.isPending}
-            >
-              {toggleComplete.isPending ? "Menyimpan..." : isCompleted ? "Tandai Belum Selesai" : "Tandai Selesai"}
-            </Button>
-          )}
-        </div>
-        <div className="flex min-w-0 items-center gap-3">
-          {previous ? (
-            <Link
-              to="/learn/$courseId/lesson/$lessonId"
-              params={{ courseId: course.id, lessonId: previous.id }}
-              className="flex min-w-0 items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-            >
-              <ArrowLeft className="size-3.5 shrink-0" />
-              <span className="truncate">Sebelumnya</span>
-            </Link>
-          ) : null}
-          {next ? (
-            <Link
-              to="/learn/$courseId/lesson/$lessonId"
-              params={{ courseId: course.id, lessonId: next.id }}
-              className="flex min-w-0 items-center gap-1 text-sm text-primary hover:underline"
-              title={next.title}
-            >
-              <span className="truncate">Berikutnya: {next.title}</span>
-              <ArrowRight className="size-3.5 shrink-0" />
-            </Link>
-          ) : null}
-        </div>
-      </div>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              {!isCompleted && next ? (
+                <Button
+                  onClick={() => completeAndAdvance.mutate()}
+                  disabled={completeAndAdvance.isPending}
+                  className="gap-2"
+                >
+                  <Check className="size-4" />
+                  {completeAndAdvance.isPending ? "Menyimpan..." : "Selesai & Lanjut"}
+                </Button>
+              ) : (
+                <Button
+                  variant={isCompleted ? "outline" : "default"}
+                  onClick={() => toggleComplete.mutate()}
+                  disabled={toggleComplete.isPending}
+                >
+                  {toggleComplete.isPending ? "Menyimpan..." : isCompleted ? "Tandai Belum Selesai" : "Tandai Selesai"}
+                </Button>
+              )}
+            </div>
+            <div className="flex min-w-0 items-center gap-3">
+              {previous ? (
+                <Link
+                  to="/learn/$courseId/lesson/$lessonId"
+                  params={{ courseId: course.id, lessonId: previous.id }}
+                  className="flex min-w-0 items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+                >
+                  <ArrowLeft className="size-3.5 shrink-0" />
+                  <span className="truncate">Sebelumnya</span>
+                </Link>
+              ) : null}
+              {next ? (
+                <Link
+                  to="/learn/$courseId/lesson/$lessonId"
+                  params={{ courseId: course.id, lessonId: next.id }}
+                  className="flex min-w-0 items-center gap-1 text-sm text-primary hover:underline"
+                  title={next.title}
+                >
+                  <span className="truncate">Berikutnya: {next.title}</span>
+                  <ArrowRight className="size-3.5 shrink-0" />
+                </Link>
+              ) : null}
+            </div>
+          </div>
+        </>
+      )}
     </article>
   )
 }

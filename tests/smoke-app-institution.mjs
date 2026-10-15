@@ -118,9 +118,7 @@ await expect("filtering by status narrows the list", async () => {
   // `registered` rows in this institution, so assert the filter HIDES
   // this run's selected enrollments rather than the list being empty.
   await page.getByLabel("Saring status").selectOption("registered")
-  await page
-    .getByRole("link", { name: FREE_COURSE })
-    .waitFor({ state: "detached", timeout: 10000 })
+  await page.getByRole("link", { name: FREE_COURSE }).waitFor({ state: "detached", timeout: 10000 })
   await page.getByRole("link", { name: PAID_COURSE }).waitFor({ state: "detached", timeout: 10000 })
   await page.getByLabel("Saring status").selectOption("selected")
   await page.getByRole("link", { name: FREE_COURSE }).waitFor({ timeout: 10000 })

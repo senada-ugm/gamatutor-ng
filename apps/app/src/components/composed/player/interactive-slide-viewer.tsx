@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { ArrowLeft, ArrowRight, GraduationCap } from "lucide-react"
+import { ArrowLeft, ArrowRight } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
 import type {
@@ -121,44 +121,48 @@ export function InteractiveSlideViewer({
 
   const { page, moduleLabel } = currentItem
 
+  const isHero = page.type === "hero"
+
   return (
     <div
-      className={`mx-auto flex w-full max-w-5xl flex-col overflow-hidden rounded-lg border bg-background shadow-md transition-all duration-300 ${className}`}
-      style={{ maxHeight: "calc(100vh - 4.5rem)" }}
+      className={`flex w-full flex-1 flex-col overflow-hidden rounded-[4px] border border-[#e2e6ea] bg-white shadow-[0_2px_14px_rgba(20,40,60,0.08)] transition-all duration-300 dark:border-border dark:bg-card ${className}`}
+      style={{ minHeight: "calc(100vh - 52px)" }}
     >
       {/* Top Global Progress Bar (gamatutor-ng card-top-progress: teal fill) */}
-      <div className="h-1.5 w-full shrink-0 bg-[#e2e6ea] dark:bg-muted/60">
+      <div className="h-1 w-full shrink-0 bg-[#e2e6ea] dark:bg-muted/60">
         <div
           className="h-full bg-[#5bb4b2] transition-all duration-300 ease-out"
           style={{ width: `${Math.round(((currentIndex + 1) / totalSlides) * 100)}%` }}
         />
       </div>
 
-      {/* Top Header Chrome (gamatutor-ng card-header) */}
-      <div className="flex shrink-0 items-center justify-between border-b bg-card/80 px-6 py-3 backdrop-blur-xs">
-        <div className="flex items-center gap-3 truncate">
-          <Badge
-            variant="outline"
-            className="shrink-0 border-primary/25 bg-primary/10 font-mono text-xs font-bold text-primary"
-          >
-            {moduleLabel.split("—")[0].trim()}
-          </Badge>
-          <span className="hidden truncate text-xs font-semibold text-foreground/80 sm:inline">{moduleLabel}</span>
-        </div>
+      {/* Top Header Chrome (gamatutor-ng card-header) - Hero doesn't have card header */}
+      {!isHero && (
+        <div className="flex shrink-0 items-center justify-between border-b bg-card/80 px-6 py-3 backdrop-blur-xs">
+          <div className="flex items-center gap-3 truncate">
+            <Badge
+              variant="outline"
+              className="shrink-0 border-primary/25 bg-primary/10 font-mono text-xs font-bold text-primary"
+            >
+              {moduleLabel.split("—")[0].trim()}
+            </Badge>
+            <span className="hidden truncate text-xs font-semibold text-foreground/80 sm:inline">{moduleLabel}</span>
+          </div>
 
-        {/* Brand Logo & Mark (gamatutor-ng brandlogo) */}
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-primary">
-            <span className="flex size-6 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-xs shadow-xs">
-              {course.brand?.mark || "👁"}
-            </span>
-            <span className="hidden tracking-tight sm:inline">{course.brand?.name || "DRIVE Initiative"}</span>
+          {/* Brand Logo & Mark (gamatutor-ng brandlogo) */}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-primary">
+              <span className="flex size-6 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-xs shadow-xs">
+                {course.brand?.mark || "👁"}
+              </span>
+              <span className="hidden tracking-tight sm:inline">{course.brand?.name || "DRIVE Initiative"}</span>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Main Slide Content Stage - Clamped Viewport with Scroll when needed */}
-      <div className="flex-1 space-y-6 overflow-y-auto p-6 md:p-8">
+      <div className={isHero ? "flex-1 overflow-hidden p-0" : "flex-1 space-y-6 overflow-y-auto p-6 md:p-8"}>
         {page.type === "hero" && <HeroSlide page={page} onStart={handleNext} />}
         {page.type === "divider" && <DividerSlide page={page} onProceed={handleNext} />}
         {page.type === "content" && <ContentSlide page={page} currentTime={currentPlaybackTime} />}
@@ -191,7 +195,7 @@ export function InteractiveSlideViewer({
       </div>
 
       {/* Persistent Audio Narration Bar on Content & Cards with Voiceover Audio */}
-      {(("audio" in page && page.audio) || ("transcript" in page && page.transcript)) && (
+      {!isHero && (("audio" in page && page.audio) || ("transcript" in page && page.transcript)) && (
         <div className="shrink-0 border-t bg-card/80 p-3">
           <AudioNarrationBar
             key={page.id}
@@ -202,102 +206,108 @@ export function InteractiveSlideViewer({
         </div>
       )}
 
-      {/* Bottom Card Footer Chrome (from gamatutor-ng card-footer) */}
-      <div className="flex shrink-0 items-center justify-between border-t bg-card/90 px-6 py-2.5 backdrop-blur-xs">
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          {"audio" in page && page.audio ? (
-            <Badge
-              variant="outline"
-              className="gap-1 border-primary/30 bg-primary/5 text-[11px] font-medium text-primary"
-            >
-              <span>🔊 Narasi Suara Tersedia</span>
-            </Badge>
-          ) : "transcript" in page && page.transcript ? (
-            <Badge variant="outline" className="gap-1 border-muted text-[11px] font-normal text-muted-foreground">
-              <span>📄 Transkrip Narasi Tersedia</span>
-            </Badge>
-          ) : (
-            <span className="text-[11px] text-muted-foreground/75">Kurikulum Skrining Klinis FK-KMK UGM</span>
-          )}
-        </div>
+      {/* Bottom Card Footer Chrome (from gamatutor-ng card-footer) - Hero has NO footer nav */}
+      {!isHero && (
+        <div className="flex shrink-0 items-center justify-between border-t bg-card/90 px-6 py-2.5 backdrop-blur-xs">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            {"audio" in page && page.audio ? (
+              <Badge
+                variant="outline"
+                className="gap-1 border-primary/30 bg-primary/5 text-[11px] font-medium text-primary"
+              >
+                <span>🔊 Narasi Suara Tersedia</span>
+              </Badge>
+            ) : "transcript" in page && page.transcript ? (
+              <Badge variant="outline" className="gap-1 border-muted text-[11px] font-normal text-muted-foreground">
+                <span>📄 Transkrip Narasi Tersedia</span>
+              </Badge>
+            ) : (
+              <span className="text-[11px] text-muted-foreground/75">Kurikulum Skrining Klinis FK-KMK UGM</span>
+            )}
+          </div>
 
-        <div className="flex items-center gap-3">
           <div className="flex items-center gap-3">
-            <Button
-              size="icon-sm"
-              variant="outline"
-              disabled={currentIndex === 0}
-              onClick={handlePrev}
-              aria-label="Halaman sebelumnya"
-              className="size-8 rounded-full"
-            >
-              <ArrowLeft className="size-4" />
-            </Button>
-            <span className="font-mono text-xs font-bold whitespace-nowrap text-[#173a5e] dark:text-foreground">
-              {currentIndex + 1} / {totalSlides}
-            </span>
-            <Button
-              size="icon-sm"
-              disabled={currentIndex === totalSlides - 1}
-              onClick={handleNext}
-              aria-label="Halaman berikutnya"
-              className="size-8 rounded-full"
-            >
-              <ArrowRight className="size-4" />
-            </Button>
+            <div className="flex items-center gap-3">
+              <Button
+                size="icon-sm"
+                variant="outline"
+                disabled={currentIndex === 0}
+                onClick={handlePrev}
+                aria-label="Halaman sebelumnya"
+                className="size-8 rounded-full"
+              >
+                <ArrowLeft className="size-4" />
+              </Button>
+              <span className="font-mono text-xs font-bold whitespace-nowrap text-[#173a5e] dark:text-foreground">
+                {currentIndex + 1} / {totalSlides}
+              </span>
+              <Button
+                size="icon-sm"
+                disabled={currentIndex === totalSlides - 1}
+                onClick={handleNext}
+                aria-label="Halaman berikutnya"
+                className="size-8 rounded-full"
+              >
+                <ArrowRight className="size-4" />
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
 
 function HeroSlide({ page, onStart }: { page: HeroPage; onStart: () => void }) {
   return (
-    <div className="relative flex animate-in flex-col items-center justify-center space-y-6 overflow-hidden rounded-2xl bg-gradient-to-br from-slate-950 via-slate-900 to-primary/85 px-6 py-16 text-center text-white shadow-md fade-in">
-      <div className="flex size-16 items-center justify-center rounded-2xl bg-white/10 text-white shadow-inner ring-1 ring-white/20 backdrop-blur-xs">
-        <GraduationCap className="h-8 w-8 text-white" />
-      </div>
-
-      <div className="max-w-2xl space-y-3">
-        <Badge
-          variant="outline"
-          className="border-white/30 bg-white/10 font-mono text-xs font-semibold tracking-wider text-white uppercase"
-        >
-          MODUL 1 • DIABETES & RETINOPATI
-        </Badge>
-        <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">{page.title}</h1>
-        {page.body && <p className="text-sm leading-relaxed text-slate-200 sm:text-base">{page.body}</p>}
-      </div>
-
-      <div className="pt-4">
-        <Button size="lg" onClick={onStart} variant="secondary" className="gap-2 px-8 text-base font-bold shadow-lg">
-          <span>Start Interactive Learning</span>
-          <ArrowRight className="h-5 w-5" />
-        </Button>
+    <div className="relative flex h-full min-h-[520px] w-full flex-1 overflow-hidden bg-[#173a5e] text-white">
+      {/* Background SVG Illustration matching gamatutor-ng hero-illustration.svg */}
+      <img
+        className="pointer-events-none absolute inset-0 size-full object-cover"
+        src="/content/drive-retinopati/assets/hero-illustration.svg"
+        alt=""
+      />
+      {/* Dark gradient overlay matching gamatutor-ng .hero::after */}
+      <div
+        className="pointer-events-none absolute inset-0 z-10"
+        style={{
+          background: "linear-gradient(100deg, rgba(15,35,55,.88) 0%, rgba(15,35,55,.55) 42%, rgba(15,35,55,.15) 68%)",
+        }}
+      />
+      {/* Hero content aligned bottom-left matching gamatutor-ng .hero-content */}
+      <div className="relative z-20 flex size-full flex-col justify-end p-10 md:p-12">
+        <h1 className="mb-2 max-w-[560px] text-[28px] leading-tight font-bold tracking-tight text-white">
+          {page.title}
+        </h1>
+        {page.body && <p className="mb-6 max-w-[480px] text-sm leading-relaxed text-white/90">{page.body}</p>}
+        <div>
+          <button
+            type="button"
+            onClick={onStart}
+            className="cursor-pointer bg-[#132d47] px-8 py-3.5 text-sm font-bold tracking-wider text-white transition-colors hover:bg-[#173a5e]"
+            style={{ clipPath: "polygon(6% 0, 100% 0, 94% 100%, 0% 100%)" }}
+          >
+            MULAI &rarr;
+          </button>
+        </div>
       </div>
     </div>
   )
 }
 
-function DividerSlide({ page, onProceed }: { page: DividerPage; onProceed: () => void }) {
+function DividerSlide({ page }: { page: DividerPage; onProceed: () => void }) {
   return (
-    <div className="flex animate-in flex-col items-center justify-center space-y-6 rounded-2xl bg-gradient-to-br from-slate-950 via-slate-900 to-primary/80 px-6 py-20 text-center text-white shadow-md fade-in">
+    <div
+      className="flex min-h-[380px] flex-1 flex-col items-center justify-center p-10 text-center text-white"
+      style={{
+        background: "linear-gradient(120deg, #132d47, #173a5e 55%, #2d77c2)",
+      }}
+    >
       {page.kicker && (
-        <Badge
-          variant="outline"
-          className="border-white/30 bg-white/10 px-3.5 py-1 font-mono text-xs font-bold tracking-widest text-white uppercase backdrop-blur-xs"
-        >
-          {page.kicker}
-        </Badge>
+        <div className="mb-2.5 text-[13px] font-bold tracking-[0.15em] text-white/80 uppercase">{page.kicker}</div>
       )}
-      <h2 className="max-w-xl text-3xl font-extrabold tracking-tight text-white sm:text-4xl">{page.title}</h2>
-      <div className="h-1 w-20 rounded-full bg-primary-foreground/75" />
-      <div className="pt-6">
-        <Button onClick={onProceed} variant="secondary" size="lg" className="gap-2 font-bold shadow-md">
-          <span>Continue Chapter</span>
-          <ArrowRight className="h-4 w-4" />
-        </Button>
+      <div className="max-w-[600px] text-[30px] leading-tight font-extrabold tracking-tight text-white">
+        {page.title || ""}
       </div>
     </div>
   )
