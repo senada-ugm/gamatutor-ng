@@ -59,7 +59,8 @@ DEV_MODE=false
 # SMTP_HOST/SMTP_PORT/SMTP_USER/SMTP_PASS/SMTP_SECURE, or clear SMTP_HOST
 # and set RESEND_API_KEY, then rerun the deploy.
 SMTP_HOST=mailpit
-RESEND_FROM_EMAIL=GamaTutor <no-reply@komunitech.id>
+# Quote values with spaces or < >: bash sources this file too.
+RESEND_FROM_EMAIL="GamaTutor <no-reply@komunitech.id>"
 ENV
   chmod 600 /etc/gamatutor/ng.env
   echo "wrote /etc/gamatutor/ng.env"
