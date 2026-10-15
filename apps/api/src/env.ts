@@ -101,7 +101,6 @@ const envSchema = z
 
     // Web app origin — notification emails link back into the app, and an
     // in-app-relative "/learn/..." href is dead inside a mail client.
-    WEB_PUBLIC_URL: z.string().default("http://localhost:3000"),
   })
   .superRefine((data, ctx) => {
     if (data.NODE_ENV === "production") {

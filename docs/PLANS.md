@@ -235,7 +235,7 @@ Rules of execution: **delete, never hide** (hidden UI is dead code), and keep th
 
 #### Phase 6 — Optional Trims (each pending confirmation; default = keep)
 - [x] 6.1 **Assignments domain removed**: `modules/assignments` + `assignments.tsp` + `assignments`/`assignment_submissions` tables (migration 0012) + `Enrollment.completedAssignments` + the upload service's assignment-attachment entitlement; frontend loses the editor Penilaian tab, the player Tugas routes/nav, the assignment components, and the now-orphaned multi-file `FileUploadWidget`; essays remain gradeable through the quiz engine's `pending_review` queue. `smoke-app-player-tabs.mjs` deleted (it was entirely assignment-driven; quizzes/announcements tabs are covered by the player/teaching/workspaces suites), `smoke-app-teaching.mjs` keeps quiz + essay-queue coverage — 2026-10-15
-- [ ] 6.2 Announcements + notifications email fanout (candidate: keep in-app only, drop transactional email)
+- [x] 6.2 **Transactional email fanout dropped, in-app notifications kept**: `lib/notify.ts` now records only the in-app row (the `notifyUser`/email-leg variant is gone — `notifyUserById` remains the single entry point for all five call sites), email stays exclusively Better Auth's (verification + password reset), and the now-unused `WEB_PUBLIC_URL` env var was removed from env + `.env.example`. Announcements and the notification bell keep working unchanged — 2026-10-15
 - [ ] 6.3 Audit log module
 - [ ] 6.4 Enrollment funnel simplification (drop the `interviewed` stage → enrolled/graduated/failed)
 - [ ] 6.5 Multi-instructor management (`/instruktur` tab, invites, co-instructor roles) → single instructor per course
