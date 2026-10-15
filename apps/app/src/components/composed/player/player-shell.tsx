@@ -89,19 +89,6 @@ export function PlayerShell({
               Kuis
             </Link>
             <Link
-              to="/learn/$courseId/assignments"
-              params={params}
-              {...tabNavItemProps(
-                !!matchRoute({
-                  to: "/learn/$courseId/assignments",
-                  params,
-                  fuzzy: true,
-                })
-              )}
-            >
-              Tugas
-            </Link>
-            <Link
               to="/learn/$courseId/pengumuman"
               params={params}
               {...tabNavItemProps(

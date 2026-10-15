@@ -234,7 +234,7 @@ Rules of execution: **delete, never hide** (hidden UI is dead code), and keep th
 **Phase 5 complete.** The platform now reads single-tenant end to end — one resolved institution per account, no switcher, no self-service requests (closed server-side too) — while the backend's multi-tenant model, ownership-based permissions, and the admin institutions escape hatch are fully intact. The full backend collapse stays a documented, deferred fallback.
 
 #### Phase 6 — Optional Trims (each pending confirmation; default = keep)
-- [ ] 6.1 Assignments domain (quizzes already cover essay + instructor grading via `pending_review`)
+- [x] 6.1 **Assignments domain removed**: `modules/assignments` + `assignments.tsp` + `assignments`/`assignment_submissions` tables (migration 0012) + `Enrollment.completedAssignments` + the upload service's assignment-attachment entitlement; frontend loses the editor Penilaian tab, the player Tugas routes/nav, the assignment components, and the now-orphaned multi-file `FileUploadWidget`; essays remain gradeable through the quiz engine's `pending_review` queue. `smoke-app-player-tabs.mjs` deleted (it was entirely assignment-driven; quizzes/announcements tabs are covered by the player/teaching/workspaces suites), `smoke-app-teaching.mjs` keeps quiz + essay-queue coverage — 2026-10-15
 - [ ] 6.2 Announcements + notifications email fanout (candidate: keep in-app only, drop transactional email)
 - [ ] 6.3 Audit log module
 - [ ] 6.4 Enrollment funnel simplification (drop the `interviewed` stage → enrolled/graduated/failed)

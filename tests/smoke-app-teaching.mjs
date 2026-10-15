@@ -4,10 +4,12 @@
  *   pnpm --filter api dev          # CORS_ORIGIN=http://localhost:3030
  *   pnpm --filter app dev
  *   node tests/smoke-app-teaching.mjs
- * Signs in as the seeded admin and drives the editor's Kuis and Penilaian
- * tabs end to end: builds a quiz through the UI and takes it in the
- * player (server-graded pass), creates an assignment and grades a
- * submission through the UI — proving the whole instructor/student loop.
+ * Signs in as the seeded admin and drives the editor's Kuis tab end to
+ * end: builds a quiz through the UI and takes it in the player
+ * (server-graded pass), then grades a pending essay attempt through the
+ * grading queue — proving the whole instructor/student loop. (The
+ * Penilaian/assignments tab was removed with the assignments domain —
+ * PLANS 6.1; essays are graded through the quiz engine.)
  */
 import { chromium } from "playwright"
 
@@ -20,8 +22,6 @@ const QUIZ_TITLE = "Kuis Akhir Modul"
 const QUESTION_TEXT = "Ibukota Indonesia adalah?"
 const CORRECT_OPTION = "Jakarta"
 const WRONG_OPTION = "Bandung"
-const ASSIGNMENT_TITLE = "Tugas Refleksi"
-const ASSIGNMENT_ANSWER = "Refleksi saya tentang materi ini."
 let failures = 0
 
 async function expect(name, fn) {
@@ -103,46 +103,6 @@ await page.getByRole("button", { name: "Kirim Jawaban" }).click()
 await expect("quiz built in the editor grades as a pass in the player", async () => {
   await page.getByText("100/100").waitFor({ timeout: 8000 })
   await page.getByText("Lulus", { exact: true }).waitFor({ timeout: 8000 })
-})
-
-// ================= PENILAIAN: create + grade through the UI =================
-await page.goto(`${BASE}/instructor/courses/${courseId}/editor/penilaian`, { timeout: 30000 })
-await page.getByRole("button", { name: "Tugas Baru" }).click()
-await page.locator("#assignment-title").fill(ASSIGNMENT_TITLE)
-await page.locator("#assignment-instructions").fill("Tuliskan refleksi singkat.")
-await page.getByRole("button", { name: "Buat Tugas", exact: true }).click()
-await expect("assignment creation persists in the list", async () => {
-  await page.getByText(ASSIGNMENT_TITLE).waitFor({ timeout: 8000 })
-})
-
-// Submit through the API as the enrolled admin (the student submit flow
-// is already covered by smoke-app-player-tabs), then grade in the UI.
-const listRes = await page.request.get(`${API}/v1/courses/${courseId}/assignments?pageSize=50`)
-const assignmentId = (await listRes.json()).data.find((a) => a.title === ASSIGNMENT_TITLE)?.id
-if (!assignmentId) throw new Error("assignment id not found")
-const submitRes = await page.request.post(`${API}/v1/assignments/${assignmentId}/submissions`, {
-  data: { content: ASSIGNMENT_ANSWER },
-})
-if (!submitRes.ok()) throw new Error(`submission failed: ${submitRes.status()}`)
-
-await page.reload()
-// exact: the editor's "Penilaian" tab also contains "nilai" as a substring
-await page.getByRole("button", { name: "Nilai", exact: true }).click()
-await expect("grading queue shows the submission as Dikumpulkan", async () => {
-  // "Dikumpulkan" also prefixes the submitted-at line — badge is exact
-  await page.getByText("Dikumpulkan", { exact: true }).waitFor({ timeout: 8000 })
-})
-
-await page.getByRole("button", { name: "Periksa" }).click()
-await expect("expanding reveals the submission content", async () => {
-  await page.getByText(ASSIGNMENT_ANSWER).waitFor({ timeout: 8000 })
-})
-await page.locator("#grade-feedback").fill("Refleksi yang baik.")
-await page.locator(`#score-100`).fill("90")
-await page.getByRole("button", { name: "Simpan Nilai" }).click()
-await expect("grading saves the score and flips the badge to Dinilai", async () => {
-  await page.getByText("Dinilai", { exact: true }).waitFor({ timeout: 8000 })
-  await page.getByText("90/100").waitFor({ timeout: 8000 })
 })
 
 // ================= ESSAY GRADING QUEUE (Kuis tab) =================

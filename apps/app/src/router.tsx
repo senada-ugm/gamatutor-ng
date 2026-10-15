@@ -182,12 +182,6 @@ const editorQuizzesRoute = createRoute({
   component: lazyRouteComponent(() => import("@/routes/instructor/editor-quizzes"), "EditorQuizzesTab"),
 })
 
-const editorAssessmentsRoute = createRoute({
-  getParentRoute: () => editorLayoutRoute,
-  path: "/penilaian",
-  component: lazyRouteComponent(() => import("@/routes/instructor/editor-assessments"), "EditorAssessmentsTab"),
-})
-
 const editorCertificatesRoute = createRoute({
   getParentRoute: () => editorLayoutRoute,
   path: "/sertifikat",
@@ -317,18 +311,6 @@ const learnQuizDetailRoute = createRoute({
   component: lazyRouteComponent(() => import("@/routes/learn/quizzes"), "QuizDetailPage"),
 })
 
-const learnAssignmentsRoute = createRoute({
-  getParentRoute: () => learnLayoutRoute,
-  path: "/assignments",
-  component: lazyRouteComponent(() => import("@/routes/learn/assignments"), "AssignmentListPage"),
-})
-
-const learnAssignmentDetailRoute = createRoute({
-  getParentRoute: () => learnLayoutRoute,
-  path: "/assignments/$assignmentId",
-  component: lazyRouteComponent(() => import("@/routes/learn/assignments"), "AssignmentDetailPage"),
-})
-
 const learnAnnouncementsRoute = createRoute({
   getParentRoute: () => learnLayoutRoute,
   path: "/pengumuman",
@@ -368,7 +350,6 @@ const routeTree = rootRoute.addChildren([
           editorContentRoute,
           editorParticipantsRoute,
           editorQuizzesRoute,
-          editorAssessmentsRoute,
           editorCertificatesRoute,
           editorInstructorsRoute,
           editorAnnouncementsRoute,
@@ -382,8 +363,6 @@ const routeTree = rootRoute.addChildren([
     learnLessonRoute,
     learnQuizzesRoute,
     learnQuizDetailRoute,
-    learnAssignmentsRoute,
-    learnAssignmentDetailRoute,
     learnAnnouncementsRoute,
   ]),
 ])

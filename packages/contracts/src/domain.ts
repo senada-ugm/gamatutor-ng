@@ -13,15 +13,6 @@
  */
 import type {
   AccountStatus,
-  Assignment,
-  AssignmentAttachment,
-  AssignmentCreate,
-  AssignmentGrade,
-  AssignmentSubmission,
-  AssignmentSubmissionCreate,
-  AssignmentSubmissionStatus,
-  AssignmentSubmissionUser,
-  AssignmentUpdate,
   Certificate,
   CertificateCourse,
   CertificateInstitution,
@@ -136,16 +127,6 @@ export type ContractUserCapabilities = UserCapabilities
 export type ContractUserSuspend = UserSuspend
 
 // --- Assignment domain (spec/assignments.tsp) -----------------------------
-
-export type ContractAssignmentSubmissionStatus = AssignmentSubmissionStatus
-export type ContractAssignmentAttachment = AssignmentAttachment
-export type ContractAssignment = Assignment
-export type ContractAssignmentCreate = AssignmentCreate
-export type ContractAssignmentUpdate = AssignmentUpdate
-export type ContractAssignmentSubmissionUser = AssignmentSubmissionUser
-export type ContractAssignmentSubmission = AssignmentSubmission
-export type ContractAssignmentSubmissionCreate = AssignmentSubmissionCreate
-export type ContractAssignmentGrade = AssignmentGrade
 
 // --- Course domain (spec/courses.tsp) ------------------------------------
 
@@ -308,5 +289,4 @@ export type ContractTelemetryParticipantRow = TelemetryParticipantRow
 export type ContractCourseTelemetrySummary = CourseTelemetrySummary
 export { CertificateSignaturePlacement } from "../gen/types.gen.js"
 export { QuizQuestionType, QuizAttemptStatus } from "../gen/types.gen.js"
-export { AssignmentSubmissionStatus } from "../gen/types.gen.js"
 export { NotificationType as NotificationTypeValue } from "../gen/types.gen.js"

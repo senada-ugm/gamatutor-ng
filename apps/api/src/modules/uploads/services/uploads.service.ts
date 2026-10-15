@@ -3,12 +3,11 @@ import type { Upload } from "@workspace/contracts"
 import type { MultipartFile } from "@fastify/multipart"
 import { and, eq, or, sql } from "drizzle-orm"
 import { db } from "../../../db/index.js"
-import { assignmentSubmissions, assignments, uploads } from "../../../db/app-schema.js"
+import { uploads } from "../../../db/app-schema.js"
 import { env } from "../../../env.js"
 import { BadRequestError, ForbiddenError, NotFoundError, UnauthorizedError } from "../../../lib/errors.js"
 import { generateId } from "../../../lib/response.js"
 import type { Tx } from "../../../db/index.js"
-import { assertCanManageCourse } from "../../../lib/course-access.js"
 import { deleteStoredFile, readStoredFileHeader, statStoredFile, writeStoredFile } from "../../../lib/storage.js"
 
 /** Default cap for images and misc purposes. Media purposes have their
@@ -271,11 +270,9 @@ type UploadViewer = { id: string; role?: string | null } | null
  * Read entitlement for an upload's metadata or bytes. Publicly rendered
  * assets (catalog thumbnails claimed by a course, institution logos,
  * certificate signature images claimed by certificate settings) are
- * anonymous-readable; everything else — unclaimed uploads and assignment
- * attachments — is uploader/admin only, with assignment attachments
- * additionally readable by their submitter and the course's managers.
- * The id is unguessable, but it is the only thing protecting private
- * documents here.
+ * anonymous-readable; everything else is uploader/admin only. The id is
+ * unguessable, but it is the only thing protecting private documents
+ * here.
  */
 async function assertCanReadUpload(row: typeof uploads.$inferSelect, viewer: UploadViewer): Promise<void> {
   if (viewer && (viewer.role === "admin" || row.uploadedByUserId === viewer.id)) return
@@ -283,20 +280,6 @@ async function assertCanReadUpload(row: typeof uploads.$inferSelect, viewer: Upl
   if (row.status === "claimed") {
     if (row.ownerType === "course" || row.ownerType === "institution" || row.ownerType === "certificate_settings")
       return
-
-    if (row.ownerType === "assignment_submission" && viewer && row.ownerId) {
-      const [submission] = await db
-        .select({ userId: assignmentSubmissions.userId, courseId: assignments.courseId })
-        .from(assignmentSubmissions)
-        .innerJoin(assignments, eq(assignments.id, assignmentSubmissions.assignmentId))
-        .where(eq(assignmentSubmissions.id, row.ownerId))
-        .limit(1)
-      if (submission) {
-        if (submission.userId === viewer.id) return
-        await assertCanManageCourse(viewer, submission.courseId)
-        return
-      }
-    }
   }
 
   if (!viewer) throw new UnauthorizedError()

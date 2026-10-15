@@ -8,8 +8,6 @@ import type {
 import { and, desc, eq, inArray, isNull, notInArray, or, sql } from "drizzle-orm"
 import { db, type Tx } from "../../../db/index.js"
 import {
-  assignmentSubmissions,
-  assignments,
   certificates,
   courseLessons,
   courseModules,
@@ -31,9 +29,8 @@ import { orderByClause } from "../../../lib/order.js"
 /** Per-course lesson totals and per-(user, course) completion counts for
  *  many enrollment rows at once — a handful of grouped queries total,
  *  instead of two (or worse) per enrollment. Backs both list variants'
- *  progress math, including the quiz/assignment completion counts (a
- *  quiz counts once the learner has a submitted/graded attempt; an
- *  assignment counts once any submission exists). */
+ *  progress math, including the quiz completion counts (a quiz counts
+ *  once the learner has a submitted/graded attempt). */
 async function loadLessonStats(rows: { userId: string; courseId: string }[]) {
   const courseIds = [...new Set(rows.map((r) => r.courseId))]
   const userIds = [...new Set(rows.map((r) => r.userId))]
@@ -67,7 +64,6 @@ async function loadLessonStats(rows: { userId: string; courseId: string }[]) {
 
   const completedByUserCourse = new Map<string, number>()
   const completedQuizzesByUserCourse = new Map<string, number>()
-  const completedAssignmentsByUserCourse = new Map<string, number>()
   if (userIds.length > 0 && courseIds.length > 0) {
     const progressRows = await db
       .select({ userId: lessonProgress.userId, courseId: lessonProgress.courseId, count: sql<number>`count(*)::int` })
@@ -97,27 +93,12 @@ async function loadLessonStats(rows: { userId: string; courseId: string }[]) {
     for (const q of quizRows) {
       completedQuizzesByUserCourse.set(`${q.userId}:${q.courseId}`, q.count)
     }
-
-    const assignmentRows = await db
-      .select({
-        userId: assignmentSubmissions.userId,
-        courseId: assignments.courseId,
-        count: sql<number>`count(distinct ${assignmentSubmissions.assignmentId})::int`,
-      })
-      .from(assignmentSubmissions)
-      .innerJoin(assignments, eq(assignments.id, assignmentSubmissions.assignmentId))
-      .where(and(inArray(assignmentSubmissions.userId, userIds), inArray(assignments.courseId, courseIds)))
-      .groupBy(assignmentSubmissions.userId, assignments.courseId)
-    for (const a of assignmentRows) {
-      completedAssignmentsByUserCourse.set(`${a.userId}:${a.courseId}`, a.count)
-    }
   }
 
   return {
     totalsByCourse,
     completedByUserCourse,
     completedQuizzesByUserCourse,
-    completedAssignmentsByUserCourse,
   }
 }
 
@@ -127,7 +108,6 @@ function toEnrollmentFromStats(
   completedByUserCourse: Map<string, number>,
   extra?: {
     completedQuizzes?: Map<string, number>
-    completedAssignments?: Map<string, number>
   }
 ): Enrollment {
   const totalLessons = totalsByCourse.get(row.courseId) ?? 0
@@ -143,7 +123,6 @@ function toEnrollmentFromStats(
     progress,
     completedLessons,
     completedQuizzes: extra?.completedQuizzes?.get(`${row.userId}:${row.courseId}`) ?? 0,
-    completedAssignments: extra?.completedAssignments?.get(`${row.userId}:${row.courseId}`) ?? 0,
     enrolledAt: row.enrolledAt.toISOString(),
     approvedAt: row.approvedAt?.toISOString(),
     interviewedAt: row.interviewedAt?.toISOString(),
@@ -162,7 +141,6 @@ async function toEnrollment(row: typeof enrollments.$inferSelect): Promise<Enrol
   const stats = await loadLessonStats([row])
   return toEnrollmentFromStats(row, stats.totalsByCourse, stats.completedByUserCourse, {
     completedQuizzes: stats.completedQuizzesByUserCourse,
-    completedAssignments: stats.completedAssignmentsByUserCourse,
   })
 }
 
@@ -196,7 +174,6 @@ async function mapRowsToEnrollments(rows: (typeof enrollments.$inferSelect)[]): 
   return rows.map((row) =>
     toEnrollmentFromStats(row, stats.totalsByCourse, stats.completedByUserCourse, {
       completedQuizzes: stats.completedQuizzesByUserCourse,
-      completedAssignments: stats.completedAssignmentsByUserCourse,
     })
   )
 }

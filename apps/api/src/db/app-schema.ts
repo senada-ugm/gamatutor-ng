@@ -480,62 +480,6 @@ export const quizAttempts = pgTable(
   ]
 )
 
-export const assignments = pgTable(
-  "assignments",
-  {
-    id: text("id").primaryKey(),
-    courseId: text("course_id")
-      .notNull()
-      .references(() => courses.id, { onDelete: "cascade" }),
-    lessonId: text("lesson_id").references(() => courseLessons.id, { onDelete: "set null" }),
-    title: text("title").notNull(),
-    description: text("description"),
-    instructions: text("instructions"),
-    maxScore: integer("max_score").notNull().default(100),
-    dueDate: timestamp("due_date"),
-    allowLateSubmission: boolean("allow_late_submission").notNull().default(false),
-    lateSubmissionPenalty: integer("late_submission_penalty").notNull().default(0),
-    allowedFileTypes: jsonb("allowed_file_types").$type<string[]>().notNull().default([]),
-    maxFileSize: integer("max_file_size"),
-    maxFiles: integer("max_files").notNull().default(1),
-    isActive: boolean("is_active").notNull().default(true),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    deletedAt: timestamp("deleted_at"),
-  },
-  (table) => [index("assignments_course_idx").on(table.courseId)]
-)
-
-/** Resubmission rule: overwrite allowed while draft/submitted; once
- *  graded, a new submission is rejected unless the instructor first
- *  PATCHes status back to `returned` (see assignments.service.ts's
- *  submitAssignment()). No version-history table. */
-export const assignmentSubmissions = pgTable(
-  "assignment_submissions",
-  {
-    id: text("id").primaryKey(),
-    assignmentId: text("assignment_id")
-      .notNull()
-      .references(() => assignments.id, { onDelete: "cascade" }),
-    userId: text("user_id").notNull(),
-    content: text("content"),
-    attachments: jsonb("attachments")
-      .$type<Array<{ uploadId: string; url: string; name: string; size: number; mimeType: string }>>()
-      .notNull()
-      .default([]),
-    status: text("status").notNull().default("submitted"),
-    score: integer("score"),
-    feedback: text("feedback"),
-    submittedAt: timestamp("submitted_at").defaultNow().notNull(),
-    gradedAt: timestamp("graded_at"),
-    isLate: boolean("is_late").notNull().default(false),
-  },
-  (table) => [
-    uniqueIndex("assignment_submissions_assignment_user_idx").on(table.assignmentId, table.userId),
-    index("assignment_submissions_user_idx").on(table.userId),
-    check("assignment_submissions_status_check", sql`${table.status} in ('draft', 'submitted', 'graded', 'returned')`),
-  ]
-)
-
 export const auditLog = pgTable(
   "audit_log",
   {

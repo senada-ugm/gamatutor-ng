@@ -50,7 +50,6 @@ namespace Lms {
     progress: int32;
     completedLessons: int32;
     completedQuizzes: int32;
-    completedAssignments: int32;
     @visibility(Lifecycle.Read)
     enrolledAt: utcDateTime;
     approvedAt?: utcDateTime;

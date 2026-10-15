@@ -31,31 +31,6 @@ export const zAdminOverview = z.object({
 
 export const zAnnouncementPriority = z.enum(['normal', 'high']);
 
-export const zAssignmentAttachment = z.object({
-    uploadId: z.string(),
-    url: z.string(),
-    name: z.string(),
-    size: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    mimeType: z.string()
-});
-
-export const zAssignmentGrade = z.object({
-    score: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    feedback: z.string().optional()
-});
-
-export const zAssignmentSubmissionCreate = z.object({
-    content: z.string().optional(),
-    attachmentUploadIds: z.array(z.string()).optional()
-});
-
-export const zAssignmentSubmissionStatus = z.enum([
-    'draft',
-    'submitted',
-    'graded',
-    'returned'
-]);
-
 export const zCertificateInstitution = z.object({
     name: z.string()
 });
@@ -179,75 +154,6 @@ export const zAnnouncement = z.object({
     isPinned: z.boolean(),
     priority: zAnnouncementPriority,
     createdAt: z.iso.datetime().readonly()
-});
-
-export const zAssignment = z.object({
-    id: zCommonResourceId,
-    courseId: zCommonResourceId,
-    lessonId: zCommonResourceId.optional(),
-    title: z.string(),
-    description: z.string().optional(),
-    instructions: z.string().optional(),
-    maxScore: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    dueDate: z.iso.datetime().optional(),
-    allowLateSubmission: z.boolean(),
-    lateSubmissionPenalty: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    allowedFileTypes: z.array(z.string()),
-    maxFileSize: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    maxFiles: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    isActive: z.boolean(),
-    submissionCount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).readonly(),
-    createdAt: z.iso.datetime().readonly()
-});
-
-export const zAssignmentCreate = z.object({
-    lessonId: zCommonResourceId.optional(),
-    title: z.string(),
-    description: z.string().optional(),
-    instructions: z.string().optional(),
-    maxScore: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    dueDate: z.iso.datetime().optional(),
-    allowLateSubmission: z.boolean().optional(),
-    lateSubmissionPenalty: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    allowedFileTypes: z.array(z.string()).optional(),
-    maxFileSize: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    maxFiles: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    isActive: z.boolean().optional()
-});
-
-export const zAssignmentSubmissionUser = z.object({
-    id: zCommonResourceId,
-    name: z.string(),
-    email: z.string()
-});
-
-export const zAssignmentSubmission = z.object({
-    id: zCommonResourceId,
-    assignmentId: zCommonResourceId,
-    content: z.string().optional(),
-    attachments: z.array(zAssignmentAttachment),
-    status: zAssignmentSubmissionStatus,
-    score: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    feedback: z.string().optional(),
-    submittedAt: z.iso.datetime().readonly(),
-    gradedAt: z.iso.datetime().readonly().optional(),
-    isLate: z.boolean(),
-    user: zAssignmentSubmissionUser
-});
-
-export const zAssignmentUpdate = z.object({
-    lessonId: zCommonResourceId.optional(),
-    title: z.string().optional(),
-    description: z.string().optional(),
-    instructions: z.string().optional(),
-    maxScore: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    dueDate: z.iso.datetime().optional(),
-    allowLateSubmission: z.boolean().optional(),
-    lateSubmissionPenalty: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    allowedFileTypes: z.array(z.string()).optional(),
-    maxFileSize: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    maxFiles: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    isActive: z.boolean().optional()
 });
 
 export const zAuditLogEntry = z.object({
@@ -487,7 +393,6 @@ export const zEnrollment = z.object({
     progress: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
     completedLessons: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
     completedQuizzes: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    completedAssignments: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
     enrolledAt: z.iso.datetime().readonly(),
     approvedAt: z.iso.datetime().optional(),
     interviewedAt: z.iso.datetime().optional(),
@@ -1280,35 +1185,6 @@ export const zAnnouncementWritable = z.object({
     priority: zAnnouncementPriority
 });
 
-export const zAssignmentWritable = z.object({
-    id: zCommonResourceId,
-    courseId: zCommonResourceId,
-    lessonId: zCommonResourceId.optional(),
-    title: z.string(),
-    description: z.string().optional(),
-    instructions: z.string().optional(),
-    maxScore: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    dueDate: z.iso.datetime().optional(),
-    allowLateSubmission: z.boolean(),
-    lateSubmissionPenalty: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    allowedFileTypes: z.array(z.string()),
-    maxFileSize: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    maxFiles: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    isActive: z.boolean()
-});
-
-export const zAssignmentSubmissionWritable = z.object({
-    id: zCommonResourceId,
-    assignmentId: zCommonResourceId,
-    content: z.string().optional(),
-    attachments: z.array(zAssignmentAttachment),
-    status: zAssignmentSubmissionStatus,
-    score: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional(),
-    feedback: z.string().optional(),
-    isLate: z.boolean(),
-    user: zAssignmentSubmissionUser
-});
-
 export const zAuditLogEntryWritable = z.object({
     id: zCommonResourceId
 });
@@ -1387,7 +1263,6 @@ export const zEnrollmentWritable = z.object({
     progress: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
     completedLessons: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
     completedQuizzes: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-    completedAssignments: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
     approvedAt: z.iso.datetime().optional(),
     interviewedAt: z.iso.datetime().optional(),
     interviewNotes: z.string().optional(),
@@ -1627,118 +1502,6 @@ export const zAnnouncementApiUnpinResponse = z.object({
     warnings: z.array(zCommonWarning).optional()
 });
 
-export const zAssignmentSubmissionApiGetPath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zAssignmentSubmissionApiGetResponse = z.object({
-    data: zAssignmentSubmission,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zAssignmentSubmissionApiGradeBody = zAssignmentGrade;
-
-export const zAssignmentSubmissionApiGradePath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zAssignmentSubmissionApiGradeResponse = z.object({
-    data: zAssignmentSubmission,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zAssignmentSubmissionApiReopenPath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zAssignmentSubmissionApiReopenResponse = z.object({
-    data: zAssignmentSubmission,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zAssignmentSubmissionsApiListPath = z.object({
-    assignmentId: zCommonResourceId
-});
-
-export const zAssignmentSubmissionsApiListQuery = z.object({
-    page: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(1),
-    pageSize: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(50)
-});
-
-/**
- * Standard page-based paginated response envelope.
- */
-export const zAssignmentSubmissionsApiListResponse = z.object({
-    data: z.array(zAssignmentSubmission),
-    pagination: zCommonPagePagination,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zAssignmentSubmissionsApiSubmitBody = zAssignmentSubmissionCreate;
-
-export const zAssignmentSubmissionsApiSubmitPath = z.object({
-    assignmentId: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zAssignmentSubmissionsApiSubmitResponse = z.object({
-    data: zAssignmentSubmission,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zAssignmentsApiDeletePath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * There is no content to send for this request, but the headers may be useful.
- */
-export const zAssignmentsApiDeleteResponse = z.void();
-
-export const zAssignmentsApiGetPath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zAssignmentsApiGetResponse = z.object({
-    data: zAssignment,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zAssignmentsApiUpdateBody = zAssignmentUpdate;
-
-export const zAssignmentsApiUpdatePath = z.object({
-    id: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zAssignmentsApiUpdateResponse = z.object({
-    data: zAssignment,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
 export const zAuditLogApiListQuery = z.object({
     page: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(1),
     pageSize: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(50),
@@ -1926,40 +1689,6 @@ export const zCourseAnnouncementsApiCreatePath = z.object({
  */
 export const zCourseAnnouncementsApiCreateResponse = z.object({
     data: zAnnouncement,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zCourseAssignmentsApiListPath = z.object({
-    courseId: zCommonResourceId
-});
-
-export const zCourseAssignmentsApiListQuery = z.object({
-    page: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(1),
-    pageSize: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(50)
-});
-
-/**
- * Standard page-based paginated response envelope.
- */
-export const zCourseAssignmentsApiListResponse = z.object({
-    data: z.array(zAssignment),
-    pagination: zCommonPagePagination,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zCourseAssignmentsApiCreateBody = zAssignmentCreate;
-
-export const zCourseAssignmentsApiCreatePath = z.object({
-    courseId: zCommonResourceId
-});
-
-/**
- * Standard single resource response envelope.
- */
-export const zCourseAssignmentsApiCreateResponse = z.object({
-    data: zAssignment,
     meta: zCommonResponseMeta,
     warnings: z.array(zCommonWarning).optional()
 });
