@@ -26,7 +26,6 @@ type EditorRoutePath =
   | "/instructor/courses/$courseId/editor/konten"
   | "/instructor/courses/$courseId/editor/kuis"
   | "/instructor/courses/$courseId/editor/peserta"
-  | "/instructor/courses/$courseId/editor/instruktur"
   | "/instructor/courses/$courseId/editor/pengumuman"
   | "/instructor/courses/$courseId/editor/sertifikat"
   | "/instructor/courses/$courseId/editor/laporan"
@@ -61,7 +60,6 @@ const TAB_GROUPS: readonly TabGroup[] = [
     icon: Users,
     tabs: [
       { to: "/instructor/courses/$courseId/editor/peserta", label: "Peserta" },
-      { to: "/instructor/courses/$courseId/editor/instruktur", label: "Instruktur" },
       { to: "/instructor/courses/$courseId/editor/pengumuman", label: "Pengumuman" },
     ],
   },

@@ -188,12 +188,6 @@ const editorCertificatesRoute = createRoute({
   component: lazyRouteComponent(() => import("@/routes/instructor/editor-certificates"), "EditorCertificatesTab"),
 })
 
-const editorInstructorsRoute = createRoute({
-  getParentRoute: () => editorLayoutRoute,
-  path: "/instruktur",
-  component: lazyRouteComponent(() => import("@/routes/instructor/editor-instructors"), "EditorInstructorsTab"),
-})
-
 const editorAnnouncementsRoute = createRoute({
   getParentRoute: () => editorLayoutRoute,
   path: "/pengumuman",
@@ -339,7 +333,6 @@ const routeTree = rootRoute.addChildren([
           editorParticipantsRoute,
           editorQuizzesRoute,
           editorCertificatesRoute,
-          editorInstructorsRoute,
           editorAnnouncementsRoute,
           editorReportRoute,
         ]),

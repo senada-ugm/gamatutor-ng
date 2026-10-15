@@ -6,8 +6,9 @@
  *   node tests/smoke-app-editor-tabs.mjs
  * Signs in as the seeded admin, creates a course through the UI, then
  * exercises Sertifikat (signature with a real image upload, persisted
- * across reload) and Instruktur (invite an existing account -> active
- * row -> remove).
+ * across reload). (The Instruktur tab was removed with the single-
+ * instructor trim — PLANS 6.5; instructor assignment lives in seeding
+ * and the API.)
  */
 import { chromium } from "playwright"
 
@@ -17,7 +18,6 @@ const PASSWORD = process.env.SMOKE_PASSWORD ?? "correcthorsebatterystaple"
 const COURSE_TITLE = `Smoke Editor Tabs ${Date.now()}`
 const SIGNER_NAME = "Dr. Bambang Sutrisno"
 const SIGNER_TITLE = "Ketua Lembaga"
-const INVITE_EMAIL = "user@lms.dev"
 // 1x1 transparent PNG — real magic bytes so the server's content sniffing
 // accepts it for the certificate-signature (image-only) purpose.
 const PNG_BASE64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
@@ -98,26 +98,6 @@ await expect("signatures persist across reload", async () => {
   const nameValue = await page.locator("#sig-name-1").inputValue()
   if (nameValue !== SIGNER_NAME) throw new Error(`signer name not persisted: "${nameValue}"`)
   await page.getByRole("img", { name: "Tanda tangan" }).waitFor({ timeout: 8000 })
-})
-
-// ================= INSTRUKTUR =================
-// (direct URL: the editor's "Instruktur" tab name collides with the
-// workspace nav's "Instruktur" button in role matching)
-await page.goto(`${BASE}/instructor/courses/${courseId}/editor/instruktur`, { timeout: 30000 })
-await page.getByRole("button", { name: "Undang Instruktur", exact: true }).click()
-await page.locator("#instructor-email").fill(INVITE_EMAIL)
-await page.getByRole("button", { name: "Kirim Undangan" }).click()
-await expect("inviting an existing account adds an active instructor row", async () => {
-  await page.getByText(INVITE_EMAIL).waitFor({ timeout: 8000 })
-  await page.getByText("Aktif", { exact: true }).waitFor({ timeout: 8000 })
-})
-
-// Destructive actions confirm through the in-app AlertDialog now, not
-// window.confirm — accept it by clicking the dialog's own action.
-await page.getByRole("button", { name: "Hapus", exact: true }).click()
-await page.locator('[data-slot="alert-dialog-content"]').getByRole("button", { name: "Hapus" }).click()
-await expect("removing the instructor empties the list", async () => {
-  await page.getByText("Belum ada instruktur tambahan").waitFor({ timeout: 8000 })
 })
 
 await browser.close()
