@@ -14,7 +14,10 @@ COPY packages/eslint-config ./packages/eslint-config
 COPY apps/app ./apps/app
 
 # Install dependencies and build SPA
-RUN pnpm install --frozen-lockfile
+# pnpm leaves out @esbuild/linux-x64 for esbuild 0.27/0.28 on Linux, so
+# their postinstall resolves the hoisted 0.25 binary and fails its version
+# check. Unhoisted, esbuild's own fallback fetches the matching binary.
+RUN pnpm install --frozen-lockfile --config.hoist-pattern='*' --config.hoist-pattern='!@esbuild/*'
 RUN pnpm --filter app build
 
 # Stage 2: High-performance Nginx Static Server
