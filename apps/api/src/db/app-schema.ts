@@ -480,20 +480,6 @@ export const quizAttempts = pgTable(
   ]
 )
 
-export const auditLog = pgTable(
-  "audit_log",
-  {
-    id: text("id").primaryKey(),
-    actorUserId: text("actor_user_id").notNull(),
-    action: text("action").notNull(),
-    entityType: text("entity_type").notNull(),
-    entityId: text("entity_id").notNull(),
-    metadata: jsonb("metadata").$type<Record<string, unknown>>(),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-  },
-  (table) => [index("audit_log_created_at_idx").on(table.createdAt)]
-)
-
 /** One in-app notification row per recipient per business moment
  *  (selection result, payment confirmed, graded, certificate issued) —
  *  written by lib/notify.ts, which also fires the matching transactional

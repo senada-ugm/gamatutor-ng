@@ -14,7 +14,6 @@ import {
 import type { FastifyInstance } from "fastify"
 import { z } from "zod"
 import { ForbiddenError } from "../../../lib/errors.js"
-import { recordAudit } from "../../../lib/audit.js"
 import { requireAdmin } from "../../../lib/require-admin.js"
 import { requireSession } from "../../../lib/require-session.js"
 import * as settingsService from "../../platform-settings/services/platform-settings.service.js"
@@ -86,13 +85,6 @@ export function institutionRequestsRoutes(app: FastifyInstance) {
     async (request): Promise<InstitutionRequestsApiApproveResponse> => {
       const actor = await requireAdmin(request)
       const approved = await service.approveRequest(request.params.id)
-      await recordAudit({
-        actorUserId: actor.id,
-        action: "institution_request.approve",
-        entityType: "institution_request",
-        entityId: request.params.id,
-        metadata: { institutionId: approved.id },
-      })
       return dataResponse(approved, request.id)
     }
   )
@@ -103,13 +95,6 @@ export function institutionRequestsRoutes(app: FastifyInstance) {
     async (request) => {
       const actor = await requireAdmin(request)
       const rejected = await service.rejectRequest(request.params.id, request.body.reason)
-      await recordAudit({
-        actorUserId: actor.id,
-        action: "institution_request.reject",
-        entityType: "institution_request",
-        entityId: request.params.id,
-        metadata: { reason: request.body.reason },
-      })
       return dataResponse(rejected, request.id)
     }
   )

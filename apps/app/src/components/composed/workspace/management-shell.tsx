@@ -78,13 +78,6 @@ export function ManagementShell() {
                   >
                     <span>Pengaturan</span>
                   </Link>
-                  <Link
-                    to="/admin/audit"
-                    data-sidebar="menu-button"
-                    className={verticalTabClass(!!matchRoute({ to: "/admin/audit" }))}
-                  >
-                    <span>Log Audit</span>
-                  </Link>
                 </div>
 
                 <div className="border-t border-border/50 pt-3">

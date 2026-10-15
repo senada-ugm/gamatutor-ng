@@ -7,7 +7,7 @@
  *   node tests/smoke-app-workspaces.mjs
  *
  * As admin: dashboard stats, user suspend/reactivate, institution
- * create/edit, platform settings save, audit trail. As the seeded
+ * create/edit, platform settings save. As the seeded
  * learner: catalog -> enroll course, announcement visible in the
  * player, course report tab, certificate view + public verify.
  */
@@ -98,11 +98,6 @@ await expect("platform settings save", async () => {
 await page.locator("#platform-name").fill(originalName)
 await page.getByRole("button", { name: "Simpan Pengaturan" }).click()
 await page.getByText("Pengaturan platform disimpan").waitFor({ timeout: 8000 })
-
-await page.goto(`${BASE}/admin/audit`, { timeout: 30000 })
-await expect("audit log records the settings updates", async () => {
-  await page.getByText("platform_settings.update").first().waitFor({ timeout: 8000 })
-})
 
 // ================= SEED COURSES AS ADMIN =================
 let institutionId = (await (await page.request.get(`${API}/v1/institutions?pageSize=1`)).json())?.data?.[0]?.id

@@ -8,7 +8,6 @@ import { zAccountStatus, zUserRole, zUserSuspend } from "@workspace/contracts/zo
 import type { FastifyInstance } from "fastify"
 import { z } from "zod"
 
-import { recordAudit } from "../../../lib/audit.js"
 import { requireAdmin } from "../../../lib/require-admin.js"
 import { dataResponse, pagedResponse } from "../../../lib/response.js"
 import { validateBody } from "../../../lib/validation.js"
@@ -56,13 +55,6 @@ export function usersRoutes(app: FastifyInstance) {
       const actor = await requireAdmin(request)
       const { id } = idParamsSchema.parse(request.params)
       const suspended = await service.suspendUser(id, request.body.reason)
-      await recordAudit({
-        actorUserId: actor.id,
-        action: "user.suspend",
-        entityType: "user",
-        entityId: id,
-        metadata: { reason: request.body.reason },
-      })
       return dataResponse(suspended, request.id)
     }
   )
@@ -82,7 +74,6 @@ export function usersRoutes(app: FastifyInstance) {
     const actor = await requireAdmin(request)
     const { id } = idParamsSchema.parse(request.params)
     const reactivated = await service.reactivateUser(id)
-    await recordAudit({ actorUserId: actor.id, action: "user.reactivate", entityType: "user", entityId: id })
     return dataResponse(reactivated, request.id)
   })
 }

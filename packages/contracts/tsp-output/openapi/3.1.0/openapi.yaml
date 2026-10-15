@@ -45,8 +45,6 @@ tags:
     description: "Ownership grants linking accounts to the institutions they administer."
   - name: Users
     description: "Platform user administration: listing, search, suspension. Admin-only."
-  - name: Audit Log
-    description: "Append-only trail of privileged administrative actions."
 paths:
   /admin/overview:
     get:
@@ -229,52 +227,6 @@ paths:
                 $ref: '#/components/schemas/Common.ErrorResponse'
       tags:
         - Announcements
-  /audit-log:
-    get:
-      operationId: AuditLogApi_list
-      description: Lists recorded actions, newest first.
-      parameters:
-        - $ref: '#/components/parameters/Common.PageParams.page'
-        - $ref: '#/components/parameters/Common.PageParams.pageSize'
-        - $ref: '#/components/parameters/Common.SearchParam.search'
-        - $ref: '#/components/parameters/Common.SearchParam.q'
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - data
-                  - pagination
-                  - meta
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/AuditLogEntry'
-                    description: The list of resources for the current page.
-                  pagination:
-                    $ref: '#/components/schemas/Common.PagePagination'
-                    description: Pagination details and navigation links.
-                  meta:
-                    $ref: '#/components/schemas/Common.ResponseMeta'
-                    description: Response tracing metadata.
-                  warnings:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Common.Warning'
-                    description: Minor warning list.
-                description: Standard page-based paginated response envelope.
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Common.ErrorResponse'
-      tags:
-        - Audit Log
   /certificates/verify:
     get:
       operationId: CertificatesApi_verify
@@ -2878,7 +2830,7 @@ paths:
         - Platform Settings
     patch:
       operationId: PlatformSettingsApi_update
-      description: Updates fields and audit-logs the change. Admin only.
+      description: Updates fields. Admin only.
       parameters: []
       responses:
         '200':
@@ -4007,41 +3959,6 @@ components:
           $ref: '#/components/schemas/Common.ResourceId'
         name:
           type: string
-    AuditLogEntry:
-      type: object
-      required:
-        - id
-        - actorUserId
-        - action
-        - entityType
-        - entityId
-        - createdAt
-      properties:
-        id:
-          $ref: '#/components/schemas/Common.ResourceId'
-        actorUserId:
-          $ref: '#/components/schemas/Common.ResourceId'
-          description: The admin account that performed the action.
-          readOnly: true
-        action:
-          type: string
-          description: Dot-namespaced action, e.g. "user.suspend".
-          readOnly: true
-        entityType:
-          type: string
-          readOnly: true
-        entityId:
-          $ref: '#/components/schemas/Common.ResourceId'
-          readOnly: true
-        metadata:
-          type: object
-          unevaluatedProperties: {}
-          description: Action-specific free-form context (reasons, related ids).
-          readOnly: true
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
     Certificate:
       type: object
       required:

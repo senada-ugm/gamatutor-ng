@@ -18,7 +18,6 @@ import "./reports.tsp";
 import "./telemetry.tsp";
 import "./institutions.tsp";
 import "./users.tsp";
-import "./audit.tsp";
 
 /**
  * LMS API contracts — single source of truth for shapes. The web mockup

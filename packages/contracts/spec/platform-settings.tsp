@@ -9,7 +9,7 @@ using Lms.Common;
 
 /**
  * Platform-wide operational settings, admin-managed. Stored as one
- * settings row; every update is audit-logged (action
+ * settings row.
  * "platform_settings.update"). allowInstitutionRequests is enforced
  * server-side (the self-service request route rejects while off);
  * maintenanceMode is persisted for the kill-switch UI — sign-in gating
@@ -45,7 +45,7 @@ namespace Lms {
     @get
     get(): DataResponse<PlatformSettings> | ErrorResponse;
 
-    /** Updates fields and audit-logs the change. Admin only. */
+    /** Updates fields. Admin only. */
     @patch
     update(@body body: PlatformSettingsUpdate): DataResponse<PlatformSettings> | ErrorResponse;
   }

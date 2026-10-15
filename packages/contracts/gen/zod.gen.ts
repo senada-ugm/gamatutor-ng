@@ -156,16 +156,6 @@ export const zAnnouncement = z.object({
     createdAt: z.iso.datetime().readonly()
 });
 
-export const zAuditLogEntry = z.object({
-    id: zCommonResourceId,
-    actorUserId: zCommonResourceId.readonly(),
-    action: z.string().readonly(),
-    entityType: z.string().readonly(),
-    entityId: zCommonResourceId.readonly(),
-    metadata: z.record(z.string(), z.unknown()).readonly().optional(),
-    createdAt: z.iso.datetime().readonly()
-});
-
 export const zCertificate = z.object({
     id: zCommonResourceId,
     enrollmentId: zCommonResourceId,
@@ -1185,10 +1175,6 @@ export const zAnnouncementWritable = z.object({
     priority: zAnnouncementPriority
 });
 
-export const zAuditLogEntryWritable = z.object({
-    id: zCommonResourceId
-});
-
 export const zCertificateWritable = z.object({
     id: zCommonResourceId,
     enrollmentId: zCommonResourceId,
@@ -1498,23 +1484,6 @@ export const zAnnouncementApiUnpinPath = z.object({
  */
 export const zAnnouncementApiUnpinResponse = z.object({
     data: zAnnouncement,
-    meta: zCommonResponseMeta,
-    warnings: z.array(zCommonWarning).optional()
-});
-
-export const zAuditLogApiListQuery = z.object({
-    page: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(1),
-    pageSize: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(50),
-    search: z.string().optional(),
-    q: z.string().optional()
-});
-
-/**
- * Standard page-based paginated response envelope.
- */
-export const zAuditLogApiListResponse = z.object({
-    data: z.array(zAuditLogEntry),
-    pagination: zCommonPagePagination,
     meta: zCommonResponseMeta,
     warnings: z.array(zCommonWarning).optional()
 });

@@ -98,7 +98,6 @@ import type {
   UserCapabilities,
   AdminOverview,
   AdminGrowth30d,
-  AuditLogEntry,
   PlatformSettings,
   PlatformSettingsUpdate,
   TelemetryEvent,
@@ -276,7 +275,6 @@ export type ContractInstitutionReport = InstitutionReport
 export type ContractInstitutionReportCourseRow = InstitutionReportCourseRow
 export type ContractParticipantProfileUpdate = ParticipantProfileUpdate
 export type ContractReportUser = ReportUser
-export type ContractAuditLogEntry = AuditLogEntry
 export type ContractAnnouncement = Announcement
 export type ContractAnnouncementCreate = AnnouncementCreate
 export type ContractAnnouncementPriority = AnnouncementPriority

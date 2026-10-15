@@ -102,7 +102,7 @@ export function DashboardPage() {
               <div>
                 <h2 className="text-sm font-bold text-[#173a5e] dark:text-blue-300">Konsol Administrasi Platform</h2>
                 <p className="text-xs text-muted-foreground">
-                  Kelola pengguna, institusi mitra, pengaturan platform, dan audit log.
+                  Kelola pengguna, institusi mitra, dan pengaturan platform.
                 </p>
               </div>
             </div>

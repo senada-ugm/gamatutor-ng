@@ -4,7 +4,6 @@ import type { FastifyInstance } from "fastify"
 import { z } from "zod"
 
 import { requireAdmin } from "../../../lib/require-admin.js"
-import { recordAudit } from "../../../lib/audit.js"
 import { requireSession } from "../../../lib/require-session.js"
 import { dataResponse, paginate } from "../../../lib/response.js"
 import { validateBody } from "../../../lib/validation.js"
@@ -38,13 +37,6 @@ export function institutionOwnershipsRoutes(app: FastifyInstance) {
       const actor = await requireAdmin(request)
       const { userId, institutionId } = request.body
       const granted = await service.grantOwnership(userId, institutionId)
-      await recordAudit({
-        actorUserId: actor.id,
-        action: "institution_ownership.grant",
-        entityType: "institution_ownership",
-        entityId: granted.id,
-        metadata: { userId, institutionId },
-      })
       return dataResponse(granted, request.id)
     }
   )

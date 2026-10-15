@@ -463,7 +463,6 @@ export async function resetAndSeedDatabase() {
       certificates,
       course_lessons,
       certificate_settings,
-      audit_log,
       course_instructors,
       accounts,
       enrollments,

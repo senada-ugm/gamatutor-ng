@@ -34,7 +34,7 @@ interface SearchInputProps {
 
 /** The one search box: magnifier affordance, an accessible name, and a
  *  clear button once there's something to clear. The three search
- *  surfaces (catalog, admin users, audit) each rendered a bare Input
+ *  surfaces (catalog, admin users) each rendered a bare Input
  *  with only a placeholder to say what it did. */
 export function SearchInput({ value, onChange, label, placeholder, className }: SearchInputProps) {
   return (

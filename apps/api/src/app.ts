@@ -10,7 +10,6 @@ import { env, corsOrigins } from "./env.js"
 import { getOptionalSession } from "./lib/require-session.js"
 import { isMaintenanceMode } from "./lib/maintenance.js"
 import { handleError } from "./lib/errors.js"
-import { auditModule } from "./modules/audit/index.js"
 import { certificatesModule } from "./modules/certificates/index.js"
 import { courseContentModule } from "./modules/course-content/index.js"
 import { courseInstructorsModule } from "./modules/course-instructors/index.js"
@@ -116,7 +115,6 @@ export async function buildApp() {
   await app.register(announcementsModule, { prefix: "/v1" })
   await app.register(platformSettingsModule, { prefix: "/v1" })
   await app.register(usersModule, { prefix: "/v1" })
-  await app.register(auditModule, { prefix: "/v1" })
   await app.register(telemetryModule, { prefix: "/v1" })
   await app.register(devModule, { prefix: "/v1" })
 

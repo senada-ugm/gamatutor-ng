@@ -79,27 +79,6 @@ export type AnnouncementUser = {
     name: string;
 };
 
-export type AuditLogEntry = {
-    id: CommonResourceId;
-    /**
-     * The admin account that performed the action.
-     */
-    readonly actorUserId: CommonResourceId;
-    /**
-     * Dot-namespaced action, e.g. "user.suspend".
-     */
-    readonly action: string;
-    readonly entityType: string;
-    readonly entityId: CommonResourceId;
-    /**
-     * Action-specific free-form context (reasons, related ids).
-     */
-    readonly metadata?: {
-        [key: string]: unknown;
-    };
-    readonly createdAt: string;
-};
-
 export type Certificate = {
     id: CommonResourceId;
     enrollmentId: CommonResourceId;
@@ -1486,10 +1465,6 @@ export type AnnouncementWritable = {
     priority: AnnouncementPriority;
 };
 
-export type AuditLogEntryWritable = {
-    id: CommonResourceId;
-};
-
 export type CertificateWritable = {
     id: CommonResourceId;
     enrollmentId: CommonResourceId;
@@ -1970,65 +1945,6 @@ export type AnnouncementApiUnpinResponses = {
 };
 
 export type AnnouncementApiUnpinResponse = AnnouncementApiUnpinResponses[keyof AnnouncementApiUnpinResponses];
-
-export type AuditLogApiListData = {
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * The page index to retrieve (default: 1).
-         */
-        page?: number;
-        /**
-         * The maximum number of records to return on a page (default: 50).
-         */
-        pageSize?: number;
-        /**
-         * Query string matching wildcard terms.
-         */
-        search?: string;
-        /**
-         * Short query alias parameter.
-         */
-        q?: string;
-    };
-    url: '/audit-log';
-};
-
-export type AuditLogApiListErrors = {
-    /**
-     * An unexpected error response.
-     */
-    default: CommonErrorResponse;
-};
-
-export type AuditLogApiListError = AuditLogApiListErrors[keyof AuditLogApiListErrors];
-
-export type AuditLogApiListResponses = {
-    /**
-     * Standard page-based paginated response envelope.
-     */
-    200: {
-        /**
-         * The list of resources for the current page.
-         */
-        data: Array<AuditLogEntry>;
-        /**
-         * Pagination details and navigation links.
-         */
-        pagination: CommonPagePagination;
-        /**
-         * Response tracing metadata.
-         */
-        meta: CommonResponseMeta;
-        /**
-         * Minor warning list.
-         */
-        warnings?: Array<CommonWarning>;
-    };
-};
-
-export type AuditLogApiListResponse = AuditLogApiListResponses[keyof AuditLogApiListResponses];
 
 export type CertificatesApiVerifyData = {
     body?: never;
