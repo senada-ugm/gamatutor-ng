@@ -13,10 +13,11 @@ COPY packages/eslint-config ./packages/eslint-config
 COPY apps/api ./apps/api
 
 # Install dependencies and build
-# pnpm leaves out @esbuild/linux-x64 for esbuild 0.27/0.28 on Linux, so
-# their postinstall resolves the hoisted 0.25 binary and fails its version
-# check. Unhoisted, esbuild's own fallback fetches the matching binary.
-RUN pnpm install --frozen-lockfile --config.hoist-pattern='*' --config.hoist-pattern='!@esbuild/*'
+# pnpm (10.x, this lockfile) skips the Linux native packages under vite 8 -
+# @esbuild/linux-x64 for esbuild 0.27/0.28 and @rolldown/binding-linux-x64-*
+# - so esbuild's postinstall and `vite build` fail. --force installs every
+# optional platform package, the native ones for this image included.
+RUN pnpm install --frozen-lockfile --force
 RUN pnpm --filter api build
 
 # Isolate production dependencies
