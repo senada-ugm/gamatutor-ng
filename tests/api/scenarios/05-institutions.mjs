@@ -78,11 +78,30 @@ export async function run(ctx) {
     1
   )
 
-  // self-service request queue
+  // self-service request queue — closed by default since the
+  // single-tenant frontend (PLANS 5.2); the admin opens it for this
+  // journey's round-trip.
   status(
     "anon cannot submit a request",
     await anon.post("/v1/institution-requests", { json: { institutionName: "Anon", institutionType: "universitas" } }),
     401
+  )
+  status(
+    "admin closes the request form (the shipped default)",
+    await admin.patch("/v1/platform-settings", { json: { allowInstitutionRequests: false } }),
+    200
+  )
+  status(
+    "self-service submissions are refused while closed",
+    await user.post("/v1/institution-requests", {
+      json: { institutionName: "Closed", institutionType: "universitas" },
+    }),
+    403
+  )
+  status(
+    "admin opens the request form",
+    await admin.patch("/v1/platform-settings", { json: { allowInstitutionRequests: true } }),
+    200
   )
   const reqA = status(
     "user submits request #1 (to be approved)",

@@ -1,9 +1,9 @@
 import { check, eq, status } from "../lib/assert.mjs"
 
 /**
- * Quizzes: authoring (quiz + single-choice/essay questions), learner
+ * Quizzes: authoring (quiz + single-choice/essay questions) and learner
  * attempts with server-side grading (essay -> pending_review -> manual
- * grade), and platform-wide assessments.
+ * grade).
  */
 export async function run(ctx) {
   console.log("\n== Quizzes ==")
@@ -94,15 +94,6 @@ export async function run(ctx) {
     200
   )
   check("graded attempt carries a score", graded ? typeof graded.data?.score === "number" : false)
-
-  // platform-wide assessments (course-less quizzes)
-  status(
-    "admin creates an assessment",
-    await admin.post("/v1/assessments", { json: { title: "Journey Assessment (RIASEC-style)" } }),
-    201
-  )
-  status("admin lists assessments", await admin.get("/v1/assessments"), 200)
-  status("plain user cannot author assessments", await user.post("/v1/assessments", { json: { title: "nope" } }), 403)
 
   // the quiz is deleted last: attempts/questions cascade with it
   status("admin deletes the quiz", await admin.delete(`/v1/quizzes/${ids.quiz}`), 204)

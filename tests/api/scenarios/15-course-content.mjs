@@ -82,6 +82,23 @@ export async function run(ctx) {
     }),
     201
   )
+  // interactive slide decks (PLANS 4.x): manager-scoped manifest upsert
+  // + read, and the study-time aggregate over the event just recorded.
+  const deck = status(
+    "admin attaches a slide deck",
+    await admin.put(`/v1/courses/${ids.course}/slide-deck`, {
+      json: { schemaVersion: 1, manifest: { id: "journey-deck", modules: [{ id: "m1", pages: [] }] } },
+    }),
+    200
+  )
+  check("deck echoes the manifest", deck?.data?.manifest?.id === "journey-deck")
+  status("anon cannot read the deck", await anon.get(`/v1/courses/${ids.course}/slide-deck`), 401)
+  const summary = status(
+    "admin reads the telemetry summary",
+    await admin.get(`/v1/courses/${ids.course}/telemetry-summary`),
+    200
+  )
+  check("summary counts the recorded dwell", (summary?.data?.totalDwellSeconds ?? 0) >= 15)
   status(
     "anon cannot record telemetry",
     await anon.post("/v1/telemetry/events", {

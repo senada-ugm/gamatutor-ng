@@ -34,9 +34,9 @@ export async function run(ctx) {
   eq("status returns to active", reactivated?.data?.status, "active")
   status("reactivating an active account conflicts", await admin.post(`/v1/users/${ids.userId}/reactivate`), 409)
 
-  // Suspension revoked the user persona's Better Auth session — sign them
-  // back in so later scenarios (audit's 403 check, payments, wishlist…)
-  // authenticate as the plain user again.
+  // Suspension revoked the user persona's Better Auth session — sign
+  // them back in so later scenarios authenticate as the plain user
+  // again.
   status(
     "user re-signs in after reactivation",
     await user.post("/api/auth/sign-in/email", {

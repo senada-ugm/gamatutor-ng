@@ -16,15 +16,21 @@ apps/
   api/              - Fastify backend, real Postgres via Drizzle (health,
                       institutions, users, courses, course-content,
                       course-instructors, enrollments, certificates,
-                      certificate-settings, quizzes, assignments, uploads,
+                      certificate-settings, quizzes, uploads,
                       notifications, announcements, reports, telemetry,
-                      platform-settings, audit, plus the slide-deck ops
+                      platform-settings, plus the slide-deck ops
                       served by course-content — contract/API parity
                       enforced by scripts/check-api-contract-parity.mjs).
-                      Scope note (docs/PLANS.md Phase 1, 2026-10-15): the
-                      payments/wishlist, attendance, discussions, and
-                      standalone-assessment domains were REMOVED as out of
-                      PKS scope — do not reintroduce them.
+                      Scope note (docs/PLANS.md Phases 1 & 6, 2026-10-15):
+                      the payments/wishlist, attendance, discussions,
+                      standalone-assessment, assignments, and audit domains
+                      were REMOVED as out of PKS scope; notifications are
+                      in-app only (email is Better Auth's alone); the
+                      enrollment funnel is registered->selected->graduated;
+                      multi-instructor management UI is gone (the
+                      course-instructors module stays for capability
+                      derivation and gates). Do not reintroduce any of
+                      these.
 packages/
   contracts/        - TypeSpec API contracts (source of truth for shapes)
   ui/               - Shared UI: shadcn primitives + authored composed blocks (@workspace/ui)
@@ -69,11 +75,11 @@ packages/
 ## apps/app — Component conventions
 
 - Any custom component we write — whether a small shared atom (a badge,
-  a file-upload widget) or a full composed block (an assignment manager,
+  a file-upload widget) or a full composed block (a report panel,
   a course editor) — lives under `apps/app/src/components/composed/<domain>/`
   (e.g. `components/composed/courses/`). Sub-pieces used only within one
   domain go in that domain's `_atoms/` subfolder. Atoms reused **across**
-  multiple domains (an assignment submission badge) go in
+  multiple domains (a status badge) go in
   `components/composed/_shared/` instead — prefer a shadcn primitive from
   `packages/ui` over a custom atom whenever one fits. Shared page chrome
   lives in `components/composed/workspace/`; the chrome-less player's
@@ -429,7 +435,7 @@ packages/
   editor`) resolved the course via `lib/mock/courses.ts`'s `getCourseById()`
   (404s on any real `crs_`-prefixed id) and every one of its 9 tabs
   read/wrote local `useState`; `CoursePlayer` (`/learn/[courseId]/**`) was
-  the same story for lesson progress, quizzes, and assignments. Both
+  the same story for lesson progress and quizzes. Both
   now resolve the real course via `coursesApiGet` and every tab/route is
   real. The domains that got built from scratch — schema
   → `.tsp` → `apps/api` module → frontend wiring, in this order, each
@@ -476,30 +482,18 @@ packages/
     marked `@visibility(Lifecycle.Read)`, populated server-side only
     when the caller is authorized — never a separate "public" vs
     "authoring" model variant.
-  - **Assignments**: `assignments.tsp` — resubmission rule is "overwrite
-    until graded": a `submitted` submission can be freely overwritten, but
-    once `graded`, a new submission is rejected (409) until the instructor
-    explicitly reopens it (`AssignmentSubmissionApi.reopen`, flips status
-    to `returned`) — see `submitAssignment()` in `assignments.service.ts`.
-    Resubmitting always clears the prior `score`/`feedback`/`gradedAt`.
-    Attachments reuse the general upload lifecycle
-    (`claimUpload`/`releaseUpload`) via the same
-    `reconcileXUploads(ownerId, oldList, newIds)` diff-and-claim helper
-    used by certificate signature uploads.
-
   New shared permission helpers, `apps/api/src/lib/course-access.ts`:
   `assertCanManageCourse` (broad — admin, institution owner, or active
-  course-instructor; used by content/quiz/assignment/certificate
+  course-instructor; used by content/quiz/certificate
   routes), `assertCanManageCourseInstructors`
   (narrow — admin-or-institution-owner only, invite/remove/role-change
   routes), `assertIsEnrolledParticipant` (requires a non-canceled/failed
   enrollment row; used by every student-facing CoursePlayer mutation —
-  mark-lesson-complete, quiz attempts, assignment submission — managers
+  mark-lesson-complete, quiz attempts — managers
   bypass it automatically).
 
   Test coverage: `tests/smoke-course-content-contract.mjs`,
-  `smoke-certificates-contract.mjs`, `smoke-quizzes-contract.mjs`,
-  `smoke-assignments-contract.mjs` (new), plus
+  `smoke-certificates-contract.mjs`, `smoke-quizzes-contract.mjs`, plus
   `smoke-courses-contract.mjs`/`smoke-course-instructors-contract.mjs`/
   `smoke-enrollments-contract.mjs` (rewritten off the now-closed mock
   course-id gap — see above).

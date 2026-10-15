@@ -61,7 +61,9 @@ async function get(path) {
   if (!res.ok()) throw new Error(`GET ${path} failed: ${res.status()}`)
   return (await res.json()).data
 }
-const grants = await get(`/institution-ownerships?userId=${(await (await page.request.get(`${API}/api/auth/get-session`)).json())?.user?.id}&pageSize=100`)
+const grants = await get(
+  `/institution-ownerships?userId=${(await (await page.request.get(`${API}/api/auth/get-session`)).json())?.user?.id}&pageSize=100`
+)
 if (!grants || grants.length === 0) throw new Error("admin owns no institution — seed state unexpected")
 const institution = await get(`/institutions/${grants[0].institutionId}`)
 const INSTITUTION_NAME = institution.name
@@ -117,7 +119,6 @@ await expect("filtering by status narrows the list", async () => {
   await page.getByLabel("Saring status").selectOption("selected")
   await page.getByText(ADMIN.email).first().waitFor({ timeout: 10000 })
 })
-
 
 // ================= The ownership gate =================
 await page.getByRole("button", { name: "Menu Akun" }).click()

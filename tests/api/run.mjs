@@ -20,18 +20,12 @@ import * as courses from "./scenarios/10-courses.mjs"
 import * as courseContent from "./scenarios/15-course-content.mjs"
 import * as courseInstructors from "./scenarios/20-course-instructors.mjs"
 import * as enrollments from "./scenarios/25-enrollments.mjs"
-import * as attendance from "./scenarios/30-attendance.mjs"
 import * as quizzes from "./scenarios/35-quizzes.mjs"
-import * as assignments from "./scenarios/40-assignments.mjs"
-import * as discussions from "./scenarios/45-discussions.mjs"
 import * as certificates from "./scenarios/50-certificates.mjs"
 import * as uploads from "./scenarios/60-uploads.mjs"
 import * as users from "./scenarios/65-users.mjs"
-import * as audit from "./scenarios/70-audit.mjs"
-import * as couponsPayments from "./scenarios/72-coupons-payments.mjs"
-import * as notificationsWishlist from "./scenarios/73-notifications-wishlist.mjs"
+import * as notifications from "./scenarios/73-notifications.mjs"
 import * as announcements from "./scenarios/74-announcements.mjs"
-import * as discussionsModeration from "./scenarios/75-discussions-moderation.mjs"
 import * as reportsSettings from "./scenarios/76-reports-settings.mjs"
 import * as capabilitiesProfiles from "./scenarios/77-capabilities-profiles.mjs"
 
@@ -42,18 +36,12 @@ const SCENARIOS = [
   ["course content", courseContent],
   ["course instructors", courseInstructors],
   ["enrollments", enrollments],
-  ["attendance", attendance],
   ["quizzes", quizzes],
-  ["assignments", assignments],
-  ["discussions", discussions],
   ["certificates", certificates],
   ["uploads", uploads],
   ["users", users],
-  ["audit log", audit],
-  ["coupons & payments", couponsPayments],
-  ["notifications & wishlist", notificationsWishlist],
+  ["notifications", notifications],
   ["announcements", announcements],
-  ["discussions moderation", discussionsModeration],
   ["reports & settings", reportsSettings],
   ["capabilities & profiles", capabilitiesProfiles],
 ]

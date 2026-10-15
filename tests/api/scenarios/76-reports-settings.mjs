@@ -2,7 +2,7 @@ import { check, eq, status } from "../lib/assert.mjs"
 
 /**
  * Manager/admin analytics + platform configuration: course report,
- * admin overview, financial summary, platform settings round-trip.
+ * admin overview, platform settings round-trip.
  */
 export async function run(ctx) {
   console.log("\n== Reports & Platform Settings ==")
@@ -10,10 +10,6 @@ export async function run(ctx) {
 
   const report = status("admin reads the course report", await admin.get(`/v1/courses/${ids.course}/report`), 200)
   check("report lists participants", (report?.data?.participants ?? []).length >= 1)
-  check(
-    "report carries attendance aggregates",
-    typeof report?.data?.participants?.[0]?.attendance?.sessionsCount === "number"
-  )
   status("plain user cannot read the course report", await user.get(`/v1/courses/${ids.course}/report`), 403)
 
   const instReport = status(
@@ -28,14 +24,9 @@ export async function run(ctx) {
     403
   )
 
-  const ordersCsv = await admin.get(`/v1/institutions/${ids.institution}/orders/export`)
-  check("institution orders export returns CSV", ordersCsv.status === 200)
-
   const overview = status("admin reads the platform overview", await admin.get("/v1/admin/overview"), 200)
   check("overview counts users", (overview?.data?.totalUsers ?? 0) >= 3)
   status("plain user cannot read the overview", await user.get("/v1/admin/overview"), 403)
-  const financial = status("admin reads the financial summary", await admin.get("/v1/admin/financial-summary"), 200)
-  check("financial summary counts the refunded order", (financial?.data?.refundedOrders ?? 0) >= 1)
 
   const settings = status("admin reads platform settings", await admin.get("/v1/platform-settings"), 200)
   const originalName = settings?.data?.platformName

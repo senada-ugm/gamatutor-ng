@@ -6,7 +6,7 @@
 > **Contract Value:** IDR 35,000,000 (Fixed Price, Non-VAT/Non-PKP)  
 > **Timeline:** 16 Calendar Weeks (4 Months)  
 > **Lead Software Architect & Tech Lead:** Ariefan Dipokusumo Wibowo, S.Kom., M.Cs.
-> **Last Updated:** 2026-10-15 — Phase 5 rescoped to a single-tenant frontend over retained backend multi-tenancy (full collapse kept as a deferred fallback)
+> **Last Updated:** 2026-10-15 — Phase 6 executed (assignments, email fanout, audit, interview stage, instructor tab); Phases 0–6 complete
 
 ---
 
@@ -239,6 +239,8 @@ Rules of execution: **delete, never hide** (hidden UI is dead code), and keep th
 - [x] 6.3 **Audit log module removed**: `modules/audit` + `lib/audit.ts` + `audit.tsp` + the `audit_log` table (migration 0013) + the admin `/admin/audit` page/nav/router entry + every `recordAudit` write site (users suspend/reactivate, institution request approve/reject, ownership grants, platform-settings updates); platform-settings spec comments de-audited; workspaces smoke's audit check dropped — 2026-10-15
 - [x] 6.4 **Enrollment funnel simplified**: the `interviewed` stage is gone — `EnrollmentStatus` is now registered → selected → graduated/failed/canceled, with `interviewedAt`/`interviewNotes` dropped from the contract, the enrollment row (migration 0014), the transition matrix, and the UI (badge label, enroll-panel branch, participants-panel notes block); self-cancel is registered-only; the transitions unit test and the API journey scenario walk the shorter happy path — 2026-10-15
 - [x] 6.5 **Multi-instructor management UI removed**: the editor's `/instruktur` tab + `course-instructors-manager.tsx` are gone (single instructor per course — the creator, plus seed assignments); the **backend `course-instructors` module stays intact** by design: it backs capability derivation (`GET /course-instructors/mine` feeds teaching-access and the instructor index) and the access gates, and its contracted routes remain served. editor-tabs smoke trimmed accordingly — 2026-10-15
+
+**Phase 6 complete — and with it, the whole trim plan (Phases 0–6).** The platform now serves 86 contracted operations across 13 modules, down from 117 ops when the audit started. Every removal is verified: the API journey suite runs 276 checks green with 86/86 contract coverage, all ten apps/app smoke suites pass, and the regression pass also caught and fixed a stale seed TRUNCATE that would have broken every future `reset-seed`.
 
 ### 6.2 Review Note Disposition (verified 2026-10-15)
 

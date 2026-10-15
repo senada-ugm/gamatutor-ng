@@ -459,7 +459,6 @@ export async function resetAndSeedDatabase() {
   await db.execute(sql`
     TRUNCATE TABLE
       announcements,
-      assignments,
       certificates,
       course_lessons,
       certificate_settings,
@@ -479,7 +478,6 @@ export async function resetAndSeedDatabase() {
       lesson_progress,
       verifications,
       users,
-      assignment_submissions,
       quiz_attempts,
       learning_telemetry_logs,
       participant_profiles
