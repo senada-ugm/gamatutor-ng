@@ -1,4 +1,5 @@
 import { Link, Outlet, useParams } from "@tanstack/react-router"
+import { useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 
 import { Button } from "@workspace/ui/components/button"
@@ -7,9 +8,11 @@ import { Skeleton } from "@workspace/ui/components/skeleton"
 import { EmptyState } from "@/components/composed/_shared/empty-state"
 import { PlayerShell } from "@/components/composed/player/player-shell"
 import { CourseContextProvider } from "@/components/composed/player/course-context"
+import { PlayerDeckProvider } from "@/components/composed/player/player-deck-context"
+import type { CourseDefinition } from "@/lib/content/course-types"
 import { getSession } from "@/lib/auth"
 import { apiGet } from "@/lib/api"
-import type { ContractCourse } from "@workspace/contracts/domain"
+import type { ContractCourse, ContractSlideDeck } from "@workspace/contracts/domain"
 
 export function LearnLayout() {
   const { courseId } = useParams({ from: "/learn/$courseId" })
@@ -91,9 +94,49 @@ export function LearnLayout() {
 
   return (
     <CourseContextProvider value={{ course, completedLessonIds, refreshProgress: loadProgress }}>
-      <PlayerShell course={course} completedLessonIds={completedLessonIds}>
+      <DeckAwareShell course={course} completedLessonIds={completedLessonIds}>
         <Outlet />
-      </PlayerShell>
+      </DeckAwareShell>
     </CourseContextProvider>
+  )
+}
+
+/** Resolves the course's interactive deck (cached — the lesson page's
+ *  slide-deck query shares the key) and, when one exists, wraps the
+ *  player in the deck navigation context and switches the shell chrome
+ *  to the gamatutor-ng steps layout. */
+function DeckAwareShell({
+  course,
+  completedLessonIds,
+  children,
+}: {
+  course: ContractCourse
+  completedLessonIds: string[]
+  children: React.ReactNode
+}) {
+  const slideDeck = useQuery({
+    queryKey: ["slide-deck", course.id],
+    queryFn: () => apiGet<ContractSlideDeck>(`/courses/${course.id}/slide-deck`),
+    retry: false,
+    staleTime: 5 * 60 * 1000,
+  })
+  const deckCourse =
+    slideDeck.data && slideDeck.data.schemaVersion === 1
+      ? (slideDeck.data.manifest as unknown as CourseDefinition)
+      : null
+
+  if (!deckCourse) {
+    return (
+      <PlayerShell course={course} completedLessonIds={completedLessonIds}>
+        {children}
+      </PlayerShell>
+    )
+  }
+  return (
+    <PlayerDeckProvider courseId={course.id} modules={deckCourse.modules.map((m) => ({ id: m.id, label: m.label }))}>
+      <PlayerShell course={course} completedLessonIds={completedLessonIds} deckCourse={deckCourse}>
+        {children}
+      </PlayerShell>
+    </PlayerDeckProvider>
   )
 }

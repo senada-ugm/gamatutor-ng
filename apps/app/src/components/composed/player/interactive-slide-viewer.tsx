@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ArrowLeft, ArrowRight, GraduationCap } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
@@ -23,6 +23,7 @@ import { ClinicalFundusGrading } from "./clinical-fundus-grading"
 import { ClinicalQuizRunner } from "./clinical-quiz-runner"
 
 import { useSlideTelemetry } from "@/lib/use-slide-telemetry"
+import { usePlayerDeck } from "@/components/composed/player/player-deck-context"
 
 interface InteractiveSlideViewerProps {
   course: CourseDefinition
@@ -58,6 +59,33 @@ export function InteractiveSlideViewer({
   const [currentPlaybackTime, setCurrentPlaybackTime] = useState<number>(0)
   const currentItem = allSlides[currentIndex] || allSlides[0]
   const totalSlides = allSlides.length
+  const deck = usePlayerDeck()
+
+  // Report slide landings to the steps sidebar, and honor its jump
+  // requests (gamatutor-ng sidebar model — see player-deck-context).
+  const currentModuleId = currentItem?.moduleId
+  const currentModuleIdx = currentModuleId ? course.modules.findIndex((m) => m.id === currentModuleId) : -1
+  useEffect(() => {
+    if (deck && currentModuleId && currentModuleIdx >= 0) {
+      deck.onSlideChange(currentModuleId, currentModuleIdx)
+    }
+  }, [deck, currentModuleId, currentModuleIdx])
+
+  const lastJumpNonce = useRef<number>(0)
+  const jump = deck?.jump ?? null
+  const jumpNonce = jump?.nonce ?? 0
+  useEffect(() => {
+    if (!jump || jump.nonce === lastJumpNonce.current) return
+    lastJumpNonce.current = jump.nonce
+    const target = allSlides.findIndex((s) => s.moduleId === jump.moduleId)
+    if (target >= 0) {
+      setCurrentIndex(target)
+      setCurrentPlaybackTime(0)
+      onSlideChange?.(target, allSlides[target].page)
+    }
+    // jumpNonce is the retrigger; allSlides/onSlideChange are stable per
+    // course render.
+  }, [jumpNonce])
 
   useSlideTelemetry({
     courseId: course.id,
@@ -95,13 +123,13 @@ export function InteractiveSlideViewer({
 
   return (
     <div
-      className={`mx-auto flex w-full max-w-5xl flex-col overflow-hidden rounded-2xl border bg-background shadow-xs transition-all duration-300 ${className}`}
+      className={`mx-auto flex w-full max-w-5xl flex-col overflow-hidden rounded-lg border bg-background shadow-md transition-all duration-300 ${className}`}
       style={{ maxHeight: "calc(100vh - 4.5rem)" }}
     >
-      {/* Top Global Progress Bar (from gamatutor-ng card-top-progress) */}
-      <div className="h-1.5 w-full shrink-0 bg-muted/60">
+      {/* Top Global Progress Bar (gamatutor-ng card-top-progress: teal fill) */}
+      <div className="h-1.5 w-full shrink-0 bg-[#e2e6ea] dark:bg-muted/60">
         <div
-          className="h-full bg-primary transition-all duration-300 ease-out"
+          className="h-full bg-[#5bb4b2] transition-all duration-300 ease-out"
           style={{ width: `${Math.round(((currentIndex + 1) / totalSlides) * 100)}%` }}
         />
       </div>
@@ -182,46 +210,40 @@ export function InteractiveSlideViewer({
               variant="outline"
               className="gap-1 border-primary/30 bg-primary/5 text-[11px] font-medium text-primary"
             >
-              <span>🔊 Voiceover Audio Available</span>
+              <span>🔊 Narasi Suara Tersedia</span>
             </Badge>
           ) : "transcript" in page && page.transcript ? (
             <Badge variant="outline" className="gap-1 border-muted text-[11px] font-normal text-muted-foreground">
-              <span>📄 Audio Transcript Available</span>
+              <span>📄 Transkrip Narasi Tersedia</span>
             </Badge>
           ) : (
-            <span className="text-[11px] text-muted-foreground/75">FK-KMK UGM Clinical Screening Curriculum</span>
+            <span className="text-[11px] text-muted-foreground/75">Kurikulum Skrining Klinis FK-KMK UGM</span>
           )}
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
-            <span>Slide</span>
-            <span className="font-bold text-foreground">{currentIndex + 1}</span>
-            <span>/</span>
-            <span>{totalSlides}</span>
-          </div>
-
-          <div className="h-4 w-px bg-border" />
-
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-3">
             <Button
-              size="sm"
+              size="icon-sm"
               variant="outline"
               disabled={currentIndex === 0}
               onClick={handlePrev}
-              className="h-8 gap-1 px-3 text-xs"
+              aria-label="Halaman sebelumnya"
+              className="size-8 rounded-full"
             >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              <span>Previous</span>
+              <ArrowLeft className="size-4" />
             </Button>
+            <span className="font-mono text-xs font-bold whitespace-nowrap text-[#173a5e] dark:text-foreground">
+              {currentIndex + 1} / {totalSlides}
+            </span>
             <Button
-              size="sm"
-              variant="default"
+              size="icon-sm"
+              disabled={currentIndex === totalSlides - 1}
               onClick={handleNext}
-              className="h-8 gap-1 px-3 text-xs font-medium shadow-xs"
+              aria-label="Halaman berikutnya"
+              className="size-8 rounded-full"
             >
-              <span>{currentIndex === totalSlides - 1 ? "Complete" : "Next"}</span>
-              <ArrowRight className="h-3.5 w-3.5" />
+              <ArrowRight className="size-4" />
             </Button>
           </div>
         </div>
