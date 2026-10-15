@@ -139,7 +139,6 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem render={<Link to="/profile" />}>Profil Saya</DropdownMenuItem>
                 <DropdownMenuItem render={<Link to="/certificates/verify" />}>Verifikasi Sertifikat</DropdownMenuItem>
-                <DropdownMenuItem render={<Link to="/institution-requests" />}>Ajukan Institusi</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => void handleSignOut()}>Keluar</DropdownMenuItem>
               </DropdownMenuContent>

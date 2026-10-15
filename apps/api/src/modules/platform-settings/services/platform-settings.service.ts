@@ -8,6 +8,9 @@ const DEFAULTS = {
   id: SETTINGS_ROW_ID,
   platformName: "Solo Kerja",
   supportEmail: "dukungan@solokerja.example.test",
+  // Single-tenant frontend (PLANS Phase 5): the self-service request
+  // flow is closed by default — institutions are granted by admins.
+  allowInstitutionRequests: false,
 }
 
 function toSettings(row: typeof platformSettings.$inferSelect): PlatformSettings {

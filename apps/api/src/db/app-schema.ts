@@ -599,7 +599,7 @@ export const platformSettings = pgTable("platform_settings", {
   supportEmail: text("support_email").notNull(),
   supportPhone: text("support_phone"),
   maintenanceMode: boolean("maintenance_mode").notNull().default(false),
-  allowInstitutionRequests: boolean("allow_institution_requests").notNull().default(true),
+  allowInstitutionRequests: boolean("allow_institution_requests").notNull().default(false),
   certificateValidityMonths: integer("certificate_validity_months").notNull().default(24),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })

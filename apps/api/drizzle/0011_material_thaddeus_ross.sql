@@ -1,0 +1,1 @@
+ALTER TABLE "platform_settings" ALTER COLUMN "allow_institution_requests" SET DEFAULT false;

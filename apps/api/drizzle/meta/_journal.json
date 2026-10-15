@@ -78,6 +78,13 @@
       "when": 1792004181522,
       "tag": "0010_zippy_tarantula",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1792023257900,
+      "tag": "0011_material_thaddeus_ross",
+      "breakpoints": true
     }
   ]
 }

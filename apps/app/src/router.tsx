@@ -286,12 +286,6 @@ const profileRoute = createRoute({
   component: lazyRouteComponent(() => import("@/routes/profile"), "ProfilePage"),
 })
 
-const institutionRequestsRoute = createRoute({
-  getParentRoute: () => learnerRoute,
-  path: "/institution-requests",
-  component: lazyRouteComponent(() => import("@/routes/institution-requests"), "InstitutionRequestsPage"),
-})
-
 // Learn player — layout route with nested children
 const learnLayoutRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -355,7 +349,6 @@ const routeTree = rootRoute.addChildren([
       courseCatalogRoute,
       courseDetailRoute,
       profileRoute,
-      institutionRequestsRoute,
       certificateViewRoute,
     ]),
     managementRoute.addChildren([
