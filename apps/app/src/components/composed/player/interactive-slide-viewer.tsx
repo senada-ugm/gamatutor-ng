@@ -328,9 +328,11 @@ function ContentSlide({ page, currentTime }: { page: ContentPage; currentTime?: 
         <AnimatedRevealList steps={page.reveal_steps} currentTime={currentTime} />
       )}
 
-      {/* Image if present */}
+      {/* Image if present — v4.3 imageLayout "below" stacks it under the
+          text at reading width (reference content-layout.stacked) instead
+          of the full-width default. */}
       {page.image && (
-        <div className="space-y-2">
+        <div className={page.imageLayout === "below" ? "mx-auto w-full max-w-xl space-y-2" : "space-y-2"}>
           <div className="overflow-hidden rounded-xl border bg-black/5 shadow-inner">
             <img src={page.image} alt={page.title || ""} className="h-auto max-h-[420px] w-full object-contain" />
           </div>

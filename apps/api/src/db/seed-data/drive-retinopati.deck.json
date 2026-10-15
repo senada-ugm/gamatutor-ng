@@ -45,44 +45,42 @@
           "slide": 3,
           "type": "divider",
           "kicker": "BAB 1",
-          "title": "DIABETES MELLITUS",
-          "transcript": "Bab 1, Diabetes Mellitus."
+          "title": "DIABETES MELLITUS"
         },
         {
           "id": "modul1-p2",
           "slide": 4,
           "type": "content",
-          "audio": "/content/drive-retinopati/assets/audio/modul1-p2.mp3",
           "kicker": "DEFINISI",
           "title": "Apa itu Diabetes Mellitus?",
-          "body": "Diabetes mellitus (DM) merupakan sekelompok penyakit metabolik dengan karakteristik hiperglikemia, yang menandakan abnormalitas proses metabolisme karbohidrat.\n\nKondisi ini diakibatkan oleh gangguan pada sekresi insulin, kerja insulin, ataupun keduanya.\n\n• Hiperglikemia kronis adalah penanda utama — sekaligus pemicu komplikasi mikro- dan makrovaskular.",
-          "transcript": "Apa itu diabetes mellitus? Menurut pedoman PERKENI 2021, diabetes mellitus atau DM adalah sekelompok penyakit metabolik dengan ciri utama hiperglikemia, yaitu kadar glukosa darah yang tinggi. Hiperglikemia ini menandakan adanya gangguan dalam proses metabolisme karbohidrat di dalam tubuh. Kondisi ini diakibatkan oleh gangguan sekresi insulin, gangguan kerja insulin, atau gabungan keduanya. Kita bisa membayangkan insulin sebagai “kunci” yang membuka pintu sel agar glukosa dari darah bisa masuk dan dipakai sebagai energi. Hiperglikemia kronis adalah penanda utama DM, sekaligus pemicu terjadinya komplikasi, baik mikrovaskular seperti retinopati, nefropati, dan neuropati, maupun makrovaskular seperti penyakit jantung koroner dan stroke. The Egregious Eleven dari Schwartz dan kawan-kawan menunjukkan bahwa hiperglikemia pada DM tipe 2 melibatkan sebelas mekanisme. Pertama, berkurangnya sekresi insulin oleh sel beta pancreas. Kedua, respons insulin tidak lagi optimal karena efek inkretin yang menurun. Ketiga, sel alfa pankreas yang meningkatkan sekresi glukagon. Keempat, sel lemak yang mengalami peningkatan lipolisis. Kelima, terjadinya penurunan penggunaan glukosa oleh otot akibat kurang responsifnya otot skeletal terhadap insulin. Keenam, resistensi insulin dan peningkatan sekresi glukagon ini menyebabkan hati melakukan glukoneogenesis. Ketujuh, gangguan neurotransmiter pada otak menyebabkan gangguan regulasi nafsu makan. Kedelapan, pada kolon terjadi perubahan mikrobiota yang mempengaruhi metabolisme dan permeabilitas usus. Kesembilan, disregulasi sistem imun dan media terinflamasi memperburuk resistensi insulin dan merusak fungsi sel beta. Kesepuluh, terjadi pengosongan lambung dan usus halus yang lebih cepat sehingga glukosa lebih cepat diserap. Dan kesebelas, pada ginjal terjadi peningkatan reabsorpsi glukosa di tubulus ginjal sehingga menahan glukosa tidak keluar melalui urin. Dengan demikian, diabetes mellitus, khususnya diabetes tipe 2, merupakan kondisi yang kompleks dan melibatkan interaksi berbagai organ.",
-          "image": "/content/drive-retinopati/assets/v42_image1.png",
+          "body": "Diabetes mellitus (DM) merupakan sekelompok penyakit metabolik dengan karakteristik hiperglikemia, yang menandakan abnormalitas proses metabolisme karbohidrat.\nKondisi ini diakibatkan oleh gangguan pada sekresi insulin, kerja insulin, ataupun keduanya.\n•  Hiperglikemia kronis adalah penanda utama — sekaligus pemicu komplikasi mikro- dan makrovaskular.",
+          "transcript": "Diabetes mellitus merupakan sekelompok penyakit metabolik dengan karakteristik hiperglikemia kronik, yang menandakan abnormalitas proses metabolisme karbohidrat dalam tubuh.\nKondisi ini diakibatkan oleh gangguan pada sekresi insulin, kerja insulin, ataupun keduanya.\nKondisi hiperglikemia kronis adalah penanda utama, sekaligus pemicu terjadinya komplikasi mikro dan makrovaskular.",
+          "image": "/content/drive-retinopati/assets/slide4_10.png",
           "imageLayout": "below",
-          "imageCaption": "The Egregious Eleven (diadaptasi dari Schwartz, Diabetes Care 2016 & PERKENI 2021)."
+          "imageCaption": "The Egregious Eleven (diadaptasi dari Schwartz, Diabetes Care 2016).",
+          "audio": "/content/drive-retinopati/assets/audio/modul1-p2.mp3"
         },
         {
           "id": "modul1-p3",
           "slide": 5,
           "type": "cards",
-          "audio": "/content/drive-retinopati/assets/audio/modul1-p3.mp3",
           "kicker": "EPIDEMIOLOGI",
-          "title": "Prevalensi & Proyeksi Kasus DM",
-          "intro": "Beban diabetes global terus meningkat — dan Indonesia termasuk negara dengan kasus terbanyak (IDF Diabetes Atlas 11th ed 2025).",
-          "transcript": "Menurut International Diabetes Federation, pada tahun 2024 terdapat sekitar 588,7 juta orang dewasa usia 20–79 tahun yang hidup dengan diabetes di seluruh dunia. Artinya, hampir 1 dari 9 orang dewasa di dunia menyandang diabetes. Angka ini diproyeksikan meningkat sekitar 45% menjadi 852,5 juta pada tahun 2050. Bagaimana dengan Indonesia? Indonesia termasuk negara dengan jumlah penyandang diabetes terbanyak kelima di dunia, yaitu sekitar 20,4 juta orang dewasa pada tahun 2024, dengan prevalensi 11,3%.",
+          "title": "Prevalensi & proyeksi kasus DM",
+          "intro": "Beban diabetes global terus meningkat — dan Indonesia termasuk negara dengan kasus terbanyak.",
+          "transcript": "Beban diabetes secara global terus meningkat dan telah mencapai jumlah yang mengkhawatirkan.\n• Sekitar 589 juta penduduk dunia dilaporkan memiliki diabetes.\n• Angka ini diproyeksikan meningkat sebanyak 45% pada tahun 2050.\n• Indonesia menduduki peringkat ke-5 dengan jumlah penderita diabetes terbanyak di dunia, yaitu 20,4 juta penderita atau 11,3%.",
           "columns": 3,
           "cards": [
             {
               "big": "588,7 juta",
-              "body": "penderita DM di dunia usia 20–79 tahun (2024)"
+              "body": "penderita DM di dunia (2024)"
             },
             {
               "big": "852,5 juta (↑ 45%)",
-              "body": "proyeksi kasus global pada tahun 2050"
+              "body": "proyeksi kasus dunia pada 2050"
             },
             {
               "big": "Peringkat 5",
-              "body": "negara dengan penderita DM terbanyak di dunia",
+              "body": "negara dengan penderita DM terbanyak",
               "dark": true
             },
             {
@@ -91,121 +89,120 @@
             },
             {
               "big": "11,3%",
-              "body": "prevalensi penduduk Indonesia usia 20–79 tahun"
+              "body": "penduduk Indonesia usia 20–79 tahun"
             }
           ],
-          "trailingImage": "/content/drive-retinopati/assets/v42_image2.jpeg",
-          "trailingCaption": "Distribusi global prevalensi diabetes mellitus (IDF Diabetes Atlas 2025)."
+          "audio": "/content/drive-retinopati/assets/audio/modul1-p3.mp3"
         },
         {
           "id": "modul1-p4",
           "slide": 6,
           "type": "content",
-          "audio": "/content/drive-retinopati/assets/audio/modul1-p4.mp3",
           "kicker": "KLASIFIKASI",
-          "title": "DM Berdasarkan Etiologi",
-          "body": "Berdasarkan etiologinya, diabetes mellitus diklasifikasikan menjadi 4 kelompok utama (PERKENI 2021 & AAO BCSC 2025):\n\n1. DM Tipe 1: Destruksi sel beta pankreas oleh sistem imun (autoimun) → defisiensi insulin absolut.\n2. DM Tipe 2: Resistensi insulin dengan penurunan sekresi insulin progresif hingga defisiensi relatif.\n3. DM Gestasional: Resistensi insulin dipicu hormon plasenta pada masa kehamilan.\n4. DM Tipe Lain: Kelainan genetik (MODY), penyakit eksokrin pankreas, endokrinopati, obat/zat kimia.",
-          "transcript": "Berdasarkan etiologinya, diabetes mellitus diklasifikasikan menjadi 4 Pertama, DM Tipe 1. Kondisi ini terjadi karena destruksi sel beta pankreas oleh sistem imun yang merupakan proses autoimun pada Pulau Langerhans, yang merusak sel-sel beta tersebut. Akibat kerusakan permanen ini, tubuh tidak lagi mampu menghasilkan insulin, yang berujung pada defisiensi insulin absolut, di mana sel-sel tubuh sama sekali tidak mendapatkan pasokan insulin yang dibutuhkan. Kedua, DM Tipe 2. Kondisi ini bermula dari resistensi insulin, di mana pankreas masih memproduksi insulin, namun sel-sel tubuh tidak meresponsnya dengan baik. Untuk mengompensasi kondisi tersebut, sel beta pankreas bekerja terlalu keras guna menghasilkan lebih banyak insulin, hingga akhirnya sel-sel tersebut mengalami kelelahan. Pada tahap lanjut, kelelahan ini menyebabkan penurunan fungsi yang drastis, hingga terjadi defisiensi insulin relatif atau absolut di mana pasokan insulin tidak lagi mencukupi kebutuhan sel tubuh. Ketiga, DM Gestasional. Kondisi ini dipicu oleh peningkatan hormon kehamilan yang diproduksi oleh plasenta. Hormon-hormon ini menyebabkan peningkatan resistensi insulin pada tubuh ibu hamil. Jika resistensi tersebut tidak terkontrol, kadar glukosa dalam darah ibu hamil akan melonjak tinggi, dan glukosa yang berlebihan tersebut akan menembus plasenta untuk dialirkan langsung ke janin, yang dapat memengaruhi pertumbuhan dan kesehatan bayi. Keempat, DM Tipe Lain. Merupakan kelompok diabetes yang disebabkan oleh berbagai faktor spesifik eksternal maupun internal, seperti Maturity-Onset Diabetes of the Young (MODY), gangguan eksokrin pankreas, endokrinopati, induksi obat atau zat kimia, infeksi, sebab imunologi, serta kelainan atau mutasi genetik lainnya.",
-          "image": "/content/drive-retinopati/assets/v42_image3.png",
-          "imageCaption": "Klasifikasi etiologi diabetes mellitus (PERKENI 2021)."
+          "title": "DM berdasarkan etiologi",
+          "body": "•  Tipe 1 — pankreas berhenti memproduksi insulin.\n•  Tipe 2 — resistensi insulin pada organ, dan/atau produksi insulin pankreas tidak mencukupi.\n•  Gestasional — terdiagnosis pada trimester kedua/ketiga kehamilan, tanpa riwayat diabetes sebelumnya.\n•  Tipe lain — mis. MODY (mutasi genetik tunggal), penyakit eksokrin pankreas, akibat obat/zat kimia, infeksi, sebab imunologi, atau genetik lain.",
+          "transcript": "Berdasarkan etiologinya, diabetes mellitus diklasifikasikan menjadi empat.\n• Diabetes mellitus tipe 1: kadar glukosa darah meningkat karena pankreas berhenti memproduksi insulin.\n• Diabetes mellitus tipe 2: disebabkan oleh resistensi insulin, atau pankreas yang tidak memproduksi cukup insulin.\n• Diabetes mellitus gestasional: diabetes yang terdiagnosis pada trimester kedua atau ketiga kehamilan, padahal sebelum hamil tidak didapatkan diabetes.\n• Tipe spesifik akibat penyebab lain: misalnya Maturity-Onset Diabetes of the Young akibat mutasi genetik tunggal, penyakit eksokrin pankreas, obat atau zat kimia, infeksi, sebab imunologi, atau sebab genetik lain.",
+          "image": "/content/drive-retinopati/assets/slide6_8.png",
+          "imageLayout": "below",
+          "audio": "/content/drive-retinopati/assets/audio/modul1-p4.mp3"
         },
         {
           "id": "modul1-p5",
           "slide": 7,
           "type": "content",
           "kicker": "FAKTOR RISIKO",
-          "title": "Faktor Risiko Diabetes Mellitus",
-          "body": "Individu dengan Indeks Massa Tubuh (IMT) ≥ 23 kg/m² disertai minimal satu faktor risiko berikut:",
-          "transcript": "Adapun faktor risiko terjadinya diabetes mellitus adalah individu dengan indeks massa tubuh 23 kg/m² atau lebih, yang disertai minimal satu faktor risik lain, yaitu Satu, aktivitas fisik yang kurang, yang dapat memperburuk resistensi insulin. Dua, riwayat keluarga dengan diabetes, terutama keluarga derajat pertama seperti orang tua atau saudara kandung. Tiga, ras atau etnis tertentu yang memang lebih rentan. Empat, perempuan dengan riwayat melahirkan bayi dengan berat lahir lebih dari 4 kg atau pernah didiagnosis DM gestasional. Lima, hipertensi, yaitu tekanan darah 140/90 mmHg atau lebih, atau sedang dalam pengobatan antihipertensi. Enam, dislipidemia, yaitu HDL kurang dari 35 mg/dL dan/atau trigliserida lebih dari 250 mg/dL. Tujuh, perempuan dengan sindrom ovarium polikistik atau PCOS. Delapan, memiliki riwayat prediabetes, yaitu toleransi glukosa terganggu atau glukosa darah puasa terganggu. Sembilan, obesitas berat dan akantosis nigrikans, yaitu kulit yang menebal dan menggelap di lipatan leher atau ketiak sebagai tanda resistensi insulin. Sepuluh, memiliki riwayat penyakit kardiovaskular. Selain itu, PERKENI juga menganjurkan pemeriksaan skrining diabetes pada individu berusia di atas 45 tahun, meskipun tanpa faktor risiko di atas. Bila hasilnya normal, pemeriksaan pada kelompok risiko tinggi sebaiknya diulang setiap 3 tahun, sedangkan pada kelompok prediabetes diulang setiap tahun.",
-          "audio": "/content/drive-retinopati/assets/audio/modul1-p5.mp3",
+          "title": "Faktor risiko Diabetes Mellitus",
+          "body": "IMT > 23 kg/m² disertai ≥ 1 faktor risiko berikut:",
+          "transcript": "Berdasarkan PERKENI 2021, faktor risiko yang terbukti meningkatkan kejadian diabetes mellitus, terutama tipe 2, adalah indeks massa tubuh di atas 23 kg per meter persegi yang disertai minimal satu faktor risiko berikut.",
           "reveal_steps": [
             {
-              "texts": ["a. Aktivitas fisik kurang (memperburuk resistensi insulin)"],
+              "texts": ["a. Aktivitas fisik kurang"],
               "narration": "Aktivitas fisik yang kurang.",
               "cue": 21.22
             },
             {
-              "texts": ["b. Riwayat keluarga (keturunan) diabetes derajat pertama"],
+              "texts": ["b. Riwayat keluarga (keturunan) DM"],
               "narration": "Riwayat keluarga dengan diabetes.",
               "cue": 24.95
             },
             {
-              "texts": ["c. Ras / etnis tertentu dengan kerentanan metabolik tinggi"],
+              "texts": ["c. Ras/etnis tertentu"],
               "narration": "Berasal dari ras atau etnis tertentu.",
               "cue": 28.57
             },
             {
-              "texts": ["d. Riwayat melahirkan bayi > 4 kg atau riwayat DM gestasional"],
+              "texts": ["d. Riwayat bayi lahir > 4 kg / DM gestasional"],
               "narration": "Riwayat melahirkan bayi dengan berat lebih dari 4 kilogram, atau pernah terdiagnosis diabetes gestasional.",
               "cue": 32.47
             },
             {
-              "texts": ["e. Hipertensi (tekanan darah ≥ 140/90 mmHg atau terapi antihipertensi)"],
+              "texts": ["e. Hipertensi (≥ 140/90 mmHg)"],
               "narration": "Hipertensi, yaitu tekanan darah 140 per 90 mmHg atau lebih.",
               "cue": 41.83
             },
             {
-              "texts": ["f. Dislipidemia (HDL < 35 mg/dL dan/atau trigliserida > 250 mg/dL)"],
+              "texts": ["f. HDL < 35 atau trigliserida > 250 mg/dL"],
               "narration": "HDL kurang dari 35, dan atau trigliserida lebih dari 250 mg per dL.",
-              "cue": 52
+              "cue": 52.0
             },
             {
-              "texts": ["g. Perempuan dengan sindrom ovarium polikistik (PCOS)"],
+              "texts": ["g. Sindrom ovarium polikistik (PCOS)"],
               "narration": "Wanita dengan sindrom ovarium polikistik.",
               "cue": 60.02
             },
             {
-              "texts": ["h. Riwayat prediabetes (toleransi glukosa terganggu / GDPT)"],
+              "texts": ["h. Riwayat prediabetes"],
               "narration": "Riwayat prediabetes.",
               "cue": 64.04
             },
             {
-              "texts": ["i. Obesitas berat dan akantosis nigrikans (tanda resistensi insulin)"],
+              "texts": ["i. Obesitas berat + akantosis nigrikans"],
               "narration": "Obesitas berat disertai akantosis nigrikans.",
               "cue": 66.9
             },
             {
-              "texts": ["j. Riwayat penyakit kardiovaskular aterosklerotik"],
+              "texts": ["j. Riwayat penyakit kardiovaskular"],
               "narration": "Riwayat penyakit kardiovaskular.",
               "cue": 71.46
             }
-          ]
+          ],
+          "audio": "/content/drive-retinopati/assets/audio/modul1-p5.mp3"
         },
         {
           "id": "modul1-p6",
           "slide": 8,
           "type": "content",
-          "audio": "/content/drive-retinopati/assets/audio/modul1-p6.mp3",
           "kicker": "DIAGNOSIS",
-          "title": "Kriteria Diagnosis Diabetes Mellitus",
-          "body": "Diagnosis diabetes mellitus ditegakkan bila memenuhi salah satu dari 4 kriteria laboratorium standar (PERKENI 2021):\n\n1. Glukosa Plasma Puasa (GDP) ≥ 126 mg/dL (puasa minimal 8 jam).\n2. Glukosa Plasma 2 Jam Post-TTGO ≥ 200 mg/dL (beban glukosa anhidrat 75 gram).\n3. Glukosa Plasma Sewaktu (GDS) ≥ 200 mg/dL disertai gejala klasik (poliuria, polidipsia, polifagia, BB turun drastis).\n4. Pemeriksaan HbA1c ≥ 6,5% dengan metode terstandarisasi NGSP.",
-          "transcript": "Dalam mendiagnosis diabetes mellitus, diagnosis ditegakkan bila memenuhi satu dari empat kriteria. Kriteria pertama, pemeriksaan glukosa plasma puasa. Yaitu kadar glukosa plasma puasa menunjukkan angka 126 mg/dL atau lebih yang diukur pada kondisi puasa minimal selama 8 jam. Kriteria kedua, pemeriksaan glukosa plasma 2 jam post prandial atau setelah Tes Toleransi Glukosa Oral dengan beban glukosa 75 gram. Yaitu kadar glukosa plasma setelah 2 jam menunjukkan angka 200 mg/dL atau lebih. Kriteria ketiga, pemeriksaan glukosa plasma sewaktu. Yaitu kadar glukosa plasma sewaktu menunjukkan angka 200 mg/dL atau lebih, disertai gejala klasik diabetes yaitu poliuria, polifagia, polidipsia, dan penurunan berat badan yang tidak dapat dijelaskan penyebabnya. Kriteria keempat, pemeriksaan HbA1c. Yaitu kadar HbA1c menunjukkan angka 6,5% atau lebih.",
-          "image": "/content/drive-retinopati/assets/v42_image4.png",
-          "imageCaption": "Algoritma pemeriksaan dan kriteria diagnostik DM (PERKENI 2021)."
+          "title": "Kriteria diagnosis DM",
+          "body": "Empat kriteria diagnosis diabetes mellitus menurut PERKENI 2021 (lihat ringkasan pada gambar).",
+          "transcript": "Kriteria diagnosis diabetes mellitus, cukup salah satu:\n• gula darah puasa lebih dari atau sama dengan 126 mg per dL;\n• TTGO 2 jam lebih dari atau sama dengan 200 mg per dL;\n• gula darah sewaktu lebih dari atau sama dengan 200 mg per dL, disertai keluhan klasik atau krisis hiperglikemia;\n• HbA1c lebih dari atau sama dengan 6,5 persen.",
+          "image": "/content/drive-retinopati/assets/slide8_8.png",
+          "imageLayout": "below",
+          "audio": "/content/drive-retinopati/assets/audio/modul1-p6.mp3"
         },
         {
           "id": "modul1-p7",
           "slide": 9,
           "type": "content",
-          "audio": "/content/drive-retinopati/assets/audio/modul1-p7.mp3",
           "kicker": "DIAGNOSIS",
-          "title": "Klasifikasi Glukosa & HbA1c",
-          "body": "Interpretasi hasil pemeriksaan laboratorium metabolik glukosa:\n\n• Normal: GDP < 100 mg/dL, 2 jam TTGO < 140 mg/dL, HbA1c < 5,7%.\n• Prediabetes: GDP 100–125 mg/dL, 2 jam TTGO 140–199 mg/dL, HbA1c 5,7–6,4%.\n• Diabetes Mellitus: GDP ≥ 126 mg/dL, 2 jam TTGO ≥ 200 mg/dL, HbA1c ≥ 6,5%.",
-          "transcript": "Berdasarkan hasil pemeriksaan laboratorium, individu dapat dibedakan menjadi 3 kategori, yaitu diabetes, prediabetes, dan normal. Kategori diabetes jika ditemukan HbA1c 6,5% atau lebih, glukosa darah puasa 126 mg/dL atau lebih, atau glukosa 2 jam setelah TTGO 200 mg/dL atau lebih. Kategori prediabetes jika ditemukan HbA1c 5,7–6,4%, glukosa darah puasa 100–125 mg/dL, atau glukosa 2 jam setelah TTGO 140–199 mg/dL. Kategori normal jika ditemukan HbA1c di bawah 5,7%, glukosa darah puasa 70–99 mg/dL, dan glukosa 2 jam setelah TTGO 70–139 mg/dL. Namun terdapat beberapa kondisi tertentu di mana pemeriksaan HbA1c tidak dapat diinterpretasikan secara valid pada keadaan yang mempengaruhi masa hidup eritrosit atau struktur hemoglobin, yaitu anemia, hemoglobinopati, riwayat transfusi darah dalam 2–3 bulan terakhir, dan gangguan fungsi ginjal. Pada kondisi-kondisi ini, HbA1c tidak dapat dipakai sebagai alat diagnosis maupun evaluasi, sehingga kita berpegang pada pemeriksaan glukosa plasma.",
-          "image": "/content/drive-retinopati/assets/v42_image5.png",
-          "imageCaption": "Tabel klasifikasi kadar glukosa darah puasa, 2 jam TTGO, dan HbA1c (PERKENI 2021)."
+          "title": "Klasifikasi kadar glukosa & HbA1c",
+          "body": "Klasifikasi kadar glukosa darah dan HbA1c untuk kategori diabetes, prediabetes, dan normal (lihat gambar).",
+          "transcript": "Berikut klasifikasi kadar glukosa dan HbA1c untuk kategori diabetes, prediabetes, dan normal.\nPerlu diperhatikan kondisi yang membuat hasil HbA1c tidak valid, seperti anemia, hemoglobinopati, transfusi, dan gangguan ginjal.",
+          "image": "/content/drive-retinopati/assets/slide9_8.png",
+          "imageLayout": "below",
+          "audio": "/content/drive-retinopati/assets/audio/modul1-p7.mp3"
         },
         {
           "id": "modul1-p8",
           "slide": 10,
           "type": "content",
-          "audio": "/content/drive-retinopati/assets/audio/modul1-p8.mp3",
           "kicker": "KOMPLIKASI",
-          "title": "Komplikasi Diabetes Mellitus",
-          "body": "Hiperglikemia kronis memicu kerusakan vaskular sistemik yang luas:\n\n• Komplikasi Mikrovaskular: Retinopati Diabetika (mata), Nefropati Diabetika (ginjal), Neuropati Diabetika (saraf perifer).\n• Komplikasi Makrovaskular: Penyakit Jantung Koroner, Stroke, Penyakit Arteri Perifer (ulkus & gangren).",
-          "transcript": "Bagan ini menggambarkan alur terjadinya komplikasi diabetes mellitus yang berakar dari hiperglikemia kronis. Hiperglikemia yang berlangsung lama akan merusak pembuluh darah yang dibagi dalam dua kategori, yaitu makroangiopati dan mikroangiopati. Makroangiopati adalah kerusakan pembuluh darah besar yang dipicu oleh proses aterosklerosis yang berisiko menimbulkan penyakit kardiovaskular seperti penyakit jantung, stroke, dan penyakit arteri perifer. Mikroangiopati adalah kerusakan pembuluh darah kecil, yang meliputi retinopati yaitu kerusakan pada pembuluh darah retina mata yang berujung pada gangguan penglihatan hingga kebutaan. Neuropati, yaitu kerusakan pada serabut saraf yang dapat bermanifestasi sebagai ulkus atau luka pada kaki diabetik. Dan nefropati, yaitu gangguan filtrasi pada glomerulus ginjal yang ditandai dengan kebocoran protein pada urin dan berpotensi menyebabkan gagal ginjal. Semakin lama individu menyandang diabetes, semakin besar pula peluang munculnya komplikasi sehingga pemeriksaan rutin dalam mendeteksi kejadian komplikasi ini.",
-          "image": "/content/drive-retinopati/assets/v42_image6.png",
-          "imageCaption": "Bagan patogenesis komplikasi mikrovaskular dan makrovaskular diabetes."
+          "title": "Komplikasi diabetes mellitus",
+          "body": "Hiperglikemia kronis memicu makroangiopati (jantung, otak, pembuluh darah perifer) dan mikroangiopati (retinopati, neuropati, nefropati).",
+          "transcript": "Diabetes mellitus yang menyebabkan hiperglikemia dapat memicu makroangiopati dan mikroangiopati, termasuk di antaranya retinopati, neuropati, dan nefropati.",
+          "image": "/content/drive-retinopati/assets/slide10_8.png",
+          "imageLayout": "below",
+          "audio": "/content/drive-retinopati/assets/audio/modul1-p8.mp3"
         }
       ]
     },
