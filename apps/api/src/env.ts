@@ -25,7 +25,7 @@ const booleanFromEnvironment = (defaultValue: boolean) =>
 const envSchema = z
   .object({
     NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
-    PORT: z.coerce.number().default(8000),
+    PORT: z.coerce.number().default(8010),
     // The web app origin — must be a valid origin, empty disables CORS origin checks.
     CORS_ORIGIN: z.string().default("http://localhost:3030"),
     CORS_ORIGINS: z.string().optional(),
@@ -54,7 +54,7 @@ const envSchema = z
     // separate from the parent solokerja app's DB.
     DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
     BETTER_AUTH_SECRET: z.string().min(1, "BETTER_AUTH_SECRET is required"),
-    BETTER_AUTH_URL: z.string().default("http://localhost:8000"),
+    BETTER_AUTH_URL: z.string().default("http://localhost:8010"),
 
     // Database connection pool limit — size appropriately per pod against PgBouncer / Postgres max_connections.
     DATABASE_POOL_MAX: z.coerce.number().int().min(1).max(100).default(10),
@@ -97,7 +97,7 @@ const envSchema = z
     // Multi-instance deployments should point every instance at a shared
     // volume (or swap storage.ts for an object-store adapter).
     UPLOAD_STORAGE_DIR: z.string().optional().default(""),
-    API_PUBLIC_URL: z.string().default("http://localhost:8000"),
+    API_PUBLIC_URL: z.string().default("http://localhost:8010"),
 
     // Web app origin — notification emails link back into the app, and an
     // in-app-relative "/learn/..." href is dead inside a mail client.

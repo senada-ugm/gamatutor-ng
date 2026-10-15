@@ -96,10 +96,10 @@ describe("API Core Utilities & Security Helpers", () => {
 
   describe("uploads helper", () => {
     it("strictly extracts upload ID from valid /v1/uploads/:id/file URLs", () => {
-      const valid = "http://localhost:8000/v1/uploads/upl_a1b2c3d4e5f6/file"
+      const valid = "http://localhost:8010/v1/uploads/upl_a1b2c3d4e5f6/file"
       assert.equal(extractUploadIdFromUrl(valid), "upl_a1b2c3d4e5f6")
 
-      const invalidPath = "http://localhost:8000/v1/courses/upl_123/file"
+      const invalidPath = "http://localhost:8010/v1/courses/upl_123/file"
       assert.equal(extractUploadIdFromUrl(invalidPath), null)
 
       assert.equal(extractUploadIdFromUrl(null), null)

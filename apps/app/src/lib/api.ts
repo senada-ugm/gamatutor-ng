@@ -6,7 +6,7 @@
  * shaping. If the SDK is ever fixed, migrate back to it.
  */
 
-export const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000"
+export const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8010"
 
 export class ApiError extends Error {
   readonly status: number
