@@ -19,7 +19,6 @@ const API = process.env.SMOKE_API_URL ?? "http://localhost:8000"
 const ADMIN = { email: "admin@lms.dev", password: "correcthorsebatterystaple" }
 const LEARNER = { email: "user@lms.dev", password: "correcthorsebatterystaple" }
 const STAMP = Date.now()
-const INSTITUTION = `Institusi Smoke ${STAMP}`
 const FREE_COURSE = `Pelatihan Gratis ${STAMP}`
 const PAID_COURSE = `Pelatihan Kedua ${STAMP}`
 let failures = 0
@@ -53,11 +52,19 @@ async function post(path, data) {
   return (await res.json()).data
 }
 
-const institution = await post("/institutions", {
-  name: INSTITUTION,
-  institutionType: "company",
-  email: `smoke-${STAMP}@example.test`,
-})
+// Single-tenant resolution (PLANS Phase 5): the UI reports on the
+// account's FIRST ownership grant, so the suite must run against that
+// institution rather than a freshly created one the UI would never
+// resolve to.
+async function get(path) {
+  const res = await page.request.get(`${API}/v1${path}`)
+  if (!res.ok()) throw new Error(`GET ${path} failed: ${res.status()}`)
+  return (await res.json()).data
+}
+const grants = await get(`/institution-ownerships?userId=${(await (await page.request.get(`${API}/api/auth/get-session`)).json())?.user?.id}&pageSize=100`)
+if (!grants || grants.length === 0) throw new Error("admin owns no institution — seed state unexpected")
+const institution = await get(`/institutions/${grants[0].institutionId}`)
+const INSTITUTION_NAME = institution.name
 const freeCourse = await post("/courses", {
   title: FREE_COURSE,
   institutionId: institution.id,
@@ -82,27 +89,12 @@ const enrollment = await post("/enrollments", { courseId: freeCourse.id })
 await page.request.patch(`${API}/v1/enrollments/${enrollment.id}`, { data: { status: "selected" } })
 await post("/enrollments", { courseId: secondCourse.id })
 
-// ================= The scope gate =================
-// The switcher persists its pick, so a previous run would leave this
-// account already scoped to an institution and skip the gate entirely.
-await page.evaluate(() => {
-  try {
-    localStorage.removeItem("lms.authoring-institution")
-  } catch {
-    // Blocked site data — nothing was persisted to clear.
-  }
-})
+// ================= Overview (single-tenant resolution) =================
+// No scope switcher anymore — the page resolves the account's owned
+// institution directly (PLANS Phase 5).
 await page.goto(`${BASE}/institution`, { timeout: 30000 })
-await expect("the platform-wide scope refuses to report on one institution", async () => {
-  await page.getByText("Pilih satu institusi").waitFor({ timeout: 10000 })
-})
-
-await page.getByRole("button", { name: /Semua institusi/ }).click()
-await page.getByRole("menuitem", { name: new RegExp(INSTITUTION) }).click()
-
-// ================= Overview =================
-await expect("picking the institution renders its report", async () => {
-  await page.getByRole("heading", { name: INSTITUTION }).waitFor({ timeout: 15000 })
+await expect("the resolved institution renders its report directly", async () => {
+  await page.getByRole("heading", { name: INSTITUTION_NAME }).waitFor({ timeout: 15000 })
 })
 await expect("the per-course table lists both seeded courses", async () => {
   await page.getByRole("cell", { name: FREE_COURSE }).waitFor({ timeout: 10000 })

@@ -85,12 +85,14 @@ packages/
   shells**:
   - `id: "learner"` -> `WorkspaceShell`, a top nav. Dashboard, catalog,
     course detail, certificates,
-    notifications, institution requests.
+    notifications.
   - `id: "management"` -> `ManagementShell`, a sidebar. `/instructor/**`
-    and `/admin/**`. The sidebar header carries the institution scope
-    (see lib/authoring-institution.ts), and its groups mean something:
-    everything above "Platform" is scoped by that switcher, everything
-    under it is admin-wide and ignores the scope.
+    and `/admin/**`. Single-tenant frontend (PLANS Phase 5): there is no
+    institution switcher — `lib/institution-ownership.ts`'s
+    `useMyInstitution()` resolves the account's first ownership grant
+    (admins fall back to the first registered institution) and everything
+    above "Platform" reports on that one institution; everything under
+    "Platform" is admin-wide.
   - `/learn/**` stays outside the guard's shells entirely, chrome-less,
     with the player's own sidebar.
 
@@ -316,8 +318,9 @@ packages/
 
 - **Capability derivation is real across the board.** the adaptive dashboard's capability sections decide which nav chrome
   shows: `admin > institution_owner > instructor > student`. Ownership
-  reads `lib/institution-ownership.ts` (read-through cache over
-  `institutionOwnershipsApiListByUser`); instructor status reads
+  reads `lib/institution-ownership.ts` (now home to `useMyInstitution()`,
+  the single-tenant resolution hook — first ownership grant, admin
+  fallback); instructor status reads
   `lib/instructor-status.ts` (same read-through-cache shape over
   `GET /course-instructors/mine`) — both exist because plain sync
   functions (post-login redirect, href defaults) can't await, the app has
@@ -385,7 +388,10 @@ packages/
   `institution_requests` is a real Drizzle table now (`app-schema.ts`,
   `requestedByUser`'s display name/email joined from Better Auth's `user`
   table at read time rather than denormalized, so it can't go stale).
-  `POST /institution-requests` requires `requireSession` (any signed-in
+  Self-service institution requests are CLOSED by default since the
+  single-tenant frontend (`allowInstitutionRequests` defaults false —
+  PLANS Phase 5); the route still exists behind the admin-facing
+  setting. `POST /institution-requests` requires `requireSession` (any signed-in
   account, not admin — this *is* the "everyone can request" behavior) and
   attributes the request to the real caller; `approve`/`reject` require
   `requireAdmin` (previously **completely ungated** — a real gap, not
