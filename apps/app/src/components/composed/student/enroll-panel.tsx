@@ -90,7 +90,7 @@ export function EnrollPanel({ course, enrollment }: { course: ContractCourse; en
         </Button>
       </div>
     )
-  } else if (status === "registered" || status === "interviewed") {
+  } else if (status === "registered") {
     body = (
       <div className="space-y-2">
         <Badge variant="secondary">Menunggu persetujuan</Badge>

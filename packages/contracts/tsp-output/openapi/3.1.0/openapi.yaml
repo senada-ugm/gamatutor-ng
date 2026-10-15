@@ -4885,11 +4885,6 @@ components:
         approvedAt:
           type: string
           format: date-time
-        interviewedAt:
-          type: string
-          format: date-time
-        interviewNotes:
-          type: string
         failedAt:
           type: string
           format: date-time
@@ -4926,7 +4921,6 @@ components:
       type: string
       enum:
         - registered
-        - interviewed
         - selected
         - failed
         - graduated
@@ -4945,8 +4939,6 @@ components:
       properties:
         status:
           $ref: '#/components/schemas/EnrollmentStatus'
-        interviewNotes:
-          type: string
         failureReason:
           $ref: '#/components/schemas/FailureReasonCode'
         failureNotes:
@@ -4958,12 +4950,12 @@ components:
           maximum: 100
       description: |-
         Status transition + the fields relevant to it. Server derives the
-        corresponding timestamp (interviewedAt/approvedAt/failedAt/
-        completedAt) from the transition rather than trusting a client-
-        supplied one. One general update op covers every button
-        ParticipantsPanel exposes (interview, approve, cancel, reactivate,
-        fail, graduate, return-to-registrant, undo-graduation) since they're
-        all just different target `status` values.
+        corresponding timestamp (approvedAt/failedAt/completedAt) from the
+        transition rather than trusting a client-supplied one. One general
+        update op covers every button ParticipantsPanel exposes (approve,
+        cancel, reactivate, fail, graduate, return-to-registrant,
+        undo-graduation) since they're all just different target `status`
+        values.
     ExperienceEntry:
       type: object
       required:

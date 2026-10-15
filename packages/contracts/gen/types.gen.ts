@@ -651,8 +651,6 @@ export type Enrollment = {
     completedQuizzes: number;
     readonly enrolledAt: string;
     approvedAt?: string;
-    interviewedAt?: string;
-    interviewNotes?: string;
     failedAt?: string;
     failureReason?: FailureReasonCode;
     failureNotes?: string;
@@ -676,7 +674,6 @@ export type EnrollmentCreate = {
 
 export const EnrollmentStatus = {
     REGISTERED: 'registered',
-    INTERVIEWED: 'interviewed',
     SELECTED: 'selected',
     FAILED: 'failed',
     GRADUATED: 'graduated',
@@ -696,16 +693,15 @@ export type EnrollmentType = typeof EnrollmentType[keyof typeof EnrollmentType];
 
 /**
  * Status transition + the fields relevant to it. Server derives the
- * corresponding timestamp (interviewedAt/approvedAt/failedAt/
- * completedAt) from the transition rather than trusting a client-
- * supplied one. One general update op covers every button
- * ParticipantsPanel exposes (interview, approve, cancel, reactivate,
- * fail, graduate, return-to-registrant, undo-graduation) since they're
- * all just different target `status` values.
+ * corresponding timestamp (approvedAt/failedAt/completedAt) from the
+ * transition rather than trusting a client-supplied one. One general
+ * update op covers every button ParticipantsPanel exposes (approve,
+ * cancel, reactivate, fail, graduate, return-to-registrant,
+ * undo-graduation) since they're all just different target `status`
+ * values.
  */
 export type EnrollmentUpdate = {
     status: EnrollmentStatus;
-    interviewNotes?: string;
     failureReason?: FailureReasonCode;
     failureNotes?: string;
     finalGrade?: number;
@@ -1542,8 +1538,6 @@ export type EnrollmentWritable = {
     completedLessons: number;
     completedQuizzes: number;
     approvedAt?: string;
-    interviewedAt?: string;
-    interviewNotes?: string;
     failedAt?: string;
     failureReason?: FailureReasonCode;
     failureNotes?: string;

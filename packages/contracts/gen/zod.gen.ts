@@ -332,7 +332,6 @@ export const zEducationEntry = z.object({
 
 export const zEnrollmentStatus = z.enum([
     'registered',
-    'interviewed',
     'selected',
     'failed',
     'graduated',
@@ -385,8 +384,6 @@ export const zEnrollment = z.object({
     completedQuizzes: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
     enrolledAt: z.iso.datetime().readonly(),
     approvedAt: z.iso.datetime().optional(),
-    interviewedAt: z.iso.datetime().optional(),
-    interviewNotes: z.string().optional(),
     failedAt: z.iso.datetime().optional(),
     failureReason: zFailureReasonCode.optional(),
     failureNotes: z.string().optional(),
@@ -398,16 +395,15 @@ export const zEnrollment = z.object({
 
 /**
  * Status transition + the fields relevant to it. Server derives the
- * corresponding timestamp (interviewedAt/approvedAt/failedAt/
- * completedAt) from the transition rather than trusting a client-
- * supplied one. One general update op covers every button
- * ParticipantsPanel exposes (interview, approve, cancel, reactivate,
- * fail, graduate, return-to-registrant, undo-graduation) since they're
- * all just different target `status` values.
+ * corresponding timestamp (approvedAt/failedAt/completedAt) from the
+ * transition rather than trusting a client-supplied one. One general
+ * update op covers every button ParticipantsPanel exposes (approve,
+ * cancel, reactivate, fail, graduate, return-to-registrant,
+ * undo-graduation) since they're all just different target `status`
+ * values.
  */
 export const zEnrollmentUpdate = z.object({
     status: zEnrollmentStatus,
-    interviewNotes: z.string().optional(),
     failureReason: zFailureReasonCode.optional(),
     failureNotes: z.string().optional(),
     finalGrade: z.int().gte(0).lte(100).optional()
@@ -1250,8 +1246,6 @@ export const zEnrollmentWritable = z.object({
     completedLessons: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
     completedQuizzes: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
     approvedAt: z.iso.datetime().optional(),
-    interviewedAt: z.iso.datetime().optional(),
-    interviewNotes: z.string().optional(),
     failedAt: z.iso.datetime().optional(),
     failureReason: zFailureReasonCode.optional(),
     failureNotes: z.string().optional(),

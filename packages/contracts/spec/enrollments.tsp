@@ -9,14 +9,13 @@ using Lms.Common;
 
 /**
  * Enrollment domain: a student's registration/participation in a course
- * (registered -> interviewed -> selected -> graduated/failed/canceled),
+ * (registered -> selected -> graduated/failed/canceled),
  * plus the richer applicant profile (education/experience/certifications)
  * that participant management needs beyond a plain User account.
  */
 namespace Lms {
   enum EnrollmentStatus {
     registered: "registered";
-    interviewed: "interviewed";
     selected: "selected";
     failed: "failed";
     graduated: "graduated";
@@ -53,8 +52,6 @@ namespace Lms {
     @visibility(Lifecycle.Read)
     enrolledAt: utcDateTime;
     approvedAt?: utcDateTime;
-    interviewedAt?: utcDateTime;
-    interviewNotes?: string;
     failedAt?: utcDateTime;
     failureReason?: FailureReasonCode;
     failureNotes?: string;
@@ -161,16 +158,15 @@ namespace Lms {
 
   /**
    * Status transition + the fields relevant to it. Server derives the
-   * corresponding timestamp (interviewedAt/approvedAt/failedAt/
-   * completedAt) from the transition rather than trusting a client-
-   * supplied one. One general update op covers every button
-   * ParticipantsPanel exposes (interview, approve, cancel, reactivate,
-   * fail, graduate, return-to-registrant, undo-graduation) since they're
-   * all just different target `status` values.
+   * corresponding timestamp (approvedAt/failedAt/completedAt) from the
+   * transition rather than trusting a client-supplied one. One general
+   * update op covers every button ParticipantsPanel exposes (approve,
+   * cancel, reactivate, fail, graduate, return-to-registrant,
+   * undo-graduation) since they're all just different target `status`
+   * values.
    */
   model EnrollmentUpdate {
     status: EnrollmentStatus;
-    interviewNotes?: string;
     failureReason?: FailureReasonCode;
     failureNotes?: string;
     @minValue(0)

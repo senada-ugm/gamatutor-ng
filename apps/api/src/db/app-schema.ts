@@ -319,8 +319,6 @@ export const enrollments = pgTable(
     enrollmentType: text("enrollment_type").notNull().default("free"),
     enrolledAt: timestamp("enrolled_at").defaultNow().notNull(),
     approvedAt: timestamp("approved_at"),
-    interviewedAt: timestamp("interviewed_at"),
-    interviewNotes: text("interview_notes"),
     failedAt: timestamp("failed_at"),
     failureReason: text("failure_reason"),
     failureNotes: text("failure_notes"),
@@ -337,7 +335,7 @@ export const enrollments = pgTable(
     index("enrollments_course_idx").on(table.courseId),
     check(
       "enrollments_status_check",
-      sql`${table.status} in ('registered', 'interviewed', 'selected', 'failed', 'graduated', 'canceled')`
+      sql`${table.status} in ('registered', 'selected', 'failed', 'graduated', 'canceled')`
     ),
   ]
 )

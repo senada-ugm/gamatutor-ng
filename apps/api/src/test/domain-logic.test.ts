@@ -91,8 +91,8 @@ describe("quiz grading — isAnswerCorrect", () => {
 // Enrollment workflow — the transition matrix IS the funnel law.
 // ---------------------------------------------------------------------------
 describe("enrollment transitions — ALLOWED_TRANSITIONS", () => {
-  it("walks the happy path: registered -> interviewed -> selected -> graduated", () => {
-    const path = ["registered", "interviewed", "selected", "graduated"] as const
+  it("walks the happy path: registered -> selected -> graduated", () => {
+    const path = ["registered", "selected", "graduated"] as const
     for (let i = 0; i < path.length - 1; i++) {
       const from = path[i] as keyof typeof ALLOWED_TRANSITIONS
       const to = path[i + 1] as (typeof ALLOWED_TRANSITIONS)[keyof typeof ALLOWED_TRANSITIONS][number]
@@ -102,7 +102,6 @@ describe("enrollment transitions — ALLOWED_TRANSITIONS", () => {
 
   it("no state skips the funnel straight to graduation", () => {
     assert.ok(!ALLOWED_TRANSITIONS.registered.includes("graduated"))
-    assert.ok(!ALLOWED_TRANSITIONS.interviewed.includes("graduated"))
   })
 
   it("graduated is terminal (except idempotent self)", () => {

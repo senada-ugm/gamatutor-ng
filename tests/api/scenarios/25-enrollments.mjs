@@ -2,8 +2,8 @@ import { check, eq, status } from "../lib/assert.mjs"
 
 /**
  * Enrollments: self-service enrollment, the workflow transitions
- * (interview -> selected; graduation happens in the certificates
- * scenario), read scoping, and the participant-profile surface.
+ * (selection; graduation happens in the certificates scenario), read
+ * scoping, and the participant-profile surface.
  */
 export async function run(ctx) {
   console.log("\n== Enrollments ==")
@@ -104,19 +104,12 @@ export async function run(ctx) {
     409
   )
 
-  // The funnel: registering is not participating — the manager walks the
-  // interview step, then selects, before participant-gated surfaces open.
+  // The funnel: registering is not participating — the manager selects
+  // before participant-gated surfaces open.
   status(
     "user is not yet an active participant",
     await user.post(`/v1/lesson-progress/${ids.lesson}/complete?courseId=${ids.course}`),
     403
-  )
-  status(
-    "admin interviews the user's enrollment",
-    await admin.patch(`/v1/enrollments/${ids.enrollmentUser}`, {
-      json: { status: "interviewed", interviewNotes: "journey notes" },
-    }),
-    200
   )
   status(
     "admin selects the user's enrollment",

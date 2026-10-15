@@ -140,7 +140,7 @@ export function enrollmentsRoutes(app: FastifyInstance) {
       if (request.body.status === "canceled") {
         const ownerId = await service.getEnrollmentOwnerId(request.params.id)
         const currentStatus = await service.getEnrollmentStatus(request.params.id)
-        const selfCancelable = ownerId === user.id && ["registered", "interviewed"].includes(currentStatus)
+        const selfCancelable = ownerId === user.id && currentStatus === "registered"
         if (!selfCancelable) await assertCanManageCourse(user, courseId)
       } else {
         await assertCanManageCourse(user, courseId)

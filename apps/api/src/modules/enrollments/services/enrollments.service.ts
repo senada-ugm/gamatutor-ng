@@ -125,8 +125,6 @@ function toEnrollmentFromStats(
     completedQuizzes: extra?.completedQuizzes?.get(`${row.userId}:${row.courseId}`) ?? 0,
     enrolledAt: row.enrolledAt.toISOString(),
     approvedAt: row.approvedAt?.toISOString(),
-    interviewedAt: row.interviewedAt?.toISOString(),
-    interviewNotes: row.interviewNotes ?? undefined,
     failedAt: row.failedAt?.toISOString(),
     failureReason: (row.failureReason as Enrollment["failureReason"]) ?? undefined,
     failureNotes: row.failureNotes ?? undefined,
@@ -320,8 +318,6 @@ export async function enroll(
             enrollmentType: input.enrollmentType ?? "free",
             enrolledAt: nowTimestamp,
             approvedAt: isFreeOnline ? nowTimestamp : null,
-            interviewedAt: null,
-            interviewNotes: null,
             failedAt: null,
             failureReason: null,
             failureNotes: null,
@@ -354,7 +350,6 @@ export async function enroll(
 }
 
 const STATUS_TIMESTAMP_FIELD: Partial<Record<Enrollment["status"], string>> = {
-  interviewed: "interviewedAt",
   selected: "approvedAt",
   failed: "failedAt",
   graduated: "completedAt",
@@ -366,8 +361,7 @@ const STATUS_TIMESTAMP_FIELD: Partial<Record<Enrollment["status"], string>> = {
  *  so idempotent re-submits (e.g. re-graduating for the certificate
  *  backfill) stay no-ops rather than 409s. */
 export const ALLOWED_TRANSITIONS: Record<Enrollment["status"], Enrollment["status"][]> = {
-  registered: ["registered", "interviewed", "selected", "failed", "canceled"],
-  interviewed: ["interviewed", "registered", "selected", "failed", "canceled"],
+  registered: ["registered", "selected", "failed", "canceled"],
   selected: ["selected", "graduated", "failed", "canceled"],
   graduated: ["graduated"],
   failed: ["failed", "registered"],
@@ -388,10 +382,7 @@ export async function updateEnrollment(id: string, input: EnrollmentUpdate): Pro
 
   const timestampField = STATUS_TIMESTAMP_FIELD[target]
   const patch: Record<string, unknown> = { status: target }
-  if (timestampField === "interviewedAt") {
-    patch.interviewedAt = new Date()
-    patch.interviewNotes = input.interviewNotes
-  } else if (timestampField === "approvedAt") {
+  if (timestampField === "approvedAt") {
     patch.approvedAt = new Date()
   } else if (timestampField === "failedAt") {
     patch.failedAt = new Date()

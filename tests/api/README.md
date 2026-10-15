@@ -31,11 +31,9 @@ email verification journeys stay in the Playwright suites.
 ## What it covers
 
 - **Journey**: institution registration → course authoring (owner + admin
-  paths) → content tree → enrollment workflow (self-enroll → interview →
+  paths) → content tree → enrollment workflow (self-enroll →
   select → graduate → auto-issued certificate → public verification) →
-  attendance with code verification and brute-force lockout → quiz
-  attempts with server-side grading → assignment submit/grade/return →
-  discussions with moderation → references, uploads (magic-byte MIME
+  quiz attempts with server-side grading → uploads (magic-byte MIME
   detection, purpose validation), user suspension.
 - **Auth matrix per surface**: anonymous → 401, wrong role → 403,
   cross-user reads → 403/filtered, conflicts → 409, validation → 400.

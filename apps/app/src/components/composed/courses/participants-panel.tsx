@@ -138,7 +138,7 @@ export function ParticipantsPanel({ courseId }: { courseId: string }) {
           </TableHeader>
           <TableBody>
             {rows.map((enrollment) => {
-              const isActive = ["registered", "interviewed", "selected"].includes(enrollment.status)
+              const isActive = ["registered", "selected"].includes(enrollment.status)
               const profile = profiles.data?.get(enrollment.userId)
 
               return (
@@ -305,12 +305,6 @@ export function ParticipantsPanel({ courseId }: { courseId: string }) {
                     <p className="font-mono text-xs">{enrollmentDetail.data.certificateId || "—"}</p>
                   </div>
                 </div>
-                {enrollmentDetail.data.interviewNotes ? (
-                  <div>
-                    <span className="text-xs text-muted-foreground">Catatan Wawancara</span>
-                    <p className="rounded bg-muted p-2 text-xs">{enrollmentDetail.data.interviewNotes}</p>
-                  </div>
-                ) : null}
                 {enrollmentDetail.data.failureNotes ? (
                   <div>
                     <span className="text-xs text-muted-foreground">Alasan Tidak Lolos</span>

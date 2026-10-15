@@ -10,7 +10,6 @@ export const ENROLLMENT_STATUS: Record<
   { label: string; variant: "default" | "secondary" | "outline" | "destructive" }
 > = {
   registered: { label: "Terdaftar", variant: "secondary" },
-  interviewed: { label: "Diwawancarai", variant: "secondary" },
   selected: { label: "Peserta", variant: "default" },
   failed: { label: "Tidak Lulus", variant: "destructive" },
   graduated: { label: "Lulus", variant: "default" },
