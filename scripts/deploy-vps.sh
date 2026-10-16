@@ -141,7 +141,9 @@ for (const email of ["admin@lms.dev", "owner@lms.dev", "user@lms.dev"]) {
 }
 const demo = await db.query("update courses set status = 'draft' where status = 'published' and slug is distinct from 'drive-retinopati' returning title")
 out.push("", "unpublished seed demo courses: " + demo.rows.map((r) => r.title).join("; "))
-// The seed leaves DRIVE a draft; publish it through the api so its checks run.
+// Older seeds left DRIVE a draft; publish it through the api so its checks run.
+const { rows: [drive] } = await db.query("select id, status from courses where slug = 'drive-retinopati'")
+if (drive.status !== "published") {
 const origin = "https://$DOMAIN"
 const adminPass = out.find((l) => l.startsWith("admin@lms.dev  ")).split("  ")[1]
 const signIn = await fetch("http://api:8000/api/auth/sign-in/email", {
@@ -149,10 +151,10 @@ const signIn = await fetch("http://api:8000/api/auth/sign-in/email", {
   body: JSON.stringify({ email: "admin@lms.dev", password: adminPass }),
 })
 const cookie = signIn.headers.getSetCookie().map((c) => c.split(";")[0]).join("; ")
-const { rows: [drive] } = await db.query("select id from courses where slug = 'drive-retinopati'")
 const pub = await fetch("http://api:8000/v1/courses/" + drive.id + "/publish", { method: "POST", headers: { Origin: origin, Cookie: cookie } })
 if (!pub.ok) throw new Error("publishing DRIVE failed: " + pub.status)
-out.push("published DRIVE (" + drive.id + ")")
+}
+out.push("DRIVE published (" + drive.id + ")")
 console.log(out.join("\n"))
 await db.end()
 JS
