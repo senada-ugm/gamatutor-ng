@@ -24,9 +24,10 @@ export function AuthPage({
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="relative hidden overflow-hidden bg-slate-900 lg:block" aria-hidden="true">
+        {/* Photo: Vivek Doshi on Unsplash (unsplash.com/photos/zziTPieyuBI), Unsplash License. */}
         <img
-          src="/images/eyeball-auth-bg.jpg"
-          alt="Model anatomis bola mata dalam laboratorium oftalmologi klinis"
+          src="/images/peacock-auth-bg.jpg"
+          alt="Burung merak biru-hijau mengembangkan ekornya di atas rumput"
           className="absolute inset-0 h-full w-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/35 to-slate-900/10" />
