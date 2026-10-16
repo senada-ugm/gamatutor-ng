@@ -73,8 +73,19 @@ export function AudioNarrationBar({
           }
         }
       }
-      void audioRef.current.play()
-      setIsPlaying(true)
+      const playPromise = audioRef.current.play()
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlaying(true)
+          })
+          .catch((err) => {
+            console.warn("Autoplay deferred or blocked:", err)
+            setIsPlaying(false)
+          })
+      } else {
+        setIsPlaying(true)
+      }
       return
     }
 

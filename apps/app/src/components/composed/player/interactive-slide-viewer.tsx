@@ -199,6 +199,7 @@ export function InteractiveSlideViewer({
         <div className="shrink-0 border-t bg-card/80 p-3">
           <AudioNarrationBar
             key={page.id}
+            autoPlay={true}
             audioUrl={"audio" in page && page.audio ? page.audio : undefined}
             transcript={"transcript" in page && page.transcript ? page.transcript : undefined}
             onTimeUpdate={setCurrentPlaybackTime}
