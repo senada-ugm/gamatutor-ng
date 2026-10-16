@@ -197,8 +197,8 @@ const userContext = await browser.newContext()
 const userPage = await userContext.newPage()
 await userPage.goto(`${BASE}/login`)
 
-await expect("login page renders clinical eyeball split background image", async () => {
-  const bgImg = userPage.locator("img[src='/images/eyeball-auth-bg.jpg']")
+await expect("login page renders the peacock split background image", async () => {
+  const bgImg = userPage.locator("img[src='/images/peacock-auth-bg.jpg']")
   await bgImg.waitFor({ timeout: 8000 })
 })
 
