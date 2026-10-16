@@ -23,13 +23,11 @@ DOMAIN=${GAMATUTOR_DOMAIN:-gamatutor.komunitech.id}
 REPO_ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 cd "$REPO_ROOT"
 
-# One multiplexed connection for every step: the host rate-limits new ssh
-# connections, and a deploy opens about eight.
-# GAMATUTOR_SSH_CONTROL reuses a master connection the caller already opened.
-SSH_CTL=${GAMATUTOR_SSH_CONTROL:-$(mktemp -u "${TMPDIR:-/tmp}/gt-ssh-XXXXXX")}
-SSH=(ssh -i "$SSH_KEY" -o StrictHostKeyChecking=accept-new
-  -o ControlMaster=auto -o ControlPath="$SSH_CTL" -o ControlPersist=120 "$HOST")
-[[ -n ${GAMATUTOR_SSH_CONTROL:-} ]] || trap 'ssh -o ControlPath="$SSH_CTL" -O exit "$HOST" 2>/dev/null || true' EXIT
+# No ControlMaster multiplexing: Git Bash's ssh master connections reset on
+# Windows. IdentitiesOnly keeps a failed key from falling through to password
+# attempts, which the host's fail2ban counts.
+SSH=(ssh -i "$SSH_KEY" -o StrictHostKeyChecking=accept-new -o IdentitiesOnly=yes
+  -o PasswordAuthentication=no -o ConnectTimeout=20 "$HOST")
 say() { printf '\n\033[1m==> %s\033[0m\n' "$1"; }
 
 if [[ -n $(git status --porcelain) ]]; then
