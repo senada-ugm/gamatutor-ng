@@ -14,7 +14,11 @@ COPY packages/eslint-config ./packages/eslint-config
 COPY apps/app ./apps/app
 
 # Install dependencies and build SPA
-RUN pnpm install --frozen-lockfile
+# pnpm (10.x, this lockfile) skips the Linux native packages under vite 8 -
+# @esbuild/linux-x64 for esbuild 0.27/0.28 and @rolldown/binding-linux-x64-*
+# - so esbuild's postinstall and `vite build` fail. --force installs every
+# optional platform package, the native ones for this image included.
+RUN pnpm install --frozen-lockfile --force
 RUN pnpm --filter app build
 
 # Stage 2: High-performance Nginx Static Server

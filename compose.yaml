@@ -13,11 +13,7 @@ services:
     volumes:
       - rustfs_data:/data
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "exec 3<>/dev/tcp/127.0.0.1/9000 && echo -e 'GET /minio/health/live HTTP/1.1\\r\\nHost: localhost\\r\\n\\r\\n' >&3 || exit 1",
-        ]
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://127.0.0.1:9000/health"]
       interval: 10s
       timeout: 5s
       retries: 5

@@ -13,11 +13,17 @@ COPY packages/eslint-config ./packages/eslint-config
 COPY apps/api ./apps/api
 
 # Install dependencies and build
-RUN pnpm install --frozen-lockfile
+# pnpm (10.x, this lockfile) skips the Linux native packages under vite 8 -
+# @esbuild/linux-x64 for esbuild 0.27/0.28 and @rolldown/binding-linux-x64-*
+# - so esbuild's postinstall and `vite build` fail. --force installs every
+# optional platform package, the native ones for this image included.
+RUN pnpm install --frozen-lockfile --force
 RUN pnpm --filter api build
 
 # Isolate production dependencies
-RUN pnpm --filter=api --prod --legacy deploy /app/pruned
+# --ignore-scripts: no runtime dependency needs one, and the esbuild that
+# better-auth's optional peers drag in would fail its postinstall as above.
+RUN pnpm --filter=api --prod --legacy deploy --ignore-scripts /app/pruned
 RUN cp -r /app/apps/api/dist /app/pruned/dist
 RUN cp -r /app/apps/api/drizzle /app/pruned/drizzle 2>/dev/null || true
 

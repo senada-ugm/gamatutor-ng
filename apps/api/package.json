@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "tsup src/index.ts --format esm --out-dir dist --clean --target node20",
+    "build": "tsup",
     "start": "node dist/index.js",
     "db:backup": "tsx scripts/backup-db.ts",
     "db:generate": "drizzle-kit generate",
