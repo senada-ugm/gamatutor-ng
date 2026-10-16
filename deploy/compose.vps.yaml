@@ -20,6 +20,9 @@ services:
       - TRUST_PROXY=true
       - API_PUBLIC_URL=${PUBLIC_ORIGIN}
       - WEB_PUBLIC_URL=${PUBLIC_ORIGIN}
+      # compose.prod.yaml defaults an empty SMTP_HOST to mailpit, and the api
+      # prefers SMTP over Resend; here empty means "use RESEND_API_KEY".
+      - SMTP_HOST=${SMTP_HOST:-}
       - SMTP_PORT=${SMTP_PORT:-1025}
       - SMTP_USER=${SMTP_USER:-}
       - SMTP_PASS=${SMTP_PASS:-}
@@ -35,9 +38,8 @@ services:
     ports: !override
       - "127.0.0.1:3120:80"
 
-  # No SMTP relay is configured yet. Until SMTP_HOST/RESEND_API_KEY point at a
-  # real one, mail lands here (UI on 127.0.0.1:8125, reach it over an ssh
-  # tunnel) instead of failing sign-up.
+  # Mail sink for when no relay is configured (SMTP_HOST=mailpit in ng.env):
+  # UI on 127.0.0.1:8125, reach it over an ssh tunnel.
   mailpit:
     image: axllent/mailpit:v1.27
     container_name: lms-mailpit
