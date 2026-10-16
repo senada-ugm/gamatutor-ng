@@ -1,6 +1,6 @@
 import { useMemo } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { BarChart3, Clock, Download, Flame, Users } from "lucide-react"
+import { BarChart3, Clock, Download, Eye, Flame, Users } from "lucide-react"
 
 import { Button } from "@workspace/ui/components/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@workspace/ui/components/card"
@@ -86,7 +86,7 @@ export function CourseReportPanel({ courseId }: { courseId: string }) {
       <div className="flex flex-wrap items-center justify-between gap-4 border-b pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-lg">👁</span>
+            <Eye className="size-5 text-[#173a5e] dark:text-foreground" />
             <h2 className="text-xl font-bold tracking-tight text-[#173a5e] dark:text-foreground">
               Laporan Analisis & Waktu Belajar
             </h2>

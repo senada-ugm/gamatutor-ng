@@ -32,7 +32,7 @@ export function SiteHeader() {
             <circle cx="15" cy="15" r="6" fill="#137a77" />
             <circle cx="18.5" cy="13" r="2" fill="#f2902e" />
           </svg>
-          <span className="sr-only">👁</span>
+          <span className="sr-only">Logo DRIVE School</span>
           <span className="text-[1.125rem] font-extrabold tracking-tight text-[#0f2a44] dark:text-white">
             DRIVE School
           </span>

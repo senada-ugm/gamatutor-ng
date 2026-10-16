@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { ArrowLeft, ArrowRight } from "lucide-react"
+import { ArrowLeft, ArrowRight, Eye, FileText, Volume2 } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
 import type {
@@ -153,7 +153,7 @@ export function InteractiveSlideViewer({
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1.5 text-xs font-bold text-primary">
               <span className="flex size-6 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-xs shadow-xs">
-                {course.brand?.mark || "👁"}
+                <Eye className="size-3.5 stroke-[2.2]" />
               </span>
               <span className="hidden tracking-tight sm:inline">{course.brand?.name || "DRIVE Initiative"}</span>
             </div>
@@ -213,13 +213,15 @@ export function InteractiveSlideViewer({
             {"audio" in page && page.audio ? (
               <Badge
                 variant="outline"
-                className="gap-1 border-primary/30 bg-primary/5 text-[11px] font-medium text-primary"
+                className="gap-1.5 border-primary/30 bg-primary/5 text-[11px] font-medium text-primary"
               >
-                <span>🔊 Narasi Suara Tersedia</span>
+                <Volume2 className="size-3" />
+                <span>Narasi Suara Tersedia</span>
               </Badge>
             ) : "transcript" in page && page.transcript ? (
-              <Badge variant="outline" className="gap-1 border-muted text-[11px] font-normal text-muted-foreground">
-                <span>📄 Transkrip Narasi Tersedia</span>
+              <Badge variant="outline" className="gap-1.5 border-muted text-[11px] font-normal text-muted-foreground">
+                <FileText className="size-3" />
+                <span>Transkrip Narasi Tersedia</span>
               </Badge>
             ) : (
               <span className="text-[11px] text-muted-foreground/75">Kurikulum Skrining Klinis FK-KMK UGM</span>

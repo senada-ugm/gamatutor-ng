@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router"
-import { ArrowLeft, Check, Lock, Play } from "lucide-react"
+import { ArrowLeft, Check, Eye, Lock, Play } from "lucide-react"
 
+import { Button } from "@workspace/ui/components/button"
 import { cn } from "@workspace/ui/lib/utils"
 
 import { usePlayerDeck } from "@/components/composed/player/player-deck-context"
@@ -21,16 +22,19 @@ export function DeckSteps({ course }: { course: CourseDefinition }) {
   return (
     <>
       <div className="bg-gradient-to-br from-[#5bb4b2] via-[#2d77c2] to-[#173a5e] p-4 text-white">
-        <Link
-          to="/dashboard"
-          className="inline-flex min-h-8 items-center gap-1.5 text-[13px] opacity-90 transition-opacity hover:underline hover:opacity-100"
+        <Button
+          variant="ghost"
+          size="sm"
+          nativeButton={false}
+          className="-ms-2.5 h-8 gap-2 px-2.5 text-xs font-medium text-white/90 hover:bg-white/15 hover:text-white"
+          render={<Link to="/dashboard" />}
         >
-          <ArrowLeft className="size-3.5" />
-          Kembali ke Dasbor
-        </Link>
+          <ArrowLeft className="size-4" />
+          <span>Kembali ke Dasbor</span>
+        </Button>
         <div className="mt-3 flex items-center gap-2">
           <span className="flex size-[26px] items-center justify-center rounded-full border-2 border-white/90 bg-white/10 text-[13px]">
-            {course.brand?.mark || "👁"}
+            <Eye className="size-3.5 stroke-[2.2]" />
           </span>
           <span className="text-[13px] font-bold tracking-wide">{course.brand?.name || "DRIVE Initiative"}</span>
         </div>

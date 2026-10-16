@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { Link } from "@tanstack/react-router"
 import { useQuery } from "@tanstack/react-query"
-import { Award, ChevronRight, GraduationCap } from "lucide-react"
+import { Award, ChevronRight, Eye, GraduationCap } from "lucide-react"
 
 import { Button } from "@workspace/ui/components/button"
 import { Card, CardContent } from "@workspace/ui/components/card"
@@ -57,7 +57,7 @@ export function DashboardPage() {
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#132d47] via-[#173a5e] to-[#2d77c2] p-6 text-white shadow-md md:p-8">
         <div className="relative z-10 max-w-2xl space-y-3">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold backdrop-blur-md">
-            <span>👁</span>
+            <Eye className="size-3.5 stroke-[2.2]" />
             <span>Platform Pembelajaran Klinis Terakreditasi</span>
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-white md:text-3xl">

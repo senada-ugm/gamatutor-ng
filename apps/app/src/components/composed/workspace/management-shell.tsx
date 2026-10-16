@@ -1,4 +1,5 @@
 import { Link, Outlet, useLocation, useMatchRoute } from "@tanstack/react-router"
+import { ArrowRight } from "lucide-react"
 
 import { cn } from "@workspace/ui/lib/utils"
 
@@ -86,7 +87,7 @@ export function ManagementShell() {
                     className="flex items-center justify-between rounded-md px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-[#0369a1] dark:hover:text-sky-300"
                   >
                     <span>Ke Menu Instruktur</span>
-                    <span className="text-xs">➔</span>
+                    <ArrowRight className="size-3.5" />
                   </Link>
                 </div>
               </div>
@@ -124,7 +125,7 @@ export function ManagementShell() {
                       className="flex items-center justify-between rounded-md px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-[#0369a1] dark:hover:text-sky-300"
                     >
                       <span>Ke Konsol Admin</span>
-                      <span className="text-xs">➔</span>
+                      <ArrowRight className="size-3.5" />
                     </Link>
                   </div>
                 ) : null}

@@ -1,4 +1,5 @@
 import { Link, useMatchRoute, useNavigate } from "@tanstack/react-router"
+import { Eye } from "lucide-react"
 
 import { Avatar, AvatarFallback } from "@workspace/ui/components/avatar"
 import { Button } from "@workspace/ui/components/button"
@@ -61,7 +62,7 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
             className="flex shrink-0 items-center gap-2.5 font-bold tracking-tight text-white transition-opacity hover:opacity-95"
           >
             <span className="flex size-7 items-center justify-center rounded-full bg-white/20 text-xs font-black text-white shadow-xs backdrop-blur-xs">
-              👁
+              <Eye className="size-4 stroke-[2.2]" />
             </span>
             <span className="text-base font-extrabold tracking-tight text-white">
               DRIVE <span className="font-semibold text-sky-200 dark:text-sky-300">Learn</span>

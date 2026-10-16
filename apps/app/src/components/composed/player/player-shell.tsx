@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Link, useLocation, useMatchRoute } from "@tanstack/react-router"
-import { Menu } from "lucide-react"
+import { Eye, Menu } from "lucide-react"
 
 import { Button } from "@workspace/ui/components/button"
 import { Progress } from "@workspace/ui/components/progress"
@@ -163,8 +163,8 @@ function CourseOutline({ course, completedLessonIds }: { course: ContractCourse;
       <div className="space-y-3 p-4 pe-12 lg:pe-4">
         <BackLink to="/dashboard" label="Kembali ke Dasbor" />
         <div className="flex items-center gap-2 text-xs font-bold tracking-wider uppercase">
-          <span className="flex size-5 items-center justify-center rounded-full bg-[#0d9488]/15 text-xs text-[#0d9488] dark:text-[#14b8a6]">
-            👁
+          <span className="flex size-5 items-center justify-center rounded-full bg-[#0d9488]/15 text-[#0d9488] dark:text-[#14b8a6]">
+            <Eye className="size-3.5 stroke-[2.2]" />
           </span>
           <span className="font-extrabold text-[#0369a1] dark:text-sky-400">DRIVE Initiative</span>
         </div>
