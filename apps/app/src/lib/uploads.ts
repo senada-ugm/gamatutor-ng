@@ -1,4 +1,4 @@
-import { API_URL } from "@/lib/api"
+import { API_V1 } from "@/lib/api"
 
 export interface UploadedFile {
   id: string
@@ -24,7 +24,7 @@ export function uploadFile(file: File, purpose: string, onProgress?: (fraction: 
   const xhr = new XMLHttpRequest()
 
   const promise = new Promise<UploadedFile>((resolve, reject) => {
-    xhr.open("POST", `${API_URL}/v1/uploads`)
+    xhr.open("POST", `${API_V1}/uploads`)
     xhr.withCredentials = true
 
     xhr.upload.onprogress = (event) => {
@@ -69,14 +69,14 @@ export function uploadFile(file: File, purpose: string, onProgress?: (fraction: 
  *  and forgets — a failure here just means the orphan sweep cleans it up
  *  later instead of immediately, so callers don't need to handle errors. */
 export function deleteUpload(id: string): void {
-  void fetch(`${API_URL}/v1/uploads/${id}`, { method: "DELETE", credentials: "include" }).catch(() => {
+  void fetch(`${API_V1}/uploads/${id}`, { method: "DELETE", credentials: "include" }).catch(() => {
     // Best-effort — the background orphan sweep is the backstop.
   })
 }
 
 /** Fetch metadata for a stored upload. */
 export async function getUpload(id: string): Promise<UploadedFile & { sizeBytes?: number; mimeType?: string }> {
-  const res = await fetch(`${API_URL}/v1/uploads/${id}`, { credentials: "include" })
+  const res = await fetch(`${API_V1}/uploads/${id}`, { credentials: "include" })
   if (!res.ok) throw new Error("Gagal mengambil metadata file")
   const json = (await res.json()) as { data: UploadedFile & { sizeBytes?: number; mimeType?: string } }
   return json.data

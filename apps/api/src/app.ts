@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs"
 import { createRequire } from "node:module"
 import cors from "@fastify/cors"
+import fastifyStatic from "@fastify/static"
 import scalarApiReference from "@scalar/fastify-api-reference"
 import { toNodeHandler } from "better-auth/node"
 import Fastify from "fastify"
@@ -53,6 +54,9 @@ export async function buildApp() {
   const app = Fastify({
     logger: env.NODE_ENV === "test" ? false : { level: env.LOG_LEVEL },
     trustProxy: env.TRUST_PROXY,
+    // /api/v1/* is an alias of /v1/*: lets the SPA and the API share one origin
+    // with everything API-ish under /api (alongside Better Auth's /api/auth).
+    rewriteUrl: (req) => (req.url ?? "").replace(/^\/api\/v1(?=[/?]|$)/, "/v1"),
   })
 
   // Route handlers throw; this renders every failure — domain AppErrors,
@@ -117,6 +121,8 @@ export async function buildApp() {
   await app.register(usersModule, { prefix: "/v1" })
   await app.register(telemetryModule, { prefix: "/v1" })
   await app.register(devModule, { prefix: "/v1" })
+
+  if (env.WEB_DIST_DIR) await registerSpa(app, env.WEB_DIST_DIR)
 
   // Orphaned-upload sweep: started once the app is ready, stopped on
   // shutdown — not a bare module-scope setInterval, which would leak
@@ -210,5 +216,32 @@ async function setupApiDocs(app: import("fastify").FastifyInstance) {
       theme: "kepler",
       url: "/openapi.json",
     },
+  })
+}
+
+/**
+ * Serves the built SPA from the same process (single-container deploy).
+ * Real routes always win; only unmatched GET/HEAD requests outside /api and
+ * /v1 fall back to index.html so client-side routing works on refresh.
+ */
+async function registerSpa(app: import("fastify").FastifyInstance, root: string) {
+  await app.register(fastifyStatic, {
+    root,
+    wildcard: false,
+    setHeaders: (res, filePath) => {
+      const normalized = filePath.replaceAll("\\", "/")
+      res.header("Cache-Control", normalized.includes("/assets/") ? "public, max-age=31536000, immutable" : "no-cache")
+    },
+  })
+
+  app.setNotFoundHandler((request, reply) => {
+    const path = request.url.split("?")[0] ?? request.url
+    const isApiPath = path === "/api" || path.startsWith("/api/") || path === "/v1" || path.startsWith("/v1/")
+    if ((request.method !== "GET" && request.method !== "HEAD") || isApiPath) {
+      return reply.status(404).send({
+        error: { code: "notFound", message: "Route not found", requestId: request.id },
+      })
+    }
+    return reply.sendFile("index.html")
   })
 }

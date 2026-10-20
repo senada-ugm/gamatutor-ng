@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 
 import { EnrollmentStatusBadge } from "@/components/composed/_shared/enrollment-status-badge"
 import { EmptyState } from "@/components/composed/_shared/empty-state"
-import { API_URL, apiGet } from "@/lib/api"
+import { API_V1, apiGet } from "@/lib/api"
 import type { ContractCourseReport, ContractCourseTelemetrySummary } from "@workspace/contracts/domain"
 
 const DAYS = ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"]
@@ -104,10 +104,10 @@ export function CourseReportPanel({ courseId }: { courseId: string }) {
             nativeButton={false}
             render={
               <a
-                href={`${API_URL}/v1/courses/${courseId}/participants/export`}
+                href={`${API_V1}/courses/${courseId}/participants/export`}
                 onClick={(e) => {
                   e.preventDefault()
-                  window.open(`${API_URL}/v1/courses/${courseId}/participants/export`, "_blank")
+                  window.open(`${API_V1}/courses/${courseId}/participants/export`, "_blank")
                 }}
               />
             }
@@ -123,10 +123,10 @@ export function CourseReportPanel({ courseId }: { courseId: string }) {
             nativeButton={false}
             render={
               <a
-                href={`${API_URL}/v1/reports/telemetry/export?courseId=${courseId}`}
+                href={`${API_V1}/reports/telemetry/export?courseId=${courseId}`}
                 onClick={(e) => {
                   e.preventDefault()
-                  window.open(`${API_URL}/v1/reports/telemetry/export?courseId=${courseId}`, "_blank")
+                  window.open(`${API_V1}/reports/telemetry/export?courseId=${courseId}`, "_blank")
                 }}
               />
             }

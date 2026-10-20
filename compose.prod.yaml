@@ -53,15 +53,15 @@ services:
     networks:
       - lms-network
 
-  # Fastify Backend API (Container 1)
-  api:
+  # Single container: Fastify serves the API (/api/v1, /api/auth, /docs) AND the SPA
+  lms:
     build:
       context: .
-      dockerfile: apps/api/Dockerfile
-    container_name: lms-api
+      dockerfile: Dockerfile
+    container_name: lms
     restart: unless-stopped
     ports:
-      - "8000:8000"
+      - "3000:8000"
     environment:
       - NODE_ENV=production
       - HOST=0.0.0.0
@@ -77,8 +77,10 @@ services:
       - S3_SECRET_ACCESS_KEY=${S3_SECRET_KEY:-rustfsadmin}
       - S3_FORCE_PATH_STYLE=true
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET:-replace-with-a-real-secret-at-least-32-chars-long}
-      - BETTER_AUTH_URL=${BETTER_AUTH_URL:-http://localhost:8000}
-      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:3000,http://localhost:8000}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL:-http://localhost:3000}
+      - API_PUBLIC_URL=${API_PUBLIC_URL:-${BETTER_AUTH_URL:-http://localhost:3000}}
+      - TRUST_PROXY=${TRUST_PROXY:-false}
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:3000}
       - PII_ENCRYPTION_KEY=${PII_ENCRYPTION_KEY:-0123456789abcdef0123456789abcdef}
       - SMTP_HOST=${SMTP_HOST:-mailpit}
     depends_on:
@@ -87,21 +89,6 @@ services:
       redis:
         condition: service_healthy
       rustfs:
-        condition: service_healthy
-    networks:
-      - lms-network
-
-  # Authenticated React SPA (Container 2)
-  app:
-    build:
-      context: .
-      dockerfile: apps/app/Dockerfile
-    container_name: lms-app
-    restart: unless-stopped
-    ports:
-      - "3000:80"
-    depends_on:
-      api:
         condition: service_healthy
     networks:
       - lms-network

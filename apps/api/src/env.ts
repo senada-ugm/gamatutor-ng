@@ -65,6 +65,11 @@ const envSchema = z
     // Demonstration / development mode — enables quick-login and database reset for demos. Defaults to false.
     DEV_MODE: booleanFromEnvironment(false),
 
+    // Single-container deploy: absolute path to the built SPA (apps/app/dist).
+    // When set, this process also serves the SPA (with index.html fallback);
+    // the API stays reachable under /api/v1 (alias of /v1) and /api/auth.
+    WEB_DIST_DIR: z.string().optional().default(""),
+
     // Email — SMTP (Mailpit on 1025 for local dev) or Resend API (production).
     SMTP_HOST: z.string().optional().default(""),
     SMTP_PORT: z.coerce.number().int().default(1025),

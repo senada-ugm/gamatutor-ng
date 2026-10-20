@@ -19,6 +19,12 @@ COPY apps/app ./apps/app
 # - so esbuild's postinstall and `vite build` fail. --force installs every
 # optional platform package, the native ones for this image included.
 RUN pnpm install --frozen-lockfile --force
+# VITE_* values are inlined at build time (static nginx image has no runtime
+# env), so they must arrive as build args or the bundle falls back to localhost.
+ARG VITE_API_URL=http://localhost:8000
+ARG VITE_DEV_MODE=false
+ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_DEV_MODE=$VITE_DEV_MODE
 RUN pnpm --filter app build
 
 # Stage 2: High-performance Nginx Static Server

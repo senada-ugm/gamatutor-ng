@@ -6,7 +6,11 @@
  * shaping. If the SDK is ever fixed, migrate back to it.
  */
 
+// Empty string = same origin (single-container deploy where the API is served
+// under /api by the same Fastify process that serves this SPA).
 export const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8010"
+/** Base for all business endpoints; the API accepts /api/v1/* as an alias of /v1/*. */
+export const API_V1 = `${API_URL}/api/v1`
 
 export class ApiError extends Error {
   readonly status: number
@@ -18,7 +22,7 @@ export class ApiError extends Error {
 
 /** GET — returns the envelope's `data` payload. */
 export async function apiGet<T>(path: string): Promise<T> {
-  const res = await fetch(`${API_URL}/v1${path}`, { credentials: "include" })
+  const res = await fetch(`${API_V1}${path}`, { credentials: "include" })
   const body = await res.json().catch(() => null)
   if (!res.ok) throw new ApiError(body?.error?.message ?? `Request failed (${res.status})`, res.status)
   return (body?.data ?? null) as T
@@ -39,7 +43,7 @@ export interface PagedResult<T> {
 /** GET a paged collection — rows plus the envelope's pagination block,
  *  so list pages can drive the shared Pager without guessing totals. */
 export async function apiGetPaged<T>(path: string): Promise<PagedResult<T>> {
-  const res = await fetch(`${API_URL}/v1${path}`, { credentials: "include" })
+  const res = await fetch(`${API_V1}${path}`, { credentials: "include" })
   const body = await res.json().catch(() => null)
   if (!res.ok) throw new ApiError(body?.error?.message ?? `Request failed (${res.status})`, res.status)
   return {
@@ -61,7 +65,7 @@ export async function apiSend<T>(
   path: string,
   body?: unknown
 ): Promise<T> {
-  const res = await fetch(`${API_URL}/v1${path}`, {
+  const res = await fetch(`${API_V1}${path}`, {
     method,
     credentials: "include",
     headers: body !== undefined ? { "Content-Type": "application/json" } : undefined,

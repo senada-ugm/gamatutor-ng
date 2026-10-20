@@ -1,4 +1,5 @@
 import { createAuthClient } from "better-auth/react"
+import { API_URL } from "@/lib/api"
 
 /**
  * Better Auth client for apps/app. In a plain Vite SPA, the proxy-based
@@ -6,6 +7,6 @@ import { createAuthClient } from "better-auth/react"
  * cookie as apps/legacy and apps/web — all hit the same apps/api.
  */
 export const authClient = createAuthClient({
-  baseURL: import.meta.env.VITE_API_URL ?? "http://localhost:8010",
+  baseURL: API_URL || window.location.origin,
   basePath: "/api/auth",
 })
