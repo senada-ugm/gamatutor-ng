@@ -1,7 +1,9 @@
 import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { admin } from "better-auth/plugins"
+import { eq } from "drizzle-orm"
 import { db } from "./db/index.js"
+import { users } from "./db/auth-schema.js"
 import { env, corsOrigins } from "./env.js"
 import { generateId } from "./lib/response.js"
 import { sendEmail } from "./lib/email.js"
@@ -46,9 +48,20 @@ export const auth = betterAuth({
         html: `<p>Hi ${user.name || user.email},</p><p>We received a request to reset your LMS password. If this was you, follow the link below (it can only be used once):</p><p><a href="${url}">${url}</a></p><p>If you didn't request this, you can safely ignore this email.</p>`,
       })
     },
+    // The reset link only reaches the inbox, so using it proves the address
+    // as well as a verification link would. Without this, a user who lost
+    // the verification email resets their password and still can't sign in.
+    onPasswordReset: async ({ user }) => {
+      if (!user.emailVerified) {
+        await db.update(users).set({ emailVerified: true }).where(eq(users.id, user.id))
+      }
+    },
   },
   emailVerification: {
     sendOnSignUp: true,
+    // Re-send the link when an unverified user signs in with the right
+    // password; the sign-up email may be long expired or lost to spam.
+    sendOnSignIn: true,
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }) => {
       await sendEmail({

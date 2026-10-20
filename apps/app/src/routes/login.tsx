@@ -31,7 +31,13 @@ export function LoginPage() {
     setSubmitting(true)
     setError(null)
     try {
-      const user = await signIn(email, password)
+      const { user, error: signInError } = await signIn(email, password, `${window.location.origin}/dashboard`)
+      if (signInError === "EMAIL_NOT_VERIFIED") {
+        setError(
+          `Email Anda belum diverifikasi. Kami baru saja mengirim ulang tautan verifikasi ke ${email} — buka tautan itu (periksa juga folder spam), lalu Anda akan langsung masuk.`
+        )
+        return
+      }
       if (!user) {
         setError("Invalid email or password")
         return
