@@ -55,3 +55,4 @@ apps/api/storage/
 # gitignore patterns without a leading slash match at any depth.
 !apps/api/src/modules/uploads/
 # Abandoned frozen copy of the UI package — kept on disk as reference only.
+*.pptx
