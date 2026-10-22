@@ -90,12 +90,17 @@ await expect("hero renders clinical retinopathy title and description", async ()
   await page.getByText(/kursus daring untuk dokter layanan primer/i).waitFor({ timeout: 8000 })
 })
 
-await expect("hero action offers participant registration and Masuk is only in header", async () => {
-  await page.getByRole("button", { name: "Daftar sebagai peserta" }).first().waitFor({ timeout: 8000 })
+await expect("hero action has no auth button and Masuk is only in header", async () => {
   // Masuk must only be in header
-  await page.locator("header").getByRole("link", { name: "Masuk" }).waitFor({ timeout: 8000 })
+  await page
+    .locator("header")
+    .locator('a:has-text("Masuk"), button:has-text("Masuk")')
+    .first()
+    .waitFor({ timeout: 8000 })
   const heroMasuk = await page.locator("#hero").getByRole("button", { name: "Masuk" }).count()
   if (heroMasuk > 0) throw new Error("Masuk button should not be in hero")
+  const heroDaftar = await page.locator("#hero").getByRole("button", { name: "Daftar sebagai peserta" }).count()
+  if (heroDaftar > 0) throw new Error("Daftar button should not be in hero")
   const badgeCount = await page.getByText("Terakreditasi SKP IDI").count()
   if (badgeCount > 0) throw new Error("Accreditation badge should be removed")
 })

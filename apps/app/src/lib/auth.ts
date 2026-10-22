@@ -14,7 +14,8 @@ export interface SessionUser {
  * that don't exist here.
  */
 
-export type SignInResult = { user: SessionUser; error?: undefined } | { user?: undefined; error: "EMAIL_NOT_VERIFIED" | "FAILED" }
+export type SignInResult =
+  { user: SessionUser; error?: undefined } | { user?: undefined; error: "EMAIL_NOT_VERIFIED" | "FAILED" }
 
 /**
  * An unverified account with the right password gets EMAIL_NOT_VERIFIED, and

@@ -4,10 +4,10 @@ import { Eye } from "lucide-react"
 /**
  * The auth scaffold, mirroring the shadcn login-02 block page layout
  * (packages/ui/src/components/login-form.tsx holds the registry's form
- * half — never hand-edited): a two-column split with the image panel
- * (full-bleed background + tagline overlay) on the left, hidden below
+ * half — never hand-edited): a two-column split with the image/video panel
+ * (full-bleed background + tagline overlay) on the left (2/3), hidden below
  * lg, and the form column (brand row + centered max-w-xs form) on the
- * right. Every auth surface (login, register, forgot/reset password)
+ * right (1/3). Every auth surface (login, register, forgot/reset password)
  * renders inside it.
  */
 export function AuthPage({
@@ -22,14 +22,11 @@ export function AuthPage({
   maxWidth?: string
 }) {
   return (
-    <div className="grid min-h-svh lg:grid-cols-2">
-      <div className="relative hidden overflow-hidden bg-slate-900 lg:block" aria-hidden="true">
-        {/* Photo: Vivek Doshi on Unsplash (unsplash.com/photos/zziTPieyuBI), Unsplash License. */}
-        <img
-          src="/images/peacock-auth-bg.jpg"
-          alt="Burung merak biru-hijau mengembangkan ekornya di atas rumput"
-          className="absolute inset-0 h-full w-full object-cover object-center"
-        />
+    <div className="grid min-h-svh lg:grid-cols-3">
+      <div className="relative hidden overflow-hidden bg-slate-900 lg:col-span-2 lg:block" aria-hidden="true">
+        <video autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover object-center">
+          <source src="/videos/auth-bg.mp4" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/35 to-slate-900/10" />
         <div className="absolute inset-x-0 bottom-0 p-10 text-white">
           <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
@@ -39,8 +36,8 @@ export function AuthPage({
             Platform pembelajaran klinis interaktif terakreditasi untuk dokter layanan primer dan tenaga kesehatan.
           </p>
         </div>
-      </div>{" "}
-      <div className="flex flex-col gap-4 p-6 md:p-10">
+      </div>
+      <div className="flex flex-col gap-4 p-6 md:p-10 lg:col-span-1">
         <div className="flex justify-center gap-2 md:justify-start">
           <Link to="/" className="flex items-center gap-2 font-medium" aria-label="Kembali ke Beranda">
             <div className="flex size-7 items-center justify-center rounded-full bg-[#0369a1] text-xs font-black text-white shadow-xs">
@@ -60,7 +57,7 @@ export function AuthPage({
             {children}
           </div>
         </div>
-      </div>{" "}
+      </div>
     </div>
   )
 }

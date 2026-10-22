@@ -89,22 +89,9 @@ export function SiteHeader() {
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-3">
-              <Link
-                to="/login"
-                className="text-sm font-semibold text-[#46607a] transition-colors hover:text-[#137a77] hover:underline hover:decoration-[#5bb4b2] hover:decoration-2 hover:underline-offset-4 dark:text-slate-300 dark:hover:text-teal-400"
-              >
-                Masuk
-              </Link>
-              <Button
-                size="sm"
-                className="cursor-pointer bg-[#137a77] text-xs font-bold text-white shadow-xs hover:bg-[#0e625f]"
-                nativeButton={false}
-                render={<Link to="/register" />}
-              >
-                Daftar
-              </Button>
-            </div>
+            <Button size="sm" nativeButton={false} render={<Link to="/login" />}>
+              Masuk
+            </Button>
           )}
         </nav>
       </div>

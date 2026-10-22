@@ -495,17 +495,7 @@ export function LandingPage() {
                         Buka Dasbor
                       </Button>
                     </>
-                  ) : (
-                    <Button
-                      size="lg"
-                      className="gama-launch cursor-pointer rounded-none border-0 shadow-md"
-                      nativeButton={false}
-                      render={<Link to="/register" />}
-                    >
-                      <span>Daftar sebagai peserta</span>
-                      <ArrowRight className="ml-2 size-4" />
-                    </Button>
-                  )}
+                  ) : null}
                   <a
                     href="#simulasi"
                     className="gama-quiet cursor-pointer text-sm font-bold"
