@@ -137,16 +137,18 @@ await expect("participant roster shows the enrollee as Terdaftar", async () => {
   await page.getByText("1 pendaftar").waitFor({ timeout: 8000 })
 })
 
+// Click the row to open the participant detail dialog
+await page.locator("table tbody tr").first().click()
 await page.getByRole("button", { name: "Terima" }).click()
 await expect("accepting moves the enrollment to Peserta", async () => {
-  // Scoped to the roster table tbody — the TableHead also contains 'Peserta'.
-  await page.getByRole("table").locator("tbody").getByText("Peserta", { exact: true }).waitFor({ timeout: 8000 })
+  await page.locator('[data-slot="dialog-content"]').getByText("Peserta", { exact: true }).waitFor({ timeout: 8000 })
 })
 
 await page.getByRole("button", { name: "Luluskan" }).click()
 await expect("graduating marks the participant Lulus (certificate auto-issued server-side)", async () => {
   await page.getByText("Lulus", { exact: true }).first().waitFor({ timeout: 8000 })
 })
+await page.getByRole("button", { name: "Tutup" }).click()
 
 // --- Publish ---
 await page.getByRole("link", { name: "Detail" }).click()

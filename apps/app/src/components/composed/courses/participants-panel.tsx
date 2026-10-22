@@ -1,9 +1,17 @@
 import { useState } from "react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
+import { AlertCircle, Award, BookOpen, ChevronRight, Trash2 } from "lucide-react"
 
 import { Button } from "@workspace/ui/components/button"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@workspace/ui/components/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@workspace/ui/components/dialog"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@workspace/ui/components/table"
 import { ENROLLMENT_STATUS, EnrollmentStatusBadge } from "@/components/composed/_shared/enrollment-status-badge"
@@ -21,11 +29,9 @@ import type {
 } from "@workspace/contracts/domain"
 
 /**
- * Peserta tab: enrollment roster with the workflow actions the API
- * models as plain status transitions (select / fail / graduate / cancel).
- * Graduating auto-issues a certificate server-side.
+ * Peserta tab: clickable roster with chevron indicators and a comprehensive
+ * detail modal housing all workflow transitions (accept, graduate, reject, cancel, expel).
  */
-
 export function ParticipantsPanel({ courseId }: { courseId: string }) {
   const queryClient = useQueryClient()
   const confirm = useConfirm()
@@ -49,10 +55,6 @@ export function ParticipantsPanel({ courseId }: { courseId: string }) {
   const totalCount = enrollments.data?.pagination.totalCount ?? 0
   const totalPages = enrollments.data?.pagination.totalPages ?? 1
 
-  // Enrollment rows carry only userId; participant profiles (readable by
-  // course managers) supply the display name/email. One batch read for
-  // the whole roster — ids the caller may not see come back omitted, and
-  // the row falls back to its userId.
   const userIds = [...new Set(rows.map((e) => e.userId))]
   const profiles = useQuery({
     queryKey: ["participant-profiles", courseId, userIds.join(",")],
@@ -75,6 +77,9 @@ export function ParticipantsPanel({ courseId }: { courseId: string }) {
       void queryClient.invalidateQueries({
         queryKey: ["enrollments", courseId],
       })
+      void queryClient.invalidateQueries({
+        queryKey: ["enrollment-detail", selectedEnrollmentId],
+      })
     },
     onError: (err) => toast.error(err instanceof Error ? err.message : "Gagal menerbitkan sertifikat"),
   })
@@ -89,6 +94,9 @@ export function ParticipantsPanel({ courseId }: { courseId: string }) {
       void queryClient.invalidateQueries({
         queryKey: ["enrollments", courseId],
       })
+      void queryClient.invalidateQueries({
+        queryKey: ["enrollment-detail", input.id],
+      })
     },
     onError: (err) => toast.error(err instanceof Error ? err.message : "Gagal mengubah status"),
   })
@@ -97,12 +105,16 @@ export function ParticipantsPanel({ courseId }: { courseId: string }) {
     mutationFn: (id: string) => apiSend<null>("DELETE", `/enrollments/${id}`),
     onSuccess: () => {
       toast.success("Peserta dikeluarkan dari pelatihan")
+      setSelectedEnrollmentId(null)
       void queryClient.invalidateQueries({
         queryKey: ["enrollments", courseId],
       })
     },
     onError: (err) => toast.error(err instanceof Error ? err.message : "Gagal mengeluarkan peserta"),
   })
+
+  const selectedEnrollment = enrollmentDetail.data ?? rows.find((e) => e.id === selectedEnrollmentId)
+  const selectedProfile = selectedEnrollment ? profiles.data?.get(selectedEnrollment.userId) : undefined
 
   if (enrollments.isLoading || enrollments.isError || rows.length === 0) {
     return (
@@ -122,148 +134,80 @@ export function ParticipantsPanel({ courseId }: { courseId: string }) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-medium">Peserta</h2>
-        <p className="text-sm text-muted-foreground">{totalCount} pendaftar</p>
+        <div>
+          <h2 className="text-lg font-medium">Peserta</h2>
+          <p className="text-xs text-muted-foreground">
+            Klik baris peserta untuk melihat detail dan mengelola status pendaftaran.
+          </p>
+        </div>
+        <p className="text-sm font-medium text-muted-foreground">{totalCount} pendaftar</p>
       </div>
-      <div className="overflow-hidden rounded-xl border">
+
+      <div className="overflow-hidden rounded-xl border bg-card shadow-xs">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Peserta</TableHead>
+            <TableRow className="hover:bg-transparent">
+              <TableHead className="w-[38%]">Peserta</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="hidden sm:table-cell">Terdaftar</TableHead>
               <TableHead className="hidden md:table-cell">Progres</TableHead>
-              <TableHead className="text-right">Aksi</TableHead>
+              <TableHead className="w-10" />
             </TableRow>
           </TableHeader>
           <TableBody>
             {rows.map((enrollment) => {
-              const isActive = ["registered", "selected"].includes(enrollment.status)
               const profile = profiles.data?.get(enrollment.userId)
 
               return (
-                <TableRow key={enrollment.id}>
+                <TableRow
+                  key={enrollment.id}
+                  tabIndex={0}
+                  role="button"
+                  onClick={() => setSelectedEnrollmentId(enrollment.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault()
+                      setSelectedEnrollmentId(enrollment.id)
+                    }
+                  }}
+                  className="group cursor-pointer transition-colors hover:bg-muted/50 focus-visible:bg-muted/60 focus-visible:outline-hidden"
+                >
                   <TableCell>
-                    <p className="font-medium">{profile?.name ?? enrollment.userId}</p>
-                    {profile?.email ? <p className="text-xs text-muted-foreground">{profile.email}</p> : null}
+                    <div className="flex items-center gap-3">
+                      <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                        {(profile?.name?.[0] ?? "P").toUpperCase()}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="truncate font-semibold text-foreground transition-colors group-hover:text-primary">
+                          {profile?.name ?? enrollment.userId}
+                        </p>
+                        {profile?.email ? (
+                          <p className="truncate text-xs text-muted-foreground">{profile.email}</p>
+                        ) : (
+                          <p className="truncate font-mono text-[11px] text-muted-foreground">{enrollment.userId}</p>
+                        )}
+                      </div>
+                    </div>
                   </TableCell>
                   <TableCell>
                     <EnrollmentStatusBadge status={enrollment.status} />
                   </TableCell>
-                  <TableCell className="hidden text-muted-foreground sm:table-cell">
+                  <TableCell className="hidden text-xs text-muted-foreground sm:table-cell">
                     {formatCourseDate(enrollment.enrolledAt, { full: false })}
                   </TableCell>
-                  <TableCell className="hidden text-muted-foreground md:table-cell">{enrollment.progress}%</TableCell>
-                  <TableCell>
-                    <div className="flex justify-end gap-1">
-                      {isActive ? (
-                        <>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            disabled={updateStatus.isPending}
-                            onClick={() =>
-                              updateStatus.mutate({
-                                id: enrollment.id,
-                                status: "selected",
-                              })
-                            }
-                          >
-                            Terima
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="destructive"
-                            disabled={updateStatus.isPending}
-                            onClick={() => {
-                              void confirm({
-                                title: "Tolak peserta?",
-                                description: `${profile?.name ?? "Peserta ini"} ditandai tidak lolos untuk pelatihan ini.`,
-                                confirmLabel: "Tolak",
-                                destructive: true,
-                              }).then((ok) => {
-                                if (ok)
-                                  updateStatus.mutate({
-                                    id: enrollment.id,
-                                    status: "failed",
-                                  })
-                              })
-                            }}
-                          >
-                            Tolak
-                          </Button>
-                        </>
-                      ) : null}
-                      {enrollment.status === "selected" ? (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          disabled={updateStatus.isPending}
-                          onClick={() =>
-                            updateStatus.mutate({
-                              id: enrollment.id,
-                              status: "graduated",
-                            })
-                          }
-                        >
-                          Luluskan
-                        </Button>
-                      ) : null}
-                      {enrollment.status === "graduated" && !enrollment.certificateId ? (
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          disabled={issueCertificate.isPending}
-                          onClick={() => issueCertificate.mutate(enrollment.id)}
-                        >
-                          Terbitkan Sertifikat
-                        </Button>
-                      ) : null}
-                      {isActive ? (
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          disabled={updateStatus.isPending}
-                          onClick={() => {
-                            void confirm({
-                              title: "Batalkan pendaftaran?",
-                              description: `Pendaftaran ${profile?.name ?? "peserta ini"} dibatalkan dan aksesnya ke pelatihan dicabut.`,
-                              confirmLabel: "Batalkan Pendaftaran",
-                              cancelLabel: "Tutup",
-                              destructive: true,
-                            }).then((ok) => {
-                              if (ok)
-                                updateStatus.mutate({
-                                  id: enrollment.id,
-                                  status: "canceled",
-                                })
-                            })
-                          }}
-                        >
-                          Batalkan
-                        </Button>
-                      ) : null}
-                      <Button size="sm" variant="outline" onClick={() => setSelectedEnrollmentId(enrollment.id)}>
-                        Detail
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="destructive"
-                        disabled={removeEnrollment.isPending}
-                        onClick={() => {
-                          void confirm({
-                            title: "Keluarkan peserta?",
-                            description: `Hapus data pendaftaran ${profile?.name ?? "peserta ini"} dari pelatihan secara permanen.`,
-                            confirmLabel: "Keluarkan",
-                            destructive: true,
-                          }).then((ok) => {
-                            if (ok) removeEnrollment.mutate(enrollment.id)
-                          })
-                        }}
-                      >
-                        Keluarkan
-                      </Button>
+                  <TableCell className="hidden md:table-cell">
+                    <div className="flex items-center gap-2">
+                      <div className="h-1.5 w-16 overflow-hidden rounded-full bg-muted">
+                        <div
+                          className="h-full bg-primary transition-all duration-300"
+                          style={{ width: `${Math.min(100, Math.max(0, enrollment.progress))}%` }}
+                        />
+                      </div>
+                      <span className="text-xs font-medium text-muted-foreground">{enrollment.progress}%</span>
                     </div>
+                  </TableCell>
+                  <TableCell className="w-10 pr-4 text-right">
+                    <ChevronRight className="inline-block size-4 text-muted-foreground/50 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-foreground" />
                   </TableCell>
                 </TableRow>
               )
@@ -276,45 +220,309 @@ export function ParticipantsPanel({ courseId }: { courseId: string }) {
 
       {selectedEnrollmentId ? (
         <Dialog open={selectedEnrollmentId !== null} onOpenChange={(open) => !open && setSelectedEnrollmentId(null)}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Detail Pendaftaran Peserta</DialogTitle>
-              <DialogDescription>Informasi lengkap pendaftaran dan evaluasi peserta.</DialogDescription>
-            </DialogHeader>
-            {enrollmentDetail.isLoading ? (
-              <Skeleton className="h-32 w-full" />
-            ) : enrollmentDetail.data ? (
-              <div className="space-y-3 text-sm">
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <span className="text-xs text-muted-foreground">ID Pendaftaran</span>
-                    <p className="font-mono text-xs">{enrollmentDetail.data.id}</p>
+          <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-xl">
+            <DialogHeader className="border-b pb-4">
+              <div className="flex items-start justify-between gap-3 pr-6">
+                <div className="flex items-center gap-3">
+                  <div className="flex size-11 items-center justify-center rounded-full bg-primary/10 text-base font-bold text-primary">
+                    {(selectedProfile?.name?.[0] ?? "P").toUpperCase()}
                   </div>
                   <div>
-                    <span className="text-xs text-muted-foreground">Status</span>
-                    <EnrollmentStatusBadge status={enrollmentDetail.data.status} />
-                  </div>
-                  <div>
-                    <span className="text-xs text-muted-foreground">Tanggal Terdaftar</span>
-                    <p className="text-muted-foreground">
-                      {formatCourseDate(enrollmentDetail.data.enrolledAt, { full: true })}
-                    </p>
-                  </div>
-                  <div>
-                    <span className="text-xs text-muted-foreground">Sertifikat ID</span>
-                    <p className="font-mono text-xs">{enrollmentDetail.data.certificateId || "—"}</p>
+                    <DialogTitle className="text-lg font-bold">
+                      {selectedProfile?.name ?? selectedEnrollment?.userId}
+                    </DialogTitle>
+                    <DialogDescription className="text-xs">
+                      {selectedProfile?.email ?? "Peserta Pelatihan"}
+                    </DialogDescription>
                   </div>
                 </div>
-                {enrollmentDetail.data.failureNotes ? (
-                  <div>
-                    <span className="text-xs text-muted-foreground">Alasan Tidak Lolos</span>
-                    <p className="rounded bg-destructive/10 p-2 text-xs text-destructive">
-                      {enrollmentDetail.data.failureNotes}
-                    </p>
-                  </div>
-                ) : null}
+                {selectedEnrollment && <EnrollmentStatusBadge status={selectedEnrollment.status} />}
               </div>
-            ) : null}
+            </DialogHeader>
+
+            {selectedEnrollment ? (
+              <div className="space-y-4 py-2 text-sm">
+                {/* Progres Belajar */}
+                <div className="space-y-2.5 rounded-lg border bg-muted/20 p-3.5">
+                  <div className="flex items-center justify-between text-xs font-semibold">
+                    <span className="flex items-center gap-1.5 text-muted-foreground">
+                      <BookOpen className="size-3.5 text-primary" /> Progres Pelatihan
+                    </span>
+                    <span className="font-bold text-foreground">{selectedEnrollment.progress}%</span>
+                  </div>
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+                    <div
+                      className="h-full bg-primary transition-all duration-300"
+                      style={{ width: `${Math.min(100, Math.max(0, selectedEnrollment.progress))}%` }}
+                    />
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 pt-1 text-center">
+                    <div className="rounded border bg-background p-2">
+                      <p className="text-[11px] text-muted-foreground">Materi Selesai</p>
+                      <p className="mt-0.5 text-sm font-bold text-foreground">
+                        {selectedEnrollment.completedLessons ?? 0}
+                      </p>
+                    </div>
+                    <div className="rounded border bg-background p-2">
+                      <p className="text-[11px] text-muted-foreground">Kuis Selesai</p>
+                      <p className="mt-0.5 text-sm font-bold text-foreground">
+                        {selectedEnrollment.completedQuizzes ?? 0}
+                      </p>
+                    </div>
+                    <div className="rounded border bg-background p-2">
+                      <p className="text-[11px] text-muted-foreground">Nilai Akhir</p>
+                      <p className="mt-0.5 text-sm font-bold text-foreground">
+                        {selectedEnrollment.finalGrade != null ? `${selectedEnrollment.finalGrade}/100` : "—"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Detail Pendaftaran */}
+                <div className="grid grid-cols-2 gap-3 text-xs">
+                  <div className="rounded-lg border p-3">
+                    <span className="block text-[11px] text-muted-foreground">ID Pendaftaran</span>
+                    <span
+                      className="mt-0.5 block truncate font-mono font-medium text-foreground"
+                      title={selectedEnrollment.id}
+                    >
+                      {selectedEnrollment.id}
+                    </span>
+                  </div>
+                  <div className="rounded-lg border p-3">
+                    <span className="block text-[11px] text-muted-foreground">Tanggal Terdaftar</span>
+                    <span className="mt-0.5 block font-medium text-foreground">
+                      {formatCourseDate(selectedEnrollment.enrolledAt, { full: true })}
+                    </span>
+                  </div>
+                  {selectedEnrollment.approvedAt && (
+                    <div className="rounded-lg border p-3">
+                      <span className="block text-[11px] text-muted-foreground">Tanggal Diterima</span>
+                      <span className="mt-0.5 block font-medium text-foreground">
+                        {formatCourseDate(selectedEnrollment.approvedAt, { full: true })}
+                      </span>
+                    </div>
+                  )}
+                  {selectedEnrollment.completedAt && (
+                    <div className="rounded-lg border p-3">
+                      <span className="block text-[11px] text-muted-foreground">Tanggal Selesai</span>
+                      <span className="mt-0.5 block font-medium text-foreground">
+                        {formatCourseDate(selectedEnrollment.completedAt, { full: true })}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Profil Tambahan */}
+                {selectedProfile &&
+                  (selectedProfile.profession ||
+                    selectedProfile.institutionName ||
+                    selectedProfile.phone ||
+                    selectedProfile.strNumber) && (
+                    <div className="space-y-2 rounded-lg border p-3.5">
+                      <span className="block text-xs font-semibold text-muted-foreground">Data Diri Peserta</span>
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        {selectedProfile.profession && (
+                          <div>
+                            <span className="text-[11px] text-muted-foreground">Profesi</span>
+                            <p className="font-medium text-foreground">{selectedProfile.profession}</p>
+                          </div>
+                        )}
+                        {selectedProfile.institutionName && (
+                          <div>
+                            <span className="text-[11px] text-muted-foreground">Instansi</span>
+                            <p className="font-medium text-foreground">{selectedProfile.institutionName}</p>
+                          </div>
+                        )}
+                        {selectedProfile.phone && (
+                          <div>
+                            <span className="text-[11px] text-muted-foreground">No. Telepon / WA</span>
+                            <p className="font-medium text-foreground">{selectedProfile.phone}</p>
+                          </div>
+                        )}
+                        {selectedProfile.strNumber && (
+                          <div>
+                            <span className="text-[11px] text-muted-foreground">No. STR</span>
+                            <p className="font-mono text-foreground">{selectedProfile.strNumber}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                {/* Status Sertifikat */}
+                {selectedEnrollment.status === "graduated" && (
+                  <div className="flex items-center justify-between rounded-lg border border-emerald-200 bg-emerald-50/50 p-3 dark:border-emerald-900 dark:bg-emerald-950/20">
+                    <div className="flex items-center gap-2.5">
+                      <div className="flex size-8 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300">
+                        <Award className="size-4" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold text-emerald-900 dark:text-emerald-200">
+                          {selectedEnrollment.certificateId
+                            ? "Sertifikat Sah Telah Terbit"
+                            : "Lulus - Siap Terbit Sertifikat"}
+                        </p>
+                        {selectedEnrollment.certificateId ? (
+                          <p className="font-mono text-[11px] text-emerald-700 dark:text-emerald-400">
+                            ID: {selectedEnrollment.certificateId}
+                          </p>
+                        ) : (
+                          <p className="text-[11px] text-emerald-600 dark:text-emerald-400">
+                            Klik tombol Terbitkan Sertifikat untuk mengeluarkan sertifikat resmi.
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Catatan Penolakan/Kegagalan */}
+                {selectedEnrollment.failureNotes && (
+                  <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-xs">
+                    <span className="mb-1 flex items-center gap-1.5 font-semibold text-destructive">
+                      <AlertCircle className="size-3.5" /> Catatan Tidak Lolos / Ditolak
+                    </span>
+                    <p className="text-destructive/90">{selectedEnrollment.failureNotes}</p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Skeleton className="h-48 w-full" />
+            )}
+
+            {selectedEnrollment && (
+              <DialogFooter className="flex flex-row items-center justify-between gap-2 border-t pt-3 sm:justify-between">
+                <div>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="cursor-pointer text-destructive hover:bg-destructive/10 hover:text-destructive"
+                    disabled={removeEnrollment.isPending}
+                    onClick={() => {
+                      void confirm({
+                        title: "Keluarkan peserta?",
+                        description: `Hapus data pendaftaran ${selectedProfile?.name ?? "peserta ini"} dari pelatihan secara permanen.`,
+                        confirmLabel: "Keluarkan",
+                        destructive: true,
+                      }).then((ok) => {
+                        if (ok) removeEnrollment.mutate(selectedEnrollment.id)
+                      })
+                    }}
+                  >
+                    <Trash2 className="mr-1 size-3.5" />
+                    Keluarkan
+                  </Button>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {["registered", "selected"].includes(selectedEnrollment.status) ? (
+                    <>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="cursor-pointer"
+                        disabled={updateStatus.isPending}
+                        onClick={() =>
+                          updateStatus.mutate({
+                            id: selectedEnrollment.id,
+                            status: "selected",
+                          })
+                        }
+                      >
+                        Terima
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        className="cursor-pointer"
+                        disabled={updateStatus.isPending}
+                        onClick={() => {
+                          void confirm({
+                            title: "Tolak peserta?",
+                            description: `${selectedProfile?.name ?? "Peserta ini"} ditandai tidak lolos untuk pelatihan ini.`,
+                            confirmLabel: "Tolak",
+                            destructive: true,
+                          }).then((ok) => {
+                            if (ok)
+                              updateStatus.mutate({
+                                id: selectedEnrollment.id,
+                                status: "failed",
+                              })
+                          })
+                        }}
+                      >
+                        Tolak
+                      </Button>
+                    </>
+                  ) : null}
+
+                  {selectedEnrollment.status === "selected" ? (
+                    <>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="cursor-pointer"
+                        disabled={updateStatus.isPending}
+                        onClick={() => {
+                          void confirm({
+                            title: "Batalkan pendaftaran?",
+                            description: `Pendaftaran ${selectedProfile?.name ?? "peserta ini"} dibatalkan dan aksesnya ke pelatihan dicabut.`,
+                            confirmLabel: "Batalkan Pendaftaran",
+                            cancelLabel: "Tutup",
+                            destructive: true,
+                          }).then((ok) => {
+                            if (ok)
+                              updateStatus.mutate({
+                                id: selectedEnrollment.id,
+                                status: "canceled",
+                              })
+                          })
+                        }}
+                      >
+                        Batalkan
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="default"
+                        className="cursor-pointer"
+                        disabled={updateStatus.isPending}
+                        onClick={() =>
+                          updateStatus.mutate({
+                            id: selectedEnrollment.id,
+                            status: "graduated",
+                          })
+                        }
+                      >
+                        Luluskan
+                      </Button>
+                    </>
+                  ) : null}
+
+                  {selectedEnrollment.status === "graduated" && !selectedEnrollment.certificateId ? (
+                    <Button
+                      size="sm"
+                      variant="default"
+                      className="cursor-pointer"
+                      disabled={issueCertificate.isPending}
+                      onClick={() => issueCertificate.mutate(selectedEnrollment.id)}
+                    >
+                      <Award className="mr-1 size-3.5" />
+                      Terbitkan Sertifikat
+                    </Button>
+                  ) : null}
+
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="cursor-pointer"
+                    onClick={() => setSelectedEnrollmentId(null)}
+                  >
+                    Tutup
+                  </Button>
+                </div>
+              </DialogFooter>
+            )}
           </DialogContent>
         </Dialog>
       ) : null}
