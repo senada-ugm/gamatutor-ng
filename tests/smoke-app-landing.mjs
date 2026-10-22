@@ -74,9 +74,9 @@ await expect("anonymous visitor stays on root route (no redirect away)", async (
   if (new URL(page.url()).pathname !== "/") throw new Error(`URL was ${page.url()}`)
 })
 
-await expect("landing header renders GamaTutor brand and eye icon mark", async () => {
-  await page.getByText("DRIVE School").first().waitFor({ timeout: 8000 })
-  await page.getByText("GamaTutor").first().waitFor({ timeout: 8000 })
+await expect("landing header renders DRIVE Learn brand and eye icon mark", async () => {
+  await page.getByText("DRIVE").first().waitFor({ timeout: 8000 })
+  await page.getByText("Learn").first().waitFor({ timeout: 8000 })
   await page.locator("header svg").first().waitFor({ timeout: 8000 })
 })
 
