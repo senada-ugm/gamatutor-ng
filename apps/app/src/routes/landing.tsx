@@ -476,7 +476,7 @@ export function LandingPage() {
                 <div className="mt-8 flex flex-wrap items-center gap-4">
                   <Button
                     size="lg"
-                    className="gama-launch cursor-pointer rounded-none border-0 shadow-md"
+                    className="h-12 cursor-pointer rounded-lg px-6 text-base font-bold shadow-md"
                     nativeButton={false}
                     render={<Link to="/register" />}
                   >
