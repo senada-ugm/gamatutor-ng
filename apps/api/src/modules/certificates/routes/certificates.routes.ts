@@ -7,9 +7,12 @@ import { assertCanManageCourse } from "../../../lib/course-access.js"
 import { eq } from "drizzle-orm"
 import { db } from "../../../db/index.js"
 import { enrollments } from "../../../db/app-schema.js"
+import { ForbiddenError, NotFoundError } from "../../../lib/errors.js"
+import { notifyUserById } from "../../../lib/notify.js"
 import { requireSession } from "../../../lib/require-session.js"
 import { dataResponse } from "../../../lib/response.js"
 import { validateBody } from "../../../lib/validation.js"
+import { updateEnrollment } from "../../enrollments/services/enrollments.service.js"
 import * as service from "../services/certificates.service.js"
 
 const verifyQuerySchema = z.object({ code: z.string() })
@@ -63,10 +66,38 @@ export function certificatesRoutes(app: FastifyInstance) {
       const isSelfClaim = enrollment && enrollment.userId === user.id
       if (!isSelfClaim) {
         await assertCanManageCourse(user, request.params.courseId)
+        const created = await service.issueCertificate(request.params.courseId, request.body)
+        reply.status(201)
+        return dataResponse(created, request.id)
       }
-      const created = await service.issueCertificate(request.params.courseId, request.body)
+
+      // Self-claim: a participant who passed the post-test graduates
+      // themselves — the same transition a manager makes, which issues
+      // the certificate atomically — instead of waiting for an admin.
+      if (enrollment.courseId !== request.params.courseId) {
+        throw new NotFoundError("Enrollment", request.body.enrollmentId)
+      }
+      if (enrollment.status === "graduated") {
+        const existing = await service.issueCertificate(request.params.courseId, request.body)
+        reply.status(201)
+        return dataResponse(existing, request.id)
+      }
+      if (enrollment.status !== "selected") {
+        throw new ForbiddenError("Pendaftaran Anda belum aktif untuk pelatihan ini")
+      }
+      const score = await service.passedPostTestScore(user.id, request.params.courseId)
+      if (score === null) {
+        throw new ForbiddenError("Sertifikat dapat diklaim setelah Anda lulus post-test")
+      }
+      const graduated = await updateEnrollment(enrollment.id, { status: "graduated", finalGrade: score })
+      await notifyUserById(user.id, {
+        type: "certificate_issued",
+        title: "Sertifikat kelulusan diterbitkan",
+        body: "Selamat! Sertifikat kelulusan Anda sudah tersedia.",
+        link: graduated.certificateId ? `/certificates/${graduated.certificateId}` : undefined,
+      })
       reply.status(201)
-      return dataResponse(created, request.id)
+      return dataResponse(await service.getCertificate(graduated.certificateId!), request.id)
     }
   )
 }

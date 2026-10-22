@@ -5,9 +5,18 @@ import type {
   CertificateSettings,
   CertificateSettingsUpdate,
 } from "@workspace/contracts"
-import { eq, or } from "drizzle-orm"
+import { and, eq, inArray, isNull, or } from "drizzle-orm"
 import { db, type Tx } from "../../../db/index.js"
-import { certificateSettings, certificates, courses, enrollments, institutions } from "../../../db/app-schema.js"
+import {
+  certificateSettings,
+  certificates,
+  courses,
+  enrollments,
+  institutions,
+  quizAttempts,
+  quizzes,
+  slideDecks,
+} from "../../../db/app-schema.js"
 import { users as userTable } from "../../../db/auth-schema.js"
 import { ConflictError, ForbiddenError, NotFoundError } from "../../../lib/errors.js"
 import { generateId } from "../../../lib/response.js"
@@ -197,4 +206,33 @@ export async function issueCertificate(courseId: string, input: CertificateIssue
     .where(eq(enrollments.id, input.enrollmentId))
 
   return toCertificate(row!)
+}
+
+/** Best passing post-test score (0–100) for this user in this course, or
+ *  null when they have not passed it. The post-test is the slide deck's
+ *  linked quiz; a course without one falls back to any of its quizzes. */
+export async function passedPostTestScore(userId: string, courseId: string): Promise<number | null> {
+  const [deck] = await db
+    .select({ postTestQuizId: slideDecks.postTestQuizId })
+    .from(slideDecks)
+    .where(eq(slideDecks.courseId, courseId))
+    .limit(1)
+  const quizIds = deck?.postTestQuizId
+    ? [deck.postTestQuizId]
+    : (
+        await db
+          .select({ id: quizzes.id })
+          .from(quizzes)
+          .where(and(eq(quizzes.courseId, courseId), isNull(quizzes.deletedAt)))
+      ).map((q) => q.id)
+  if (quizIds.length === 0) return null
+
+  const passed = await db
+    .select({ score: quizAttempts.score, maxScore: quizAttempts.maxScore })
+    .from(quizAttempts)
+    .where(and(eq(quizAttempts.userId, userId), inArray(quizAttempts.quizId, quizIds), eq(quizAttempts.passed, true)))
+  if (passed.length === 0) return null
+  return Math.max(
+    ...passed.map((a) => (a.maxScore && a.maxScore > 0 ? Math.round(((a.score ?? 0) / a.maxScore) * 100) : 100))
+  )
 }

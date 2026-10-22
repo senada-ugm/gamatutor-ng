@@ -167,9 +167,10 @@ export function InteractiveSlideViewer({
         {page.type === "divider" && <DividerSlide page={page} onProceed={handleNext} />}
         {page.type === "content" && <ContentSlide page={page} currentTime={currentPlaybackTime} />}
         {page.type === "cards" && <CardsSlide page={page} />}
-        {page.type === "hotspot" && <HotspotSlide page={page} onAllCompleted={handleNext} />}
-        {page.type === "match" && <MatchSlide page={page} onDone={handleNext} />}
-        {page.type === "image-grading" && <ClinicalFundusGrading page={page} onNext={handleNext} />}
+        {page.type === "hotspot" && <HotspotSlide key={page.id} page={page} />}
+        {page.type === "match" && <MatchSlide key={page.id} page={page} onDone={handleNext} />}
+        {/* Keyed by page so the previous case's selection never carries over. */}
+        {page.type === "image-grading" && <ClinicalFundusGrading key={page.id} page={page} onNext={handleNext} />}
         {page.type === "quiz" && (
           <ClinicalQuizRunner
             quizId={postTestQuizId}
@@ -424,7 +425,13 @@ function CardsSlide({ page }: { page: CardsPage }) {
             {c.image && (
               <img src={c.image} alt={c.title || ""} className="mb-3 h-32 w-full rounded-lg object-contain" />
             )}
-            {c.big && <span className="text-2xl font-extrabold tracking-tight text-primary sm:text-3xl">{c.big}</span>}
+            {c.big && (
+              <span
+                className={`text-2xl font-extrabold tracking-tight sm:text-3xl ${c.dark ? "text-white" : "text-primary"}`}
+              >
+                {c.big}
+              </span>
+            )}
             {c.title && <h4 className="mt-1 text-sm font-semibold">{c.title}</h4>}
             <p className={`mt-2 text-xs leading-relaxed ${c.dark ? "text-slate-300" : "text-muted-foreground"}`}>
               {c.body}
@@ -449,10 +456,11 @@ function CardsSlide({ page }: { page: CardsPage }) {
   )
 }
 
-function HotspotSlide({ page, onAllCompleted }: { page: HotspotPage; onAllCompleted: () => void }) {
-  // If it's modul2-p5 (pathophysiology), render SequentialHotspotViewer (Review #4)
+function HotspotSlide({ page }: { page: HotspotPage }) {
+  // If it's modul2-p5 (pathophysiology), render SequentialHotspotViewer (Review #4).
+  // No auto-advance on the last step: it would cut that step's narration off.
   if (page.id === "modul2-p5" || page.title.toLowerCase().includes("patofisiologi")) {
-    return <SequentialHotspotViewer page={page} onAllCompleted={onAllCompleted} />
+    return <SequentialHotspotViewer page={page} />
   }
 
   // Otherwise render EyeAnatomyViewer (Review #2)
@@ -467,7 +475,7 @@ function MatchSlide({ page, onDone }: { page: MatchPage; onDone: () => void }) {
           {page.kicker}
         </Badge>
       )}
-      <MatchingPairGame pairs={page.pairs} title={page.title} intro={page.intro} onComplete={() => onDone()} />
+      <MatchingPairGame pairs={page.pairs} title={page.title} intro={page.intro} onContinue={onDone} />
     </div>
   )
 }

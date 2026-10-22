@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { Play, Pause, RotateCcw, Volume2, VolumeX, Gauge } from "lucide-react"
 import { Button } from "@workspace/ui/components/button"
 import { Slider } from "@workspace/ui/components/slider"
+import { speak } from "@/lib/speech"
 
 interface AudioNarrationBarProps {
   transcript?: string
@@ -91,10 +92,8 @@ export function AudioNarrationBar({
 
     if (!transcript || typeof window === "undefined" || !("speechSynthesis" in window)) return
 
-    window.speechSynthesis.cancel()
-    const utterance = new SpeechSynthesisUtterance(transcript)
-    utterance.lang = lang
-    utterance.rate = rate
+    const utterance = speak(transcript, { lang, rate })
+    if (!utterance) return
     utteranceRef.current = utterance
 
     // Estimate duration based on text length: ~15 chars per sec at 1.0x
@@ -120,7 +119,6 @@ export function AudioNarrationBar({
       if (timerRef.current) window.clearInterval(timerRef.current)
     }
 
-    window.speechSynthesis.speak(utterance)
     setIsPlaying(true)
   }
 

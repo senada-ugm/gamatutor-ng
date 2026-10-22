@@ -36,15 +36,15 @@ export function ClinicalFundusGrading({ page, onGraded, onNext, className = "" }
       <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3">
         <div className="flex items-center gap-2">
           <Badge variant="outline" className="border-primary/20 bg-primary/5 text-primary">
-            SIMULATION • {page.level || "CLINICAL GRADING"}
+            SIMULASI • {page.level || "GRADING KLINIS"}
           </Badge>
-          <h2 className="text-xl font-bold tracking-tight">Fundus Photography Clinical Evaluation</h2>
+          <h2 className="text-xl font-bold tracking-tight">Evaluasi Klinis Foto Fundus</h2>
         </div>
 
         <div className="flex items-center gap-2">
           <Button size="sm" variant="outline" className="h-8 gap-1.5 text-xs" onClick={() => setIsZoomed(!isZoomed)}>
             {isZoomed ? <ZoomOut className="h-3.5 w-3.5" /> : <ZoomIn className="h-3.5 w-3.5" />}
-            {isZoomed ? "Reset Scale" : "Zoom 1.5x"}
+            {isZoomed ? "Ukuran Normal" : "Perbesar 1.5x"}
           </Button>
 
           {isSubmitted && page.lesions.length > 0 && (
@@ -55,7 +55,7 @@ export function ClinicalFundusGrading({ page, onGraded, onNext, className = "" }
               onClick={() => setShowLesions(!showLesions)}
             >
               <Eye className="h-3.5 w-3.5" />
-              {showLesions ? "Hide Lesion Pins" : "Show Lesion Pins"}
+              {showLesions ? "Sembunyikan Penanda Lesi" : "Tampilkan Penanda Lesi"}
             </Button>
           )}
         </div>
@@ -71,7 +71,7 @@ export function ClinicalFundusGrading({ page, onGraded, onNext, className = "" }
           >
             <img
               src={page.image}
-              alt="High-resolution retinal fundus photograph"
+              alt="Foto fundus retina"
               className="block h-auto max-h-[500px] w-full object-contain"
               loading="eager"
             />
@@ -163,11 +163,9 @@ export function ClinicalFundusGrading({ page, onGraded, onNext, className = "" }
           </div>
 
           <div className="mt-2 flex w-full items-center justify-between px-1 text-xs text-muted-foreground">
-            <span>Standard 45° macular-centered fundus view</span>
+            <span>Foto fundus standar 45° berpusat di makula</span>
             {isSubmitted && page.lesions.length > 0 && (
-              <span className="font-medium text-red-500">
-                {page.lesions.length} verified lesion landmarks indicated
-              </span>
+              <span className="font-medium text-red-500">{page.lesions.length} lesi ditandai</span>
             )}
           </div>
         </div>
@@ -175,9 +173,9 @@ export function ClinicalFundusGrading({ page, onGraded, onNext, className = "" }
         {/* Diagnostic Options & Rationale Panel */}
         <div className="space-y-4 lg:col-span-4">
           <div className="space-y-1">
-            <h3 className="text-sm font-bold text-foreground">Clinical Diagnostic Options:</h3>
+            <h3 className="text-sm font-bold text-foreground">Pilihan Diagnosis Klinis:</h3>
             <p className="text-xs text-muted-foreground">
-              Select the appropriate diagnosis for this patient based on the retinal microvascular findings.
+              Pilih diagnosis yang tepat untuk pasien ini berdasarkan temuan mikrovaskular retina.
             </p>
           </div>
 
@@ -223,7 +221,7 @@ export function ClinicalFundusGrading({ page, onGraded, onNext, className = "" }
           {/* Submission and Feedback Banner */}
           {!isSubmitted ? (
             <Button onClick={handleSubmit} disabled={!selectedOption} className="w-full font-semibold shadow-sm">
-              Verify Clinical Diagnosis
+              Periksa Diagnosis
             </Button>
           ) : (
             <div className="animate-in space-y-3 fade-in">
@@ -239,25 +237,25 @@ export function ClinicalFundusGrading({ page, onGraded, onNext, className = "" }
                   {isCorrect ? (
                     <>
                       <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-                      <span>Accurate Diagnosis!</span>
+                      <span>Diagnosis Tepat!</span>
                     </>
                   ) : (
                     <>
                       <XCircle className="h-5 w-5 text-red-600" />
-                      <span className="text-red-700 dark:text-red-400">Diagnostic Inaccuracy</span>
+                      <span className="text-red-700 dark:text-red-400">Diagnosis Kurang Tepat</span>
                     </>
                   )}
                 </div>
 
                 <div className="space-y-1">
-                  <span className="font-semibold text-foreground">Clinical Reasoning:</span>
+                  <span className="font-semibold text-foreground">Alasan Klinis:</span>
                   <p>{page.reasoning}</p>
                 </div>
               </div>
 
               {onNext && (
                 <Button onClick={onNext} className="w-full gap-2 shadow-sm">
-                  <span>Continue to Next Case</span>
+                  <span>Lanjut ke Kasus Berikutnya</span>
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               )}

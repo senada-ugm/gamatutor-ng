@@ -3,7 +3,8 @@ import { check, eq, status } from "../lib/assert.mjs"
 /**
  * Certificates: graduating an enrollment auto-issues the certificate
  * server-side; the by-id read is scoped (recipient/admin/manager) while
- * code verification stays public; re-issuing is idempotent.
+ * code verification stays public; re-issuing is idempotent. A
+ * participant who passed the post-test may self-claim (graduate).
  */
 export async function run(ctx) {
   console.log("\n== Certificates ==")
@@ -23,6 +24,53 @@ export async function run(ctx) {
     401
   )
 
+  // self-claim: a participant graduates themselves once the post-test
+  // is passed — refused before that, then issued without an admin
+  const claimBody = { json: { enrollmentId: ids.enrollmentUser } }
+  status(
+    "user cannot self-claim before passing the post-test",
+    await user.post(`/v1/courses/${ids.course}/certificates`, claimBody),
+    403
+  )
+  const postTest = status(
+    "admin creates a post-test",
+    await admin.post(`/v1/courses/${ids.course}/quizzes`, { json: { title: "Journey Post-test" } }),
+    201
+  )
+  const postTestQuestion = status(
+    "admin adds a post-test question",
+    await admin.post(`/v1/quizzes/${postTest?.data?.id}/questions`, {
+      json: {
+        question: "Best HTTP status for success?",
+        questionType: "single_choice",
+        options: [{ text: "200" }, { text: "500" }],
+        correctAnswers: ["200"],
+        points: 10,
+      },
+    }),
+    201
+  )
+  const postTestAttempt = status(
+    "user starts the post-test",
+    await user.post(`/v1/quizzes/${postTest?.data?.id}/attempts`),
+    201
+  )
+  const passedAttempt = status(
+    "user passes the post-test",
+    await user.post(`/v1/quiz-attempts/${postTestAttempt?.data?.id}/submit`, {
+      json: { answers: { [postTestQuestion?.data?.id]: ["200"] } },
+    }),
+    200
+  )
+  check("post-test attempt passed", passedAttempt?.data?.passed === true)
+  const selfClaimed = status(
+    "user self-claims the certificate after passing",
+    await user.post(`/v1/courses/${ids.course}/certificates`, claimBody),
+    201
+  )
+  eq("self-claim certificate belongs to the user's enrollment", selfClaimed?.data?.enrollmentId, ids.enrollmentUser)
+  status("admin deletes the post-test", await admin.delete(`/v1/quizzes/${postTest?.data?.id}`), 204)
+
   const graduated = status(
     "admin graduates the user's enrollment",
     await admin.patch(`/v1/enrollments/${ids.enrollmentUser}`, { json: { status: "graduated" } }),
@@ -30,6 +78,7 @@ export async function run(ctx) {
   )
   ids.certificate = graduated?.data?.certificateId
   check("graduation auto-issued a certificate", !!ids.certificate)
+  eq("re-graduating keeps the self-claimed certificate", ids.certificate, selfClaimed?.data?.id)
   check("enrollment flags certificateIssued", graduated?.data?.certificateIssued === true)
 
   const issued = status(

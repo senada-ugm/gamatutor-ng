@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"
-import { CheckCircle2, RotateCcw, XCircle, Award } from "lucide-react"
+import { useEffect, useState, type DragEvent } from "react"
+import { ArrowRight, CheckCircle2, RotateCcw, XCircle, Award } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
 import type { MatchPair } from "@/lib/content/course-types"
@@ -9,20 +9,26 @@ interface MatchingPairGameProps {
   title?: string
   intro?: string
   onComplete?: (score: number) => void
+  /** Shown after verifying, so the learner reads the per-pair result before
+   *  moving on instead of the slide changing under them. */
+  onContinue?: () => void
   className?: string
 }
 
 export function MatchingPairGame({
   pairs,
-  title = "Match Risk Factors with Clinical Explanations",
+  title = "Cocokkan faktor risiko dengan penjelasannya",
   intro,
   onComplete,
+  onContinue,
   className = "",
 }: MatchingPairGameProps) {
   const [selectedLeft, setSelectedLeft] = useState<string | null>(null)
   const [matches, setMatches] = useState<Record<string, string>>({}) // leftId -> rightId
   const [shuffledRights, setShuffledRights] = useState<MatchPair[]>([])
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
+  const [draggingLeft, setDraggingLeft] = useState<string | null>(null)
+  const [dropTarget, setDropTarget] = useState<string | null>(null)
 
   useEffect(() => {
     // Shuffle right items on mount or when pairs change
@@ -42,11 +48,7 @@ export function MatchingPairGame({
     }
   }
 
-  function handleSelectRight(rightId: string) {
-    if (isSubmitted) return
-    if (!selectedLeft) return
-
-    // Pair selectedLeft with this rightId
+  function pair(leftId: string, rightId: string) {
     // If another left was previously paired with this rightId, unpair it
     const newMatches = { ...matches }
     for (const [k, v] of Object.entries(newMatches)) {
@@ -54,9 +56,24 @@ export function MatchingPairGame({
         delete newMatches[k]
       }
     }
-    newMatches[selectedLeft] = rightId
+    newMatches[leftId] = rightId
     setMatches(newMatches)
     setSelectedLeft(null)
+  }
+
+  function handleSelectRight(rightId: string) {
+    if (isSubmitted) return
+    if (!selectedLeft) return
+    pair(selectedLeft, rightId)
+  }
+
+  function handleDrop(rightId: string, e: DragEvent) {
+    e.preventDefault()
+    const leftId = e.dataTransfer.getData("text/plain") || draggingLeft
+    setDraggingLeft(null)
+    setDropTarget(null)
+    if (isSubmitted || !leftId) return
+    pair(leftId, rightId)
   }
 
   function handleUnpair(leftId: string) {
@@ -107,15 +124,14 @@ export function MatchingPairGame({
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-bold text-foreground">{title}</h3>
           <Badge variant="outline" className="font-mono text-xs">
-            Paired: {pairedCount} / {totalCount}
+            Terpasang: {pairedCount} / {totalCount}
           </Badge>
         </div>
         {intro ? (
           <p className="text-xs text-muted-foreground">{intro}</p>
         ) : (
           <p className="text-xs text-muted-foreground">
-            Click a risk factor on the left, then click its corresponding clinical explanation on the right to link
-            them.
+            Seret kartu di kiri ke penjelasan yang sesuai di kanan, atau klik kartu lalu klik kotak tujuannya.
           </p>
         )}
       </div>
@@ -124,7 +140,7 @@ export function MatchingPairGame({
       <div className="grid gap-6 md:grid-cols-2">
         {/* Left Column: Risk Factor Terms */}
         <div className="space-y-3">
-          <h4 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">Risk Factor Terms</h4>
+          <h4 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">Faktor Risiko</h4>
           <div className="space-y-2.5">
             {pairs.map((pair, pIdx) => {
               const isSelected = selectedLeft === pair.id
@@ -147,7 +163,18 @@ export function MatchingPairGame({
                 <div
                   key={pair.id}
                   onClick={() => handleSelectLeft(pair.id)}
-                  className={`flex cursor-pointer items-center justify-between rounded-xl border p-3.5 text-sm font-semibold shadow-xs transition-all ${borderClass}`}
+                  draggable={!isSubmitted}
+                  onDragStart={(e) => {
+                    e.dataTransfer.setData("text/plain", pair.id)
+                    e.dataTransfer.effectAllowed = "link"
+                    setDraggingLeft(pair.id)
+                    setSelectedLeft(pair.id)
+                  }}
+                  onDragEnd={() => {
+                    setDraggingLeft(null)
+                    setDropTarget(null)
+                  }}
+                  className={`flex cursor-grab items-center active:cursor-grabbing ${draggingLeft === pair.id ? "opacity-50" : ""} justify-between rounded-xl border p-3.5 text-sm font-semibold shadow-xs transition-all ${borderClass}`}
                   role="button"
                   tabIndex={0}
                   aria-pressed={isSelected}
@@ -174,9 +201,9 @@ export function MatchingPairGame({
                         handleUnpair(pair.id)
                       }}
                       className="h-6 px-1.5 text-xs text-muted-foreground hover:text-destructive"
-                      title="Unpair"
+                      title="Lepas pasangan"
                     >
-                      Unpair
+                      Lepas
                     </Button>
                   ) : null}
                 </div>
@@ -187,9 +214,7 @@ export function MatchingPairGame({
 
         {/* Right Column: Explanations */}
         <div className="space-y-3">
-          <h4 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-            Clinical Explanations
-          </h4>
+          <h4 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">Penjelasan Klinis</h4>
           <div className="space-y-2.5">
             {shuffledRights.map((pair) => {
               // Find which left item is linked to this right item
@@ -209,11 +234,22 @@ export function MatchingPairGame({
               } else if (linkedIndex !== -1) {
                 borderClass = colorMap[linkedIndex % 6]
               }
+              if (!isSubmitted && dropTarget === pair.id) {
+                borderClass = "border-primary bg-primary/10 ring-2 ring-primary/40 cursor-pointer"
+              }
 
               return (
                 <div
                   key={pair.id}
                   onClick={() => handleSelectRight(pair.id)}
+                  onDragOver={(e) => {
+                    if (isSubmitted) return
+                    e.preventDefault()
+                    e.dataTransfer.dropEffect = "link"
+                    if (dropTarget !== pair.id) setDropTarget(pair.id)
+                  }}
+                  onDragLeave={() => setDropTarget((t) => (t === pair.id ? null : t))}
+                  onDrop={(e) => handleDrop(pair.id, e)}
                   className={`flex items-start gap-2.5 rounded-xl border p-3.5 text-xs leading-relaxed shadow-xs transition-all ${borderClass}`}
                   role="button"
                   tabIndex={0}
@@ -237,25 +273,35 @@ export function MatchingPairGame({
           <div className="flex items-center gap-2">
             <Award className="h-5 w-5 text-amber-500" />
             <span className="text-sm font-semibold">
-              Score: {pairs.filter((p) => matches[p.id] === p.id).length} of {pairs.length} correct
+              Skor: {pairs.filter((p) => matches[p.id] === p.id).length} dari {pairs.length} pasangan benar
             </span>
           </div>
         ) : (
           <div className="text-xs text-muted-foreground">
-            {allPaired ? "All pairs matched! Click Verify Answers." : "Pair all items to submit."}
+            {allPaired
+              ? "Semua sudah dipasangkan. Klik Periksa Jawaban."
+              : "Pasangkan semua kartu untuk memeriksa jawaban."}
           </div>
         )}
 
         <div className="flex items-center gap-2">
           {isSubmitted ? (
-            <Button size="sm" variant="outline" onClick={handleReset} className="gap-1.5">
-              <RotateCcw className="h-4 w-4" />
-              Try Again
-            </Button>
+            <>
+              <Button size="sm" variant="outline" onClick={handleReset} className="gap-1.5">
+                <RotateCcw className="h-4 w-4" />
+                Coba Lagi
+              </Button>
+              {onContinue && (
+                <Button size="sm" onClick={onContinue} className="gap-1.5 font-semibold">
+                  Lanjut
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              )}
+            </>
           ) : (
             <Button size="sm" disabled={!allPaired} onClick={handleSubmit} className="gap-1.5 font-semibold">
               <CheckCircle2 className="h-4 w-4" />
-              Verify Answers
+              Periksa Jawaban
             </Button>
           )}
         </div>

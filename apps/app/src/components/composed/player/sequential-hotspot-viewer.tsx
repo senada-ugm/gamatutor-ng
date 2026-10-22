@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle, Info, Volume2 } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
 import type { HotspotPage, HotspotPoint } from "@/lib/content/course-types"
+import { speak } from "@/lib/speech"
 
 interface SequentialHotspotViewerProps {
   page: HotspotPage
@@ -38,6 +39,7 @@ export function SequentialHotspotViewer({
     const nextVisited = { ...visited, [idx]: true }
     setVisited(nextVisited)
     onStepComplete?.(idx)
+    handleSpeak(page.points[idx])
 
     if (Object.keys(nextVisited).length === page.points.length) {
       onAllCompleted?.()
@@ -72,12 +74,7 @@ export function SequentialHotspotViewer({
   }
 
   function fallbackSpeak(text: string) {
-    if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      window.speechSynthesis.cancel()
-      const u = new SpeechSynthesisUtterance(text)
-      u.lang = "id-ID"
-      window.speechSynthesis.speak(u)
-    }
+    speak(text)
   }
 
   const activePoint = page.points[currentStep]
@@ -93,7 +90,9 @@ export function SequentialHotspotViewer({
             <Info className="h-5 w-5" />
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold text-foreground">Alur Patofisiologi Berurutan (Langkah 1 → 8)</span>
+            <span className="text-sm font-semibold text-foreground">
+              Alur Patofisiologi Berurutan (Langkah 1 → {page.points.length})
+            </span>
             <Badge variant="outline" className="bg-background text-xs">
               Langkah {currentStep + 1} dari {page.points.length}
             </Badge>
@@ -104,8 +103,8 @@ export function SequentialHotspotViewer({
             )}
           </div>
           <p className="text-xs leading-relaxed text-muted-foreground">
-            Silakan klik nomor secara berurutan 1–8 untuk mengetahui patofisiologi retinopati diabetika dari
-            hiperglikemia kronik hingga neovaskularisasi proliferatif.
+            Silakan klik nomor secara berurutan 1–{page.points.length} untuk mengetahui patofisiologi retinopati
+            diabetika dari hiperglikemia kronik hingga neovaskularisasi proliferatif.
           </p>
         </div>
 
@@ -130,7 +129,7 @@ export function SequentialHotspotViewer({
                         ? "animate-pulse border border-primary/40 bg-primary/5 text-primary"
                         : "text-muted-foreground hover:bg-muted/50"
                 }`}
-                title={`Step ${idx + 1}: ${pt.label}`}
+                title={`Langkah ${idx + 1}: ${pt.label}`}
               >
                 <span
                   className={`flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold ${
@@ -191,8 +190,8 @@ export function SequentialHotspotViewer({
                     left: `${point.x}%`,
                     top: `${point.y}%`,
                   }}
-                  title={`Step ${pIdx + 1}: ${point.label}`}
-                  aria-label={`Step ${pIdx + 1}: ${point.label}`}
+                  title={`Langkah ${pIdx + 1}: ${point.label}`}
+                  aria-label={`Langkah ${pIdx + 1}: ${point.label}`}
                 >
                   {pIdx + 1}
                 </button>

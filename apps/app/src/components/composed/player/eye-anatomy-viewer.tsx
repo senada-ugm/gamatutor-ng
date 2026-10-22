@@ -3,6 +3,7 @@ import { Eye, Info, Volume2, Box, Layers, CheckCircle2 } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
 import type { HotspotPage, HotspotPoint } from "@/lib/content/course-types"
+import { speak } from "@/lib/speech"
 
 interface EyeAnatomyViewerProps {
   page: HotspotPage
@@ -40,6 +41,7 @@ export function EyeAnatomyViewer({
     setActiveIdx(idx)
     setVisited((prev) => ({ ...prev, [idx]: true }))
     onPointSelect?.(idx, page.points[idx])
+    handleSpeak(page.points[idx])
   }
 
   function handleSpeak(point: HotspotPoint) {
@@ -64,12 +66,7 @@ export function EyeAnatomyViewer({
   }
 
   function fallbackSpeak(text: string) {
-    if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      window.speechSynthesis.cancel()
-      const u = new SpeechSynthesisUtterance(text)
-      u.lang = "id-ID"
-      window.speechSynthesis.speak(u)
-    }
+    speak(text)
   }
 
   const activePoint = activeIdx !== null ? page.points[activeIdx] : null
@@ -83,7 +80,7 @@ export function EyeAnatomyViewer({
         <div>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="border-primary/20 bg-primary/5 text-primary">
-              {page.kicker || "ANATOMY"}
+              {page.kicker || "ANATOMI"}
             </Badge>
             <h2 className="text-xl font-bold tracking-tight">{page.title}</h2>
           </div>
@@ -103,7 +100,7 @@ export function EyeAnatomyViewer({
               }}
             >
               <Layers className="h-3.5 w-3.5" />
-              2D Diagram
+              Diagram 2D
             </Button>
             <Button
               type="button"
@@ -114,10 +111,10 @@ export function EyeAnatomyViewer({
                 setCurrentMode("3d")
                 onModeChange?.("3d")
               }}
-              title="WebGL 3D Interactive Model (Extensible Architecture)"
+              title="Model 3D interaktif (segera hadir)"
             >
               <Box className="h-3.5 w-3.5" />
-              3D Model
+              Model 3D
               <span className="font-mono text-[10px] opacity-80">(Beta)</span>
             </Button>
           </div>
@@ -130,10 +127,9 @@ export function EyeAnatomyViewer({
           <div className="mb-3 rounded-full bg-primary/10 p-4 text-primary">
             <Box className="h-8 w-8 animate-spin" />
           </div>
-          <h3 className="text-lg font-semibold">3D WebGL Anatomy Canvas Slot</h3>
+          <h3 className="text-lg font-semibold">Model 3D Segera Hadir</h3>
           <p className="mt-1 mb-4 max-w-md text-sm text-muted-foreground">
-            The system architecture is decoupled and ready to mount Three.js / WebGL canvas models without refactoring
-            the page layout or data contracts.
+            Model anatomi 3D interaktif sedang disiapkan. Sementara ini, gunakan diagram 2D.
           </p>
           <Button
             size="sm"
@@ -143,7 +139,7 @@ export function EyeAnatomyViewer({
               onModeChange?.("2d")
             }}
           >
-            Switch back to 2D High-Resolution Diagram
+            Kembali ke Diagram 2D
           </Button>
         </div>
       ) : (
@@ -199,9 +195,9 @@ export function EyeAnatomyViewer({
             </div>
 
             <div className="mt-2 flex w-full items-center justify-between px-1 text-xs text-muted-foreground">
-              <span>Click on any numbered point to explore anatomical details</span>
+              <span>Klik nomor pada gambar untuk melihat penjelasan struktur</span>
               <span className="font-medium text-foreground">
-                Explored: {visitedCount} / {totalCount}
+                Dijelajahi: {visitedCount} / {totalCount}
               </span>
             </div>
           </div>
@@ -212,9 +208,7 @@ export function EyeAnatomyViewer({
               <div className="space-y-3 rounded-xl border bg-card p-5 shadow-xs">
                 <div className="flex items-start justify-between gap-2 border-b pb-3">
                   <div>
-                    <span className="font-mono text-xs font-medium text-primary">
-                      STRUCTURE #{(activeIdx ?? 0) + 1}
-                    </span>
+                    <span className="font-mono text-xs font-medium text-primary">STRUKTUR #{(activeIdx ?? 0) + 1}</span>
                     <h3 className="text-lg leading-snug font-bold text-foreground">{activePoint.label}</h3>
                   </div>
                   <Button
@@ -222,7 +216,7 @@ export function EyeAnatomyViewer({
                     variant="ghost"
                     className="h-8 w-8 p-0 text-muted-foreground hover:text-primary"
                     onClick={() => handleSpeak(activePoint)}
-                    title="Listen to description"
+                    title="Dengarkan penjelasan"
                   >
                     <Volume2 className="h-4 w-4" />
                   </Button>
@@ -238,8 +232,8 @@ export function EyeAnatomyViewer({
                   <div className="flex items-start gap-2 rounded-lg border border-teal-500/20 bg-teal-500/10 p-2.5 text-xs text-teal-800 dark:text-teal-300">
                     <Info className="mt-0.5 h-4 w-4 shrink-0 text-teal-600" />
                     <span>
-                      <strong>Clinical Relevance:</strong> Critical landmark for Diabetic Retinopathy screening and
-                      fundus evaluation.
+                      <strong>Relevansi Klinis:</strong> Penanda penting dalam skrining retinopati diabetika dan
+                      evaluasi fundus.
                     </span>
                   </div>
                 ) : null}
@@ -247,7 +241,7 @@ export function EyeAnatomyViewer({
                 <div className="flex items-center justify-between border-t pt-2 text-xs text-muted-foreground">
                   <span className="flex items-center gap-1 font-medium text-teal-600">
                     <CheckCircle2 className="h-3.5 w-3.5" />
-                    Explored
+                    Sudah dijelajahi
                   </span>
                   <div className="flex gap-1">
                     <Button
@@ -257,7 +251,7 @@ export function EyeAnatomyViewer({
                       disabled={activeIdx === 0}
                       onClick={() => handleSelectPoint((activeIdx ?? 1) - 1)}
                     >
-                      Prev
+                      Sebelumnya
                     </Button>
                     <Button
                       size="sm"
@@ -266,7 +260,7 @@ export function EyeAnatomyViewer({
                       disabled={activeIdx === totalCount - 1}
                       onClick={() => handleSelectPoint((activeIdx ?? 0) + 1)}
                     >
-                      Next
+                      Berikutnya
                     </Button>
                   </div>
                 </div>
@@ -274,7 +268,7 @@ export function EyeAnatomyViewer({
             ) : (
               <div className="rounded-xl border border-dashed p-6 text-center text-sm text-muted-foreground">
                 <Eye className="mx-auto mb-2 h-8 w-8 text-muted-foreground/60" />
-                Select any anatomical point on the left diagram to view details.
+                Pilih salah satu nomor pada diagram untuk melihat penjelasannya.
               </div>
             )}
           </div>

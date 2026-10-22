@@ -90,12 +90,12 @@ export function AnimatedRevealList({
           {intro ? <p className="text-sm font-semibold text-foreground">{intro}</p> : null}
           <div className="mt-0.5 flex items-center gap-2">
             <span className="text-xs text-muted-foreground">
-              Revealed: {Math.min(revealedCount, totalSteps)} of {totalSteps} items
+              Ditampilkan: {Math.min(revealedCount, totalSteps)} dari {totalSteps} poin
             </span>
             {isAllRevealed && (
               <Badge variant="outline" className="border-teal-300 bg-teal-500/10 text-[10px] text-teal-800">
                 <CheckCircle2 className="mr-1 h-3 w-3" />
-                All Displayed
+                Semua Ditampilkan
               </Badge>
             )}
           </div>
@@ -112,12 +112,12 @@ export function AnimatedRevealList({
               {isAutoPlaying ? (
                 <>
                   <Pause className="h-3.5 w-3.5" />
-                  Pause Auto Reveal
+                  Jeda
                 </>
               ) : (
                 <>
                   <Play className="h-3.5 w-3.5" />
-                  Resume Auto Reveal
+                  Lanjutkan
                 </>
               )}
             </Button>
@@ -126,7 +126,7 @@ export function AnimatedRevealList({
           {!isAllRevealed ? (
             <Button size="sm" variant="outline" onClick={handleRevealAll} className="h-8 gap-1.5 text-xs">
               <Eye className="h-3.5 w-3.5" />
-              Reveal All (Skip)
+              Tampilkan Semua
             </Button>
           ) : (
             <Button
@@ -136,7 +136,7 @@ export function AnimatedRevealList({
               className="h-8 gap-1.5 text-xs text-muted-foreground hover:text-foreground"
             >
               <RotateCcw className="h-3.5 w-3.5" />
-              Replay Animation
+              Ulangi Animasi
             </Button>
           )}
         </div>
@@ -174,7 +174,7 @@ export function AnimatedRevealList({
                 key={idx}
                 className="animate-in overflow-hidden rounded-xl border bg-card shadow-xs fade-in slide-in-from-bottom-2"
               >
-                <img src={step.image} alt={step.title || ""} className="h-auto w-full object-cover" />
+                <img src={step.image} alt={step.title || ""} className="h-48 w-full bg-white object-contain" />
                 {step.title || step.body ? (
                   <div className="p-3">
                     {step.title && <h4 className="text-sm font-semibold">{step.title}</h4>}

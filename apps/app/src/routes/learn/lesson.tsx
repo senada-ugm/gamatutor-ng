@@ -10,6 +10,8 @@ import { EmptyState } from "@/components/composed/_shared/empty-state"
 import { InteractiveSlideViewer } from "@/components/composed/player/interactive-slide-viewer"
 import { AudioLessonPlayer, DocumentLessonViewer } from "@/components/composed/player/_atoms/media-renderers"
 import { apiGet, apiSend } from "@/lib/api"
+import { getSession } from "@/lib/auth"
+import { useSession } from "@/lib/session"
 import type { CourseDefinition } from "@/lib/content/course-types"
 import type { ContractCertificate, ContractEnrollment, ContractSlideDeck } from "@workspace/contracts/domain"
 
@@ -50,6 +52,7 @@ export function LessonPage() {
   const { lessonId } = useParams({ from: "/learn/$courseId/lesson/$lessonId" })
   const navigate = useNavigate()
   const { course, completedLessonIds, refreshProgress } = useCourseContext()
+  const session = useSession()
 
   const lesson = course.modules.flatMap((m) => m.lessons).find((l) => l.id === lessonId)
   const isCompleted = completedLessonIds.includes(lessonId)
@@ -100,12 +103,17 @@ export function LessonPage() {
 
   const claimCertificate = useMutation({
     mutationFn: async () => {
+      // Scope to the caller's own rows: a bare courseId read is the
+      // manager roster view and rejects participants ("You do not
+      // manage this course").
+      const me = session.data?.id ?? (await getSession())?.id
+      if (!me) throw new Error("Sesi berakhir — silakan masuk kembali")
       const enrollmentsList = await apiGet<ContractEnrollment[]>(
-        `/enrollments?courseId=${encodeURIComponent(course.id)}&pageSize=1`
+        `/enrollments?userId=${encodeURIComponent(me)}&courseId=${encodeURIComponent(course.id)}&pageSize=1`
       )
       const myEnrollment = enrollmentsList[0]
       if (!myEnrollment) {
-        throw new Error("No active enrollment found to claim certificate")
+        throw new Error("Pendaftaran Anda pada pelatihan ini tidak ditemukan")
       }
       return apiSend<ContractCertificate>("POST", `/courses/${course.id}/certificates`, {
         enrollmentId: myEnrollment.id,
@@ -114,14 +122,14 @@ export function LessonPage() {
       })
     },
     onSuccess: (cert) => {
-      toast.success("Certificate claimed successfully!")
+      toast.success("Sertifikat berhasil diterbitkan")
       void navigate({
         to: "/certificates/$certificateId",
         params: { certificateId: cert.id },
       })
     },
     onError: (err: unknown) => {
-      const msg = err instanceof Error ? err.message : "Failed to claim certificate"
+      const msg = err instanceof Error ? err.message : "Gagal mengklaim sertifikat"
       toast.error(msg)
     },
   })
