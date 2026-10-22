@@ -2,7 +2,7 @@ import { useParams } from "@tanstack/react-router"
 import { useQuery } from "@tanstack/react-query"
 
 import { Badge } from "@workspace/ui/components/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@workspace/ui/components/card"
+import { Card, CardContent } from "@workspace/ui/components/card"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 
 import { CourseThumbnail } from "@/components/composed/courses/_atoms/course-thumbnail"
@@ -91,41 +91,37 @@ export function CourseDetailPage() {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Course Syllabus</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {c.modules.length === 0 ? (
-                <EmptyState
-                  compact
-                  title="Syllabus not available"
-                  description="The instructor has not added modules for this course yet."
-                />
-              ) : (
-                c.modules.map((module, index) => (
-                  <div key={module.id} className="rounded-lg border p-3">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-sm font-medium">
-                        {index + 1}. {module.title}
-                      </span>
-                      <Badge variant="outline">{module.lessons.length} lessons</Badge>
-                    </div>
-                    <ul className="mt-2 divide-y divide-border">
-                      {module.lessons.map((lesson, lessonIndex) => (
-                        <li key={lesson.id} className="flex items-center justify-between gap-2 py-1.5 text-sm">
-                          <span className="truncate">
-                            {lessonIndex + 1}. {lesson.title}
-                          </span>
-                          {lesson.isPreview ? <Badge variant="secondary">Preview</Badge> : null}
-                        </li>
-                      ))}
-                    </ul>
+          <div className="space-y-3">
+            <h2 className="text-base font-semibold tracking-tight text-foreground">Course Syllabus</h2>
+            {c.modules.length === 0 ? (
+              <EmptyState
+                compact
+                title="Syllabus not available"
+                description="The instructor has not added modules for this course yet."
+              />
+            ) : (
+              c.modules.map((module, index) => (
+                <div key={module.id} className="rounded-lg border bg-card p-3 shadow-2xs">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-sm font-medium">
+                      {index + 1}. {module.title}
+                    </span>
+                    <Badge variant="outline">{module.lessons.length} lessons</Badge>
                   </div>
-                ))
-              )}
-            </CardContent>
-          </Card>
+                  <ul className="mt-2 divide-y divide-border">
+                    {module.lessons.map((lesson, lessonIndex) => (
+                      <li key={lesson.id} className="flex items-center justify-between gap-2 py-1.5 text-sm">
+                        <span className="truncate">
+                          {lessonIndex + 1}. {lesson.title}
+                        </span>
+                        {lesson.isPreview ? <Badge variant="secondary">Preview</Badge> : null}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            )}
+          </div>
         </div>
 
         <div className="space-y-3">
