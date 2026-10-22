@@ -38,7 +38,9 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
 
   async function handleSignOut() {
     await signOut()
-    navigate({ to: "/" })
+    if (typeof window !== "undefined") {
+      window.location.href = "/"
+    }
   }
 
   // Active pill has high contrast against the Sky Blue background:

@@ -30,6 +30,9 @@ export async function signIn(email: string, password: string, callbackURL?: stri
 
 export async function signOut(): Promise<void> {
   await authClient.signOut()
+  if (typeof window !== "undefined") {
+    window.location.href = "/"
+  }
 }
 
 export async function getSession(): Promise<SessionUser | null> {

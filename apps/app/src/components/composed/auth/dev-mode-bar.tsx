@@ -77,34 +77,27 @@ export function DevModeBar({ onSelectAccount, submitting }: DevModeBarProps) {
     },
   })
 
-  const isDevMode = import.meta.env.VITE_DEV_MODE === "true" || devStatus?.devMode === true
-  if (!isDevMode) return null
+  const isLocalhost =
+    typeof window !== "undefined" &&
+    (window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1" ||
+      window.location.hostname === "::1" ||
+      window.location.hostname.endsWith(".localhost"))
 
-  const accounts = devStatus?.accounts?.length
-    ? devStatus.accounts
-    : [
-        {
-          role: "admin",
-          name: "LMS Admin",
-          email: "admin@lms.dev",
-          password: "correcthorsebatterystaple",
-          description: "Platform Admin",
-        },
-        {
-          role: "owner",
-          name: "Institution Owner",
-          email: "owner@lms.dev",
-          password: "correcthorsebatterystaple",
-          description: "Institution Owner",
-        },
-        {
-          role: "user",
-          name: "Doctor / Learner",
-          email: "user@lms.dev",
-          password: "correcthorsebatterystaple",
-          description: "Clinical Trainee",
-        },
-      ]
+  const isDevMode = import.meta.env.DEV || import.meta.env.VITE_DEV_MODE === "true" || devStatus?.devMode === true
+  if (!isLocalhost || !isDevMode) return null
+
+  const adminAccount: DevAccount = devStatus?.accounts?.find(
+    (acc) => acc.role === "admin" || acc.name.toLowerCase().includes("admin")
+  ) ?? {
+    role: "admin",
+    name: "LMS Admin",
+    email: "admin@lms.dev",
+    password: "correcthorsebatterystaple",
+    description: "Platform Admin",
+  }
+
+  const accounts = [adminAccount]
 
   return (
     <div className="flex flex-col gap-2 pt-1">

@@ -1,8 +1,6 @@
-import { Link, useNavigate } from "@tanstack/react-router"
-import { LogOut } from "lucide-react"
+import { Link } from "@tanstack/react-router"
 
 import { Button } from "@workspace/ui/components/button"
-import { signOut } from "@/lib/auth"
 import { useSession } from "@/lib/session"
 
 /**
@@ -16,12 +14,6 @@ import { useSession } from "@/lib/session"
  */
 export function SiteHeader() {
   const { data: user } = useSession()
-  const navigate = useNavigate()
-
-  async function handleSignOut() {
-    await signOut()
-    navigate({ to: "/" })
-  }
 
   return (
     <header className="sticky top-0 z-40 border-b border-[#d5e1ea] bg-[#fbfdfe]/95 backdrop-blur-xs dark:border-slate-800 dark:bg-background/95">
@@ -56,38 +48,9 @@ export function SiteHeader() {
           </Link>
 
           {user ? (
-            <div className="flex items-center gap-3">
-              {user.role === "admin" ? (
-                <Link
-                  to="/admin"
-                  className="text-xs font-semibold text-[#137a77] transition-colors hover:underline dark:text-teal-400"
-                >
-                  Admin
-                </Link>
-              ) : null}
-              <Link
-                to="/dashboard"
-                className="text-[#46607a] transition-colors hover:text-[#137a77] hover:underline hover:decoration-[#5bb4b2] hover:decoration-2 hover:underline-offset-4 dark:text-slate-300 dark:hover:text-teal-400"
-              >
-                Dasbor
-              </Link>
-              <Link
-                to="/profile"
-                className="text-[#46607a] transition-colors hover:text-[#137a77] hover:underline hover:decoration-[#5bb4b2] hover:decoration-2 hover:underline-offset-4 dark:text-slate-300 dark:hover:text-teal-400"
-              >
-                Profil
-              </Link>
-              <span className="hidden text-xs text-[#6b8196] md:inline dark:text-slate-400">{user.name}</span>
-              <button
-                type="button"
-                onClick={() => void handleSignOut()}
-                className="flex cursor-pointer items-center gap-1 text-xs font-medium text-[#46607a] transition-colors hover:text-rose-600 dark:text-slate-300 dark:hover:text-rose-400"
-                title="Keluar dari akun"
-              >
-                <LogOut className="size-3.5" />
-                <span>Keluar</span>
-              </button>
-            </div>
+            <Button size="sm" nativeButton={false} render={<Link to="/dashboard" />}>
+              Beranda
+            </Button>
           ) : (
             <Button size="sm" nativeButton={false} render={<Link to="/login" />}>
               Masuk

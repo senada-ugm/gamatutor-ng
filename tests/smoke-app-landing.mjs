@@ -77,7 +77,7 @@ await expect("anonymous visitor stays on root route (no redirect away)", async (
 await expect("landing header renders GamaTutor brand and eye icon mark", async () => {
   await page.getByText("DRIVE School").first().waitFor({ timeout: 8000 })
   await page.getByText("GamaTutor").first().waitFor({ timeout: 8000 })
-  await page.getByText("👁").first().waitFor({ timeout: 8000 })
+  await page.locator("header svg").first().waitFor({ timeout: 8000 })
 })
 
 await expect("landing header contains Verifikasi Sertifikat link", async () => {
@@ -90,7 +90,7 @@ await expect("hero renders clinical retinopathy title and description", async ()
   await page.getByText(/kursus daring untuk dokter layanan primer/i).waitFor({ timeout: 8000 })
 })
 
-await expect("hero action has no auth button and Masuk is only in header", async () => {
+await expect("hero action has Daftar sebagai peserta and Masuk is only in header", async () => {
   // Masuk must only be in header
   await page
     .locator("header")
@@ -99,8 +99,8 @@ await expect("hero action has no auth button and Masuk is only in header", async
     .waitFor({ timeout: 8000 })
   const heroMasuk = await page.locator("#hero").getByRole("button", { name: "Masuk" }).count()
   if (heroMasuk > 0) throw new Error("Masuk button should not be in hero")
-  const heroDaftar = await page.locator("#hero").getByRole("button", { name: "Daftar sebagai peserta" }).count()
-  if (heroDaftar > 0) throw new Error("Daftar button should not be in hero")
+  const heroDaftar = page.locator("#hero").getByRole("button", { name: "Daftar sebagai peserta" })
+  await heroDaftar.waitFor({ timeout: 8000 })
   const badgeCount = await page.getByText("Terakreditasi SKP IDI").count()
   if (badgeCount > 0) throw new Error("Accreditation badge should be removed")
 })
@@ -202,9 +202,9 @@ const userContext = await browser.newContext()
 const userPage = await userContext.newPage()
 await userPage.goto(`${BASE}/login`)
 
-await expect("login page renders the peacock split background image", async () => {
-  const bgImg = userPage.locator("img[src='/images/peacock-auth-bg.jpg']")
-  await bgImg.waitFor({ timeout: 8000 })
+await expect("login page renders the background video", async () => {
+  await userPage.locator("video").first().waitFor({ timeout: 8000 })
+  await userPage.locator("video source[src='/videos/auth-bg.mp4']").waitFor({ state: "attached", timeout: 8000 })
 })
 
 await userPage.locator("#email").fill(ADMIN.email)
@@ -219,10 +219,10 @@ await expect("authenticated user visiting root stays on landing page", async () 
   if (new URL(userPage.url()).pathname !== "/") throw new Error(`URL was ${userPage.url()}`)
 })
 
-await expect("authenticated landing header displays Dasbor, Profil, and Keluar", async () => {
-  await userPage.getByRole("link", { name: "Dasbor" }).first().waitFor({ timeout: 8000 })
-  await userPage.getByRole("link", { name: "Profil" }).first().waitFor({ timeout: 8000 })
-  await userPage.getByRole("button", { name: "Keluar" }).first().waitFor({ timeout: 8000 })
+await expect("authenticated landing header displays Beranda button", async () => {
+  await userPage.getByRole("button", { name: "Beranda" }).first().waitFor({ timeout: 8000 })
+  const dasbor = await userPage.locator("header").getByRole("link", { name: "Dasbor" }).count()
+  if (dasbor > 0) throw new Error("Dasbor link should be replaced by Beranda button")
 })
 
 await expect("authenticated hero displays Lanjutkan belajar and Buka Dasbor", async () => {
