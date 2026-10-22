@@ -474,38 +474,15 @@ export function LandingPage() {
                 </p>
 
                 <div className="mt-8 flex flex-wrap items-center gap-4">
-                  {user ? (
-                    <>
-                      <Button
-                        size="lg"
-                        className="gama-launch cursor-pointer rounded-none border-0 shadow-md"
-                        nativeButton={false}
-                        render={<Link to="/courses" />}
-                      >
-                        <span>Lanjutkan belajar</span>
-                        <ArrowRight className="ml-2 size-4" />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="lg"
-                        className="cursor-pointer border-2 border-[#137a77] font-semibold text-[#137a77] hover:bg-[#eaf5f5]"
-                        nativeButton={false}
-                        render={<Link to="/dashboard" />}
-                      >
-                        Buka Dasbor
-                      </Button>
-                    </>
-                  ) : (
-                    <Button
-                      size="lg"
-                      className="gama-launch cursor-pointer rounded-none border-0 shadow-md"
-                      nativeButton={false}
-                      render={<Link to="/register" />}
-                    >
-                      <span>Daftar sebagai peserta</span>
-                      <ArrowRight className="ml-2 size-4" />
-                    </Button>
-                  )}
+                  <Button
+                    size="lg"
+                    className="gama-launch cursor-pointer rounded-none border-0 shadow-md"
+                    nativeButton={false}
+                    render={<Link to="/register" />}
+                  >
+                    <span>Daftar sebagai peserta</span>
+                    <ArrowRight className="ml-2 size-4" />
+                  </Button>
                   <a
                     href="#simulasi"
                     className="gama-quiet cursor-pointer text-sm font-bold"

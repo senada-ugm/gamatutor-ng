@@ -225,9 +225,10 @@ await expect("authenticated landing header displays Beranda button", async () =>
   if (dasbor > 0) throw new Error("Dasbor link should be replaced by Beranda button")
 })
 
-await expect("authenticated hero displays Lanjutkan belajar and Buka Dasbor", async () => {
-  await userPage.getByRole("button", { name: "Lanjutkan belajar" }).first().waitFor({ timeout: 8000 })
-  await userPage.getByRole("button", { name: "Buka Dasbor" }).first().waitFor({ timeout: 8000 })
+await expect("authenticated hero displays Daftar sebagai peserta and has no Buka Dasbor", async () => {
+  await userPage.locator("#hero").getByRole("button", { name: "Daftar sebagai peserta" }).waitFor({ timeout: 8000 })
+  const heroDasbor = await userPage.locator("#hero").getByRole("button", { name: "Buka Dasbor" }).count()
+  if (heroDasbor > 0) throw new Error("Buka Dasbor button should not be present in hero")
 })
 
 await userContext.close()
