@@ -54,35 +54,35 @@ export function DashboardPage() {
   return (
     <div className="space-y-8">
       {/* Hero Banner Klinis GamaTutor */}
-      <div className="relative overflow-hidden rounded-2xl bg-primary p-6 text-primary-foreground shadow-md md:p-8">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#132d47] via-[#173a5e] to-[#2d77c2] p-6 text-white shadow-md md:p-8">
         <div className="relative z-10 max-w-2xl space-y-3">
           <h1 className="text-2xl font-bold tracking-tight text-white md:text-3xl">
             Selamat datang, {user?.name ?? "Dokter Peserta"}
           </h1>
-          <p className="text-sm text-white/90 md:text-base">
+          <p className="text-sm text-white/80 md:text-base">
             Pantau perkembangan pelatihan skrining retinopati diabetika, evaluasi kompetensi klinis, dan kelulusan
             sertifikasi Anda di sini.
           </p>
         </div>
 
         <div className="relative z-10 mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4 md:gap-4">
-          <div className="rounded-xl bg-white/15 p-3 backdrop-blur-xs">
+          <div className="rounded-xl bg-white/10 p-3 backdrop-blur-sm">
             <span className="block text-2xl font-bold text-white">{myEnrollments.length}</span>
-            <span className="text-xs text-white/80">Pelatihan Diikuti</span>
+            <span className="text-xs text-white/70">Pelatihan Diikuti</span>
           </div>
-          <div className="rounded-xl bg-white/15 p-3 backdrop-blur-xs">
-            <span className="block text-2xl font-bold text-sky-200">{inProgressCount}</span>
-            <span className="text-xs text-white/80">Sedang Berjalan</span>
+          <div className="rounded-xl bg-white/10 p-3 backdrop-blur-sm">
+            <span className="block text-2xl font-bold text-[#75c9c7]">{inProgressCount}</span>
+            <span className="text-xs text-white/70">Sedang Berjalan</span>
           </div>
-          <div className="rounded-xl bg-white/15 p-3 backdrop-blur-xs">
-            <span className="block text-2xl font-bold text-emerald-200">{passedCount}</span>
-            <span className="text-xs text-white/80">Lulus / Bersertifikat</span>
+          <div className="rounded-xl bg-white/10 p-3 backdrop-blur-sm">
+            <span className="block text-2xl font-bold text-emerald-300">{passedCount}</span>
+            <span className="text-xs text-white/70">Lulus / Bersertifikat</span>
           </div>
-          <div className="flex flex-col justify-center rounded-xl bg-white/20 p-3 backdrop-blur-xs">
+          <div className="flex flex-col justify-center rounded-xl bg-white/15 p-3 backdrop-blur-sm">
             <Link to="/courses" className="inline-flex items-center gap-1 text-xs font-bold text-white hover:underline">
               Katalog Lengkap <ChevronRight className="size-3.5" />
             </Link>
-            <span className="text-[11px] text-white/80">Jelajahi Pelatihan</span>
+            <span className="text-[11px] text-white/70">Jelajahi Pelatihan</span>
           </div>
         </div>
       </div>
