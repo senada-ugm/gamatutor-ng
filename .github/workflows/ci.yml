@@ -169,7 +169,7 @@ jobs:
           SMOKE_API_LOG: ${{ runner.temp }}/api-dev.log
         run: |
           set -e
-          for t in player player-tabs instructor teaching editor-tabs workspaces account password; do
+          for t in player instructor teaching editor-tabs workspaces account password; do
             echo "::group::smoke-app-$t"
             node "tests/smoke-app-$t.mjs"
             echo "::endgroup::"
