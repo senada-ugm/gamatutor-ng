@@ -40,7 +40,7 @@ export function NewCoursePage() {
     <div className="space-y-6">
       <PageHeader
         backTo="/instructor"
-        backLabel="Kelola Pelatihan"
+        backLabel="Pelatihan"
         title="Buat Pelatihan"
         description="Pelatihan baru dimulai sebagai draf — terbitkan setelah kontennya siap."
       />

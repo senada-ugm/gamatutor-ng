@@ -52,10 +52,7 @@ function Overview({ institutionId }: { institutionId: string }) {
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        title={r?.name ?? "Ringkasan Institusi"}
-        description="Corong peserta untuk seluruh pelatihan institusi ini."
-      />
+      <PageHeader title={r?.name ?? "Institusi"} description="Corong peserta untuk seluruh pelatihan institusi ini." />
 
       {report.isLoading ? (
         <>
@@ -99,7 +96,7 @@ function Overview({ institutionId }: { institutionId: string }) {
                 <EmptyState
                   compact
                   title="Belum ada pelatihan"
-                  description="Buat pelatihan pertama institusi ini dari Kelola Pelatihan."
+                  description="Buat pelatihan pertama institusi ini dari Pelatihan."
                 />
               ) : (
                 <div className="overflow-hidden rounded-xl border">

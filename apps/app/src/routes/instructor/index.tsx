@@ -70,7 +70,7 @@ export function InstructorCoursesPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Kelola Pelatihan"
+        title="Pelatihan"
         description={
           loading
             ? "Pelatihan yang Anda kelola."

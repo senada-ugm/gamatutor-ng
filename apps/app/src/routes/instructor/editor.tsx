@@ -3,13 +3,10 @@ import { createContext, useContext } from "react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 
-import { BarChart3, BookOpen, Users } from "lucide-react"
-
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
 import { Card, CardContent } from "@workspace/ui/components/card"
 import { Skeleton } from "@workspace/ui/components/skeleton"
-import { cn } from "@workspace/ui/lib/utils"
 
 import { CourseStatusBadge } from "@/components/composed/courses/_atoms/course-status-badge"
 import { CourseThumbnail } from "@/components/composed/courses/_atoms/course-thumbnail"
@@ -36,42 +33,14 @@ interface TabItem {
   exact?: boolean
 }
 
-interface TabGroup {
-  id: string
-  label: string
-  icon: typeof BookOpen
-  tabs: TabItem[]
-}
-
-const TAB_GROUPS: readonly TabGroup[] = [
-  {
-    id: "curriculum",
-    label: "Kurikulum & Pembelajaran",
-    icon: BookOpen,
-    tabs: [
-      { to: "/instructor/courses/$courseId/editor", label: "Detail", exact: true },
-      { to: "/instructor/courses/$courseId/editor/konten", label: "Konten" },
-      { to: "/instructor/courses/$courseId/editor/kuis", label: "Kuis" },
-    ],
-  },
-  {
-    id: "audience",
-    label: "Peserta & Komunikasi",
-    icon: Users,
-    tabs: [
-      { to: "/instructor/courses/$courseId/editor/peserta", label: "Peserta" },
-      { to: "/instructor/courses/$courseId/editor/pengumuman", label: "Pengumuman" },
-    ],
-  },
-  {
-    id: "operations",
-    label: "Sertifikat & Laporan",
-    icon: BarChart3,
-    tabs: [
-      { to: "/instructor/courses/$courseId/editor/sertifikat", label: "Sertifikat" },
-      { to: "/instructor/courses/$courseId/editor/laporan", label: "Laporan" },
-    ],
-  },
+const EDITOR_TABS: readonly TabItem[] = [
+  { to: "/instructor/courses/$courseId/editor", label: "Detail", exact: true },
+  { to: "/instructor/courses/$courseId/editor/konten", label: "Konten" },
+  { to: "/instructor/courses/$courseId/editor/kuis", label: "Kuis" },
+  { to: "/instructor/courses/$courseId/editor/peserta", label: "Peserta" },
+  { to: "/instructor/courses/$courseId/editor/pengumuman", label: "Pengumuman" },
+  { to: "/instructor/courses/$courseId/editor/sertifikat", label: "Sertifikat" },
+  { to: "/instructor/courses/$courseId/editor/laporan", label: "Laporan" },
 ]
 
 /**
@@ -107,8 +76,6 @@ export function EditorLayout() {
       })
     )
 
-  const activeGroup = TAB_GROUPS.find((group) => group.tabs.some(isTabActive)) ?? TAB_GROUPS[0]
-
   const course = useQuery({
     queryKey: ["course", courseId],
     queryFn: () => apiGet<ContractCourse>(`/courses/${courseId}`),
@@ -127,7 +94,7 @@ export function EditorLayout() {
   if (course.isLoading || !course.data) {
     return (
       <div className="space-y-6">
-        <PageHeader backTo="/instructor" backLabel="Kelola Pelatihan" />
+        <PageHeader backTo="/instructor" backLabel="Pelatihan" />
         {course.isLoading ? (
           <>
             <Skeleton className="h-24 w-full" />
@@ -148,7 +115,7 @@ export function EditorLayout() {
   return (
     <EditorCourseContext.Provider value={c}>
       <div className="space-y-6">
-        <PageHeader backTo="/instructor" backLabel="Kelola Pelatihan" />
+        <PageHeader backTo="/instructor" backLabel="Pelatihan" />
 
         <Card>
           <CardContent className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
@@ -192,46 +159,13 @@ export function EditorLayout() {
           </CardContent>
         </Card>
 
-        <div className="space-y-2">
-          {/* Category quick-switch bar */}
-          <div className="flex flex-wrap items-center gap-1.5 rounded-lg border bg-muted/40 p-1">
-            {TAB_GROUPS.map((group) => {
-              const isGroupActive = activeGroup.id === group.id
-              const Icon = group.icon
-              return (
-                <Link
-                  key={group.id}
-                  to={group.tabs[0].to}
-                  params={params}
-                  className={cn(
-                    "flex items-center gap-2 rounded-md px-3 py-1.5 text-xs font-medium transition-all sm:text-sm",
-                    isGroupActive
-                      ? "bg-background font-semibold text-foreground shadow-xs"
-                      : "text-muted-foreground hover:bg-background/50 hover:text-foreground"
-                  )}
-                >
-                  <Icon className="size-4 shrink-0" />
-                  <span>{group.label}</span>
-                  <Badge variant={isGroupActive ? "secondary" : "outline"}>{group.tabs.length}</Badge>
-                </Link>
-              )
-            })}
-          </div>
-
-          {/* Grouped TabNav containing all tabs partitioned with visual dividers */}
-          <TabNav>
-            {TAB_GROUPS.map((group, groupIdx) => (
-              <div key={group.id} className="flex shrink-0 items-center gap-0.5">
-                {groupIdx > 0 && <div className="mx-1.5 h-4 w-px shrink-0 bg-border" aria-hidden="true" />}
-                {group.tabs.map((tab) => (
-                  <Link key={tab.to} to={tab.to} params={params} {...tabNavItemProps(isTabActive(tab))}>
-                    {tab.label}
-                  </Link>
-                ))}
-              </div>
-            ))}
-          </TabNav>
-        </div>
+        <TabNav>
+          {EDITOR_TABS.map((tab) => (
+            <Link key={tab.to} to={tab.to} params={params} {...tabNavItemProps(isTabActive(tab))}>
+              {tab.label}
+            </Link>
+          ))}
+        </TabNav>
 
         <Outlet />
       </div>

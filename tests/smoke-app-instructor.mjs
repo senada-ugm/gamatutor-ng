@@ -62,7 +62,7 @@ await expect("login reaches the dashboard with workspace shell", async () => {
   await page.waitForURL("**/dashboard", { timeout: 8000 })
   await page
     .getByRole("banner")
-    .getByRole("button", { name: "Instruktur" })
+    .getByRole("button", { name: "Institusi" })
     .waitFor({ timeout: 8000 })
     .catch(() => {})
   await page.getByRole("button", { name: "Menu Akun" }).waitFor({ timeout: 8000 })
@@ -71,7 +71,7 @@ await expect("login reaches the dashboard with workspace shell", async () => {
 // --- Instructor course list -> create form ---
 await page.goto(`${BASE}/instructor`, { timeout: 30000 })
 await expect("instructor course list renders", async () => {
-  await page.getByRole("heading", { name: "Kelola Pelatihan" }).waitFor({ timeout: 8000 })
+  await page.getByRole("heading", { name: "Pelatihan", exact: true }).waitFor({ timeout: 8000 })
 })
 
 await page.getByRole("button", { name: "Buat Pelatihan" }).click()

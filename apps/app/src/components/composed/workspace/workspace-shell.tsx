@@ -99,9 +99,9 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
                 className={navClass(
                   !!matchRoute({ to: "/instructor", fuzzy: true }) || !!matchRoute({ to: "/institution", fuzzy: true })
                 )}
-                render={<Link to="/instructor" />}
+                render={<Link to="/institution" />}
               >
-                Instruktur
+                Institusi
               </Button>
             ) : null}
             {isAdmin ? (
