@@ -336,6 +336,39 @@ function ContentSlide({ page, currentTime }: { page: ContentPage; currentTime?: 
         <div className="space-y-2 text-sm leading-relaxed whitespace-pre-line text-foreground/90">{page.body}</div>
       )}
 
+      {page.table && (
+        <div className="space-y-2">
+          <div className="overflow-x-auto rounded-xl border">
+            <table className="w-full border-collapse text-left text-sm">
+              <thead className="bg-[#173a5e] text-white">
+                <tr>
+                  {page.table.head.map((h, i) => (
+                    <th key={i} className="px-4 py-2.5 font-semibold">
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {page.table.rows.map((row, r) => (
+                  <tr key={r} className="border-t">
+                    {row.map((cell, c) => (
+                      <td
+                        key={c}
+                        className={`px-4 py-2.5 align-top leading-relaxed ${c === 0 ? "bg-primary/5 font-semibold text-foreground" : "text-foreground/90"}`}
+                      >
+                        {cell}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {page.table.caption && <p className="text-xs text-muted-foreground italic">{page.table.caption}</p>}
+        </div>
+      )}
+
       {/* Slide 7 Auto-Reveal 2-Column List with Audio Cue Sync (Reviews #5 & #6) */}
       {page.reveal_steps && page.reveal_steps.length > 0 && (
         <AnimatedRevealList steps={page.reveal_steps} currentTime={currentTime} />
@@ -388,6 +421,9 @@ function CardsSlide({ page }: { page: CardsPage }) {
               c.dark ? "border-slate-800 bg-slate-900 text-white" : "border-border bg-card text-card-foreground"
             }`}
           >
+            {c.image && (
+              <img src={c.image} alt={c.title || ""} className="mb-3 h-32 w-full rounded-lg object-contain" />
+            )}
             {c.big && <span className="text-2xl font-extrabold tracking-tight text-primary sm:text-3xl">{c.big}</span>}
             {c.title && <h4 className="mt-1 text-sm font-semibold">{c.title}</h4>}
             <p className={`mt-2 text-xs leading-relaxed ${c.dark ? "text-slate-300" : "text-muted-foreground"}`}>

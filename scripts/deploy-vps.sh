@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Deploy compose.prod.yaml (api + app + postgres + redis + rustfs) to the
+# Deploy compose.prod.yaml (lms = api + SPA, postgres, redis, rustfs) to the
 # shared komunitech VPS behind gamatutor.komunitech.id.
 #
 #   ./scripts/deploy-vps.sh        # ship HEAD, build on the server, up, reload nginx
@@ -11,6 +11,8 @@
 #     replaces the seed accounts' public dev password with generated ones
 #     (saved in /etc/gamatutor/ng-accounts.txt, 0600) and unpublishes the
 #     seed's non-DRIVE demo courses.
+# Every run syncs the shipped DRIVE deck into the database
+# (apps/api/src/db/sync-drive-deck.ts): the seed writes it only once.
 #
 # Releases live in /opt/gamatutor-ng/releases/<commit>; /opt/gamatutor-ng/current
 # points at the live one. Compose state (volumes lms_postgres_data,
@@ -88,16 +90,19 @@ set -euo pipefail
 cd $RELEASE
 dc() { docker compose -p gamatutor --env-file /etc/gamatutor/ng.env -f compose.prod.yaml -f deploy/compose.vps.yaml "\$@"; }
 dc build 2>&1 | tail -15
+# Releases before the single lms container ran api and app separately; the
+# old api holds 127.0.0.1:8120, so drop both before lms takes the port.
+docker rm -f lms-api lms-app >/dev/null 2>&1 || true
 dc up -d --remove-orphans 2>&1 | tail -15
 for i in \$(seq 1 60); do
-  curl -fsS http://127.0.0.1:8120/health >/dev/null 2>&1 && curl -fsS http://127.0.0.1:3120/ >/dev/null 2>&1 && break
+  curl -fsS http://127.0.0.1:8120/health >/dev/null 2>&1 && curl -fsS http://127.0.0.1:8120/ >/dev/null 2>&1 && break
   sleep 2
 done
 curl -fsS http://127.0.0.1:8120/health; echo
-curl -fsS -o /dev/null -w 'app %{http_code}\n' http://127.0.0.1:3120/
+curl -fsS -o /dev/null -w 'app %{http_code}\n' http://127.0.0.1:8120/
 BUILD
 
-say "Bucket, first-run seed"
+say "Bucket, first-run seed, DRIVE deck sync"
 "${SSH[@]}" bash -s <<SEED
 set -euo pipefail
 cd $RELEASE
@@ -150,12 +155,12 @@ const { rows: [drive] } = await db.query("select id, status from courses where s
 if (drive.status !== "published") {
 const origin = "https://$DOMAIN"
 const adminPass = out.find((l) => l.startsWith("admin@lms.dev  ")).split("  ")[1]
-const signIn = await fetch("http://api:8000/api/auth/sign-in/email", {
+const signIn = await fetch("http://lms:8000/api/auth/sign-in/email", {
   method: "POST", headers: { "Content-Type": "application/json", Origin: origin },
   body: JSON.stringify({ email: "admin@lms.dev", password: adminPass }),
 })
 const cookie = signIn.headers.getSetCookie().map((c) => c.split(";")[0]).join("; ")
-const pub = await fetch("http://api:8000/v1/courses/" + drive.id + "/publish", { method: "POST", headers: { Origin: origin, Cookie: cookie } })
+const pub = await fetch("http://lms:8000/v1/courses/" + drive.id + "/publish", { method: "POST", headers: { Origin: origin, Cookie: cookie } })
 if (!pub.ok) throw new Error("publishing DRIVE failed: " + pub.status)
 }
 out.push("DRIVE published (" + drive.id + ")")
@@ -167,6 +172,7 @@ JS
 else
   echo "already seeded (/etc/gamatutor/ng-accounts.txt exists)"
 fi
+tool node_modules/.bin/tsx src/db/sync-drive-deck.ts
 SEED
 
 say "nginx vhost"

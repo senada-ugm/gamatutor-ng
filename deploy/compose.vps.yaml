@@ -4,8 +4,8 @@
 #     -f compose.prod.yaml -f deploy/compose.vps.yaml up -d --build
 #
 # The box hosts a dozen other apps: 3000, 8000, 8010 and 9000-9001 are taken,
-# so every host port is moved and bound to loopback; host nginx fronts both
-# containers on one origin (see deploy/nginx/gamatutor.komunitech.id.conf).
+# so every host port is moved and bound to loopback; host nginx fronts the
+# single lms container (API + SPA, see deploy/nginx/gamatutor.komunitech.id.conf).
 # Secrets come from /etc/gamatutor/ng.env, written by scripts/deploy-vps.sh.
 
 services:
@@ -13,7 +13,7 @@ services:
     # Reached only by the api over the compose network.
     ports: !reset []
 
-  api:
+  lms:
     ports: !override
       - "127.0.0.1:8120:8000"
     environment:
@@ -33,10 +33,6 @@ services:
       mailpit:
         condition: service_started
     mem_limit: 1g
-
-  app:
-    ports: !override
-      - "127.0.0.1:3120:80"
 
   # Mail sink for when no relay is configured (SMTP_HOST=mailpit in ng.env):
   # UI on 127.0.0.1:8125, reach it over an ssh tunnel.

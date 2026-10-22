@@ -11,6 +11,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:seed": "tsx src/db/seed.ts",
+    "db:sync-drive": "tsx src/db/sync-drive-deck.ts",
     "db:studio": "drizzle-kit studio",
     "dev": "tsx watch src/index.ts",
     "format": "prettier --ignore-path ../../.prettierignore --write .",

@@ -50,13 +50,21 @@ export interface ContentPage extends BasePage {
   image?: string
   imageLayout?: "below"
   imageCaption?: string
+  table?: ContentTable
   reveal_steps?: RevealStep[]
+}
+
+export interface ContentTable {
+  head: string[]
+  rows: string[][]
+  caption?: string
 }
 
 export interface CardItem {
   big?: string
   title?: string
   body: string
+  image?: string
   dark?: boolean
 }
 
