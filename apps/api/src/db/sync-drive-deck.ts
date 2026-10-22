@@ -30,7 +30,11 @@ const [deck] = await db
   .set({ manifest, schemaVersion: 1, updatedAt: new Date() })
   .where(eq(slideDecks.courseId, course.id))
   .returning()
-if (!deck) throw new Error(`DRIVE course ${course.id} has no slide deck`)
+if (!deck) {
+  // A half-finished seed; re-seeding (not this script) builds the deck.
+  console.log(`sync-drive-deck: DRIVE course ${course.id} has no slide deck; run the seed`)
+  process.exit(0)
+}
 console.log(`sync-drive-deck: manifest updated (${manifest.modules.length} modules)`)
 
 const quizPages = manifest.modules.find((m) => m.id === "evaluasi")?.pages.filter((p) => p.type === "quiz") ?? []

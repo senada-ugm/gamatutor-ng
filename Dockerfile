@@ -27,6 +27,8 @@ RUN pnpm --filter api build
 
 RUN pnpm --filter=api --prod --legacy deploy --ignore-scripts /app/pruned
 RUN cp -r /app/apps/api/dist /app/pruned/dist
+# seed.ts (bundled into dist, run by /v1/dev/reset-seed) reads its deck next to itself.
+RUN cp -r /app/apps/api/src/db/seed-data /app/pruned/dist/seed-data
 RUN cp -r /app/apps/api/drizzle /app/pruned/drizzle 2>/dev/null || true
 RUN cp -r /app/apps/app/dist /app/pruned/public
 
