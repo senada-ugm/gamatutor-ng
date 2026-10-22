@@ -84,20 +84,37 @@ export function DevModeBar({ onSelectAccount, submitting }: DevModeBarProps) {
       window.location.hostname === "::1" ||
       window.location.hostname.endsWith(".localhost"))
 
-  const isDevMode = import.meta.env.DEV || import.meta.env.VITE_DEV_MODE === "true" || devStatus?.devMode === true
-  if (!isLocalhost || !isDevMode) return null
+  const defaultAccounts: DevAccount[] = [
+    {
+      role: "admin",
+      name: "LMS Admin",
+      email: "admin@lms.dev",
+      password: "correcthorsebatterystaple",
+      description: "Platform Admin",
+    },
+    {
+      role: "owner",
+      name: "Institution Owner",
+      email: "owner@lms.dev",
+      password: "correcthorsebatterystaple",
+      description: "Institution Owner",
+    },
+    {
+      role: "user",
+      name: "Doctor / Learner",
+      email: "user@lms.dev",
+      password: "correcthorsebatterystaple",
+      description: "Clinical Trainee",
+    },
+  ]
 
-  const adminAccount: DevAccount = devStatus?.accounts?.find(
-    (acc) => acc.role === "admin" || acc.name.toLowerCase().includes("admin")
-  ) ?? {
-    role: "admin",
-    name: "LMS Admin",
-    email: "admin@lms.dev",
-    password: "correcthorsebatterystaple",
-    description: "Platform Admin",
-  }
+  const allAccounts: DevAccount[] = devStatus?.accounts?.length ? devStatus.accounts : defaultAccounts
 
-  const accounts = [adminAccount]
+  const accounts = isLocalhost
+    ? allAccounts
+    : allAccounts.filter((acc) => acc.role !== "admin" && !acc.name.toLowerCase().includes("admin"))
+
+  if (accounts.length === 0) return null
 
   return (
     <div className="flex flex-col gap-2 pt-1">
@@ -130,47 +147,49 @@ export function DevModeBar({ onSelectAccount, submitting }: DevModeBarProps) {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <AlertDialog open={openResetDialog} onOpenChange={setOpenResetDialog}>
-        <AlertDialogTrigger
-          render={
-            <Button
-              type="button"
-              variant="outline"
-              className="h-7 w-full gap-1 border-destructive/40 px-2 text-xs font-medium text-destructive hover:bg-destructive/10 hover:text-destructive"
-              disabled={resetMutation.isPending}
-            />
-          }
-        >
-          {resetMutation.isPending ? (
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
-          ) : (
-            <RotateCcw className="h-3.5 w-3.5" />
-          )}
-          <span>Reset DB & Seed</span>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Reset and re-seed demo database?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This will wipe all existing courses, student enrollments, and telemetry logs, restoring the platform to
-              the initial canonical UGM DRIVE demo state.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={resetMutation.isPending}>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              className="text-destructive-foreground bg-destructive hover:bg-destructive/90"
-              onClick={(e) => {
-                e.preventDefault()
-                resetMutation.mutate()
-              }}
-              disabled={resetMutation.isPending}
-            >
-              {resetMutation.isPending ? "Resetting..." : "Yes, Reset & Seed"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      {isLocalhost ? (
+        <AlertDialog open={openResetDialog} onOpenChange={setOpenResetDialog}>
+          <AlertDialogTrigger
+            render={
+              <Button
+                type="button"
+                variant="outline"
+                className="h-7 w-full gap-1 border-destructive/40 px-2 text-xs font-medium text-destructive hover:bg-destructive/10 hover:text-destructive"
+                disabled={resetMutation.isPending}
+              />
+            }
+          >
+            {resetMutation.isPending ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            ) : (
+              <RotateCcw className="h-3.5 w-3.5" />
+            )}
+            <span>Reset DB & Seed</span>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Reset and re-seed demo database?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This will wipe all existing courses, student enrollments, and telemetry logs, restoring the platform to
+                the initial canonical UGM DRIVE demo state.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={resetMutation.isPending}>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                className="text-destructive-foreground bg-destructive hover:bg-destructive/90"
+                onClick={(e) => {
+                  e.preventDefault()
+                  resetMutation.mutate()
+                }}
+                disabled={resetMutation.isPending}
+              >
+                {resetMutation.isPending ? "Resetting..." : "Yes, Reset & Seed"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      ) : null}
     </div>
   )
 }
