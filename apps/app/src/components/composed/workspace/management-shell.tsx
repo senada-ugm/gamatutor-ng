@@ -27,7 +27,7 @@ export function ManagementShell() {
 
   function verticalTabClass(active: boolean) {
     return cn(
-      "flex w-full items-center justify-between gap-2 rounded-md px-3 py-1.5 text-start text-xs font-medium transition-all sm:text-sm",
+      "flex w-full items-center justify-between gap-1.5 rounded-md px-2.5 py-1.5 text-start text-xs font-medium transition-all",
       active
         ? "bg-[#0369a1] font-semibold text-white shadow-xs dark:bg-sky-600 dark:text-white"
         : "text-muted-foreground hover:bg-sky-50 hover:text-[#0369a1] dark:hover:bg-sky-950/40 dark:hover:text-sky-300"
@@ -39,15 +39,15 @@ export function ManagementShell() {
       <div className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 md:px-6 md:py-8">
         {/* 2-Column Full-Width Vertical Tab Layout */}
         <div className="flex flex-col gap-6 md:flex-row md:items-start lg:gap-8">
-          <aside className="w-full shrink-0 space-y-4 md:w-48 lg:w-52" aria-label="Navigasi Pengelolaan">
+          <aside className="w-full shrink-0 space-y-3 md:w-36 lg:w-40" aria-label="Navigasi Pengelolaan">
             {isAdminSection ? (
               /* Platform Admin Vertical Tabs */
               <div className="space-y-3">
-                <div className="rounded-lg border border-border/70 bg-card p-3 shadow-2xs dark:border-border/50">
-                  <p className="text-[11px] font-bold tracking-wider text-[#0369a1] uppercase dark:text-sky-400">
+                <div className="rounded-lg border border-border/70 bg-card p-2.5 shadow-2xs dark:border-border/50">
+                  <p className="text-[10px] font-bold tracking-wider text-[#0369a1] uppercase dark:text-sky-400">
                     Konsol Administrator
                   </p>
-                  <p className="mt-0.5 text-[11px] text-muted-foreground">Tata kelola platform &amp; keamanan</p>
+                  <p className="mt-0.5 text-[10px] text-muted-foreground">Tata kelola &amp; keamanan</p>
                 </div>
 
                 <div className="space-y-0.5" data-sidebar="menu">
@@ -84,9 +84,9 @@ export function ManagementShell() {
                 <div className="border-t border-border/50 pt-2.5">
                   <Link
                     to="/institution"
-                    className="flex items-center justify-between rounded-md px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-[#0369a1] dark:hover:text-sky-300"
+                    className="flex items-center justify-between rounded-md px-2 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-[#0369a1] dark:hover:text-sky-300"
                   >
-                    <span>Ke Menu Institusi</span>
+                    <span>Ke Institusi</span>
                     <ArrowRight className="size-3.5" />
                   </Link>
                 </div>
@@ -96,18 +96,18 @@ export function ManagementShell() {
               <div className="space-y-3">
                 <div className="space-y-0.5" data-sidebar="menu">
                   <Link
-                    to="/instructor"
-                    data-sidebar="menu-button"
-                    className={verticalTabClass(!!matchRoute({ to: "/instructor", fuzzy: true }))}
-                  >
-                    <span>Pelatihan</span>
-                  </Link>
-                  <Link
                     to="/institution"
                     data-sidebar="menu-button"
                     className={verticalTabClass(!!matchRoute({ to: "/institution" }))}
                   >
                     <span>Institusi</span>
+                  </Link>
+                  <Link
+                    to="/instructor"
+                    data-sidebar="menu-button"
+                    className={verticalTabClass(!!matchRoute({ to: "/instructor", fuzzy: true }))}
+                  >
+                    <span>Pelatihan</span>
                   </Link>
                   <Link
                     to="/institution/peserta"
@@ -122,7 +122,7 @@ export function ManagementShell() {
                   <div className="border-t border-border/50 pt-2.5">
                     <Link
                       to="/admin"
-                      className="flex items-center justify-between rounded-md px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-[#0369a1] dark:hover:text-sky-300"
+                      className="flex items-center justify-between rounded-md px-2 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-[#0369a1] dark:hover:text-sky-300"
                     >
                       <span>Ke Konsol Admin</span>
                       <ArrowRight className="size-3.5" />
