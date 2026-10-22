@@ -60,7 +60,7 @@ jobs:
       # The journey's many real sign-ins (personas + re-auth after
       # suspension) trip the default limiter; CI has no abusive clients.
       RATE_LIMIT_ENABLED: "false"
-      # Everything else defaults (see apps/api/src/env.ts): PORT 8000,
+      # Everything else defaults (see apps/api/src/env.ts): PORT 8010,
       # CORS_ORIGIN http://localhost:3030 (matches the journey personas'
       # Origin header / Better Auth trustedOrigins), rate limiting off.
 
@@ -85,7 +85,7 @@ jobs:
         run: |
           pnpm --filter api exec tsx src/index.ts > api.log 2>&1 &
           for i in $(seq 1 60); do
-            if curl -sf http://localhost:8000/health > /dev/null; then
+            if curl -sf http://localhost:8010/health > /dev/null; then
               echo "API is up"
               exit 0
             fi
@@ -100,7 +100,7 @@ jobs:
 
       - name: Print API log on failure
         if: failure()
-        run: tail -200 api.log
+        run: tail -n 200 api.log
 
   ui-suites:
     name: UI suites (Playwright, all 3 apps live)
@@ -147,18 +147,20 @@ jobs:
           pnpm --filter api db:migrate
           pnpm --filter api db:seed
 
-      - name: Start the full stack (api :8000, app :3030, web :3020)
+      - name: Start the full stack (api :8010, app :3030, web :3020)
         run: |
           pnpm --filter api exec tsx src/index.ts > "$RUNNER_TEMP/api-dev.log" 2>&1 &
           pnpm --filter app dev > "$RUNNER_TEMP/app-dev.log" 2>&1 &
           pnpm --filter web dev > "$RUNNER_TEMP/web-dev.log" 2>&1 &
           for i in $(seq 1 90); do
-            if curl -sf http://localhost:8000/health > /dev/null                && curl -sf -o /dev/null http://localhost:3030/login                && curl -sf -o /dev/null http://localhost:3020/; then
+            if curl -sf http://localhost:8010/health > /dev/null \
+                && curl -sf -o /dev/null http://localhost:3030/login \
+                && curl -sf -o /dev/null http://localhost:3020/; then
               echo "stack is up"; exit 0
             fi
             sleep 2
           done
-          echo "stack did not come up"; tail -50 "$RUNNER_TEMP"/*.log; exit 1
+          echo "stack did not come up"; tail -n 50 "$RUNNER_TEMP"/*.log; exit 1
 
       # The password-recovery suite reads the API's console-fallback
       # email log to recover the reset link (no RESEND_API_KEY in CI).
@@ -178,4 +180,4 @@ jobs:
 
       - name: Print app logs on failure
         if: failure()
-        run: tail -150 "$RUNNER_TEMP"/*.log
+        run: tail -n 150 "$RUNNER_TEMP"/*.log

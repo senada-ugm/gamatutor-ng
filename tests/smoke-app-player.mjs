@@ -14,7 +14,7 @@
 import { chromium } from "playwright"
 
 const BASE = process.env.SMOKE_BASE_URL ?? "http://localhost:3030"
-const API = process.env.SMOKE_API_URL ?? "http://localhost:8000"
+const API = process.env.SMOKE_API_URL ?? "http://localhost:8010"
 const EMAIL = process.env.SMOKE_EMAIL ?? "admin@lms.dev"
 const PASSWORD = process.env.SMOKE_PASSWORD ?? "correcthorsebatterystaple"
 const TITLE = `Smoke App Player ${Date.now()}`

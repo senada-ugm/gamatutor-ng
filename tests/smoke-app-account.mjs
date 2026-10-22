@@ -13,7 +13,7 @@
 import { chromium } from "playwright"
 
 const BASE = process.env.SMOKE_BASE_URL ?? "http://localhost:3030"
-const API = process.env.SMOKE_API_URL ?? "http://localhost:8000"
+const API = process.env.SMOKE_API_URL ?? "http://localhost:8010"
 const ADMIN = { email: "admin@lms.dev", password: "correcthorsebatterystaple" }
 const LEARNER = { email: "user@lms.dev", password: "correcthorsebatterystaple" }
 const STAMP = Date.now()

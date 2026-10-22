@@ -19,12 +19,12 @@ tests/api/
 ## Run
 
 ```sh
-pnpm dev                                   # API :8000 + web :3000 (API must be up)
+pnpm dev                                   # API :8010 + web :3000 (API must be up)
 bash tests/api-journey.sh                  # or: node tests/api/run.mjs
 pnpm test:api                              # same via the root package script
 ```
 
-Env knobs: `API_BASE_URL` (default `http://localhost:8000`),
+Env knobs: `API_BASE_URL` (default `http://localhost:8010`),
 `LMS_TEST_PASSWORD` (default the seed password), `API_LOG_FILE` unused here —
 email verification journeys stay in the Playwright suites.
 
