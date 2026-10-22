@@ -1,4 +1,4 @@
-import { Link, useMatchRoute, useNavigate } from "@tanstack/react-router"
+import { Link, useMatchRoute } from "@tanstack/react-router"
 import { Eye } from "lucide-react"
 
 import { Avatar, AvatarFallback } from "@workspace/ui/components/avatar"
@@ -28,7 +28,6 @@ import { signOut } from "@/lib/auth"
  */
 export function WorkspaceShell({ children }: { children: React.ReactNode }) {
   const session = useSession()
-  const navigate = useNavigate()
   const matchRoute = useMatchRoute()
 
   const user = session.data ?? null
