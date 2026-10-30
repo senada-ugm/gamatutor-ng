@@ -39,7 +39,7 @@ const L2_OPTIONS = ["Observasi", "Rujuk"]
 const SIM_CASES: CaseItem[] = [
   {
     level: "Level 1",
-    img: "/content/drive-retinopati/assets/slide21_9.png",
+    img: "/content/drive-retinopati/assets/slide21_9_nodate.png",
     options: L1_OPTIONS,
     correct: L1_OPTIONS[0],
     q: "Apakah ada retinopati diabetika pada foto ini?",
@@ -48,20 +48,20 @@ const SIM_CASES: CaseItem[] = [
   },
   {
     level: "Level 1",
-    img: "/content/drive-retinopati/assets/slide22_4.png",
+    img: "/content/drive-retinopati/assets/slide22_4_nodate.png",
     options: L1_OPTIONS,
     correct: L1_OPTIONS[1],
     q: "Apakah ada retinopati diabetika pada foto ini?",
     reasoning: "Ada hard exudate dan perdarahan dot/blot.",
     lesions: [
-      { x: 37.4, y: 23.4, label: "Perdarahan dot/blot" },
-      { x: 57, y: 30.9, label: "Perdarahan dot/blot" },
-      { x: 34.8, y: 51, label: "Hard exudate" },
+      { x: 37.3, y: 22.8, label: "Perdarahan dot/blot" },
+      { x: 57.1, y: 30.4, label: "Perdarahan dot/blot" },
+      { x: 34.7, y: 50.9, label: "Hard exudate" },
     ],
   },
   {
     level: "Level 2",
-    img: "/content/drive-retinopati/assets/slide23_3.png",
+    img: "/content/drive-retinopati/assets/slide23_3_nodate.png",
     options: L2_OPTIONS,
     correct: L2_OPTIONS[0],
     q: "Pasien diabetes mellitus. Apa tindak lanjut Anda?",
@@ -70,37 +70,37 @@ const SIM_CASES: CaseItem[] = [
   },
   {
     level: "Level 2",
-    img: "/content/drive-retinopati/assets/slide24_3.png",
+    img: "/content/drive-retinopati/assets/slide24_3_nodate.png",
     options: L2_OPTIONS,
     correct: L2_OPTIONS[1],
     q: "Pasien diabetes mellitus. Apa tindak lanjut Anda?",
     reasoning:
       "PDR, dengan adanya lesi berupa perdarahan dot, hard exudate, neovascular elsewhere, dan neovascular disc.",
     lesions: [
-      { x: 21.2, y: 37.9, dx: -8, dy: 14, label: "Hard exudate" },
-      { x: 39.3, y: 33.8, dx: -8, dy: -15, label: "Perdarahan dot" },
-      { x: 38.3, y: 44.6, dx: 4, dy: 16, label: "Neovascular elsewhere" },
-      { x: 79.2, y: 44.6, dx: 4, dy: 14, label: "Neovascular disc" },
+      { x: 20.7, y: 37.5, dx: -8, dy: 14, label: "Hard exudate" },
+      { x: 39.1, y: 33.3, dx: -8, dy: -15, label: "Perdarahan dot" },
+      { x: 38.1, y: 44.4, dx: 4, dy: 16, label: "Neovascular elsewhere" },
+      { x: 79.7, y: 44.4, dx: 4, dy: 14, label: "Neovascular disc" },
     ],
   },
   {
     level: "Level 2",
-    img: "/content/drive-retinopati/assets/slide25_3.png",
+    img: "/content/drive-retinopati/assets/slide25_3_nodate.png",
     options: L2_OPTIONS,
     correct: L2_OPTIONS[1],
     q: "Pasien diabetes mellitus. Apa tindak lanjut Anda?",
     reasoning: "NPDR sedang, dengan adanya lesi berupa perdarahan blot dan hard exudate.",
     lesions: [
-      { x: 49.2, y: 52.4, label: "Hard exudate" },
-      { x: 57.2, y: 71.5, label: "Perdarahan blot" },
+      { x: 48.8, y: 52.2, label: "Hard exudate" },
+      { x: 56.9, y: 71.7, label: "Perdarahan blot" },
     ],
   },
 ]
 
 const HERO_LESIONS: Lesion[] = [
-  { x: 37.4, y: 23.4, label: "Perdarahan dot/blot" },
-  { x: 57, y: 30.9, label: "Perdarahan dot/blot" },
-  { x: 34.8, y: 51, label: "Hard exudate" },
+  { x: 37.3, y: 22.8, label: "Perdarahan dot/blot" },
+  { x: 57.1, y: 30.4, label: "Perdarahan dot/blot" },
+  { x: 34.7, y: 50.9, label: "Hard exudate" },
 ]
 
 function clampPct(v: number) {
@@ -167,7 +167,7 @@ function HeroLens() {
   return (
     <figure className="gama-lens relative mx-auto w-full max-w-[520px]">
       <img
-        src="/content/drive-retinopati/assets/slide22_4.png"
+        src="/content/drive-retinopati/assets/slide22_4_nodate.png"
         width={513}
         height={499}
         loading="eager"
