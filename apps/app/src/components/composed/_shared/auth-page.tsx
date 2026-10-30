@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router"
-import { Eye } from "lucide-react"
+import { DriveLogo } from "@/components/composed/_shared/drive-logo"
 
 /**
  * The auth scaffold, mirroring the shadcn login-02 block page layout
@@ -40,12 +40,7 @@ export function AuthPage({
       <div className="flex flex-col gap-4 p-6 md:p-10 lg:col-span-1">
         <div className="flex justify-center gap-2 md:justify-start">
           <Link to="/" className="flex items-center gap-2 font-medium" aria-label="Kembali ke Beranda">
-            <div className="flex size-7 items-center justify-center rounded-full bg-[#0369a1] text-xs font-black text-white shadow-xs">
-              <Eye className="size-4 stroke-[2.2]" />
-            </div>
-            <span className="font-extrabold tracking-tight">
-              DRIVE <span className="font-semibold text-sky-700 dark:text-sky-400">Learn</span>
-            </span>
+            <DriveLogo logoClassName="h-8" />
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-center">

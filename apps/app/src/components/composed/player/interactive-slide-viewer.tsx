@@ -1,17 +1,18 @@
 import { useEffect, useRef, useState } from "react"
-import { ArrowLeft, ArrowRight, Eye, FileText, Volume2 } from "lucide-react"
+import { ArrowLeft, ArrowRight, Award, FileText, ShieldCheck, Volume2 } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
 import type {
   CardsPage,
+  CompletionPage,
   ContentPage,
   CourseDefinition,
   DividerPage,
   HeroPage,
   HotspotPage,
   MatchPage,
-  QuizPage,
   SlidePage,
+  TestPage,
 } from "@/lib/content/course-types"
 import { AudioNarrationBar } from "./audio-narration-bar"
 import { TranscriptViewer } from "./transcript-viewer"
@@ -21,9 +22,11 @@ import { AnimatedRevealList } from "./animated-reveal-list"
 import { MatchingPairGame } from "./matching-pair-game"
 import { ClinicalFundusGrading } from "./clinical-fundus-grading"
 import { ClinicalQuizRunner } from "./clinical-quiz-runner"
+import { ReferenceBoxes } from "./_atoms/reference-boxes"
 
 import { useSlideTelemetry } from "@/lib/use-slide-telemetry"
 import { usePlayerDeck } from "@/components/composed/player/player-deck-context"
+import { DriveLogo } from "@/components/composed/_shared/drive-logo"
 
 interface InteractiveSlideViewerProps {
   course: CourseDefinition
@@ -31,9 +34,10 @@ interface InteractiveSlideViewerProps {
   onSlideChange?: (index: number, page: SlidePage) => void
   onCompleteModule?: (moduleId: string) => void
   onClaimCertificate?: () => void
-  /** Server-side quiz backing the evaluasi section (PLANS 4.3) — attempts
-   *  are graded and recorded through the quiz engine. */
+  /** Server-side quizzes backing the Post Test (graded, PLANS 4.3) and
+   *  the Pre Test (recorded only) — attempts go through the quiz engine. */
   postTestQuizId?: string
+  preTestQuizId?: string
   className?: string
 }
 
@@ -44,16 +48,23 @@ export function InteractiveSlideViewer({
   onCompleteModule,
   onClaimCertificate,
   postTestQuizId,
+  preTestQuizId,
   className = "",
 }: InteractiveSlideViewerProps) {
   // Flatten all pages across all modules into a linear slide sequence
+  // (placeholder modules have no pages, so the walk skips them).
   const allSlides = course.modules.flatMap((m) =>
     m.pages.map((p) => ({
       page: p,
       moduleId: m.id,
       moduleLabel: m.label,
+      moduleGroup: m.group,
     }))
   )
+  // Pre Test and Post Test share one question set (DRIVE rule), carried
+  // by the post test page; any test page without its own uses it.
+  const postTestPage = allSlides.map((s) => s.page).find((p): p is TestPage => p.type === "test" && p.mode === "post")
+  const [postTestPassed, setPostTestPassed] = useState(false)
 
   const [currentIndex, setCurrentIndex] = useState<number>(initialSlideIndex)
   const [currentPlaybackTime, setCurrentPlaybackTime] = useState<number>(0)
@@ -119,7 +130,7 @@ export function InteractiveSlideViewer({
     return <div className="p-8 text-center text-muted-foreground">No slides available.</div>
   }
 
-  const { page, moduleLabel } = currentItem
+  const { page, moduleLabel, moduleGroup } = currentItem
 
   const isHero = page.type === "hero"
 
@@ -140,29 +151,30 @@ export function InteractiveSlideViewer({
       {!isHero && (
         <div className="flex shrink-0 items-center justify-between border-b bg-card/80 px-6 py-3 backdrop-blur-xs">
           <div className="flex items-center gap-3 truncate">
+            {/* "(Modul 1) BAB 1 – Diabetes Mellitus": the step's group as the
+                badge, the step itself beside it. Ungrouped steps (Pre Test,
+                Post Test) are their own badge. */}
             <Badge
               variant="outline"
               className="shrink-0 border-primary/25 bg-primary/10 font-mono text-xs font-bold text-primary"
             >
-              {moduleLabel.split("—")[0].trim()}
+              {moduleGroup ?? moduleLabel}
             </Badge>
-            <span className="hidden truncate text-xs font-semibold text-foreground/80 sm:inline">{moduleLabel}</span>
+            {moduleGroup ? (
+              <span className="truncate text-xs font-semibold text-foreground/80">{moduleLabel}</span>
+            ) : null}
           </div>
 
-          {/* Brand Logo & Mark (gamatutor-ng brandlogo) */}
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-primary">
-              <span className="flex size-6 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-xs shadow-xs">
-                <Eye className="size-3.5 stroke-[2.2]" />
-              </span>
-              <span className="hidden tracking-tight sm:inline">{course.brand?.name || "DRIVE Initiative"}</span>
-            </div>
-          </div>
+          <DriveLogo className="hidden sm:inline-flex" logoClassName="h-6" />
         </div>
       )}
 
       {/* Main Slide Content Stage - Clamped Viewport with Scroll when needed */}
-      <div className={isHero ? "flex-1 overflow-hidden p-0" : "flex-1 space-y-6 overflow-y-auto p-6 md:p-8"}>
+      <div
+        className={
+          isHero ? "flex-1 overflow-hidden p-0" : "mx-auto w-full max-w-6xl flex-1 space-y-6 overflow-y-auto p-6 md:p-8"
+        }
+      >
         {page.type === "hero" && <HeroSlide page={page} onStart={handleNext} />}
         {page.type === "divider" && <DividerSlide page={page} onProceed={handleNext} />}
         {page.type === "content" && <ContentSlide page={page} currentTime={currentPlaybackTime} />}
@@ -171,26 +183,39 @@ export function InteractiveSlideViewer({
         {page.type === "match" && <MatchSlide key={page.id} page={page} onDone={handleNext} />}
         {/* Keyed by page so the previous case's selection never carries over. */}
         {page.type === "image-grading" && <ClinicalFundusGrading key={page.id} page={page} onNext={handleNext} />}
-        {page.type === "quiz" && (
+        {page.type === "test" && (
           <ClinicalQuizRunner
-            quizId={postTestQuizId}
-            questions={
-              (course.modules
-                .find((m) => m.id === "evaluasi")
-                ?.pages.filter((p) => p.type === "quiz") as QuizPage[]) || [page]
+            key={page.id}
+            mode={page.mode}
+            title={page.title}
+            intro={page.intro}
+            questions={page.questions ?? postTestPage?.questions ?? []}
+            passingScore={course.passingScore}
+            quizId={page.mode === "post" ? postTestQuizId : page.mode === "pre" ? preTestQuizId : undefined}
+            onContinue={handleNext}
+            onRestudy={
+              page.mode === "post"
+                ? () => {
+                    // Back to the first module's opening slide.
+                    const firstModule = allSlides.findIndex((s) => s.moduleGroup != null)
+                    if (firstModule !== -1) goToSlide(firstModule)
+                  }
+                : undefined
             }
-            onRetake={() => {
-              const evalStartIdx = allSlides.findIndex((s) => s.moduleId === "evaluasi")
-              if (evalStartIdx !== -1) {
-                goToSlide(evalStartIdx)
-              }
-            }}
-            onClaimCertificate={onClaimCertificate}
             onComplete={(_score, passed) => {
-              if (passed) {
+              if (page.mode === "post" && passed) {
+                setPostTestPassed(true)
                 onCompleteModule?.(currentItem.moduleId)
               }
             }}
+          />
+        )}
+        {page.type === "completion" && (
+          <CompletionSlide
+            page={page}
+            body={course.completion?.body}
+            postTestPassed={postTestPassed}
+            onClaimCertificate={onClaimCertificate}
           />
         )}
       </div>
@@ -207,6 +232,13 @@ export function InteractiveSlideViewer({
           />
         </div>
       )}
+
+      {/* Daftar Referensi + Daftar Singkatan, under the player */}
+      {!isHero && (page.references?.length || page.abbreviations?.length) ? (
+        <div className="shrink-0 border-t bg-card/80 px-3 py-2.5">
+          <ReferenceBoxes references={page.references} abbreviations={page.abbreviations} />
+        </div>
+      ) : null}
 
       {/* Bottom Card Footer Chrome (from gamatutor-ng card-footer) - Hero has NO footer nav */}
       {!isHero && (
@@ -280,6 +312,9 @@ function HeroSlide({ page, onStart }: { page: HeroPage; onStart: () => void }) {
       />
       {/* Hero content aligned bottom-left matching gamatutor-ng .hero-content */}
       <div className="relative z-20 flex size-full flex-col justify-end p-10 md:p-12">
+        {page.kicker && (
+          <div className="mb-2 text-[22px] font-extrabold tracking-[0.12em] text-white uppercase">{page.kicker}</div>
+        )}
         <h1 className="mb-2 max-w-[560px] text-[28px] leading-tight font-bold tracking-tight text-white">
           {page.title}
         </h1>
@@ -313,6 +348,7 @@ function DividerSlide({ page }: { page: DividerPage; onProceed: () => void }) {
       <div className="max-w-[600px] text-[30px] leading-tight font-extrabold tracking-tight text-white">
         {page.title || ""}
       </div>
+      {page.body && <p className="mt-4 max-w-[560px] text-sm leading-relaxed text-white/85">{page.body}</p>}
     </div>
   )
 }
@@ -476,6 +512,44 @@ function MatchSlide({ page, onDone }: { page: MatchPage; onDone: () => void }) {
         </Badge>
       )}
       <MatchingPairGame pairs={page.pairs} title={page.title} intro={page.intro} onContinue={onDone} />
+    </div>
+  )
+}
+
+function CompletionSlide({
+  page,
+  body,
+  postTestPassed,
+  onClaimCertificate,
+}: {
+  page: CompletionPage
+  body?: string
+  postTestPassed: boolean
+  onClaimCertificate?: () => void
+}) {
+  return (
+    <div className="mx-auto max-w-2xl animate-in space-y-6 py-6 text-center fade-in">
+      <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600">
+        <Award className="size-8" />
+      </div>
+      <div className="space-y-2">
+        <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">{page.title}</h2>
+        {body && <p className="text-sm leading-relaxed text-muted-foreground">{body}</p>}
+      </div>
+      <div className="space-y-3 rounded-xl border bg-muted/20 p-5 text-left text-sm">
+        <p className="font-semibold text-foreground">Sertifikat</p>
+        <p className="text-muted-foreground">
+          {postTestPassed
+            ? "Selamat, Anda lulus Post Test. Klaim sertifikat Anda di bawah; nama pada sertifikat mengikuti nama akun Anda."
+            : "Sertifikat dapat diklaim setelah Anda lulus Post Test (nilai minimal 70). Nama pada sertifikat mengikuti nama akun Anda."}
+        </p>
+        {onClaimCertificate && (
+          <Button onClick={onClaimCertificate} className="gap-2 font-semibold">
+            <ShieldCheck className="size-4" />
+            Klaim Sertifikat
+          </Button>
+        )}
+      </div>
     </div>
   )
 }

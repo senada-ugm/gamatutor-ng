@@ -198,6 +198,11 @@ export function SequentialHotspotViewer({
               )
             })}
           </div>
+          {page.imageCaption && (
+            <p className="mt-2 w-full max-w-2xl text-center text-xs text-muted-foreground italic">
+              {page.imageCaption}
+            </p>
+          )}
         </div>
 
         {/* Clinical Detail Card */}

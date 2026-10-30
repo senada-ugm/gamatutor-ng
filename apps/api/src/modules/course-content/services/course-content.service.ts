@@ -223,6 +223,7 @@ function toSlideDeck(row: typeof slideDecks.$inferSelect): SlideDeck {
     schemaVersion: row.schemaVersion,
     manifest: (row.manifest ?? {}) as SlideDeck["manifest"],
     postTestQuizId: row.postTestQuizId ?? undefined,
+    preTestQuizId: row.preTestQuizId ?? undefined,
     updatedAt: row.updatedAt.toISOString(),
   }
 }

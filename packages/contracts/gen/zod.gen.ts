@@ -916,14 +916,17 @@ export const zInstitutionRequest = z.object({
  * apps/app's `lib/content/course-types.ts` and evolves with the
  * player, not with the API — the server stores and serves it, plus a
  * schemaVersion so consumers can refuse manifests they can't render.
- * `postTestQuizId` links the deck's evaluation section to a real quiz
- * so attempts are graded and recorded server-side.
+ * `postTestQuizId` links the deck's Post Test to a real quiz so
+ * attempts are graded and recorded server-side; `preTestQuizId` links
+ * its Pre Test (same questions, recorded only — never decides
+ * graduation).
  */
 export const zSlideDeck = z.object({
     courseId: zCommonResourceId,
     schemaVersion: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
     manifest: z.record(z.string(), z.unknown()),
     postTestQuizId: zCommonResourceId.readonly().optional(),
+    preTestQuizId: zCommonResourceId.readonly().optional(),
     updatedAt: z.iso.datetime().readonly()
 });
 
@@ -1376,8 +1379,10 @@ export const zRegisteredInstitutionWritable = z.object({
  * apps/app's `lib/content/course-types.ts` and evolves with the
  * player, not with the API — the server stores and serves it, plus a
  * schemaVersion so consumers can refuse manifests they can't render.
- * `postTestQuizId` links the deck's evaluation section to a real quiz
- * so attempts are graded and recorded server-side.
+ * `postTestQuizId` links the deck's Post Test to a real quiz so
+ * attempts are graded and recorded server-side; `preTestQuizId` links
+ * its Pre Test (same questions, recorded only — never decides
+ * graduation).
  */
 export const zSlideDeckWritable = z.object({
     courseId: zCommonResourceId,

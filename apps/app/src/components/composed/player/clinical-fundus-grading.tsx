@@ -2,7 +2,7 @@ import { useState } from "react"
 import { CheckCircle2, XCircle, ArrowRight, Eye, ZoomIn, ZoomOut } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
-import type { ImageGradingPage } from "@/lib/content/course-types"
+import type { ImageGradingPage, LesionCoordinate } from "@/lib/content/course-types"
 
 interface ClinicalFundusGradingProps {
   page: ImageGradingPage
@@ -64,102 +64,23 @@ export function ClinicalFundusGrading({ page, onGraded, onNext, className = "" }
       <div className="grid items-start gap-6 lg:grid-cols-12">
         {/* Fundus Examination Stage */}
         <div className="flex flex-col items-center lg:col-span-8">
-          <div
-            className={`relative w-full max-w-2xl overflow-hidden rounded-2xl border bg-black shadow-lg transition-transform duration-300 select-none ${
-              isZoomed ? "z-20 scale-125 cursor-move" : ""
-            }`}
-          >
-            <img
-              src={page.image}
-              alt="Foto fundus retina"
-              className="block h-auto max-h-[500px] w-full object-contain"
-              loading="eager"
-            />
+          <div className="flex w-full max-w-2xl justify-center overflow-hidden rounded-2xl border bg-black shadow-lg">
+            {/* Sized to the photo itself, so lesion % coordinates map onto the
+                photo. They used to be laid over a box wider than the
+                letterboxed photo, which pushed every marker sideways off its
+                lesion (DRIVE review 29 Okt 2026). */}
+            <div
+              className={`relative transition-transform duration-300 select-none ${isZoomed ? "z-20 scale-125 cursor-move" : ""}`}
+            >
+              <img
+                src={page.image}
+                alt="Foto fundus retina"
+                className="block h-auto max-h-[500px] w-auto max-w-full"
+                loading="eager"
+              />
 
-            {/* Non-Obscuring SVG Lesion Pointer Arrows (Review #7) */}
-            {isSubmitted && showLesions && page.lesions.length > 0 && (
-              <div className="pointer-events-none absolute inset-0">
-                {page.lesions.map((lesion, idx) => {
-                  // Determine offset positioning so label doesn't cover lesion
-                  const isUpperHalf = lesion.y < 50
-                  const isLeftHalf = lesion.x < 50
-
-                  // Offset label by 38px
-                  const labelOffsetY = isUpperHalf ? -40 : 40
-                  const labelOffsetX = isLeftHalf ? -30 : 30
-
-                  return (
-                    <div
-                      key={idx}
-                      className="absolute"
-                      style={{
-                        left: `${lesion.x}%`,
-                        top: `${lesion.y}%`,
-                      }}
-                    >
-                      {/* SVG Target Reticle and Pointer Arrow */}
-                      <svg
-                        className="absolute overflow-visible"
-                        style={{
-                          left: 0,
-                          top: 0,
-                          width: 1,
-                          height: 1,
-                        }}
-                      >
-                        <defs>
-                          <marker
-                            id={`arrow-${idx}`}
-                            viewBox="0 0 10 10"
-                            refX="5"
-                            refY="5"
-                            markerWidth="6"
-                            markerHeight="6"
-                            orient="auto-start-reverse"
-                          >
-                            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ef4444" />
-                          </marker>
-                        </defs>
-
-                        {/* Lesion Ring - doesn't obscure the center lesion */}
-                        <circle
-                          cx="0"
-                          cy="0"
-                          r="9"
-                          fill="none"
-                          stroke="#ef4444"
-                          strokeWidth="2.5"
-                          strokeDasharray="3 2"
-                          className="animate-pulse"
-                        />
-
-                        {/* Arrow line from offset label to target center */}
-                        <line
-                          x1={labelOffsetX}
-                          y1={labelOffsetY}
-                          x2={labelOffsetX > 0 ? 9 : -9}
-                          y2={labelOffsetY > 0 ? 9 : -9}
-                          stroke="#ef4444"
-                          strokeWidth="2"
-                          markerEnd={`url(#arrow-${idx})`}
-                        />
-                      </svg>
-
-                      {/* Offset Label Badge */}
-                      <div
-                        className="pointer-events-auto absolute -translate-x-1/2 -translate-y-1/2 rounded-md border border-red-500 bg-slate-900/95 px-2 py-0.5 text-[11px] font-semibold tracking-wide whitespace-nowrap text-white shadow-md backdrop-blur-xs"
-                        style={{
-                          left: `${labelOffsetX}px`,
-                          top: `${labelOffsetY}px`,
-                        }}
-                      >
-                        {lesion.label}
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            )}
+              {isSubmitted && showLesions && page.lesions.length > 0 && <LesionArrows lesions={page.lesions} />}
+            </div>
           </div>
 
           <div className="mt-2 flex w-full items-center justify-between px-1 text-xs text-muted-foreground">
@@ -263,6 +184,76 @@ export function ClinicalFundusGrading({ page, onGraded, onNext, className = "" }
           )}
         </div>
       </div>
+    </div>
+  )
+}
+
+/** Gap left between an arrow's tip and the lesion, and the default
+ *  label distance — both in % of the photo. */
+const TIP_GAP = 2.5
+const LABEL_DISTANCE = 15
+
+/**
+ * Lesion markers as arrows (DRIVE review 29 Okt 2026): the old dashed
+ * ring sat on top of the lesion and hid it, so each lesion now gets an
+ * arrow whose tip stops just short of it, with the label at the tail,
+ * well clear of the lesion. Labels point outward from the photo centre
+ * unless the lesion carries an authored `dx`/`dy` offset.
+ */
+function LesionArrows({ lesions }: { lesions: LesionCoordinate[] }) {
+  const markers = lesions.map((lesion) => {
+    let dx = lesion.dx
+    let dy = lesion.dy
+    if (dx == null || dy == null) {
+      const vx = lesion.x - 50
+      const vy = lesion.y - 50
+      const len = Math.hypot(vx, vy) || 1
+      dx = (vx / len) * LABEL_DISTANCE
+      dy = (vy / len) * LABEL_DISTANCE
+    }
+    const lx = Math.min(88, Math.max(12, lesion.x + dx))
+    const ly = Math.min(94, Math.max(6, lesion.y + dy))
+    const ux = lesion.x - lx
+    const uy = lesion.y - ly
+    const len = Math.hypot(ux, uy) || 1
+    const tipX = lesion.x - (ux / len) * TIP_GAP
+    const tipY = lesion.y - (uy / len) * TIP_GAP
+    // Arrowhead: a small triangle at the tip, pointing at the lesion.
+    const head = 2.2
+    const bx = tipX - (ux / len) * head
+    const by = tipY - (uy / len) * head
+    const px = (-uy / len) * head * 0.55
+    const py = (ux / len) * head * 0.55
+    return { lesion, lx, ly, tipX, tipY, headPoints: `${tipX},${tipY} ${bx + px},${by + py} ${bx - px},${by - py}` }
+  })
+
+  return (
+    <div className="pointer-events-none absolute inset-0">
+      <svg className="absolute inset-0 size-full overflow-visible" viewBox="0 0 100 100" preserveAspectRatio="none">
+        {markers.map((m, idx) => (
+          <g key={idx}>
+            <line
+              x1={m.lx}
+              y1={m.ly}
+              x2={m.tipX}
+              y2={m.tipY}
+              stroke="#ef4444"
+              strokeWidth="2"
+              vectorEffect="non-scaling-stroke"
+            />
+            <polygon points={m.headPoints} fill="#ef4444" />
+          </g>
+        ))}
+      </svg>
+      {markers.map((m, idx) => (
+        <div
+          key={idx}
+          className="absolute -translate-x-1/2 -translate-y-1/2 rounded-md border border-red-500 bg-slate-900/90 px-2 py-0.5 text-[11px] font-semibold tracking-wide whitespace-nowrap text-white shadow-md"
+          style={{ left: `${m.lx}%`, top: `${m.ly}%` }}
+        >
+          {m.lesion.label}
+        </div>
+      ))}
     </div>
   )
 }

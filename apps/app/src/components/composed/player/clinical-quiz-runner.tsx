@@ -1,60 +1,107 @@
 import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { Award, CheckCircle2, RotateCcw, XCircle, ArrowRight, HelpCircle, ShieldCheck } from "lucide-react"
+import {
+  ArrowRight,
+  Award,
+  BookOpenCheck,
+  CheckCircle2,
+  ClipboardList,
+  HelpCircle,
+  RotateCcw,
+  ThumbsUp,
+  XCircle,
+} from "lucide-react"
 import { toast } from "sonner"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
 import { apiGet, apiSend } from "@/lib/api"
-import type { QuizPage } from "@/lib/content/course-types"
+import type { TestPage, TestQuestion } from "@/lib/content/course-types"
 import type { ContractQuizAttempt, ContractQuizDetail } from "@workspace/contracts/domain"
 
+type TestMode = TestPage["mode"]
+
 interface ClinicalQuizRunnerProps {
-  questions: QuizPage[]
-  passingScore?: number // e.g. 0.6 or 0.7 (70%)
-  /** The server-side quiz backing this post-test. When present, attempts
-   *  are created, graded, and recorded through the quiz engine (visible
-   *  in instructor reports); absent it, scoring falls back to local
-   *  evaluation for decks without a linked quiz. */
+  mode: TestMode
+  questions: TestQuestion[]
+  title?: string
+  intro?: string
+  passingScore?: number // e.g. 0.7 (70%)
+  /** The server-side quiz backing a pre or post test. When present,
+   *  attempts are created, graded, and recorded through the quiz engine
+   *  (visible in instructor reports); absent it — and always for a
+   *  practice Evaluasi — scoring is local. */
   quizId?: string
   onComplete?: (scorePct: number, passed: boolean) => void
-  onRetake?: () => void
-  onClaimCertificate?: () => void
+  /** Leave the test for the next slide: after a pre test or practice, and
+   *  after a post test once the learner says they are satisfied. */
+  onContinue?: () => void
+  /** Post test only: go back to the start of the modules to study again. */
+  onRestudy?: () => void
   className?: string
 }
 
-interface PostTestResult {
+interface TestResult {
   scorePct: number
   passed: boolean
   correctCount: number
 }
 
+const MODE_COPY: Record<TestMode, { eyebrow: string; resultTitle: string; finish: string }> = {
+  pre: { eyebrow: "PRE TEST", resultTitle: "Hasil Pre Test", finish: "Selesaikan Pre Test" },
+  practice: {
+    eyebrow: "EVALUASI MODUL · LATIHAN MANDIRI",
+    resultTitle: "Hasil Evaluasi",
+    finish: "Selesaikan Evaluasi",
+  },
+  post: { eyebrow: "POST TEST", resultTitle: "Hasil Post Test", finish: "Selesaikan Post Test" },
+}
+
+/**
+ * One multiple-choice test, three ways (DRIVE rules, 29 Okt 2026):
+ * - `pre` is taken before the modules. It never decides graduation, and
+ *   its answer key stays hidden — the Post Test asks the same questions.
+ * - `practice` is a module's Evaluasi: a self-check with the full
+ *   explanation of every answer, never recorded.
+ * - `post` decides graduation (passing score 70, unlimited retakes). The
+ *   result asks whether the learner is satisfied with their score; any
+ *   learner, passed or not, may retake it or restudy the modules first.
+ */
 export function ClinicalQuizRunner({
+  mode,
   questions,
+  title,
+  intro,
   passingScore = 0.7,
   quizId,
   onComplete,
-  onRetake,
-  onClaimCertificate,
+  onContinue,
+  onRestudy,
   className = "",
 }: ClinicalQuizRunnerProps) {
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
-  const [result, setResult] = useState<PostTestResult | null>(null)
+  const [result, setResult] = useState<TestResult | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const serverQuizId = mode === "practice" ? undefined : quizId
+  const copy = MODE_COPY[mode]
 
   // The server quiz's questions (option text, no answer key for
   // students) — used to translate the runner's letter answers into the
-  // attempt payload. Question text is the join key: the deck's quiz
-  // pages and the seeded quiz questions come from the same manifest.
+  // attempt payload. Question text is the join key: the deck's test
+  // questions and the seeded quiz questions come from the same manifest.
   const quiz = useQuery({
-    queryKey: ["quiz", quizId],
-    queryFn: () => apiGet<ContractQuizDetail>(`/quizzes/${quizId}`),
-    enabled: quizId != null,
+    queryKey: ["quiz", serverQuizId],
+    queryFn: () => apiGet<ContractQuizDetail>(`/quizzes/${serverQuizId}`),
+    enabled: serverQuizId != null,
     staleTime: 5 * 60 * 1000,
   })
 
   const currentQ = questions[currentIndex]
   const totalCount = questions.length
+
+  if (!currentQ) {
+    return <p className="p-8 text-center text-sm text-muted-foreground">Soal belum tersedia.</p>
+  }
 
   function handleSelect(letter: string) {
     if (result) return
@@ -75,7 +122,7 @@ export function ClinicalQuizRunner({
     }
   }
 
-  function localResult(): PostTestResult {
+  function localResult(): TestResult {
     let correctCount = 0
     for (const q of questions) {
       if (answers[q.id] === q.correct) correctCount++
@@ -90,83 +137,86 @@ export function ClinicalQuizRunner({
   async function finishQuiz() {
     setSubmitting(true)
     try {
-      if (quizId && quiz.data) {
+      let outcome = localResult()
+      if (serverQuizId && quiz.data) {
         // Server-graded path: one attempt per run, unlimited retakes
         // (quiz.maxAttempts = 0). Letters map to option text via the
-        // page's own options, keyed to server questions by question text.
-        const attempt = await apiSend<ContractQuizAttempt>("POST", `/quizzes/${quizId}/attempts`)
+        // question's own options, keyed to server questions by text.
+        const attempt = await apiSend<ContractQuizAttempt>("POST", `/quizzes/${serverQuizId}/attempts`)
         const payload: Record<string, string[]> = {}
-        for (const page of questions) {
-          const serverQuestion = quiz.data.questions.find((q) => q.question === page.question)
+        for (const q of questions) {
+          const serverQuestion = quiz.data.questions.find((s) => s.question === q.question)
           if (!serverQuestion) continue
-          const letter = answers[page.id]
-          const text = page.options.find((o) => o.letter === letter)?.text
+          const letter = answers[q.id]
+          const text = q.options.find((o) => o.letter === letter)?.text
           if (text) payload[serverQuestion.id] = [text]
         }
         const graded = await apiSend<ContractQuizAttempt>("POST", `/quiz-attempts/${attempt.id}/submit`, {
           answers: payload,
         })
         const maxScore = graded.maxScore ?? 0
-        const outcome: PostTestResult = {
+        outcome = {
           scorePct: maxScore > 0 ? Math.round(((graded.score ?? 0) / maxScore) * 100) : 0,
           passed: graded.passed === true,
           correctCount: maxScore > 0 ? Math.round(((graded.score ?? 0) / maxScore) * totalCount) : 0,
         }
-        setResult(outcome)
-        onComplete?.(outcome.scorePct, outcome.passed)
-      } else {
-        // Deck without a linked quiz — local evaluation only.
-        const outcome = localResult()
-        setResult(outcome)
-        onComplete?.(outcome.scorePct, outcome.passed)
       }
+      setResult(outcome)
+      onComplete?.(outcome.scorePct, outcome.passed)
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Gagal mengirim evaluasi — coba lagi")
+      toast.error(err instanceof Error ? err.message : "Gagal mengirim jawaban — coba lagi")
     } finally {
       setSubmitting(false)
     }
   }
 
-  function handleRetakeTest() {
+  function handleRetake() {
     setAnswers({})
     setCurrentIndex(0)
     setResult(null)
-    onRetake?.()
   }
 
   if (result) {
     const { scorePct, passed, correctCount } = result
+    const showKey = mode !== "pre"
 
     return (
       <div
         className={`mx-auto max-w-2xl animate-in space-y-6 rounded-2xl border bg-card p-6 text-center fade-in md:p-8 ${className}`}
       >
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
-          <Award className="h-8 w-8" />
+          {mode === "post" ? <Award className="h-8 w-8" /> : <ClipboardList className="h-8 w-8" />}
         </div>
 
         <div className="space-y-2">
-          <Badge
-            variant="outline"
-            className={`px-3 py-1 font-mono text-xs uppercase ${
-              passed
-                ? "border-emerald-300 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300"
-                : "border-amber-300 bg-amber-500/10 text-amber-800 dark:text-amber-300"
-            }`}
-          >
-            {passed ? "Lulus Evaluasi" : "Perlu Remediasi"}
-          </Badge>
-          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">Hasil Evaluasi Post-Test</h2>
+          {mode === "post" ? (
+            <Badge
+              variant="outline"
+              className={`px-3 py-1 font-mono text-xs uppercase ${
+                passed
+                  ? "border-emerald-300 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300"
+                  : "border-amber-300 bg-amber-500/10 text-amber-800 dark:text-amber-300"
+              }`}
+            >
+              {passed ? "Lulus Post Test" : "Belum Lulus"}
+            </Badge>
+          ) : (
+            <Badge variant="outline" className="px-3 py-1 font-mono text-xs uppercase">
+              Tidak menentukan kelulusan
+            </Badge>
+          )}
+          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">{copy.resultTitle}</h2>
           <p className="text-sm text-muted-foreground">
-            Anda memperoleh nilai <strong className="text-foreground">{scorePct}%</strong> ({correctCount} dari{" "}
-            {totalCount} soal dijawab dengan benar). Batas kelulusan minimum adalah {Math.round(passingScore * 100)}%.
+            Anda memperoleh nilai <strong className="text-foreground">{scorePct}</strong> ({correctCount} dari{" "}
+            {totalCount} soal dijawab dengan benar).
+            {mode === "post" ? ` Nilai minimal kelulusan adalah ${Math.round(passingScore * 100)}.` : null}
+            {mode === "pre" ? " Pembahasan soal dapat Anda lihat setelah mengerjakan Post Test." : null}
           </p>
         </div>
 
-        {/* Detailed Review Breakdown */}
         <div className="space-y-3 rounded-xl border bg-muted/20 p-4 text-left">
           <h4 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-            Pembahasan Soal Evaluasi:
+            {showKey ? "Pembahasan Soal" : "Ringkasan Jawaban"}
           </h4>
           <div className="space-y-2">
             {questions.map((q, idx) => {
@@ -192,10 +242,22 @@ export function ClinicalQuizRunner({
                       {idx + 1}. {q.question}
                     </p>
                     <p className="opacity-90">
-                      Jawaban Anda: <strong>{userAns || "Belum dijawab"}</strong> • Kunci Jawaban:{" "}
-                      <strong>{q.correct}</strong>
+                      Jawaban Anda: <strong>{userAns || "Belum dijawab"}</strong>
+                      {showKey ? (
+                        <>
+                          {" "}
+                          • Kunci Jawaban: <strong>{q.correct}</strong>
+                        </>
+                      ) : null}
                     </p>
-                    {!isCorrect && <p className="mt-1 text-[11px] italic">{q.explanation}</p>}
+                    {showKey && !isCorrect ? (
+                      // The deck's explanation carries the slide notes' full
+                      // REFERENSI / DAFTAR SINGKATAN after the answer; only the
+                      // answer reasoning belongs in this card.
+                      <p className="mt-1 text-[11px] whitespace-pre-line italic">
+                        {q.explanation.split(/\n\s*REFERENSI:/)[0].trim()}
+                      </p>
+                    ) : null}
                   </div>
                 </div>
               )
@@ -203,34 +265,50 @@ export function ClinicalQuizRunner({
           </div>
         </div>
 
-        {/* Review Note #9: Satisfaction Prompt & Retake Option */}
-        <div className="space-y-3 rounded-xl border border-primary/20 bg-primary/5 p-4 text-left">
-          <div className="flex items-center gap-2">
-            <HelpCircle className="h-5 w-5 text-primary" />
-            <span className="text-sm font-bold text-foreground">Apakah Anda sudah puas dengan nilai Anda?</span>
+        {mode === "post" ? (
+          <div className="space-y-4 rounded-xl border border-primary/20 bg-primary/5 p-4 text-left">
+            <div className="flex items-center gap-2">
+              <HelpCircle className="h-5 w-5 shrink-0 text-primary" />
+              <span className="text-sm font-bold text-foreground">Apakah Anda sudah puas dengan nilai Anda?</span>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {passed
+                ? "Anda sudah lulus. Jika ingin memperbaiki nilai, Anda boleh mengulang Post Test atau mempelajari ulang modul terlebih dahulu. Sertifikat dapat diklaim di halaman Selesai."
+                : `Nilai Anda belum mencapai ${Math.round(passingScore * 100)}. Anda boleh mengulang Post Test tanpa batas, atau mempelajari ulang modul terlebih dahulu.`}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <Button onClick={onContinue} className="gap-2 font-semibold">
+                <ThumbsUp className="h-4 w-4" />
+                Ya, sudah puas
+              </Button>
+              <Button variant="outline" onClick={handleRetake} className="gap-2">
+                <RotateCcw className="h-4 w-4" />
+                Belum, ulangi Post Test
+              </Button>
+              {onRestudy ? (
+                <Button variant="outline" onClick={onRestudy} className="gap-2">
+                  <BookOpenCheck className="h-4 w-4" />
+                  Pelajari ulang modul
+                </Button>
+              ) : null}
+            </div>
           </div>
-          <p className="text-xs text-muted-foreground">
-            Anda dapat mengulang evaluasi post-test tanpa batas untuk memperdalam pemahaman diagnostik retinopati dan
-            memperbaiki catatan akreditasi klinis Anda.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-          {/* Unrestricted Retake Button (Review Note #9) — each retake is a
-              fresh server attempt (maxAttempts = 0). */}
-          <Button variant="outline" onClick={handleRetakeTest} className="gap-2">
-            <RotateCcw className="h-4 w-4" />
-            Ulangi Evaluasi (Retake)
-          </Button>
-
-          {/* Certificate Claim if Passed — server-graded pass only */}
-          {passed && onClaimCertificate && (
-            <Button onClick={onClaimCertificate} className="gap-2 font-semibold shadow-sm">
-              <ShieldCheck className="h-4 w-4" />
-              Klaim Sertifikat Resmi
-            </Button>
-          )}
-        </div>
+        ) : (
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            {mode === "practice" ? (
+              <Button variant="outline" onClick={handleRetake} className="gap-2">
+                <RotateCcw className="h-4 w-4" />
+                Ulangi Evaluasi
+              </Button>
+            ) : null}
+            {onContinue ? (
+              <Button onClick={onContinue} className="gap-2 font-semibold">
+                Lanjut
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            ) : null}
+          </div>
+        )}
       </div>
     )
   }
@@ -241,17 +319,20 @@ export function ClinicalQuizRunner({
   return (
     <div className={`mx-auto max-w-2xl space-y-6 rounded-2xl border bg-card p-6 shadow-xs md:p-8 ${className}`}>
       {/* Header and Progress */}
-      <div className="flex items-center justify-between border-b pb-4">
-        <div>
-          <span className="font-mono text-xs font-bold text-primary">EVALUASI KLINIS TERSTANDAR</span>
-          <h3 className="mt-0.5 text-lg font-bold text-foreground">
-            Soal {currentIndex + 1} dari {totalCount}
-          </h3>
-        </div>
+      <div className="space-y-3 border-b pb-4">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <span className="font-mono text-xs font-bold text-primary">{copy.eyebrow}</span>
+            <h3 className="mt-0.5 text-lg font-bold text-foreground">
+              {title ? `${title} · ` : ""}Soal {currentIndex + 1} dari {totalCount}
+            </h3>
+          </div>
 
-        <Badge variant="outline" className="font-mono text-xs">
-          {Math.round(((currentIndex + 1) / totalCount) * 100)}% Selesai
-        </Badge>
+          <Badge variant="outline" className="shrink-0 font-mono text-xs">
+            {Math.round(((currentIndex + 1) / totalCount) * 100)}%
+          </Badge>
+        </div>
+        {intro && currentIndex === 0 ? <p className="text-sm text-muted-foreground">{intro}</p> : null}
       </div>
 
       {/* Question Text */}
@@ -300,9 +381,7 @@ export function ClinicalQuizRunner({
           onClick={handleNext}
           className="gap-1.5 font-semibold"
         >
-          <span>
-            {submitting ? "Menilai..." : currentIndex === totalCount - 1 ? "Selesaikan Evaluasi" : "Soal Berikutnya"}
-          </span>
+          <span>{submitting ? "Menilai..." : currentIndex === totalCount - 1 ? copy.finish : "Soal Berikutnya"}</span>
           <ArrowRight className="h-4 w-4" />
         </Button>
       </div>

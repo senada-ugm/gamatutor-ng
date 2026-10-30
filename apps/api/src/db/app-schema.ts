@@ -214,8 +214,9 @@ export const courseLessons = pgTable(
 /** A course's interactive slide deck (the DRIVE-style narrated player).
  *  One per course — the manifest is opaque JSON owned by the player's
  *  content types (apps/app lib/content/course-types.ts); postTestQuizId
- *  links the deck's evaluation section to a real quiz for server-side
- *  grading. */
+ *  links the deck's Post Test to a real quiz for server-side grading, and
+ *  preTestQuizId its Pre Test (same questions, recorded but never graded
+ *  toward graduation). */
 export const slideDecks = pgTable(
   "slide_decks",
   {
@@ -227,6 +228,7 @@ export const slideDecks = pgTable(
     schemaVersion: integer("schema_version").notNull().default(1),
     manifest: jsonb("manifest").$type<Record<string, unknown>>().notNull(),
     postTestQuizId: text("post_test_quiz_id"),
+    preTestQuizId: text("pre_test_quiz_id"),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },

@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router"
 
 /**
  * Public site footer matching GamaTutor's institutional colophon:
- * "DRIVE School · Pelatihan Skrining Retinopati Diabetika · Diselenggarakan di platform GamaTutor"
+ * "DRIVE Learn · Pelatihan Skrining Retinopati Diabetika · Diselenggarakan di platform GamaTutor"
  * "SENADA UGM · Disajikan oleh GamaTutor · Juga tersedia sebagai paket SCORM 1.2 untuk LMS lain."
  */
 export function SiteFooter() {
@@ -11,7 +11,7 @@ export function SiteFooter() {
       <div className="mx-auto flex max-w-[1200px] flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6 md:px-8">
         <div className="space-y-1 text-center sm:text-left">
           <p className="leading-relaxed">
-            <span className="font-bold text-[#0f2a44] dark:text-white">DRIVE School</span> · Pelatihan Skrining
+            <span className="font-bold text-[#0f2a44] dark:text-white">DRIVE Learn</span> · Pelatihan Skrining
             Retinopati Diabetika · Diselenggarakan di platform GamaTutor FKKMK UGM
           </p>
           <p className="text-[11px] text-[#6b8196] dark:text-slate-500">

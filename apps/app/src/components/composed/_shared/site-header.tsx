@@ -1,13 +1,12 @@
 import { Link } from "@tanstack/react-router"
-import { Eye } from "lucide-react"
-
 import { Button } from "@workspace/ui/components/button"
+import { DriveLogo } from "@/components/composed/_shared/drive-logo"
 import { useSession } from "@/lib/session"
 
 /**
  * Public and marketing topbar matching GamaTutor's clinical visual language
  * as published on https://gamatutor.komunitech.id/:
- * - DRIVE Learn brand mark with eye icon (matching app layout top nav)
+ * - DRIVE Learn brand mark: the DRIVE logo + "Learn" (matching app layout top nav)
  * - Quiet text links with bottom accent underlines on hover
  * - Direct "Verifikasi Sertifikat" certificate verification shortcut
  * - Full authenticated/guest account actions
@@ -20,14 +19,10 @@ export function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between px-4 sm:px-6 md:px-8">
         <Link
           to="/"
-          className="flex shrink-0 items-center gap-2.5 font-bold tracking-tight text-[#0f2a44] transition-opacity hover:opacity-95 dark:text-white"
+          className="flex shrink-0 items-center transition-opacity hover:opacity-95"
+          aria-label="DRIVE Learn — Beranda"
         >
-          <span className="flex size-7 items-center justify-center rounded-full bg-[#0369a1] text-xs font-black text-white shadow-xs">
-            <Eye className="size-4 stroke-[2.2]" />
-          </span>
-          <span className="text-base font-extrabold tracking-tight text-[#0f2a44] dark:text-white">
-            DRIVE <span className="font-semibold text-[#0369a1] dark:text-sky-400">Learn</span>
-          </span>
+          <DriveLogo logoClassName="h-8" />
         </Link>
 
         <nav className="flex items-center gap-5 text-sm font-semibold" aria-label="Navigasi utama">

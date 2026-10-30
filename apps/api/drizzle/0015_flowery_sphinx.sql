@@ -1,0 +1,1 @@
+ALTER TABLE "slide_decks" ADD COLUMN "pre_test_quiz_id" text;

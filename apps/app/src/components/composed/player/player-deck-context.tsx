@@ -11,6 +11,8 @@ import { createContext, useCallback, useContext, useMemo, useState } from "react
 export interface DeckModuleStep {
   id: string
   label: string
+  group?: string
+  placeholder?: boolean
 }
 
 interface PlayerDeckContextValue {
@@ -27,8 +29,10 @@ interface PlayerDeckContextValue {
 
 const PlayerDeckContext = createContext<PlayerDeckContextValue | null>(null)
 
+// v2: the 29 Okt 2026 restructure renumbered the steps, so an index
+// saved against the old seven-step outline would unlock the wrong ones.
 function storageKey(courseId: string) {
-  return `lms.deck-progress.${courseId}`
+  return `lms.deck-progress.v2.${courseId}`
 }
 
 export function PlayerDeckProvider({

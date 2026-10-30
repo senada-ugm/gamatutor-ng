@@ -24,7 +24,7 @@ import { generateId } from "../lib/response.js"
 import { users } from "./auth-schema.js"
 import { createCourse, publishCourse } from "../modules/courses/services/courses.service.js"
 import { createLesson, createModule } from "../modules/course-content/services/course-content.service.js"
-import { createQuiz, createQuestion } from "../modules/quizzes/services/quizzes.service.js"
+import { ensureDriveTestQuizzes } from "./drive-tests.js"
 import type { LessonCreate } from "@workspace/contracts"
 
 const SEED_PASSWORD = "correcthorsebatterystaple"
@@ -144,7 +144,7 @@ export async function seedDatabase() {
           title: (p.title as string) || (p.kicker as string) || (p.id as string),
           contentType: "text" as const,
           textContent: (p.transcript as string) || (p.body as string) || (p.title as string) || (p.id as string),
-          isPreview: m.id === "pengantar",
+          isPreview: m.id === "pengantar-umum",
         })),
       }))
 
@@ -234,46 +234,9 @@ export async function seedDatabase() {
     })
   console.log(`  → interactive slide deck attached (${(deckManifest.modules as unknown[])?.length ?? "?"} modules)`)
 
-  // Post-test evaluation quiz
-  const [existingDeck] = await db.select().from(slideDecks).where(eq(slideDecks.courseId, driveCourseId!)).limit(1)
-  if (existingDeck && !existingDeck.postTestQuizId) {
-    const quizPages =
-      (
-        (deckManifest.modules as Array<Record<string, unknown>>)?.find((m) => m.id === "evaluasi")?.pages as Array<
-          Record<string, unknown>
-        >
-      )?.filter((p) => p.type === "quiz") ?? []
-    if (quizPages.length > 0) {
-      const quiz = await createQuiz(driveCourseId!, {
-        title: "Post-Test Evaluasi Klinis — DRIVE",
-        description:
-          "Evaluasi akhir pelatihan: 5 soal terstandar. Nilai kelulusan minimum 70%; percobaan tidak dibatasi (retake sesuai kebutuhan).",
-        passingScore: 70,
-        maxAttempts: 0,
-        timeLimit: 0,
-        shuffleQuestions: false,
-        shuffleOptions: false,
-        showResults: true,
-        showCorrectAnswers: true,
-      })
-      for (const [index, page] of quizPages.entries()) {
-        const options = (page.options as Array<{ letter: string; text: string }>) ?? []
-        const correctLetter = page.correct as string
-        const correctText = options.find((o) => o.letter === correctLetter)?.text ?? ""
-        await createQuestion(quiz.id, {
-          question: page.question as string,
-          questionType: "single_choice",
-          options: options.map((o) => ({ text: o.text })),
-          correctAnswers: [correctText],
-          points: Math.round(100 / quizPages.length),
-          explanation: (page.explanation as string) ?? undefined,
-          displayOrder: index,
-        })
-      }
-      await db.update(slideDecks).set({ postTestQuizId: quiz.id }).where(eq(slideDecks.id, existingDeck.id))
-      console.log(`  → post-test quiz linked to DRIVE deck (${quizPages.length} questions, ${quiz.id})`)
-    }
-  }
+  // Pre Test + Post Test quizzes (one question set, from the deck's
+  // Post Test page — see drive-tests.ts)
+  await ensureDriveTestQuizzes(driveCourseId!, deckManifest)
 
   // Ensure "Course cukup 1 saja" by removing any extra non-canonical courses
   const extraCourses = await db

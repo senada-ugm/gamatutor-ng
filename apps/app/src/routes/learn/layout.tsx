@@ -133,7 +133,15 @@ function DeckAwareShell({
     )
   }
   return (
-    <PlayerDeckProvider courseId={course.id} modules={deckCourse.modules.map((m) => ({ id: m.id, label: m.label }))}>
+    <PlayerDeckProvider
+      courseId={course.id}
+      modules={deckCourse.modules.map((m) => ({
+        id: m.id,
+        label: m.label,
+        group: m.group,
+        placeholder: m.placeholder,
+      }))}
+    >
       <PlayerShell course={course} completedLessonIds={completedLessonIds} deckCourse={deckCourse}>
         {children}
       </PlayerShell>

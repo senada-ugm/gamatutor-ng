@@ -30,6 +30,12 @@ export interface BasePage {
   title?: string
   transcript?: string
   audio?: string
+  /** The slide's source list (PPTX speaker notes "REFERENSI"), shown in
+   *  the Daftar Referensi box under the narration bar. */
+  references?: string[]
+  /** "ABBR, expansion" entries (PPTX "DAFTAR SINGKATAN"), shown in the
+   *  Daftar Singkatan box beside the references. */
+  abbreviations?: string[]
 }
 
 export interface HeroPage extends BasePage {
@@ -41,6 +47,7 @@ export interface HeroPage extends BasePage {
 export interface DividerPage extends BasePage {
   type: "divider"
   title: string
+  body?: string
 }
 
 export interface ContentPage extends BasePage {
@@ -100,6 +107,7 @@ export interface HotspotPage extends BasePage {
   title: string
   intro?: string
   image: string
+  imageCaption?: string
   points: HotspotPoint[]
   masks?: HotspotMask[]
 }
@@ -122,6 +130,11 @@ export interface LesionCoordinate {
   x: number
   y: number
   label: string
+  /** Where the label sits relative to the lesion, in % of the image —
+   *  authored when the default (pointing outward from the image centre)
+   *  would land the label on another lesion. */
+  dx?: number
+  dy?: number
 }
 
 export interface ImageGradingPage extends BasePage {
@@ -139,21 +152,59 @@ export interface QuizOption {
   text: string
 }
 
-export interface QuizPage extends BasePage {
-  type: "quiz"
-  graded?: boolean
+export interface TestQuestion {
+  id: string
   question: string
   options: QuizOption[]
   correct: string
   explanation: string
+  references?: string[]
+}
+
+/**
+ * A whole multiple-choice test on one slide. `post` is the graded Post
+ * Test (the deck's postTestQuizId); `pre` is the ungraded Pre Test (the
+ * deck's preTestQuizId, recorded for pre/post comparison only); `practice`
+ * is a module's self-check Evaluasi, scored locally and never recorded.
+ * The DRIVE team's rule is that Pre and Post Test share one question set,
+ * so only the post page carries `questions` — any test page without its
+ * own falls back to the post test's.
+ */
+export interface TestPage extends BasePage {
+  type: "test"
+  mode: "pre" | "post" | "practice"
+  title: string
+  intro?: string
+  questions?: TestQuestion[]
+}
+
+/** The course's closing slide (the "Selesai" step): the completion text
+ *  and the certificate claim. */
+export interface CompletionPage extends BasePage {
+  type: "completion"
+  title: string
 }
 
 export type SlidePage =
-  HeroPage | DividerPage | ContentPage | CardsPage | HotspotPage | MatchPage | ImageGradingPage | QuizPage
+  | HeroPage
+  | DividerPage
+  | ContentPage
+  | CardsPage
+  | HotspotPage
+  | MatchPage
+  | ImageGradingPage
+  | TestPage
+  | CompletionPage
 
 export interface CourseModule {
   id: string
   label: string
+  /** The sidebar heading this step sits under ("Modul 1"); also the
+   *  badge in the slide header, so a page reads "(Modul 1) BAB 1 – …". */
+  group?: string
+  /** Announced in the sidebar but not yet written: no pages, never
+   *  reached by the linear walk, shown greyed out as "segera hadir". */
+  placeholder?: boolean
   pages: SlidePage[]
   completion?: boolean | Record<string, unknown>
 }
@@ -166,10 +217,15 @@ export interface CourseDefinition {
   brand?: {
     name: string
     mark: string
+    logo?: string
   }
   passingScore?: number
   assessment?: {
     mode: string
+  }
+  completion?: {
+    body?: string
+    certificateText?: string
   }
   modules: CourseModule[]
 }

@@ -4,42 +4,82 @@
   "title": "DRIVE — Skrining Retinopati Diabetika untuk Dokter Layanan Primer",
   "language": "id-ID",
   "brand": {
-    "name": "DRIVE School",
-    "mark": "👁"
+    "name": "DRIVE Learn",
+    "mark": "👁",
+    "logo": "/images/drive-logo.png"
   },
-  "passingScore": 0.6,
+  "passingScore": 0.7,
   "assessment": {
     "mode": "formative"
   },
   "completion": {
-    "body": "Anda telah menyelesaikan Modul 1–4 (Diabetes Mellitus, Retinopati Diabetika, Skrining & Tatalaksana, Simulasi Grading) dan evaluasi Pelatihan Skrining Retinopati Diabetika.",
-    "certificateText": "telah menyelesaikan pelatihan “Skrining Retinopati Diabetika untuk Dokter Layanan Primer”, mencakup Modul 1–4 (Diabetes Mellitus, Retinopati Diabetika, Skrining & Tatalaksana, Simulasi Grading) beserta evaluasi pre/post-test."
+    "body": "Anda telah menyelesaikan rangkaian Pelatihan Skrining Retinopati Diabetika di DRIVE Learn: Pre Test, materi modul, Simulasi Grading Retinopati Diabetika, dan Post Test.",
+    "certificateText": "telah menyelesaikan pelatihan “Skrining Retinopati Diabetika untuk Dokter Layanan Primer” di DRIVE Learn dan lulus Post Test dengan nilai minimal 70."
   },
   "modules": [
     {
-      "id": "pengantar",
+      "id": "pengantar-umum",
+      "label": "Pengantar Umum",
+      "pages": [
+        {
+          "id": "pengantar-umum-p1",
+          "type": "hero",
+          "kicker": "DRIVE LEARN",
+          "title": "Pelatihan Skrining Retinopati Diabetika untuk Dokter Layanan Primer",
+          "body": "Pelatihan daring program DRIVE (Diabetic Retinopathy Initiative) Departemen Ilmu Kesehatan Mata FK-KMK UGM."
+        },
+        {
+          "id": "pengantar-umum-p2",
+          "type": "content",
+          "kicker": "ALUR PELATIHAN",
+          "title": "Pengantar Umum",
+          "body": "Pelatihan ini terdiri atas empat modul:\nModul 1. Pengenalan Diabetes dan Retinopati Diabetika\nModul 2 dan Modul 3. Materi lanjutan (segera hadir)\nModul 4. Simulasi Grading Retinopati Diabetika\n\nUrutan belajar:\n1. Pre Test untuk mengukur pemahaman awal. Nilainya tidak menentukan kelulusan.\n2. Pelajari setiap modul. Evaluasi di akhir modul adalah latihan mandiri.\n3. Post Test di akhir pelatihan. Nilai minimal kelulusan 70; Post Test boleh diulang tanpa batas.\n4. Setelah lulus Post Test, sertifikat dapat diklaim atas nama akun Anda."
+        }
+      ]
+    },
+    {
+      "id": "pre-test",
+      "label": "Pre Test",
+      "pages": [
+        {
+          "id": "pre-test-p1",
+          "type": "test",
+          "mode": "pre",
+          "title": "Pre Test",
+          "intro": "Kerjakan Pre Test sebelum mempelajari materi. Nilai Pre Test tidak menentukan kelulusan; soalnya sama dengan Post Test di akhir pelatihan."
+        }
+      ]
+    },
+    {
+      "id": "modul1-pengantar",
       "label": "Pengantar",
+      "group": "Modul 1",
       "pages": [
         {
           "id": "pengantar-p1",
           "type": "hero",
-          "title": "Pelatihan Skrining Retinopati Diabetika",
-          "body": "Modul 1 — Pengenalan Diabetes dan Retinopati Diabetika: definisi, epidemiologi, dan beban penyakit — dilengkapi narasi otomatis dan simulasi grading fundus interaktif untuk dokter layanan primer."
+          "title": "Pengenalan Diabetes dan Retinopati Diabetika",
+          "body": "Definisi, Epidemiologi, dan Beban penyakit",
+          "kicker": "MODUL 1"
         },
         {
           "id": "pengantar-p2",
           "slide": 2,
           "type": "content",
-          "kicker": "DAFTAR ISI",
-          "title": "Cakupan modul",
-          "body": "1. Diabetes Mellitus\n2. Retinopati Diabetika (RD)\n3. Skrining dan Tatalaksana Retinopati Diabetika\n4. Evaluasi",
-          "transcript": "Modul 1 terbagi menjadi empat bagian.\nBagian pertama membahas diabetes mellitus sebagai penyakit yang mendasari.\nBagian kedua membahas retinopati diabetika atau RD.\nBagian ketiga membahas skrining dan tatalaksana retinopati diabetika.\nTerakhir, bagian keempat berisi evaluasi untuk menguji pemahaman Anda.\n\nSetelah menyelesaikan modul ini, Anda diharapkan memahami hubungan antara diabetes dan retinopati diabetika, mengerti pentingnya skrining berkala, dan tahu kapan seorang pasien perlu dirujuk ke dokter spesialis mata."
+          "title": "Cakupan Modul",
+          "body": "BAB 1. Diabetes Mellitus\nBAB 2. Retinopati Diabetika (RD)\nBAB 3. Skrining dan Tatalaksana Retinopati Diabetika\nEvaluasi",
+          "transcript": "Selamat datang di Modul 1. Pengenalan Diabetes dan Retinopati Diabetika pada Pelatihan Skrining Retinopati Diabetika dalam program DRIVE, Diabetic Retinopathy Initiative.\n\nModul 1 terbagi menjadi empat bagian.\nBagian pertama membahas diabetes mellitus sebagai penyakit yang mendasari.\nBagian kedua membahas retinopati diabetika atau RD.\nBagian ketiga membahas skrining dan tatalaksana retinopati diabetika.\nTerakhir, bagian keempat berisi evaluasi untuk menguji pemahaman Anda.\n\nSetelah menyelesaikan modul ini, Anda diharapkan memahami hubungan antara diabetes dan retinopati diabetika, mengerti pentingnya skrining berkala, dan tahu kapan seorang pasien perlu dirujuk ke dokter spesialis mata.",
+          "references": [
+            "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 5 (RD sebagai penyakit pembuluh darah mikro retina yang dikaitkan dengan hiperglikemia berkepanjangan pada DM)."
+          ],
+          "abbreviations": ["DRIVE, Diabetic Retinopathy Initiative", "RD, retinopati diabetika"]
         }
       ]
     },
     {
-      "id": "modul1",
-      "label": "Modul 1 — Diabetes Mellitus",
+      "id": "modul1-bab1",
+      "label": "BAB 1 – Diabetes Mellitus",
+      "group": "Modul 1",
       "pages": [
         {
           "id": "modul1-p1",
@@ -58,7 +98,12 @@
           "transcript": "Apa itu diabetes mellitus? Menurut pedoman PERKENI 2021, diabetes mellitus atau DM adalah sekelompok penyakit metabolik dengan ciri utama hiperglikemia, yaitu kadar glukosa darah yang tinggi. Hiperglikemia ini menandakan adanya gangguan dalam proses metabolisme karbohidrat di dalam tubuh.\n\nKondisi ini diakibatkan oleh gangguan sekresi insulin, gangguan kerja insulin, atau gabungan keduanya. Kita bisa membayangkan insulin sebagai “kunci” yang membuka pintu sel agar glukosa dari darah bisa masuk dan dipakai sebagai energi.\n\nHiperglikemia kronis adalah penanda utama DM, sekaligus pemicu terjadinya komplikasi, baik mikrovaskular seperti retinopati, nefropati, dan neuropati, maupun makrovaskular seperti penyakit jantung koroner dan stroke.\n\nThe Egregious Eleven dari Schwartz dan kawan-kawan menunjukkan bahwa hiperglikemia pada DM tipe 2 melibatkan sebelas mekanisme.\nPertama, berkurangnya sekresi insulin oleh sel beta pankreas. Kedua, respons insulin tidak lagi optimal karena efek inkretin yang menurun. Ketiga, sel alfa pankreas yang meningkatkan sekresi glukagon. Keempat, sel lemak yang mengalami peningkatan lipolisis. Kelima, terjadinya penurunan penggunaan glukosa oleh otot akibat kurang responsifnya otot skeletal terhadap insulin. Keenam, resistensi insulin dan peningkatan sekresi glukagon ini menyebabkan hati melakukan glukoneogenesis. Ketujuh, gangguan neurotransmiter pada otak menyebabkan gangguan regulasi nafsu makan. Kedelapan, pada kolon terjadi perubahan mikrobiota yang mempengaruhi metabolisme dan permeabilitas usus. Kesembilan, disregulasi sistem imun dan mediator inflamasi memperburuk resistensi insulin dan merusak fungsi sel beta. Kesepuluh, terjadi pengosongan lambung dan usus halus yang lebih cepat sehingga glukosa lebih cepat diserap. Dan kesebelas, pada ginjal terjadi peningkatan reabsorpsi glukosa di tubulus ginjal sehingga menahan glukosa tidak keluar melalui urin.\n\nDengan demikian, diabetes mellitus, khususnya diabetes tipe 2, merupakan kondisi yang kompleks dan melibatkan interaksi berbagai organ.",
           "image": "/content/drive-retinopati/assets/v52_slide4.png",
           "imageLayout": "below",
-          "imageCaption": "Gambar 1. The Egregious Eleven (Schwartz, Diabetes Care 2016)."
+          "imageCaption": "The Egregious Eleven (Schwartz, Diabetes Care 2016).",
+          "references": [
+            "Perkumpulan Endokrinologi Indonesia (PERKENI). Pedoman Pengelolaan dan Pencegahan Diabetes Melitus Tipe 2 Dewasa di Indonesia 2021. Jakarta: PB PERKENI; 2021. hlm. 6 (definisi dan patogenesis DM tipe 2), hlm. 7–10 (Gambar 1 dan uraian egregious eleven).",
+            "Schwartz SS, Epstein S, Corkey BE, Grant SFA, Gavin JR 3rd, Aguilar RB. The time is right for a new classification system for diabetes: rationale and implications of the β-cell-centric classification schema. Diabetes Care. 2016;39(2):179–186. doi:10.2337/dc15-1585"
+          ],
+          "abbreviations": ["DM, diabetes mellitus", "PERKENI, Perkumpulan Endokrinologi Indonesia"]
         },
         {
           "id": "modul1-p3",
@@ -91,6 +136,9 @@
               "big": "11,3%",
               "body": "penduduk Indonesia usia 20–79 tahun"
             }
+          ],
+          "references": [
+            "International Diabetes Federation (IDF). IDF Diabetes Atlas. 11th ed. Brussels: IDF; 2025. ISBN 978-2-930229-96-6. Tersedia di: https://diabetesatlas.org (588,7 juta penyandang DM usia 20–79 tahun pada 2024; proyeksi 852,5 juta pada 2050; Indonesia ±20,4 juta, prevalensi 11,3%, peringkat 5 dunia)."
           ]
         },
         {
@@ -103,7 +151,12 @@
           "transcript": "Berdasarkan etiologinya, diabetes mellitus diklasifikasikan menjadi empat jenis.\n\nPertama, DM Tipe 1. Kondisi ini terjadi karena destruksi sel beta pankreas oleh sistem imun yang merupakan proses autoimun pada Pulau Langerhans, yang merusak sel-sel beta tersebut. Akibat kerusakan permanen ini, tubuh tidak lagi mampu menghasilkan insulin, yang berujung pada defisiensi insulin absolut, di mana sel-sel tubuh sama sekali tidak mendapatkan pasokan insulin yang dibutuhkan.\nKedua, DM Tipe 2. Kondisi ini bermula dari resistensi insulin, di mana pankreas masih memproduksi insulin, namun sel-sel tubuh tidak meresponsnya dengan baik. Untuk mengompensasi kondisi tersebut, sel beta pankreas bekerja terlalu keras guna menghasilkan lebih banyak insulin, hingga akhirnya sel-sel tersebut mengalami kelelahan. Pada tahap lanjut, kelelahan ini menyebabkan penurunan fungsi yang drastis, hingga terjadi defisiensi insulin relatif atau absolut di mana pasokan insulin tidak lagi mencukupi kebutuhan sel tubuh.\nKetiga, DM Gestasional. Kondisi ini dipicu oleh peningkatan hormon kehamilan yang diproduksi oleh plasenta. Hormon-hormon ini menyebabkan peningkatan resistensi insulin pada tubuh ibu hamil. Jika resistensi tersebut tidak terkontrol, kadar glukosa dalam darah ibu hamil akan melonjak tinggi, dan glukosa yang berlebihan tersebut akan menembus plasenta untuk dialirkan langsung ke janin, yang dapat memengaruhi pertumbuhan dan kesehatan bayi.\nKeempat, DM Tipe Lain. Merupakan kelompok diabetes yang disebabkan oleh berbagai faktor spesifik eksternal maupun internal, seperti Maturity-Onset Diabetes of the Young (MODY), gangguan eksokrin pankreas, endokrinopati, induksi obat atau zat kimia, infeksi, sebab imunologi, serta kelainan atau mutasi genetik lainnya.",
           "image": "/content/drive-retinopati/assets/slide6_8.png",
           "imageLayout": "below",
-          "imageCaption": "Klasifikasi DM: Tipe 1, Tipe 2, Gestasional, Tipe Lain."
+          "imageCaption": "Klasifikasi DM: Tipe 1, Tipe 2, Gestasional, Tipe Lain.",
+          "references": [
+            "Perkumpulan Endokrinologi Indonesia (PERKENI). Pedoman Pengelolaan dan Pencegahan Diabetes Melitus Tipe 2 Dewasa di Indonesia 2021. Jakarta: PB PERKENI; 2021. hlm. 10 (Tabel 2. Klasifikasi Etiologi Diabetes Melitus).",
+            "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 100 (klasifikasi DM)."
+          ],
+          "abbreviations": ["DM, diabetes mellitus", "MODY, maturity-onset diabetes of the young"]
         },
         {
           "id": "modul1-p5",
@@ -154,6 +207,16 @@
               "texts": ["j. Riwayat penyakit kardiovaskular"],
               "narration": "Sepuluh, memiliki riwayat penyakit kardiovaskular."
             }
+          ],
+          "references": [
+            "Perkumpulan Endokrinologi Indonesia (PERKENI). Pedoman Pengelolaan dan Pencegahan Diabetes Melitus Tipe 2 Dewasa di Indonesia 2021. Jakarta: PB PERKENI; 2021. hlm. 12–13 (faktor risiko dan pemeriksaan penyaring DM tipe 2 serta interval pemeriksaan ulang).",
+            "WHO Expert Consultation. Appropriate body-mass index for Asian populations and its implications for policy and intervention strategies. Lancet. 2004;363(9403):157–163. doi:10.1016/S0140-6736(03)15268-3"
+          ],
+          "abbreviations": [
+            "DM, diabetes mellitus",
+            "HDL, high-density lipoprotein",
+            "PCOS, polycystic ovary syndrome (sindrom ovarium polikistik)",
+            "PERKENI, Perkumpulan Endokrinologi Indonesia"
           ]
         },
         {
@@ -161,11 +224,16 @@
           "slide": 8,
           "type": "content",
           "kicker": "DIAGNOSIS",
-          "title": "Kriteria diagnosis DM",
+          "title": "Kriteria Diagnosis DM",
           "body": "Empat kriteria diagnosis diabetes mellitus menurut PERKENI 2021 (lihat ringkasan pada gambar).",
           "transcript": "Dalam mendiagnosis diabetes mellitus, diagnosis ditegakkan bila memenuhi satu dari empat kriteria.\nKriteria pertama, pemeriksaan glukosa plasma puasa. Yaitu kadar glukosa plasma puasa menunjukkan angka 126 mg/dL atau lebih yang diukur pada kondisi puasa minimal selama 8 jam.\nKriteria kedua, pemeriksaan glukosa plasma 2 jam post prandial atau setelah Tes Toleransi Glukosa Oral dengan beban glukosa 75 gram. Yaitu kadar glukosa plasma setelah 2 jam menunjukkan angka 200 mg/dL atau lebih.\nKriteria ketiga, pemeriksaan glukosa plasma sewaktu. Yaitu kadar glukosa plasma sewaktu menunjukkan angka 200 mg/dL atau lebih, disertai gejala klasik diabetes yaitu poliuria, polifagia, polidipsia, dan penurunan berat badan yang tidak dapat dijelaskan penyebabnya.\nKriteria keempat, pemeriksaan HbA1c. Yaitu kadar HbA1c menunjukkan angka 6,5% atau lebih.",
           "image": "/content/drive-retinopati/assets/slide8_8.png",
-          "imageLayout": "below"
+          "imageLayout": "below",
+          "imageCaption": "Kriteria Diagnosis DM menurut PERKENI 2021",
+          "references": [
+            "Perkumpulan Endokrinologi Indonesia (PERKENI). Pedoman Pengelolaan dan Pencegahan Diabetes Melitus Tipe 2 Dewasa di Indonesia 2021. Jakarta: PB PERKENI; 2021. hlm. 11 (Tabel 3. Kriteria Diagnosis Diabetes Melitus; keluhan klasik), hlm. 12 (Gambar 2. Cara Pelaksanaan TTGO)."
+          ],
+          "abbreviations": ["HbA1c, hemoglobin A1c"]
         },
         {
           "id": "modul1-p7",
@@ -176,7 +244,12 @@
           "body": "Klasifikasi kadar glukosa darah dan HbA1c untuk kategori diabetes, prediabetes, dan normal (lihat gambar).",
           "transcript": "Berdasarkan hasil pemeriksaan laboratorium, individu dapat dibedakan menjadi 3 kategori, yaitu diabetes, prediabetes, dan normal.\nKategori diabetes jika ditemukan HbA1c 6,5% atau lebih, glukosa darah puasa 126 mg/dL atau lebih, atau glukosa 2 jam setelah TTGO 200 mg/dL atau lebih.\nKategori prediabetes jika ditemukan HbA1c 5,7–6,4%, glukosa darah puasa 100–125 mg/dL, atau glukosa 2 jam setelah TTGO 140–199 mg/dL.\nKategori normal jika ditemukan HbA1c di bawah 5,7%, glukosa darah puasa 70–99 mg/dL, dan glukosa 2 jam setelah TTGO 70–139 mg/dL.\n\nNamun terdapat beberapa kondisi tertentu di mana pemeriksaan HbA1c tidak dapat diinterpretasikan secara valid pada keadaan yang mempengaruhi masa hidup eritrosit atau struktur hemoglobin, yaitu anemia, hemoglobinopati, riwayat transfusi darah dalam 2–3 bulan terakhir, dan gangguan fungsi ginjal. Pada kondisi-kondisi ini, HbA1c tidak dapat dipakai sebagai alat diagnosis maupun evaluasi, sehingga kita berpegang pada pemeriksaan glukosa plasma.",
           "image": "/content/drive-retinopati/assets/v52_slide9.png",
-          "imageLayout": "below"
+          "imageLayout": "below",
+          "imageCaption": "Klasifikasi kadar glukosa darah dan HbA1c menurut PERKENI 2021",
+          "references": [
+            "Perkumpulan Endokrinologi Indonesia (PERKENI). Pedoman Pengelolaan dan Pencegahan Diabetes Melitus Tipe 2 Dewasa di Indonesia 2021. Jakarta: PB PERKENI; 2021. hlm. 11 (kondisi yang membuat HbA1c tidak valid), hlm. 11–12 (prediabetes; Tabel 4. Kadar Tes Laboratorium Darah untuk Diagnosis Diabetes dan Prediabetes)."
+          ],
+          "abbreviations": ["HbA1c, hemoglobin A1c", "TTGO, tes toleransi glukosa oral"]
         },
         {
           "id": "modul1-p8",
@@ -187,267 +260,169 @@
           "body": "Hiperglikemia kronis memicu makroangiopati (jantung, otak, pembuluh darah perifer) dan mikroangiopati (retinopati, neuropati, nefropati).",
           "transcript": "Bagan ini menggambarkan alur terjadinya komplikasi diabetes mellitus yang berakar dari hiperglikemia kronis. Hiperglikemia yang berlangsung lama akan merusak pembuluh darah yang dibagi dalam dua kategori, yaitu makroangiopati dan mikroangiopati.\n\nMakroangiopati adalah kerusakan pembuluh darah besar yang dipicu oleh proses aterosklerosis yang berisiko menimbulkan penyakit kardiovaskular seperti penyakit jantung, stroke, dan penyakit arteri perifer.\n\nMikroangiopati adalah kerusakan pembuluh darah kecil, yang meliputi retinopati yaitu kerusakan pada pembuluh darah retina mata yang berujung pada gangguan penglihatan hingga kebutaan. Neuropati, yaitu kerusakan pada serabut saraf yang dapat bermanifestasi sebagai ulkus atau luka pada kaki diabetik. Dan nefropati, yaitu gangguan filtrasi pada glomerulus ginjal yang ditandai dengan kebocoran protein pada urin dan berpotensi menyebabkan gagal ginjal.\n\nSemakin lama individu menyandang diabetes, semakin besar pula peluang munculnya komplikasi sehingga pemeriksaan rutin diperlukan untuk mendeteksi komplikasi tersebut.",
           "image": "/content/drive-retinopati/assets/v52_slide10.png",
-          "imageLayout": "below"
+          "imageLayout": "below",
+          "imageCaption": "Alur komplikasi diabetes mellitus: makroangiopati dan mikroangiopati",
+          "references": [
+            "Perkumpulan Endokrinologi Indonesia (PERKENI). Pedoman Pengelolaan dan Pencegahan Diabetes Melitus Tipe 2 Dewasa di Indonesia 2021. Jakarta: PB PERKENI; 2021. hlm. 56 (penyulit menahun: makroangiopati dan mikroangiopati).",
+            "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 6 (RD ditemukan pada 75% pasien yang telah menderita DM selama 20 tahun)."
+          ]
         }
       ]
     },
     {
-      "id": "modul2",
-      "label": "Modul 2 — Retinopati Diabetika",
+      "id": "modul1-bab2",
+      "label": "BAB 2 – Retinopati Diabetika (RD)",
+      "group": "Modul 1",
       "pages": [
         {
           "id": "modul2-p1",
           "slide": 11,
           "type": "divider",
           "kicker": "BAB 2",
-          "title": "RETINOPATI DIABETIKA"
+          "title": "RETINOPATI DIABETIKA (RD)"
         },
         {
           "id": "modul2-p2",
           "slide": 12,
           "type": "hotspot",
           "kicker": "ANATOMI",
-          "title": "Anatomi mata",
-          "intro": "Klik setiap nomor (1–17) pada gambar untuk melihat nama dan fungsi bagian mata tersebut.",
-          "image": "/content/drive-retinopati/assets/slide12_8.png",
+          "title": "Anatomi Mata",
+          "intro": "Klik nomor 1–17 pada gambar untuk menampilkan nama dan fungsi bagian mata tersebut.",
+          "image": "/content/drive-retinopati/assets/anatomi-mata-2d.png",
           "points": [
             {
-              "x": 21.38,
-              "y": 17.12,
+              "x": 2.99,
+              "y": 15.59,
               "label": "Kornea",
               "body": "Lapisan bening tembus cahaya di bagian depan mata; membiaskan sebagian besar cahaya yang masuk sebelum melewati lensa.",
               "audio": "/content/drive-retinopati/assets/audio/modul2-p2-1.mp3"
             },
             {
-              "x": 22.88,
-              "y": 22.67,
+              "x": 2.99,
+              "y": 21.05,
               "label": "Iris",
               "body": "Selaput berwarna yang mengatur ukuran pupil, sehingga mengontrol jumlah cahaya yang masuk ke dalam mata.",
               "audio": "/content/drive-retinopati/assets/audio/modul2-p2-2.mp3"
             },
             {
-              "x": 87.75,
-              "y": 20.09,
+              "x": 97.01,
+              "y": 18.1,
               "label": "Bilik mata anterior",
               "body": "Rongga berisi aqueous humor antara kornea dan iris.",
               "audio": "/content/drive-retinopati/assets/audio/modul2-p2-3.mp3"
             },
             {
-              "x": 88.2,
-              "y": 24.72,
+              "x": 97.01,
+              "y": 22.74,
               "label": "Bilik mata posterior",
               "body": "Rongga kecil berisi aqueous humor antara iris dan lensa, tempat cairan ini diproduksi sebelum mengalir ke bilik anterior.",
               "audio": "/content/drive-retinopati/assets/audio/modul2-p2-4.mp3"
             },
             {
-              "x": 83.5,
-              "y": 29.38,
+              "x": 97.01,
+              "y": 27.48,
               "label": "Lensa",
               "body": "Struktur bening di belakang iris yang memfokuskan cahaya ke retina; bentuknya berubah saat berakomodasi (fokus dekat-jauh).",
               "audio": "/content/drive-retinopati/assets/audio/modul2-p2-5.mp3"
             },
             {
-              "x": 19.2,
-              "y": 27.96,
+              "x": 2.99,
+              "y": 26.05,
               "label": "Badan siliaris",
               "body": "Struktur otot yang menghasilkan aqueous humor dan mengatur bentuk lensa saat berakomodasi.",
               "audio": "/content/drive-retinopati/assets/audio/modul2-p2-6.mp3"
             },
             {
-              "x": 19.85,
-              "y": 33.47,
+              "x": 2.99,
+              "y": 31.32,
               "label": "Ora serrata",
               "body": "Batas tepi retina di bagian perifer, tempat retina menyatu dengan badan siliaris.",
               "audio": "/content/drive-retinopati/assets/audio/modul2-p2-7.mp3"
             },
             {
-              "x": 17.23,
-              "y": 48.36,
+              "x": 2.99,
+              "y": 45.62,
               "label": "Otot rektus medial",
               "body": "Salah satu otot ekstraokular yang menggerakkan bola mata ke arah dalam (nasal).",
               "audio": "/content/drive-retinopati/assets/audio/modul2-p2-8.mp3"
             },
             {
-              "x": 87.83,
-              "y": 48.89,
+              "x": 97.01,
+              "y": 45.8,
               "label": "Otot rektus lateral",
               "body": "Otot ekstraokular yang menggerakkan bola mata ke arah luar (temporal).",
               "audio": "/content/drive-retinopati/assets/audio/modul2-p2-9.mp3"
             },
             {
-              "x": 44,
-              "y": 48.4,
+              "x": 35.55,
+              "y": 53.62,
               "label": "Badan vitreus",
               "body": "Gel bening yang mengisi rongga antara lensa dan retina, menjaga bentuk bola mata.",
               "audio": "/content/drive-retinopati/assets/audio/modul2-p2-10.mp3"
             },
             {
-              "x": 83.6,
-              "y": 60.49,
+              "x": 97.01,
+              "y": 57.24,
               "label": "Sklera",
               "body": "Lapisan luar mata yang keras dan berwarna putih; berfungsi sebagai pelindung struktural bola mata.",
               "audio": "/content/drive-retinopati/assets/audio/modul2-p2-11.mp3"
             },
             {
-              "x": 83.65,
-              "y": 65.16,
+              "x": 97.01,
+              "y": 61.71,
               "label": "Koroid",
               "body": "Lapisan pembuluh darah di antara sklera dan retina yang memberi nutrisi ke retina bagian luar.",
               "audio": "/content/drive-retinopati/assets/audio/modul2-p2-12.mp3"
             },
             {
-              "x": 83.63,
-              "y": 70,
+              "x": 97.01,
+              "y": 66.53,
               "label": "Retina",
               "body": "Lapisan saraf peka cahaya di bagian dalam mata — di sinilah kerusakan pembuluh darah akibat diabetes (retinopati diabetika) terjadi.",
               "audio": "/content/drive-retinopati/assets/audio/modul2-p2-13.mp3"
             },
             {
-              "x": 54.28,
-              "y": 94.56,
+              "x": 53.6,
+              "y": 90.26,
               "label": "Fovea",
               "body": "Titik di tengah makula dengan ketajaman penglihatan tertinggi; edema pada area ini (edema makula) sangat memengaruhi tajam penglihatan.",
               "audio": "/content/drive-retinopati/assets/audio/modul2-p2-14.mp3"
             },
             {
-              "x": 18.48,
-              "y": 81.38,
+              "x": 2.99,
+              "y": 77.26,
               "label": "Selubung dural",
               "body": "Lapisan pelindung yang membungkus saraf optik, bersambungan dengan meningen otak.",
               "audio": "/content/drive-retinopati/assets/audio/modul2-p2-15.mp3"
             },
             {
-              "x": 12.85,
-              "y": 87.38,
+              "x": 2.99,
+              "y": 83.24,
               "label": "Arteri & vena retina sentralis",
               "body": "Pembuluh darah utama yang memperdarahi dan mengalirkan darah dari retina, masuk melalui saraf optik.",
               "audio": "/content/drive-retinopati/assets/audio/modul2-p2-16.mp3"
             },
             {
-              "x": 19.98,
-              "y": 93.38,
+              "x": 2.99,
+              "y": 88.61,
               "label": "Saraf optik",
               "body": "Berkas serat saraf yang menghantarkan sinyal visual dari retina ke otak.",
               "audio": "/content/drive-retinopati/assets/audio/modul2-p2-17.mp3"
             }
           ],
-          "masks": [
-            {
-              "x": 18.15,
-              "y": 14.67,
-              "w": 6.45,
-              "h": 4.89
-            },
-            {
-              "x": 21.1,
-              "y": 20.18,
-              "w": 3.55,
-              "h": 4.98
-            },
-            {
-              "x": 13.75,
-              "y": 25.51,
-              "w": 10.9,
-              "h": 4.89
-            },
-            {
-              "x": 15.05,
-              "y": 31.02,
-              "w": 9.6,
-              "h": 4.89
-            },
-            {
-              "x": 9.85,
-              "y": 45.87,
-              "w": 14.75,
-              "h": 4.98
-            },
-            {
-              "x": 12.35,
-              "y": 78.67,
-              "w": 12.25,
-              "h": 5.42
-            },
-            {
-              "x": 1.05,
-              "y": 84.89,
-              "w": 23.6,
-              "h": 4.98
-            },
-            {
-              "x": 15.35,
-              "y": 90.67,
-              "w": 9.25,
-              "h": 5.42
-            },
-            {
-              "x": 80.65,
-              "y": 17.6,
-              "w": 14.2,
-              "h": 4.98
-            },
-            {
-              "x": 80.65,
-              "y": 21.96,
-              "w": 15.1,
-              "h": 5.51
-            },
-            {
-              "x": 80.65,
-              "y": 26.93,
-              "w": 5.7,
-              "h": 4.89
-            },
-            {
-              "x": 80.6,
-              "y": 46.4,
-              "w": 14.45,
-              "h": 4.98
-            },
-            {
-              "x": 80.65,
-              "y": 58.04,
-              "w": 5.9,
-              "h": 4.89
-            },
-            {
-              "x": 80.65,
-              "y": 62.67,
-              "w": 6,
-              "h": 4.98
-            },
-            {
-              "x": 80.65,
-              "y": 67.64,
-              "w": 5.95,
-              "h": 4.71
-            },
-            {
-              "x": 44.75,
-              "y": 3.38,
-              "w": 14.25,
-              "h": 7.91
-            },
-            {
-              "x": 38.5,
-              "y": 45.51,
-              "w": 11.25,
-              "h": 7.82
-            },
-            {
-              "x": 51.9,
-              "y": 92.6,
-              "w": 4.75,
-              "h": 3.91
-            }
+          "imageCaption": "Struktur anatomi bola mata (potongan horizontal).",
+          "references": [
+            "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 7–9 (makula, fovea, dan kepadatan sel kerucut), hlm. 13–14 (sawar darah-retina bagian dalam).",
+            "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3. hlm. 506 (sel endotel dengan tight junction sebagai sawar darah-retina bagian dalam; perisit).",
+            "American Academy of Ophthalmology (AAO). AAO 5 Neuro-Ophthalmology (2025-2026). Basic and Clinical Science Course (BCSC) Section 5. San Francisco: AAO; 2025. hlm. 27 (jaras aferen penglihatan dimulai di retina), hlm. 29 (akson sel ganglion membentuk saraf optik), hlm. 33 (korteks visual primer)."
           ]
         },
         {
           "id": "modul2-p3",
           "slide": 13,
           "type": "cards",
-          "kicker": "RETINOPATI DIABETIKA",
-          "title": "Apa itu retinopati diabetika?",
+          "kicker": "DEFINISI",
+          "title": "Apa Itu Retinopati Diabetika (RD)?",
           "transcript": "Retinopati diabetika adalah penyakit pada pembuluh darah mikro retina yang bersifat kronik dan progresif, yang dapat mengancam penglihatan.\n\nKerusakan kapiler retina akibat paparan hiperglikemia kronis menjadi pemicu utama kerusakan dinding kapiler mikrovaskular di retina. Kerusakan ini menyebabkan kebocoran cairan dan protein plasma serta penyumbatan kapiler yang menyebabkan kondisi hipoksia pada retina. Retina yang mengalami iskemia memicu pembentukan pembuluh darah baru atau neovaskularisasi abnormal. Meskipun insidensi dan prevalensi komplikasi ini terus meningkat seiring lonjakan populasi diabetes, risiko kebutaan akibat retinopati diabetika dapat dicegah apabila dideteksi dan ditangani secara dini.\n\nRetinopati diabetika berjalan progresif menurut klasifikasi International Clinical Diabetic Retinopathy Severity Scale atau ICDRS. Berawal dari retina normal berkembang menjadi nonproliferative diabetic retinopathy atau NPDR berlanjut menjadi NPDR sedang hingga berat dengan penambahan lesi perdarahan pada retina sampai akhirnya mencapai fase proliferative diabetic retinopathy atau PDR yang ditandai dengan terbentuknya neovaskularisasi, perdarahan vitreous, atau ablasi traksional. Dengan bertambahnya derajat keparahan retinopati diabetika maka risiko kebutaan semakin meningkat.",
           "columns": 3,
           "cards": [
@@ -466,7 +441,18 @@
           ],
           "trailingImage": "/content/drive-retinopati/assets/slide13_15.png",
           "trailingCaption": "Spektrum keparahan retinopati diabetika (ICDRS)",
-          "trailingNote": "Tanpa RD → Non-proliferative RD (NPDR) ringan → sedang → berat → Proliferative RD (PDR), seiring meningkatnya risiko kebutaan."
+          "trailingNote": "Tanpa RD → Non-proliferative RD (NPDR) ringan → sedang → berat → Proliferative RD (PDR), seiring meningkatnya risiko kebutaan.",
+          "references": [
+            "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 5 (definisi RD), hlm. 6 (skrining awal dan kontrol teratur dapat menghindari 90% kebutaan akibat RD), hlm. 10–14 (patofisiologi serta klasifikasi NPDR dan PDR).",
+            "Wilkinson CP, Ferris FL 3rd, Klein RE, et al; Global Diabetic Retinopathy Project Group. Proposed international clinical diabetic retinopathy and diabetic macular edema disease severity scales. Ophthalmology. 2003;110(9):1677–1682. doi:10.1016/S0161-6420(03)00475-5",
+            "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 101 (definisi NPDR dan PDR), hlm. 108 (derajat RD yang lebih berat berkaitan dengan progresi yang lebih cepat menjadi PDR).",
+            "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3. hlm. 507–508 (klasifikasi dan tanda klinis RD)."
+          ],
+          "abbreviations": [
+            "ICDRS, International Clinical Diabetic Retinopathy Severity Scale",
+            "NPDR, non-proliferative diabetic retinopathy",
+            "PDR, proliferative diabetic retinopathy"
+          ]
         },
         {
           "id": "modul2-p4",
@@ -477,7 +463,15 @@
           "body": "•  Sekitar 93 juta orang di dunia menderita retinopati diabetika.\n•  Sekitar sepertiga populasi diabetes global diperkirakan akan mengidap RD.\n•  Di Indonesia, prevalensi RD pada populasi usia 30+ tahun dengan DM Tipe 2 mencapai 43,1%.\n•  Insidensi tertinggi pada pasien dengan durasi DM > 10 tahun.",
           "transcript": "Beban penyakit retinopati diabetika di dunia dilaporkan sebanyak 93 juta orang dengan perkiraan sekitar 28 juta orang di antaranya sudah mengalami retinopati diabetika yang mengancam penglihatan.\nDinyatakan bahwa, sekitar sepertiga penyandang diabetes di dunia mengalami retinopati diabetika.\n\nData di Indonesia dari penelitian Sasongko dan kawan-kawan menunjukkan prevalensi retinopati diabetika pada populasi usia 30 tahun ke atas dengan diabetes tipe 2 sebesar 43,1%, dengan 26,3% sudah mengalami retinopati diabetika yang mengancam penglihatan. Dengan kata lain, hampir separuh pasien diabetes tipe 2 menderita retinopati diabetika, dan 1 dari 4 penderita diabetes tipe 2 menderita retinopati diabetika yang mengancam penglihatan. Angka ini menunjukkan prevalensi retinopati diabetika di Indonesia melampaui angka rata-rata global.\n\nTemuan lain pada penelitian di Indonesia, risiko retinopati diabetika meningkat seiring lamanya menyandang diabetes dengan insidensi tertinggi ditemukan pada pasien dengan durasi diabetes lebih dari 10 tahun.",
           "image": "/content/drive-retinopati/assets/chart_beban_rd.png",
-          "imageCaption": "Prevalensi blindness, VTDR, dan DR overall (%) — Global, Asia-Pacific high income, China, India, Indonesia."
+          "imageCaption": "Prevalensi blindness, VTDR, dan DR overall (%) — Global, Asia-Pacific high income, China, India, Indonesia.",
+          "references": [
+            "Yau JWY, Rogers SL, Kawasaki R, et al. Global prevalence and major risk factors of diabetic retinopathy. Diabetes Care. 2012;35(3):556–564. doi:10.2337/dc11-1909",
+            "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 101 (sepertiga penyandang DM memiliki RD dan sepertiganya mengancam penglihatan).",
+            "Sasongko MB, Widyaputri F, Agni AN, et al. Prevalence of diabetic retinopathy and blindness in Indonesian adults with type 2 diabetes. Am J Ophthalmol. 2017;181:79–87. doi:10.1016/j.ajo.2017.06.019 (studi JOGED.COM).",
+            "Sasongko MB, Agni AN, Wardhana FS, et al. Rationale and methodology for a community-based study of diabetic retinopathy in an Indonesian population with type 2 diabetes mellitus: the Jogjakarta Eye Diabetic Study in the Community. Ophthalmic Epidemiol. 2017;24(1):48–56. doi:10.1080/09286586.2016.1255763",
+            "Sasongko MB, Febryanto GA, Widyaputri F, et al. Incidence and progression of diabetic retinopathy and blindness in Indonesian adults with type 2 diabetes. PLoS One. 2025. PMCID: PMC12396671.",
+            "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 6 (prevalensi RD pada penyandang DM tipe 2 di Indonesia 43,1%)."
+          ]
         },
         {
           "id": "modul2-p5",
@@ -594,7 +588,17 @@
               "h": 5.6
             }
           ],
-          "ordered": true
+          "ordered": true,
+          "imageCaption": "Alur patofisiologi retinopati diabetika.",
+          "references": [
+            "Antonetti DA, Klein R, Gardner TW. Diabetic retinopathy. N Engl J Med. 2012;366(13):1227–1239. doi:10.1056/NEJMra1005073",
+            "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 102 (patogenesis RD), hlm. 108 (Clinical Pearl: penurunan penglihatan akibat kebocoran kapiler/DME, oklusi kapiler, serta sekuel iskemia berupa neovaskularisasi, perdarahan vitreus, ablasio retina traksional, dan glaukoma neovaskular), hlm. 121–122 (mekanisme DME; DME sebagai penyebab umum penurunan penglihatan).",
+            "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 10 (perisit, nonperfusi kapiler, VEGF), hlm. 12 (PDR, perdarahan vitreus, ablasio retina traksional).",
+            "Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162. hlm. P86 (RD sebagai penyakit inflamasi; leukostasis).",
+            "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3. hlm. 506–508 (perisit, mikroaneurisma, sawar darah-retina).",
+            "Duh EJ, Sun JK, Stitt AW. Diabetic retinopathy: current understanding, mechanisms, and treatment strategies. JCI Insight. 2017;2(14):e93751. doi:10.1172/jci.insight.93751"
+          ],
+          "abbreviations": ["PDR, proliferative diabetic retinopathy", "VEGF, vascular endothelial growth factor"]
         },
         {
           "id": "modul2-p6",
@@ -625,6 +629,12 @@
               "body": "Garis tampak bengkok — khas edema makula.",
               "image": "/content/drive-retinopati/assets/v52_gejala_distorsi.jpg"
             }
+          ],
+          "references": [
+            "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 16 (gejala klinis RD).",
+            "Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162. hlm. P93 (studi Joslin: pasien tidak menyadari penyakit matanya), hlm. P99 (RD dapat asimtomatik selama bertahun-tahun, bahkan pada stadium lanjut).",
+            "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 76 (metamorfopsia atau distorsi penglihatan pada kelainan makula), hlm. 365 (perdarahan vitreus sebagai penyebab penurunan penglihatan mendadak; PDR sebagai penyebab tersering pada dewasa), hlm. 370 (floaters akibat darah atau kekeruhan vitreus).",
+            "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3. hlm. 506–507 (pasien sering tidak menyadari retinopatinya)."
           ]
         },
         {
@@ -671,7 +681,17 @@
               "body": "Riwayat keluarga menambah risiko.",
               "narration": "Terakhir, faktor genetik. Adanya riwayat keluarga dengan komplikasi mikrovaskular serupa meningkatkan kerentanan terjadinya retinopati diabetika."
             }
-          ]
+          ],
+          "references": [
+            "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 101 (durasi DM berhubungan langsung dengan prevalensi RD), hlm. 105–106 (target HbA1c; DCCT), hlm. 108 (hipertensi; lipid serum dan hard exudate).",
+            "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 14–15 (faktor risiko yang dapat dan tidak dapat dimodifikasi).",
+            "Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162. hlm. P85, P89–P90 (durasi DM, kontrol glikemik, hipertensi, faktor genetik), hlm. P95 (kehamilan).",
+            "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3. hlm. 507 (faktor risiko RD, termasuk kehamilan).",
+            "Diabetes Control and Complications Trial Research Group. The effect of intensive treatment of diabetes on the development and progression of long-term complications in insulin-dependent diabetes mellitus. N Engl J Med. 1993;329(14):977–986. doi:10.1056/NEJM199309303291401",
+            "UK Prospective Diabetes Study Group. Tight blood pressure control and risk of macrovascular and microvascular complications in type 2 diabetes: UKPDS 38. BMJ. 1998;317(7160):703–713. doi:10.1136/bmj.317.7160.703",
+            "Chew EY, Mills JL, Metzger BE, et al. Metabolic control and progression of retinopathy: the Diabetes in Early Pregnancy Study. Diabetes Care. 1995;18(5):631–637. doi:10.2337/diacare.18.5.631"
+          ],
+          "abbreviations": ["HbA1c, hemoglobin A1c"]
         },
         {
           "id": "modul2-p8",
@@ -711,13 +731,24 @@
               "left": "Faktor genetik",
               "right": "Riwayat keluarga dengan retinopati diabetika menambah risiko seseorang mengalami kondisi yang sama."
             }
-          ]
+          ],
+          "references": [
+            "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 101 (durasi DM berhubungan langsung dengan prevalensi RD), hlm. 105–106 (target HbA1c; DCCT), hlm. 108 (hipertensi; lipid serum dan hard exudate).",
+            "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 14–15 (faktor risiko yang dapat dan tidak dapat dimodifikasi).",
+            "Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162. hlm. P85, P89–P90 (durasi DM, kontrol glikemik, hipertensi, faktor genetik), hlm. P95 (kehamilan).",
+            "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3. hlm. 507 (faktor risiko RD, termasuk kehamilan).",
+            "Diabetes Control and Complications Trial Research Group. The effect of intensive treatment of diabetes on the development and progression of long-term complications in insulin-dependent diabetes mellitus. N Engl J Med. 1993;329(14):977–986. doi:10.1056/NEJM199309303291401",
+            "UK Prospective Diabetes Study Group. Tight blood pressure control and risk of macrovascular and microvascular complications in type 2 diabetes: UKPDS 38. BMJ. 1998;317(7160):703–713. doi:10.1136/bmj.317.7160.703",
+            "Chew EY, Mills JL, Metzger BE, et al. Metabolic control and progression of retinopathy: the Diabetes in Early Pregnancy Study. Diabetes Care. 1995;18(5):631–637. doi:10.2337/diacare.18.5.631"
+          ],
+          "abbreviations": ["HbA1c, hemoglobin A1c"]
         }
       ]
     },
     {
-      "id": "modul3",
-      "label": "Modul 3 — Skrining & Tatalaksana",
+      "id": "modul1-bab3",
+      "label": "BAB 3 – Skrining & Tatalaksana Retinopati Diabetika",
+      "group": "Modul 1",
       "pages": [
         {
           "id": "modul3-p1",
@@ -753,7 +784,12 @@
               ]
             ]
           },
-          "transcript": "Istilah skrining dan deteksi dini sering dianggap sama, padahal keduanya berbeda. Skrining adalah pencarian penyakit pada orang yang merasa sehat. Dalam definisi WHO, skrining bertujuan menemukan penyakit atau lesi prekursor yang belum dikenali pada populasi yang tampak sehat dan tidak bergejala. Sementara itu, deteksi dini atau early diagnosis adalah upaya mengenali penyakit secepat mungkin pada orang yang sudah mulai merasakan gejala.\n\nDari segi kondisi pasien, skrining ditujukan pada orang yang tidak memiliki gejala atau asimtomatik, sedangkan deteksi dini ditujukan pada orang yang sudah memiliki gejala atau keluhan awal.\n\nDari segi sasaran, skrining menyasar kelompok besar, baik populasi umum maupun kelompok risiko tertentu, sedangkan deteksi dini menyasar individu yang merasa ada sesuatu yang “salah” pada tubuhnya. Contoh skrining adalah Pap smear rutin, mamografi tahunan, dan pemeriksaan gula darah. Contoh deteksi dini adalah seseorang yang memeriksakan diri ke dokter karena muncul benjolan atau batuk yang tidak kunjung sembuh, lalu segera dievaluasi.\n\nBagaimana penerapannya pada retinopati diabetika? Skrining retinopati diabetika berarti memeriksa retina pada semua penyandang diabetes secara berkala, walaupun belum ada keluhan penglihatan. Sementara itu, pasien diabetes yang datang dengan keluhan penglihatan, misalnya penglihatan kabur atau floaters, bukan lagi menjadi sasaran skrining. Pasien seperti ini harus segera diperiksa dan dirujuk ke layanan mata untuk tatalaksana lebih lanjut."
+          "transcript": "Istilah skrining dan deteksi dini sering dianggap sama, padahal keduanya berbeda. Skrining adalah pencarian penyakit pada orang yang merasa sehat. Dalam definisi WHO, skrining bertujuan menemukan penyakit atau lesi prekursor yang belum dikenali pada populasi yang tampak sehat dan tidak bergejala. Sementara itu, deteksi dini atau early diagnosis adalah upaya mengenali penyakit secepat mungkin pada orang yang sudah mulai merasakan gejala.\n\nDari segi kondisi pasien, skrining ditujukan pada orang yang tidak memiliki gejala atau asimtomatik, sedangkan deteksi dini ditujukan pada orang yang sudah memiliki gejala atau keluhan awal.\n\nDari segi sasaran, skrining menyasar kelompok besar, baik populasi umum maupun kelompok risiko tertentu, sedangkan deteksi dini menyasar individu yang merasa ada sesuatu yang “salah” pada tubuhnya. Contoh skrining adalah Pap smear rutin, mamografi tahunan, dan pemeriksaan gula darah. Contoh deteksi dini adalah seseorang yang memeriksakan diri ke dokter karena muncul benjolan atau batuk yang tidak kunjung sembuh, lalu segera dievaluasi.\n\nBagaimana penerapannya pada retinopati diabetika? Skrining retinopati diabetika berarti memeriksa retina pada semua penyandang diabetes secara berkala, walaupun belum ada keluhan penglihatan. Sementara itu, pasien diabetes yang datang dengan keluhan penglihatan, misalnya penglihatan kabur atau floaters, bukan lagi menjadi sasaran skrining. Pasien seperti ini harus segera diperiksa dan dirujuk ke layanan mata untuk tatalaksana lebih lanjut.",
+          "references": [
+            "World Health Organization (WHO). Guide to cancer early diagnosis. Geneva: WHO; 2017. ISBN 978-92-4-151194-0. hlm. 8–9 (definisi early diagnosis dan screening).",
+            "WHO Regional Office for Europe. Diabetic retinopathy screening: a short guide. Increase effectiveness, maximize benefits and minimize harm. Copenhagen: WHO Regional Office for Europe; 2020. ISBN 978-92-890-5532-1. hlm. 7 (tujuan skrining RD pada penyandang DM yang asimtomatik; pasien dengan gejala dikelola di layanan mata, bukan melalui program skrining)."
+          ],
+          "abbreviations": ["WHO, World Health Organization"]
         },
         {
           "id": "modul3-p3",
@@ -763,7 +799,13 @@
           "title": "Skrining mendeteksi sebelum terlambat",
           "image": "/content/drive-retinopati/assets/v52_slide20.png",
           "imageCaption": "Perjalanan retinopati diabetika: skrining menemukan RD pada screening window, sebelum muncul gangguan penglihatan.",
-          "transcript": "Berikut menggambarkan perjalanan gejala retinopati diabetika dari waktu ke waktu. Pada fase pre-klinis penglihatan pasien masih normal dan belum ada lesi mikrovaskular yang tampak pada pemeriksaan retina. Pada fase retinopati diabetika awal, mulai muncul kelainan mikrovaskular seperti mikroaneurisma dan bintik perdarahan. Pada fase awal ini, pasien belum merasakan gangguan penglihatan walaupun sudah ada kelainan pada retina. Kemudian apabila terjadi perburukan, pasien memasuki fase retinopati diabetika berat dengan munculnya keluhan bintik-bintik hitam pada penglihatan. Pada fase ini, pasien harus segera dirujuk ke dokter spesialis mata untuk penanganan lebih lanjut guna mencegah perburukan retinopati diabetika yang lebih berat. Jika terlambat terdeteksi, pasien akan masuk ke fase retinopati diabetika lanjut yang ditandai dengan proliferative diabetic retinopathy atau PDR, edema makula diabetika hingga perdarahan vitreus massif.\n\nDari bagan ini, hal terpenting adalah mampu mendeteksi kondisi retinopati diabetika saat pasien belum mengalami gangguan penglihatan yaitu pada periode screening window pada fase pre-klinis hingga fase awal.\n\nKebutaan permanen pada retinopati diabetika dapat dicegah dengan skrining teratur, deteksi dini, dan intervensi tepat waktu. Pesan penting yang harus kita sampaikan pada pasien diabetes yaitu jangan menunggu penglihatan kabur untuk melakukan pemeriksaan mata."
+          "transcript": "Berikut menggambarkan perjalanan gejala retinopati diabetika dari waktu ke waktu. Pada fase pre-klinis penglihatan pasien masih normal dan belum ada lesi mikrovaskular yang tampak pada pemeriksaan retina. Pada fase retinopati diabetika awal, mulai muncul kelainan mikrovaskular seperti mikroaneurisma dan bintik perdarahan. Pada fase awal ini, pasien belum merasakan gangguan penglihatan walaupun sudah ada kelainan pada retina. Kemudian apabila terjadi perburukan, pasien memasuki fase retinopati diabetika berat dengan munculnya keluhan bintik-bintik hitam pada penglihatan. Pada fase ini, pasien harus segera dirujuk ke dokter spesialis mata untuk penanganan lebih lanjut guna mencegah perburukan retinopati diabetika yang lebih berat. Jika terlambat terdeteksi, pasien akan masuk ke fase retinopati diabetika lanjut yang ditandai dengan proliferative diabetic retinopathy atau PDR, edema makula diabetika hingga perdarahan vitreus massif.\n\nDari bagan ini, hal terpenting adalah mampu mendeteksi kondisi retinopati diabetika saat pasien belum mengalami gangguan penglihatan yaitu pada periode screening window pada fase pre-klinis hingga fase awal.\n\nKebutaan permanen pada retinopati diabetika dapat dicegah dengan skrining teratur, deteksi dini, dan intervensi tepat waktu. Pesan penting yang harus kita sampaikan pada pasien diabetes yaitu jangan menunggu penglihatan kabur untuk melakukan pemeriksaan mata.",
+          "references": [
+            "WHO Regional Office for Europe. Diabetic retinopathy screening: a short guide. Increase effectiveness, maximize benefits and minimize harm. Copenhagen: WHO Regional Office for Europe; 2020. ISBN 978-92-890-5532-1. hlm. 7 (tujuan skrining), hlm. 10 (perjalanan alamiah dan fase laten), hlm. 19–20 (ambang rujukan).",
+            "Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162. hlm. P99–P100 (RD dapat asimtomatik selama bertahun-tahun; tujuan program skrining; efektivitas terapi).",
+            "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3. hlm. 507 (skrining retina teratur menurunkan risiko kehilangan penglihatan berat)."
+          ],
+          "abbreviations": ["PDR, proliferative diabetic retinopathy"]
         },
         {
           "id": "modul3-p4",
@@ -772,7 +814,18 @@
           "kicker": "PENTINGNYA SKRINING",
           "title": "Mengapa skrining retinopati diabetika penting?",
           "body": "•  Merupakan indikator global — cakupan skrining ≥ 80% individu dengan diabetes (WHO Eye Care Indicator Menu/ECIM).\n•  Merupakan problem kesehatan masyarakat yang penting.\n•  Perkembangan dan perjalanan alamiah penyakit RD sudah dipahami dengan baik.\n•  Alat skrining RD sederhana, aman, dan tervalidasi.\n•  Bila terdeteksi dini, tersedia pilihan terapi yang lebih efektif dibandingkan diagnosis yang terlambat.",
-          "transcript": "Mengapa skrining retinopati diabetika dianggap penting?\nAlasan pertama, skrining retinopati diabetika merupakan indikator global. Dalam Eye Care Indicator Menu atau ECIM yang diterbitkan WHO, cakupan skrining retina pada penyandang diabetes ditetapkan sebagai salah satu indikator inti. Indikator ini mengukur persentase penyandang diabetes yang menjalani pemeriksaan retina secara berkala sesuai pedoman nasional. Sebagai contoh standar mutu program, panduan WHO menyebutkan target cakupan 80%, artinya setidaknya 8 dari 10 penyandang diabetes sudah menjalani skrining dalam satu tahun terakhir.\nAlasan kedua, retinopati diabetika merupakan masalah kesehatan masyarakat yang penting. Dengan terus bertambahnya penyandang diabetes, maka bertambah pula kasus retinopati diabetika di masyarakat. Dan retinopati diabetika dilaporkan menjadi salah satu penyebab utama kebutaan yang dapat dicegah pada usia produktif sehingga perlu penanganan yang tepat.\nAlasan ketiga, perkembangan dan perjalanan alamiah retinopati diabetika sudah dipahami dengan baik, yaitu transisi fase awal tanpa gejala, fase pre-proliferatif hingga fase proliferatif yang mengancam penglihatan.\nAlasan keempat, saat ini tersedia alat pemeriksaan retinopati diabetika yang sederhana, aman, dan tervalidasi bahkan sangat mungkin diintegrasikan ke layanan kesehatan primer.\nAlasan kelima, bila terdeteksi dini, tersedia pilihan terapi mulai dari laser fotokoagulasi, injeksi anti-VEGF, dan kontrol metabolik yang terbukti efektif dapat mencegah atau mengurangi kehilangan penglihatan sebelum terjadinya komplikasi lebih lanjut."
+          "transcript": "Mengapa skrining retinopati diabetika dianggap penting?\nAlasan pertama, skrining retinopati diabetika merupakan indikator global. Dalam Eye Care Indicator Menu atau ECIM yang diterbitkan WHO, cakupan skrining retina pada penyandang diabetes ditetapkan sebagai salah satu indikator inti. Indikator ini mengukur persentase penyandang diabetes yang menjalani pemeriksaan retina secara berkala sesuai pedoman nasional. Sebagai contoh standar mutu program, panduan WHO menyebutkan target cakupan 80%, artinya setidaknya 8 dari 10 penyandang diabetes sudah menjalani skrining dalam satu tahun terakhir.\nAlasan kedua, retinopati diabetika merupakan masalah kesehatan masyarakat yang penting. Dengan terus bertambahnya penyandang diabetes, maka bertambah pula kasus retinopati diabetika di masyarakat. Dan retinopati diabetika dilaporkan menjadi salah satu penyebab utama kebutaan yang dapat dicegah pada usia produktif sehingga perlu penanganan yang tepat.\nAlasan ketiga, perkembangan dan perjalanan alamiah retinopati diabetika sudah dipahami dengan baik, yaitu transisi fase awal tanpa gejala, fase pre-proliferatif hingga fase proliferatif yang mengancam penglihatan.\nAlasan keempat, saat ini tersedia alat pemeriksaan retinopati diabetika yang sederhana, aman, dan tervalidasi bahkan sangat mungkin diintegrasikan ke layanan kesehatan primer.\nAlasan kelima, bila terdeteksi dini, tersedia pilihan terapi mulai dari laser fotokoagulasi, injeksi anti-VEGF, dan kontrol metabolik yang terbukti efektif dapat mencegah atau mengurangi kehilangan penglihatan sebelum terjadinya komplikasi lebih lanjut.",
+          "references": [
+            "World Health Organization (WHO). Eye care indicator menu (ECIM): a tool for monitoring strategies and actions for eye care provision. Geneva: WHO; 2022. ISBN 978-92-4-004952-9. hlm. 22 (Core Indicator 10: retina screening coverage for people with diabetes).",
+            "WHO Regional Office for Europe. Diabetic retinopathy screening: a short guide. Increase effectiveness, maximize benefits and minimize harm. Copenhagen: WHO Regional Office for Europe; 2020. ISBN 978-92-890-5532-1. hlm. 7 (prinsip Wilson & Jungner), hlm. 9–10, 12, 14 (penerapan prinsip skrining pada RD; alat skrining), hlm. 39 (contoh standar cakupan skrining 80%).",
+            "Wilson JMG, Jungner G. Principles and practice of screening for disease. Public Health Papers No. 34. Geneva: WHO; 1968.",
+            "Andermann A, Blancquaert I, Beauchamp S, Déry V. Revisiting Wilson and Jungner in the genomic age: a review of screening criteria over the past 40 years. Bull World Health Organ. 2008;86(4):317–319. doi:10.2471/BLT.07.050112"
+          ],
+          "abbreviations": [
+            "ECIM, Eye Care Indicator Menu",
+            "VEGF, vascular endothelial growth factor",
+            "WHO, World Health Organization"
+          ]
         },
         {
           "id": "modul3-p5",
@@ -782,7 +835,14 @@
           "title": "Tantangan dalam skrining retinopati diabetika",
           "image": "/content/drive-retinopati/assets/v52_slide22.png",
           "imageCaption": "Tantangan skrining RD (adaptasi PERKENI).",
-          "transcript": "Sayangnya, walaupun manfaat skrining retinopati diabetika sudah diketahui, pelaksanaan di lapangan menemukan banyak tantangan.\nPertama, kesadaran pasien. Banyak pasien dengan diabetes belum mengetahui bahwa diabetes dapat merusak mata dan kerusakan awal pada mata dapat muncul tanpa gejala.\nKedua, akses dan distribusi. Indonesia adalah negara kepulauan dengan hambatan geografis dan persebaran fasilitas kesehatan yang tidak merata seringkali menyulitkan pasien di berbagai wilayah untuk menjangkau layanan pemeriksaan mata.\nKetiga, keterbatasan tenaga kesehatan. Tenaga kesehatan dengan kemampuan melakukan skrining retinopati diabetika dan menjalankan alur rujukan secara tepat masih terbatas.\nKeempat, ketersediaan alat. Alat untuk deteksi dini retinopati diabetika yaitu kamera fundus belum tersedia di fasilitas kesehatan primer dan lebih banyak tersedia di rumah sakit rujukan.\n\nDi sisi lain terdapat tantangan pada pengelolaan dan integrasi layanan.\nDiperlukan integrasi layanan antara klinik diabetes fasilitas kesehatan primer dan layanan rujukan mata agar alur pasien tidak terputus.\nDari aspek pembiayaan, diperlukan skema penjaminan dan alokasi anggaran untuk program skrining retinopati diabetika.\nKemudian diperlukan standarisasi pencatatan data yang terpadu pada pasien diabetes untuk melacak riwayat skrining, tatalaksana, dan kepatuhan kontrol pasien.\nTerakhir, sistem kecerdasan buatan saat ini berpotensi untuk dapat menjembatani keterbatasan dokter spesialis mata dalam mendeteksi retinopati diabetika, namun implementasinya masih memerlukan infrastruktur dan regulasi yang matang.\n\nMenjawab tantangan-tantangan tersebut secara komprehensif adalah kunci agar cakupan skrining retinopati diabetika dapat tercapai secara merata dan efektif."
+          "transcript": "Sayangnya, walaupun manfaat skrining retinopati diabetika sudah diketahui, pelaksanaan di lapangan menemukan banyak tantangan.\nPertama, kesadaran pasien. Banyak pasien dengan diabetes belum mengetahui bahwa diabetes dapat merusak mata dan kerusakan awal pada mata dapat muncul tanpa gejala.\nKedua, akses dan distribusi. Indonesia adalah negara kepulauan dengan hambatan geografis dan persebaran fasilitas kesehatan yang tidak merata seringkali menyulitkan pasien di berbagai wilayah untuk menjangkau layanan pemeriksaan mata.\nKetiga, keterbatasan tenaga kesehatan. Tenaga kesehatan dengan kemampuan melakukan skrining retinopati diabetika dan menjalankan alur rujukan secara tepat masih terbatas.\nKeempat, ketersediaan alat. Alat untuk deteksi dini retinopati diabetika yaitu kamera fundus belum tersedia di fasilitas kesehatan primer dan lebih banyak tersedia di rumah sakit rujukan.\n\nDi sisi lain terdapat tantangan pada pengelolaan dan integrasi layanan.\nDiperlukan integrasi layanan antara klinik diabetes fasilitas kesehatan primer dan layanan rujukan mata agar alur pasien tidak terputus.\nDari aspek pembiayaan, diperlukan skema penjaminan dan alokasi anggaran untuk program skrining retinopati diabetika.\nKemudian diperlukan standarisasi pencatatan data yang terpadu pada pasien diabetes untuk melacak riwayat skrining, tatalaksana, dan kepatuhan kontrol pasien.\nTerakhir, sistem kecerdasan buatan saat ini berpotensi untuk dapat menjembatani keterbatasan dokter spesialis mata dalam mendeteksi retinopati diabetika, namun implementasinya masih memerlukan infrastruktur dan regulasi yang matang.\n\nMenjawab tantangan-tantangan tersebut secara komprehensif adalah kunci agar cakupan skrining retinopati diabetika dapat tercapai secara merata dan efektif.",
+          "references": [
+            "Perkumpulan Endokrinologi Indonesia (PERKENI). Pedoman Pengelolaan dan Pencegahan Diabetes Melitus Tipe 2 Dewasa di Indonesia 2021. Jakarta: PB PERKENI; 2021. hlm. 14 (Tabel 5. Komponen evaluasi komprehensif pasien diabetes: pemeriksaan funduskopi, rujuk ke spesialis mata).",
+            "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 6–7 (permasalahan: kesadaran masyarakat, keterbatasan tenaga kesehatan dan fasilitas, kondisi geografis, biaya).",
+            "Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162. hlm. P100 (sistem kecerdasan buatan otonom untuk skrining di layanan primer).",
+            "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 104 (telemedisin dan kecerdasan buatan untuk skrining RD).",
+            "Sadikin IS, Lestari YD, Victor AA. The role of cadre in the community on diabetic retinopathy management and its challenges in low-middle income countries: a scoping review. BMC Public Health. 2024;24:177. doi:10.1186/s12889-024-17652-5"
+          ]
         },
         {
           "id": "modul3-p6",
@@ -799,7 +859,15 @@
             ],
             "caption": "Sumber: diadaptasi dari Primary Care and Eye Health (pcp.vision-relief.com), berdasarkan AAO Preferred Practice Pattern Diabetic Retinopathy 2025."
           },
-          "transcript": "Skrining retinopati diabetika adalah bagian terpenting dalam pencegahan kebutaan karena retinopati diabetika. Berikut adalah rekomendasi jadwal pemeriksaan mata pertama dan lanjutan bagi pasien dengan diabetes.\n\nPada pasien diabetes tipe 1, pemeriksaan pertama dilakukan dalam 5 tahun setelah diagnosis diabetes. Pemeriksaan lanjutan dilakukan setiap tahun apabila tidak ada tanda retinopati diabetika.\nPada pasien diabetes tipe 2, pemeriksaan pertama dilakukan segera setelah diagnosis diabetes ditegakkan. Pemeriksaan lanjutan dilakukan setiap tahun apabila tidak ada tanda retinopati diabetika.\nPada pasien diabetes tipe 1 maupun tipe 2 yang sedang hamil, pemeriksaan perlu dilakukan segera setelah konsepsi atau pada awal trimester pertama, dan pemeriksaan selanjutnya dilakukan satu kali pada setiap trimester."
+          "transcript": "Skrining retinopati diabetika adalah bagian terpenting dalam pencegahan kebutaan karena retinopati diabetika. Berikut adalah rekomendasi jadwal pemeriksaan mata pertama dan lanjutan bagi pasien dengan diabetes.\n\nPada pasien diabetes tipe 1, pemeriksaan pertama dilakukan dalam 5 tahun setelah diagnosis diabetes. Pemeriksaan lanjutan dilakukan setiap tahun apabila tidak ada tanda retinopati diabetika.\nPada pasien diabetes tipe 2, pemeriksaan pertama dilakukan segera setelah diagnosis diabetes ditegakkan. Pemeriksaan lanjutan dilakukan setiap tahun apabila tidak ada tanda retinopati diabetika.\nPada pasien diabetes tipe 1 maupun tipe 2 yang sedang hamil, pemeriksaan perlu dilakukan segera setelah konsepsi atau pada awal trimester pertama, dan pemeriksaan selanjutnya dilakukan satu kali pada setiap trimester.",
+          "references": [
+            "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 103 (retinopati sudah ditemukan pada sebagian pasien saat DM tipe 2 terdiagnosis), hlm. 104 (Tabel 5-1. Jadwal pemeriksaan mata pertama pada DM tipe 1, DM tipe 2, dan kehamilan), hlm. 105 (Tabel 5-2. Interval pemeriksaan berdasarkan derajat RD).",
+            "Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162. hlm. P93 (Tabel 2: jadwal pemeriksaan mata pertama dan lanjutan), hlm. P95 (DM tipe 2 dan kehamilan).",
+            "American Diabetes Association Professional Practice Committee. 12. Retinopathy, neuropathy, and foot care: Standards of Care in Diabetes—2026. Diabetes Care. 2026;49(Suppl 1):S261–S276. doi:10.2337/dc26-S012 (pemeriksaan pertama pada DM tipe 1 dan tipe 2; pemeriksaan tahunan bila tidak ada retinopati; pemeriksaan pada kehamilan).",
+            "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 19 (rekomendasi waktu skrining pertama), hlm. 36 (follow-up minimal 1 kali setahun pada DM tanpa RD; follow-up RD sesuai derajat keparahan).",
+            "Primary Care and Eye Health (Med Learning Group). Screening and diagnosing DR [internet]. Tersedia di: https://pcp.vision-relief.com/educational-resources/screening-and-diagnosing-dr/ (diakses Oktober 2026) (sumber tabel “Recommended Frequency of Dilated Eye Exams for Patients with Diabetes” yang diadaptasi ke dalam bahasa Indonesia; tabel asli merujuk AAO PPP Diabetic Retinopathy 2025)."
+          ],
+          "abbreviations": ["DM, diabetes mellitus"]
         },
         {
           "id": "modul3-p7",
@@ -830,7 +898,21 @@
               "image": "/content/drive-retinopati/assets/v52_tatalaksana_vitrektomi.png"
             }
           ],
-          "transcript": "Tatalaksana retinopati diabetika disesuaikan dengan derajat keparahan dan ada tidaknya edema makula. Terdapat empat pilihan utama.\nPertama, observasi, untuk pasien diabetes tanpa retinopati diabetika atau dengan retinopati diabetika derajat ringan hingga sedang. Pada tahap ini belum terdapat indikasi terapi di mata, sehingga tatalaksana berfokus pada kontrol metabolik yang meliputi kontrol gula darah, tekanan darah, dan profil lipid, edukasi, serta pemeriksaan retina berkala.\nKedua, laser fotokoagulasi retina, merupakan terapi standard yang diindikasikan untuk retinopati diabetika derajat berat atau proliferatif. Laser bertujuan untuk mengurangi area retina yang iskemik sehingga produksi VEGF menurun.\nKetiga, injeksi intravitreal anti-VEGF, merupakan terapi lini pertama yang diindikasikan untuk edema makula diabetika.\nKeempat, vitrektomi, untuk retinopati diabetika proliferatif yang disertai perdarahan vitreus atau ablasio retina traksional.\n\nPada seluruh derajat keparahan retinopati diabetika, kontrol metabolik tetap menjadi faktor penting dalam tatalaksana retinopati diabetika."
+          "transcript": "Tatalaksana retinopati diabetika disesuaikan dengan derajat keparahan dan ada tidaknya edema makula. Terdapat empat pilihan utama.\nPertama, observasi, untuk pasien diabetes tanpa retinopati diabetika atau dengan retinopati diabetika derajat ringan hingga sedang. Pada tahap ini belum terdapat indikasi terapi di mata, sehingga tatalaksana berfokus pada kontrol metabolik yang meliputi kontrol gula darah, tekanan darah, dan profil lipid, edukasi, serta pemeriksaan retina berkala.\nKedua, laser fotokoagulasi retina, merupakan terapi standard yang diindikasikan untuk retinopati diabetika derajat berat atau proliferatif. Laser bertujuan untuk mengurangi area retina yang iskemik sehingga produksi VEGF menurun.\nKetiga, injeksi intravitreal anti-VEGF, merupakan terapi lini pertama yang diindikasikan untuk edema makula diabetika.\nKeempat, vitrektomi, untuk retinopati diabetika proliferatif yang disertai perdarahan vitreus atau ablasio retina traksional.\n\nPada seluruh derajat keparahan retinopati diabetika, kontrol metabolik tetap menjadi faktor penting dalam tatalaksana retinopati diabetika.",
+          "references": [
+            "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 18–20 (tatalaksana umum dan NPDR), hlm. 20–23 (PRP, anti-VEGF pada PDR, vitrektomi), hlm. 23–35 (tatalaksana edema makula diabetika).",
+            "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 115 (tujuan terapi PDR: mengendalikan iskemia dan menurunkan VEGF), hlm. 117 (PRP mengurangi retina iskemik sehingga produksi VEGF menurun), hlm. 119 (indikasi vitrektomi), hlm. 124 (anti-VEGF sebagai terapi lini pertama DME yang melibatkan pusat makula).",
+            "Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162. hlm. P99 (Tabel 5. Rekomendasi tatalaksana awal berdasarkan derajat RD).",
+            "Diabetic Retinopathy Clinical Research Network; Wells JA, Glassman AR, Ayala AR, et al. Aflibercept, bevacizumab, or ranibizumab for diabetic macular edema. N Engl J Med. 2015;372(13):1193–1203. doi:10.1056/NEJMoa1414264"
+          ],
+          "abbreviations": [
+            "DM, diabetes mellitus",
+            "NPDR, non-proliferative diabetic retinopathy",
+            "PDR, proliferative diabetic retinopathy",
+            "PRP, panretinal photocoagulation",
+            "RD, retinopati diabetika",
+            "VEGF, vascular endothelial growth factor"
+          ]
         },
         {
           "id": "modul3-p8",
@@ -839,7 +921,18 @@
           "kicker": "LAYANAN PRIMER",
           "title": "Peran dokter layanan primer dalam rujukan",
           "body": "1. Mengenal tanda dan gejala RD\n2. Melakukan skrining RD pada pasien diabetes\n3. Edukasi pasien mengenai RD dan tatalaksana\n4. Merujuk pasien yang membutuhkan tatalaksana lebih lanjut",
-          "transcript": "Dalam upaya pencegahan kebutaan akibat retinopati diabetika, dokter layanan primer memiliki empat peran penting yaitu\nPertama, mengenali tanda dan gejala retinopati diabetika. Dokter layanan primer perlu waspada terhadap keluhan mulai dari pandangan kabur, floaters, hingga penurunan penglihatan berat yang memerlukan rujukan segera.\nKedua, melakukan skrining retinopati diabetika pada pasien diabetes. Pemeriksaan mata di layanan primer merupakan langkah krusial untuk menjaring komplikasi retina pada fase sedini mungkin tanpa menunggu munculnya keluhan gangguan penglihatan.\nKetiga, memberikan edukasi kepada pasien mengenai retinopati diabetika dan tatalaksananya. Dokter layanan primer berperan sebagai pemberi informasi utama untuk membangun pemahaman pasien mengenai risiko retinopati diabetika, pentingnya pemeriksaan mata berkala, serta kepatuhan kontrol metabolik.\nKeempat, merujuk pasien yang membutuhkan tatalaksana lebih lanjut. Ketepatan indikasi dan waktu rujukan pasien ke fasilitas kesehatan tingkat lanjut dapat mencegah progresivitas retinopati diabetika menuju kebutaan permanen."
+          "transcript": "Dalam upaya pencegahan kebutaan akibat retinopati diabetika, dokter layanan primer memiliki empat peran penting yaitu\nPertama, mengenali tanda dan gejala retinopati diabetika. Dokter layanan primer perlu waspada terhadap keluhan mulai dari pandangan kabur, floaters, hingga penurunan penglihatan berat yang memerlukan rujukan segera.\nKedua, melakukan skrining retinopati diabetika pada pasien diabetes. Pemeriksaan mata di layanan primer merupakan langkah krusial untuk menjaring komplikasi retina pada fase sedini mungkin tanpa menunggu munculnya keluhan gangguan penglihatan.\nKetiga, memberikan edukasi kepada pasien mengenai retinopati diabetika dan tatalaksananya. Dokter layanan primer berperan sebagai pemberi informasi utama untuk membangun pemahaman pasien mengenai risiko retinopati diabetika, pentingnya pemeriksaan mata berkala, serta kepatuhan kontrol metabolik.\nKeempat, merujuk pasien yang membutuhkan tatalaksana lebih lanjut. Ketepatan indikasi dan waktu rujukan pasien ke fasilitas kesehatan tingkat lanjut dapat mencegah progresivitas retinopati diabetika menuju kebutaan permanen.",
+          "references": [
+            "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 16 (gejala klinis), hlm. 19 (skrining oleh dokter spesialis mata dan dokter umum yang kompeten), hlm. 36 (follow-up minimal 1 kali setahun).",
+            "Perkumpulan Endokrinologi Indonesia (PERKENI). Pedoman Pengelolaan dan Pencegahan Diabetes Melitus Tipe 2 Dewasa di Indonesia 2021. Jakarta: PB PERKENI; 2021. hlm. 14 (Tabel 5: pemeriksaan funduskopi pada kunjungan pertama dan kontrol tahunan).",
+            "Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162. hlm. P93 (edukasi pasien), hlm. P98 (kemitraan dokter mata dan dokter layanan primer), hlm. P100 (rujukan dari layanan primer).",
+            "Wong TY, Sun J, Kawasaki R, et al. Guidelines on diabetic eye care: the International Council of Ophthalmology recommendations for screening, follow-up, referral, and treatment based on resource settings. Ophthalmology. 2018;125(10):1608–1622. doi:10.1016/j.ophtha.2018.04.007 (rekomendasi rujukan berdasarkan derajat RD)."
+          ],
+          "abbreviations": [
+            "DM, diabetes mellitus",
+            "PNPK, Pedoman Nasional Pelayanan Kedokteran",
+            "RD, retinopati diabetika"
+          ]
         },
         {
           "id": "modul3-p9",
@@ -852,16 +945,109 @@
       ]
     },
     {
-      "id": "modul4",
-      "label": "Modul 4 — Simulasi Grading",
+      "id": "modul1-evaluasi",
+      "label": "Evaluasi",
+      "group": "Modul 1",
+      "pages": [
+        {
+          "id": "modul1-evaluasi-p1",
+          "type": "test",
+          "mode": "practice",
+          "title": "Evaluasi Modul 1",
+          "intro": "Latihan mandiri untuk menguji pemahaman Modul 1. Nilainya tidak menentukan kelulusan."
+        }
+      ]
+    },
+    {
+      "id": "modul2-pengantar",
+      "group": "Modul 2",
+      "label": "Pengantar",
+      "placeholder": true,
+      "pages": []
+    },
+    {
+      "id": "modul2-bab1",
+      "group": "Modul 2",
+      "label": "BAB 1",
+      "placeholder": true,
+      "pages": []
+    },
+    {
+      "id": "modul2-bab2",
+      "group": "Modul 2",
+      "label": "BAB 2",
+      "placeholder": true,
+      "pages": []
+    },
+    {
+      "id": "modul2-bab3",
+      "group": "Modul 2",
+      "label": "BAB 3",
+      "placeholder": true,
+      "pages": []
+    },
+    {
+      "id": "modul2-evaluasi",
+      "group": "Modul 2",
+      "label": "Evaluasi",
+      "placeholder": true,
+      "pages": []
+    },
+    {
+      "id": "modul3-pengantar",
+      "group": "Modul 3",
+      "label": "Pengantar",
+      "placeholder": true,
+      "pages": []
+    },
+    {
+      "id": "modul3-bab1",
+      "group": "Modul 3",
+      "label": "BAB 1",
+      "placeholder": true,
+      "pages": []
+    },
+    {
+      "id": "modul3-bab2",
+      "group": "Modul 3",
+      "label": "BAB 2",
+      "placeholder": true,
+      "pages": []
+    },
+    {
+      "id": "modul3-bab3",
+      "group": "Modul 3",
+      "label": "BAB 3",
+      "placeholder": true,
+      "pages": []
+    },
+    {
+      "id": "modul3-evaluasi",
+      "group": "Modul 3",
+      "label": "Evaluasi",
+      "placeholder": true,
+      "pages": []
+    },
+    {
+      "id": "modul4-pengantar",
+      "label": "Pengantar",
+      "group": "Modul 4",
       "pages": [
         {
           "id": "modul4-p1",
           "slide": 20,
           "type": "divider",
           "kicker": "MODUL 4",
-          "title": "SIMULASI GRADING RETINOPATI DIABETIKA"
-        },
+          "title": "Simulasi Grading Retinopati Diabetika",
+          "body": "Lima kasus foto fundus. Level 1: kenali ada tidaknya retinopati diabetika. Level 2: tentukan tindak lanjut, observasi atau rujuk. Setelah memilih, penanda lesi dan alasan klinis ditampilkan."
+        }
+      ]
+    },
+    {
+      "id": "modul4-simulasi",
+      "label": "Simulasi Grading Retinopati Diabetika",
+      "group": "Modul 4",
+      "pages": [
         {
           "id": "modul4-p2",
           "slide": 21,
@@ -886,18 +1072,18 @@
           "reasoning": "Ada hard exudate dan perdarahan dot/blot.",
           "lesions": [
             {
-              "x": 37.4,
-              "y": 23.4,
+              "x": 37.3,
+              "y": 22.8,
               "label": "Perdarahan dot/blot"
             },
             {
-              "x": 57,
-              "y": 30.9,
+              "x": 57.1,
+              "y": 30.4,
               "label": "Perdarahan dot/blot"
             },
             {
-              "x": 34.8,
-              "y": 51,
+              "x": 34.7,
+              "y": 50.9,
               "label": "Hard exudate"
             }
           ],
@@ -928,29 +1114,29 @@
           "reasoning": "PDR, dengan adanya lesi berupa perdarahan dot, hard exudate, neovascular elsewhere, dan neovascular disc.",
           "lesions": [
             {
-              "x": 21.2,
-              "y": 37.9,
+              "x": 20.7,
+              "y": 37.5,
               "label": "Hard exudate",
               "dx": -8,
               "dy": 14
             },
             {
-              "x": 39.3,
-              "y": 33.8,
+              "x": 39.1,
+              "y": 33.3,
               "label": "Perdarahan dot",
               "dx": -8,
               "dy": -15
             },
             {
-              "x": 38.3,
-              "y": 44.6,
+              "x": 38.1,
+              "y": 44.4,
               "label": "Neovascular elsewhere",
               "dx": 4,
               "dy": 16
             },
             {
-              "x": 79.2,
-              "y": 44.6,
+              "x": 79.7,
+              "y": 44.4,
               "label": "Neovascular disc",
               "dx": 4,
               "dy": 14
@@ -970,13 +1156,13 @@
           "reasoning": "NPDR sedang, dengan adanya lesi berupa perdarahan blot dan hard exudate.",
           "lesions": [
             {
-              "x": 49.2,
-              "y": 52.4,
+              "x": 48.8,
+              "y": 52.2,
               "label": "Hard exudate"
             },
             {
-              "x": 57.2,
-              "y": 71.5,
+              "x": 56.9,
+              "y": 71.7,
               "label": "Perdarahan blot"
             }
           ],
@@ -986,175 +1172,194 @@
       ]
     },
     {
-      "id": "evaluasi",
-      "label": "Evaluasi",
+      "id": "post-test",
+      "label": "Post Test",
       "pages": [
         {
-          "id": "evaluasi-p1",
-          "slide": 27,
-          "type": "divider",
-          "kicker": "EVALUASI",
-          "title": "Pre Test & Post Test — 5 Soal"
-        },
-        {
-          "id": "evaluasi-p2",
-          "slide": 28,
-          "type": "quiz",
-          "graded": true,
-          "question": "Apa yang dimaksud dengan retinopati diabetika?",
-          "options": [
+          "id": "post-test-p1",
+          "type": "test",
+          "mode": "post",
+          "title": "Post Test",
+          "intro": "Post Test menentukan kelulusan pelatihan. Nilai minimal kelulusan 70, dan Post Test boleh diulang tanpa batas.",
+          "questions": [
             {
-              "letter": "A",
-              "text": "Peradangan konjungtiva yang sering dialami penderita diabetes"
+              "id": "evaluasi-p2",
+              "question": "Apa yang dimaksud dengan retinopati diabetika?",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Peradangan konjungtiva yang sering dialami penderita diabetes"
+                },
+                {
+                  "letter": "B",
+                  "text": "Kekeruhan lensa mata akibat penuaan"
+                },
+                {
+                  "letter": "C",
+                  "text": "Kerusakan kapiler retina akibat gula darah tinggi yang kronis"
+                },
+                {
+                  "letter": "D",
+                  "text": "Peningkatan tekanan bola mata yang merusak saraf optik"
+                },
+                {
+                  "letter": "E",
+                  "text": "Kelainan refraksi yang timbul karena kadar gula berfluktuasi"
+                }
+              ],
+              "correct": "C",
+              "explanation": "Jawaban: C. Retinopati diabetika merupakan penyakit pembuluh darah mikro retina yang bersifat kronik dan progresif akibat hiperglikemia yang berkepanjangan. Pilihan A menggambarkan konjungtivitis, pilihan B menggambarkan katarak, pilihan D menggambarkan glaukoma, dan pilihan E menggambarkan perubahan refraksi akibat fluktuasi kadar gula darah.\n\nREFERENSI:\n1. Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 5 (definisi RD).\n2. American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 101–102 (definisi dan patogenesis RD).\n3. Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3. hlm. 506–507 (komplikasi oftalmik DM: katarak, refraksi tidak stabil, glaukoma neovaskular).\nMateri terkait: slide 13 “Apa itu retinopati diabetika?”.",
+              "references": [
+                "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 5 (definisi RD).",
+                "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 101–102 (definisi dan patogenesis RD).",
+                "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3. hlm. 506–507 (komplikasi oftalmik DM: katarak, refraksi tidak stabil, glaukoma neovaskular).",
+                "Materi terkait: slide 13 “Apa itu retinopati diabetika?”."
+              ]
             },
             {
-              "letter": "B",
-              "text": "Kekeruhan lensa mata akibat penuaan"
+              "id": "evaluasi-p3",
+              "question": "Penderita DM dengan hasil pemeriksaan fundus normal (tanpa RD). Kapan pemeriksaan retina ulang dianjurkan?",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1 bulan"
+                },
+                {
+                  "letter": "B",
+                  "text": "3–6 bulan"
+                },
+                {
+                  "letter": "C",
+                  "text": "6–12 bulan"
+                },
+                {
+                  "letter": "D",
+                  "text": "1–2 tahun"
+                },
+                {
+                  "letter": "E",
+                  "text": "Tidak perlu, cukup bila muncul keluhan penglihatan"
+                }
+              ],
+              "correct": "D",
+              "explanation": "Jawaban: D. 1–2 tahun. Pemeriksaan tahunan tetap dianjurkan, dan interval 2 tahun dapat dipertimbangkan apabila hasil pemeriksaan sebelumnya normal dan gula darah terkontrol. Interval yang lebih pendek pada pilihan A, B, dan C digunakan pada retinopati yang lebih berat, edema makula, atau kehamilan dengan retinopati. Pilihan E tidak tepat karena retinopati diabetika sering tidak bergejala hingga tahap lanjut.\n\nREFERENSI:\n1. American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 104–105 (Tabel 5-1 dan Tabel 5-2).\n2. Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162. hlm. P93 (Tabel 2), hlm. P99 (RD dapat asimtomatik selama bertahun-tahun).\n3. Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 36 (follow-up minimal 1 kali setahun pada DM tanpa RD).\n4. American Diabetes Association Professional Practice Committee. 12. Retinopathy, neuropathy, and foot care: Standards of Care in Diabetes—2026. Diabetes Care. 2026;49(Suppl 1):S261–S276. doi:10.2337/dc26-S012 (skrining setiap 1–2 tahun dapat dipertimbangkan bila beberapa kali pemeriksaan normal dan glikemia terkendali).\nMateri terkait: slide 23 “Jadwal skrining dan kontrol berkala pada pasien diabetes”.\n\nDAFTAR SINGKATAN:\nDM, diabetes mellitus",
+              "references": [
+                "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 104–105 (Tabel 5-1 dan Tabel 5-2).",
+                "Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162. hlm. P93 (Tabel 2), hlm. P99 (RD dapat asimtomatik selama bertahun-tahun).",
+                "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 36 (follow-up minimal 1 kali setahun pada DM tanpa RD).",
+                "American Diabetes Association Professional Practice Committee. 12. Retinopathy, neuropathy, and foot care: Standards of Care in Diabetes—2026. Diabetes Care. 2026;49(Suppl 1):S261–S276. doi:10.2337/dc26-S012 (skrining setiap 1–2 tahun dapat dipertimbangkan bila beberapa kali pemeriksaan normal dan glikemia terkendali).",
+                "Materi terkait: slide 23 “Jadwal skrining dan kontrol berkala pada pasien diabetes”."
+              ],
+              "abbreviations": ["DM, diabetes mellitus"]
             },
             {
-              "letter": "C",
-              "text": "Kerusakan kapiler retina akibat gula darah tinggi yang kronis"
+              "id": "evaluasi-p4",
+              "question": "Pada patofisiologi retinopati diabetika, iskemia retina memicu pelepasan faktor pertumbuhan yang mendorong neovaskularisasi. Faktor tersebut adalah…",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "VEGF (vascular endothelial growth factor)"
+                },
+                {
+                  "letter": "B",
+                  "text": "Insulin"
+                },
+                {
+                  "letter": "C",
+                  "text": "Hemoglobin A1c"
+                },
+                {
+                  "letter": "D",
+                  "text": "Faktor VIII"
+                },
+                {
+                  "letter": "E",
+                  "text": "Kortisol"
+                }
+              ],
+              "correct": "A",
+              "explanation": "Jawaban: A. VEGF. Retina yang mengalami iskemia melepaskan VEGF yang merangsang pertumbuhan pembuluh darah baru, yaitu ciri PDR. VEGF juga meningkatkan permeabilitas pembuluh darah sehingga berperan dalam edema makula, dan hal ini menjadi dasar penggunaan terapi anti-VEGF. Insulin merupakan hormon pengatur glukosa, HbA1c merupakan penanda rerata kadar glukosa darah, faktor VIII merupakan faktor pembekuan darah, dan kortisol merupakan hormon stres.\n\nREFERENSI:\n1. Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 10 (VEGF sebagai faktor vasoformatif terpenting), hlm. 24 (VEGF sebagai mediator permeabilitas vaskular pada edema makula).\n2. American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 102 (patogenesis RD; VEGF diproduksi oleh retina yang iskemik).\n3. Antonetti DA, Klein R, Gardner TW. Diabetic retinopathy. N Engl J Med. 2012;366(13):1227–1239. doi:10.1056/NEJMra1005073\nMateri terkait: slide 15 “Patofisiologi retinopati diabetika”.\n\nDAFTAR SINGKATAN:\nHbA1c, hemoglobin A1c; PDR, proliferative diabetic retinopathy; VEGF, vascular endothelial growth factor",
+              "references": [
+                "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 10 (VEGF sebagai faktor vasoformatif terpenting), hlm. 24 (VEGF sebagai mediator permeabilitas vaskular pada edema makula).",
+                "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 102 (patogenesis RD; VEGF diproduksi oleh retina yang iskemik).",
+                "Antonetti DA, Klein R, Gardner TW. Diabetic retinopathy. N Engl J Med. 2012;366(13):1227–1239. doi:10.1056/NEJMra1005073",
+                "Materi terkait: slide 15 “Patofisiologi retinopati diabetika”."
+              ],
+              "abbreviations": [
+                "HbA1c, hemoglobin A1c",
+                "PDR, proliferative diabetic retinopathy",
+                "VEGF, vascular endothelial growth factor"
+              ]
             },
             {
-              "letter": "D",
-              "text": "Peningkatan tekanan bola mata yang merusak saraf optik"
+              "id": "evaluasi-p5",
+              "question": "Apa yang membedakan skrining dari deteksi dini?",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Skrining dilakukan pada orang yang sudah bergejala"
+                },
+                {
+                  "letter": "B",
+                  "text": "Skrining mencari penyakit pada orang tanpa gejala (merasa sehat)"
+                },
+                {
+                  "letter": "C",
+                  "text": "Deteksi dini menyasar populasi sehat secara massal"
+                },
+                {
+                  "letter": "D",
+                  "text": "Skrining hanya dilakukan satu kali seumur hidup"
+                },
+                {
+                  "letter": "E",
+                  "text": "Keduanya sama dan dapat saling menggantikan"
+                }
+              ],
+              "correct": "B",
+              "explanation": "Jawaban: B. Skrining mencari penyakit pada orang yang tidak bergejala atau merasa sehat. Deteksi dini ditujukan pada orang yang sudah mulai bergejala. Pada retinopati diabetika, sasaran skrining adalah seluruh penyandang diabetes, dan skrining dilakukan secara berkala, bukan satu kali seumur hidup.\n\nREFERENSI:\n1. World Health Organization (WHO). Guide to cancer early diagnosis. Geneva: WHO; 2017. ISBN 978-92-4-151194-0. hlm. 8–9.\n2. WHO Regional Office for Europe. Diabetic retinopathy screening: a short guide. Increase effectiveness, maximize benefits and minimize harm. Copenhagen: WHO Regional Office for Europe; 2020. ISBN 978-92-890-5532-1. hlm. 7 (prinsip Wilson & Jungner dan tujuan skrining RD), hlm. 17 (skrining sebagai proses berkelanjutan).\n3. Wilson JMG, Jungner G. Principles and practice of screening for disease. Public Health Papers No. 34. Geneva: WHO; 1968.\nMateri terkait: slide 19 “Deteksi dini VS skrining” dan slide 20 “Skrining mendeteksi sebelum terlambat”.",
+              "references": [
+                "World Health Organization (WHO). Guide to cancer early diagnosis. Geneva: WHO; 2017. ISBN 978-92-4-151194-0. hlm. 8–9.",
+                "WHO Regional Office for Europe. Diabetic retinopathy screening: a short guide. Increase effectiveness, maximize benefits and minimize harm. Copenhagen: WHO Regional Office for Europe; 2020. ISBN 978-92-890-5532-1. hlm. 7 (prinsip Wilson & Jungner dan tujuan skrining RD), hlm. 17 (skrining sebagai proses berkelanjutan).",
+                "Wilson JMG, Jungner G. Principles and practice of screening for disease. Public Health Papers No. 34. Geneva: WHO; 1968.",
+                "Materi terkait: slide 19 “Deteksi dini VS skrining” dan slide 20 “Skrining mendeteksi sebelum terlambat”."
+              ]
             },
             {
-              "letter": "E",
-              "text": "Kelainan refraksi yang timbul karena kadar gula berfluktuasi"
+              "id": "evaluasi-p6",
+              "question": "Manakah yang merupakan peran dokter layanan primer dalam penanganan retinopati diabetika?",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Melakukan laser fotokoagulasi retina"
+                },
+                {
+                  "letter": "B",
+                  "text": "Melakukan injeksi intravitreal anti-VEGF"
+                },
+                {
+                  "letter": "C",
+                  "text": "Melakukan vitrektomi"
+                },
+                {
+                  "letter": "D",
+                  "text": "Menunda rujukan sampai tajam penglihatan menurun"
+                },
+                {
+                  "letter": "E",
+                  "text": "Edukasi pasien, mengenali gejala & tanda RD, dan merujuk yang memerlukan tatalaksana lanjut"
+                }
+              ],
+              "correct": "E",
+              "explanation": "Jawaban: E. Peran dokter layanan primer meliputi mengenali gejala dan tanda RD, melakukan skrining, mengedukasi pasien, serta merujuk pasien yang memerlukan tatalaksana lanjut. Pilihan A, B, dan C merupakan tindakan dokter spesialis mata, sedangkan pilihan D berbahaya karena RD sering tidak bergejala hingga tahap lanjut.\n\nREFERENSI:\n1. Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 19 (skrining oleh dokter umum yang kompeten), hlm. 36 (tindakan intravitreal dan vitrektomi oleh dokter spesialis mata yang kompeten).\n2. Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162. hlm. P93 (edukasi pasien), hlm. P98 (kemitraan dokter mata dan dokter layanan primer), hlm. P100 (rujukan dari layanan primer).\nMateri terkait: slide 25 “Peran dokter layanan primer dalam rujukan”.\n\nDAFTAR SINGKATAN:\nRD, retinopati diabetika; VEGF, vascular endothelial growth factor",
+              "references": [
+                "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 19 (skrining oleh dokter umum yang kompeten), hlm. 36 (tindakan intravitreal dan vitrektomi oleh dokter spesialis mata yang kompeten).",
+                "Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162. hlm. P93 (edukasi pasien), hlm. P98 (kemitraan dokter mata dan dokter layanan primer), hlm. P100 (rujukan dari layanan primer).",
+                "Materi terkait: slide 25 “Peran dokter layanan primer dalam rujukan”."
+              ],
+              "abbreviations": ["RD, retinopati diabetika", "VEGF, vascular endothelial growth factor"]
             }
-          ],
-          "correct": "C",
-          "explanation": "Jawaban: C. Retinopati diabetika merupakan penyakit pembuluh darah mikro retina yang bersifat kronik dan progresif akibat hiperglikemia yang berkepanjangan. Pilihan A menggambarkan konjungtivitis, pilihan B menggambarkan katarak, pilihan D menggambarkan glaukoma, dan pilihan E menggambarkan perubahan refraksi akibat fluktuasi kadar gula darah.\n\nREFERENSI:\n1. Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 5 (definisi RD).\n2. American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 101–102 (definisi dan patogenesis RD).\n3. Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3. hlm. 506–507 (komplikasi oftalmik DM: katarak, refraksi tidak stabil, glaukoma neovaskular).\nMateri terkait: slide 13 “Apa itu retinopati diabetika?”.",
-          "tag": "Pre/Post Test"
-        },
-        {
-          "id": "evaluasi-p3",
-          "slide": 29,
-          "type": "quiz",
-          "graded": true,
-          "question": "Penderita DM dengan hasil pemeriksaan fundus normal (tanpa RD). Kapan pemeriksaan retina ulang dianjurkan?",
-          "options": [
-            {
-              "letter": "A",
-              "text": "1 bulan"
-            },
-            {
-              "letter": "B",
-              "text": "3–6 bulan"
-            },
-            {
-              "letter": "C",
-              "text": "6–12 bulan"
-            },
-            {
-              "letter": "D",
-              "text": "1–2 tahun"
-            },
-            {
-              "letter": "E",
-              "text": "Tidak perlu, cukup bila muncul keluhan penglihatan"
-            }
-          ],
-          "correct": "D",
-          "explanation": "Jawaban: D. 1–2 tahun. Pemeriksaan tahunan tetap dianjurkan, dan interval 2 tahun dapat dipertimbangkan apabila hasil pemeriksaan sebelumnya normal dan gula darah terkontrol. Interval yang lebih pendek pada pilihan A, B, dan C digunakan pada retinopati yang lebih berat, edema makula, atau kehamilan dengan retinopati. Pilihan E tidak tepat karena retinopati diabetika sering tidak bergejala hingga tahap lanjut.\n\nREFERENSI:\n1. American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 104–105 (Tabel 5-1 dan Tabel 5-2).\n2. Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162. hlm. P93 (Tabel 2), hlm. P99 (RD dapat asimtomatik selama bertahun-tahun).\n3. Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 36 (follow-up minimal 1 kali setahun pada DM tanpa RD).\n4. American Diabetes Association Professional Practice Committee. 12. Retinopathy, neuropathy, and foot care: Standards of Care in Diabetes—2026. Diabetes Care. 2026;49(Suppl 1):S261–S276. doi:10.2337/dc26-S012 (skrining setiap 1–2 tahun dapat dipertimbangkan bila beberapa kali pemeriksaan normal dan glikemia terkendali).\nMateri terkait: slide 23 “Jadwal skrining dan kontrol berkala pada pasien diabetes”.\n\nDAFTAR SINGKATAN:\nDM, diabetes mellitus",
-          "tag": "Pre/Post Test"
-        },
-        {
-          "id": "evaluasi-p4",
-          "slide": 30,
-          "type": "quiz",
-          "graded": true,
-          "question": "Pada patofisiologi retinopati diabetika, iskemia retina memicu pelepasan faktor pertumbuhan yang mendorong neovaskularisasi. Faktor tersebut adalah…",
-          "options": [
-            {
-              "letter": "A",
-              "text": "VEGF (vascular endothelial growth factor)"
-            },
-            {
-              "letter": "B",
-              "text": "Insulin"
-            },
-            {
-              "letter": "C",
-              "text": "Hemoglobin A1c"
-            },
-            {
-              "letter": "D",
-              "text": "Faktor VIII"
-            },
-            {
-              "letter": "E",
-              "text": "Kortisol"
-            }
-          ],
-          "correct": "A",
-          "explanation": "Jawaban: A. VEGF. Retina yang mengalami iskemia melepaskan VEGF yang merangsang pertumbuhan pembuluh darah baru, yaitu ciri PDR. VEGF juga meningkatkan permeabilitas pembuluh darah sehingga berperan dalam edema makula, dan hal ini menjadi dasar penggunaan terapi anti-VEGF. Insulin merupakan hormon pengatur glukosa, HbA1c merupakan penanda rerata kadar glukosa darah, faktor VIII merupakan faktor pembekuan darah, dan kortisol merupakan hormon stres.\n\nREFERENSI:\n1. Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 10 (VEGF sebagai faktor vasoformatif terpenting), hlm. 24 (VEGF sebagai mediator permeabilitas vaskular pada edema makula).\n2. American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 102 (patogenesis RD; VEGF diproduksi oleh retina yang iskemik).\n3. Antonetti DA, Klein R, Gardner TW. Diabetic retinopathy. N Engl J Med. 2012;366(13):1227–1239. doi:10.1056/NEJMra1005073\nMateri terkait: slide 15 “Patofisiologi retinopati diabetika”.\n\nDAFTAR SINGKATAN:\nHbA1c, hemoglobin A1c; PDR, proliferative diabetic retinopathy; VEGF, vascular endothelial growth factor",
-          "tag": "Pre/Post Test"
-        },
-        {
-          "id": "evaluasi-p5",
-          "slide": 31,
-          "type": "quiz",
-          "graded": true,
-          "question": "Apa yang membedakan skrining dari deteksi dini?",
-          "options": [
-            {
-              "letter": "A",
-              "text": "Skrining dilakukan pada orang yang sudah bergejala"
-            },
-            {
-              "letter": "B",
-              "text": "Skrining mencari penyakit pada orang tanpa gejala (merasa sehat)"
-            },
-            {
-              "letter": "C",
-              "text": "Deteksi dini menyasar populasi sehat secara massal"
-            },
-            {
-              "letter": "D",
-              "text": "Skrining hanya dilakukan satu kali seumur hidup"
-            },
-            {
-              "letter": "E",
-              "text": "Keduanya sama dan dapat saling menggantikan"
-            }
-          ],
-          "correct": "B",
-          "explanation": "Jawaban: B. Skrining mencari penyakit pada orang yang tidak bergejala atau merasa sehat. Deteksi dini ditujukan pada orang yang sudah mulai bergejala. Pada retinopati diabetika, sasaran skrining adalah seluruh penyandang diabetes, dan skrining dilakukan secara berkala, bukan satu kali seumur hidup.\n\nREFERENSI:\n1. World Health Organization (WHO). Guide to cancer early diagnosis. Geneva: WHO; 2017. ISBN 978-92-4-151194-0. hlm. 8–9.\n2. WHO Regional Office for Europe. Diabetic retinopathy screening: a short guide. Increase effectiveness, maximize benefits and minimize harm. Copenhagen: WHO Regional Office for Europe; 2020. ISBN 978-92-890-5532-1. hlm. 7 (prinsip Wilson & Jungner dan tujuan skrining RD), hlm. 17 (skrining sebagai proses berkelanjutan).\n3. Wilson JMG, Jungner G. Principles and practice of screening for disease. Public Health Papers No. 34. Geneva: WHO; 1968.\nMateri terkait: slide 19 “Deteksi dini VS skrining” dan slide 20 “Skrining mendeteksi sebelum terlambat”.",
-          "tag": "Pre/Post Test"
-        },
-        {
-          "id": "evaluasi-p6",
-          "slide": 32,
-          "type": "quiz",
-          "graded": true,
-          "question": "Manakah yang merupakan peran dokter layanan primer dalam penanganan retinopati diabetika?",
-          "options": [
-            {
-              "letter": "A",
-              "text": "Melakukan laser fotokoagulasi retina"
-            },
-            {
-              "letter": "B",
-              "text": "Melakukan injeksi intravitreal anti-VEGF"
-            },
-            {
-              "letter": "C",
-              "text": "Melakukan vitrektomi"
-            },
-            {
-              "letter": "D",
-              "text": "Menunda rujukan sampai tajam penglihatan menurun"
-            },
-            {
-              "letter": "E",
-              "text": "Edukasi pasien, mengenali gejala & tanda RD, dan merujuk yang memerlukan tatalaksana lanjut"
-            }
-          ],
-          "correct": "E",
-          "explanation": "Jawaban: E. Peran dokter layanan primer meliputi mengenali gejala dan tanda RD, melakukan skrining, mengedukasi pasien, serta merujuk pasien yang memerlukan tatalaksana lanjut. Pilihan A, B, dan C merupakan tindakan dokter spesialis mata, sedangkan pilihan D berbahaya karena RD sering tidak bergejala hingga tahap lanjut.\n\nREFERENSI:\n1. Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 19 (skrining oleh dokter umum yang kompeten), hlm. 36 (tindakan intravitreal dan vitrektomi oleh dokter spesialis mata yang kompeten).\n2. Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162. hlm. P93 (edukasi pasien), hlm. P98 (kemitraan dokter mata dan dokter layanan primer), hlm. P100 (rujukan dari layanan primer).\nMateri terkait: slide 25 “Peran dokter layanan primer dalam rujukan”.\n\nDAFTAR SINGKATAN:\nRD, retinopati diabetika; VEGF, vascular endothelial growth factor",
-          "tag": "Pre/Post Test"
+          ]
         }
       ]
     },
@@ -1162,7 +1367,13 @@
       "id": "selesai",
       "label": "Selesai",
       "completion": true,
-      "pages": []
+      "pages": [
+        {
+          "id": "selesai-p1",
+          "type": "completion",
+          "title": "Selamat, Anda telah menyelesaikan pelatihan"
+        }
+      ]
     }
   ],
   "credits": "Suara narasi sementara: sintesis suara Meta MMS-TTS Bahasa Indonesia (facebook/mms-tts-ind), lisensi CC BY-NC 4.0, untuk penggunaan nonkomersial. Akan diganti rekaman voiceover Tim DRIVE."

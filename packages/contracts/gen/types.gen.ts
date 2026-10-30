@@ -1286,8 +1286,10 @@ export type RequesterInfo = {
  * apps/app's `lib/content/course-types.ts` and evolves with the
  * player, not with the API — the server stores and serves it, plus a
  * schemaVersion so consumers can refuse manifests they can't render.
- * `postTestQuizId` links the deck's evaluation section to a real quiz
- * so attempts are graded and recorded server-side.
+ * `postTestQuizId` links the deck's Post Test to a real quiz so
+ * attempts are graded and recorded server-side; `preTestQuizId` links
+ * its Pre Test (same questions, recorded only — never decides
+ * graduation).
  */
 export type SlideDeck = {
     courseId: CommonResourceId;
@@ -1296,6 +1298,7 @@ export type SlideDeck = {
         [key: string]: unknown;
     };
     readonly postTestQuizId?: CommonResourceId;
+    readonly preTestQuizId?: CommonResourceId;
     readonly updatedAt: string;
 };
 
@@ -1695,8 +1698,10 @@ export type RegisteredInstitutionWritable = {
  * apps/app's `lib/content/course-types.ts` and evolves with the
  * player, not with the API — the server stores and serves it, plus a
  * schemaVersion so consumers can refuse manifests they can't render.
- * `postTestQuizId` links the deck's evaluation section to a real quiz
- * so attempts are graded and recorded server-side.
+ * `postTestQuizId` links the deck's Post Test to a real quiz so
+ * attempts are graded and recorded server-side; `preTestQuizId` links
+ * its Pre Test (same questions, recorded only — never decides
+ * graduation).
  */
 export type SlideDeckWritable = {
     courseId: CommonResourceId;

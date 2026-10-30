@@ -74,14 +74,18 @@ namespace Lms {
    *  apps/app's `lib/content/course-types.ts` and evolves with the
    *  player, not with the API — the server stores and serves it, plus a
    *  schemaVersion so consumers can refuse manifests they can't render.
-   *  `postTestQuizId` links the deck's evaluation section to a real quiz
-   *  so attempts are graded and recorded server-side. */
+   *  `postTestQuizId` links the deck's Post Test to a real quiz so
+   *  attempts are graded and recorded server-side; `preTestQuizId` links
+   *  its Pre Test (same questions, recorded only — never decides
+   *  graduation). */
   model SlideDeck {
     courseId: ResourceId;
     schemaVersion: int32;
     manifest: Record<unknown>;
     @visibility(Lifecycle.Read)
     postTestQuizId?: ResourceId;
+    @visibility(Lifecycle.Read)
+    preTestQuizId?: ResourceId;
     @visibility(Lifecycle.Read)
     updatedAt: utcDateTime;
   }

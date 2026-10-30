@@ -8,9 +8,41 @@ interface TranscriptViewerProps {
   className?: string
 }
 
+const BULLET = /^[•\-*]\s*/
+const NUMBERED = /^(\d+)[.)]\s+/
+
+type Block = { kind: "p"; text: string } | { kind: "ul" | "ol"; items: string[] }
+
+/**
+ * The narration script as readable text (DRIVE review, 29 Okt 2026):
+ * blank lines separate paragraphs, and a single line break inside one —
+ * the scripts put each enumerated point ("Kriteria pertama, …") on its
+ * own line — starts a new paragraph too instead of running on. Runs of
+ * "•"/"-" lines become a bullet list and "1." lines a numbered list.
+ * Paragraph text is justified.
+ */
+function toBlocks(transcript: string): Block[] {
+  const blocks: Block[] = []
+  for (const para of transcript.split(/\n\s*\n/)) {
+    for (const line of para.split("\n").map((l) => l.trim())) {
+      if (!line) continue
+      const kind = NUMBERED.test(line) ? "ol" : BULLET.test(line) ? "ul" : "p"
+      if (kind === "p") {
+        blocks.push({ kind, text: line })
+        continue
+      }
+      const item = line.replace(kind === "ol" ? NUMBERED : BULLET, "")
+      const last = blocks[blocks.length - 1]
+      if (last && last.kind === kind) last.items.push(item)
+      else blocks.push({ kind, items: [item] })
+    }
+  }
+  return blocks
+}
+
 export function TranscriptViewer({
   transcript,
-  title = "Slide Narration Transcript",
+  title = "Transkrip Narasi",
   defaultOpen = false,
   className = "",
 }: TranscriptViewerProps) {
@@ -20,8 +52,7 @@ export function TranscriptViewer({
     return null
   }
 
-  // Parse transcript paragraphs and bullet points
-  const rawParagraphs = transcript.split(/\n\s*\n/).filter((p) => p.trim().length > 0)
+  const blocks = toBlocks(transcript)
 
   return (
     <div className={`overflow-hidden rounded-lg border bg-muted/20 transition-all ${className}`}>
@@ -34,9 +65,7 @@ export function TranscriptViewer({
         <div className="flex items-center gap-2 text-muted-foreground">
           <FileText className="h-4 w-4 text-primary" />
           <span className="font-semibold text-foreground/90">{title}</span>
-          <span className="text-xs font-normal text-muted-foreground/80">
-            ({rawParagraphs.length} {rawParagraphs.length === 1 ? "paragraph" : "paragraphs"})
-          </span>
+          <span className="text-xs font-normal text-muted-foreground/80">({blocks.length} paragraf)</span>
         </div>
         {isOpen ? (
           <ChevronUp className="h-4 w-4 text-muted-foreground" />
@@ -46,32 +75,30 @@ export function TranscriptViewer({
       </button>
 
       {isOpen && (
-        <div className="space-y-3 border-t bg-background/60 px-4 py-3 text-sm leading-relaxed text-foreground/90">
-          {rawParagraphs.map((para, pIdx) => {
-            const lines = para
-              .split("\n")
-              .map((l) => l.trim())
-              .filter(Boolean)
-            const isBulletList = lines.every((l) => /^[•\-*]|\d+\.\s/.test(l))
-
-            if (isBulletList) {
-              return (
-                <ul key={pIdx} className="list-disc space-y-1.5 pl-5 text-foreground/90">
-                  {lines.map((item, lIdx) => (
-                    <li key={lIdx} className="pl-1">
-                      {item.replace(/^[•\-*]|\d+\.\s*/, "")}
-                    </li>
-                  ))}
-                </ul>
-              )
-            }
-
-            return (
-              <p key={pIdx} className="text-foreground/85">
-                {para}
+        <div className="space-y-3 border-t bg-background/60 px-4 py-3 text-sm leading-relaxed text-foreground/85">
+          {blocks.map((block, i) =>
+            block.kind === "p" ? (
+              <p key={i} className="text-justify hyphens-auto" lang="id">
+                {block.text}
               </p>
+            ) : block.kind === "ol" ? (
+              <ol key={i} className="list-decimal space-y-1.5 ps-5 text-justify">
+                {block.items.map((item, j) => (
+                  <li key={j} className="ps-1">
+                    {item}
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <ul key={i} className="list-disc space-y-1.5 ps-5 text-justify">
+                {block.items.map((item, j) => (
+                  <li key={j} className="ps-1">
+                    {item}
+                  </li>
+                ))}
+              </ul>
             )
-          })}
+          )}
         </div>
       )}
     </div>

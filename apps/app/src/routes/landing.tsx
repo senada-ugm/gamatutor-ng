@@ -640,7 +640,8 @@ export function LandingPage() {
                   <p className="text-xs text-[#6b8196] dark:text-slate-400">5 soal</p>
                 </div>
                 <p className="desc text-sm leading-relaxed text-[#46607a] dark:text-slate-300">
-                  Pre-test dan post-test dengan pembahasan setiap pilihan. Nilai lulus 60.
+                  Pre test di awal dan post test di akhir pelatihan, dengan pembahasan setiap pilihan. Nilai lulus post
+                  test 70; boleh diulang tanpa batas.
                 </p>
               </li>
             </ol>
