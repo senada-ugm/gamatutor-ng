@@ -498,7 +498,7 @@ export function LandingPage() {
                 <dl className="mt-10 grid grid-cols-2 gap-4 border-t border-[#d5e1ea] pt-6 sm:grid-cols-3 dark:border-slate-800">
                   <div>
                     <dt className="text-xs text-[#6b8196] dark:text-slate-400">Isi</dt>
-                    <dd className="mt-0.5 text-base font-bold text-[#0f2a44] dark:text-white">4 modul, 32 halaman</dd>
+                    <dd className="mt-0.5 text-base font-bold text-[#0f2a44] dark:text-white">4 modul, 81 halaman</dd>
                   </div>
                   <div>
                     <dt className="text-xs text-[#6b8196] dark:text-slate-400">Akses</dt>

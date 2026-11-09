@@ -369,8 +369,21 @@ function ContentSlide({ page, currentTime }: { page: ContentPage; currentTime?: 
         <div className="h-0.5 w-full bg-gradient-to-r from-primary via-primary/40 to-transparent" />
       </div>
 
-      {page.body && (
-        <div className="space-y-2 text-sm leading-relaxed whitespace-pre-line text-foreground/90">{page.body}</div>
+      {page.imageLayout === "side" ? (
+        <div className="grid items-start gap-6 lg:grid-cols-5">
+          {page.body && (
+            <div className="rounded-lg border-l-4 border-[#173a5e] bg-muted/40 p-4 text-sm leading-relaxed whitespace-pre-line text-foreground/90 lg:col-span-2">
+              {page.body}
+            </div>
+          )}
+          <div className={page.body ? "lg:col-span-3" : "lg:col-span-5"}>
+            <SlideMedia page={page} />
+          </div>
+        </div>
+      ) : (
+        page.body && (
+          <div className="space-y-2 text-sm leading-relaxed whitespace-pre-line text-foreground/90">{page.body}</div>
+        )
       )}
 
       {page.table && (
@@ -411,20 +424,58 @@ function ContentSlide({ page, currentTime }: { page: ContentPage; currentTime?: 
         <AnimatedRevealList steps={page.reveal_steps} currentTime={currentTime} />
       )}
 
-      {/* Image if present — v4.3 imageLayout "below" stacks it under the
-          text at reading width (reference content-layout.stacked) instead
-          of the full-width default. */}
-      {page.image && (
-        <div className={page.imageLayout === "below" ? "mx-auto w-full max-w-xl space-y-2" : "space-y-2"}>
-          <div className="overflow-hidden rounded-xl border bg-black/5 shadow-inner">
-            <img src={page.image} alt={page.title || ""} className="h-auto max-h-[420px] w-full object-contain" />
-          </div>
-          {page.imageCaption && <p className="text-center text-xs text-muted-foreground italic">{page.imageCaption}</p>}
-        </div>
-      )}
+      {page.imageLayout !== "side" && <SlideMedia page={page} />}
 
       {/* Transcript collapsible viewer (Review #1) */}
       {page.transcript && <TranscriptViewer transcript={page.transcript} />}
+    </div>
+  )
+}
+
+/** A content page's image or labelled photo set. imageLayout "below" (v4.3)
+ *  keeps a single image at reading width instead of the full-width default. */
+function SlideMedia({ page }: { page: ContentPage }) {
+  const caption = page.imageCaption && (
+    <p className="text-center text-xs text-muted-foreground italic">{page.imageCaption}</p>
+  )
+
+  if (page.figures?.length) {
+    const count = page.figures.length
+    const columns = count === 2 ? "grid-cols-2" : count === 1 ? "grid-cols-1" : "grid-cols-2 sm:grid-cols-3"
+    return (
+      <div className="space-y-3">
+        <div className={`grid gap-4 ${columns}`}>
+          {page.figures.map((figure) => (
+            <figure key={figure.image} className="space-y-2">
+              <img
+                src={figure.image}
+                alt={figure.caption || page.title || ""}
+                className="mx-auto h-auto max-h-[360px] w-full object-contain"
+              />
+              {figure.caption && (
+                <figcaption className="text-center text-xs font-semibold text-foreground/85">
+                  {figure.caption}
+                </figcaption>
+              )}
+            </figure>
+          ))}
+        </div>
+        {caption}
+      </div>
+    )
+  }
+
+  if (!page.image) return null
+  return (
+    <div className={page.imageLayout === "below" ? "mx-auto w-full max-w-xl space-y-2" : "space-y-2"}>
+      <div
+        className={
+          page.imageLayout === "side" ? "overflow-hidden" : "overflow-hidden rounded-xl border bg-black/5 shadow-inner"
+        }
+      >
+        <img src={page.image} alt={page.title || ""} className="h-auto max-h-[420px] w-full object-contain" />
+      </div>
+      {caption}
     </div>
   )
 }
@@ -469,7 +520,9 @@ function CardsSlide({ page }: { page: CardsPage }) {
               </span>
             )}
             {c.title && <h4 className="mt-1 text-sm font-semibold">{c.title}</h4>}
-            <p className={`mt-2 text-xs leading-relaxed ${c.dark ? "text-slate-300" : "text-muted-foreground"}`}>
+            <p
+              className={`mt-2 text-xs leading-relaxed whitespace-pre-line ${c.dark ? "text-slate-300" : "text-muted-foreground"}`}
+            >
               {c.body}
             </p>
           </div>

@@ -55,10 +55,20 @@ export interface ContentPage extends BasePage {
   title?: string
   body?: string
   image?: string
-  imageLayout?: "below"
+  /** "below" stacks the image under the text at reading width; "side" puts
+   *  the text beside the image or figures, as the lesion slides do. */
+  imageLayout?: "below" | "side"
+  /** With `figures`, the caption shared by the whole set. */
   imageCaption?: string
+  /** Several photos shown together, each with its own label. */
+  figures?: ContentFigure[]
   table?: ContentTable
   reveal_steps?: RevealStep[]
+}
+
+export interface ContentFigure {
+  image: string
+  caption?: string
 }
 
 export interface ContentTable {
@@ -155,6 +165,8 @@ export interface QuizOption {
 export interface TestQuestion {
   id: string
   question: string
+  /** A photo the question refers to ("foto fundus tersebut"). */
+  image?: string
   options: QuizOption[]
   correct: string
   explanation: string
@@ -167,8 +179,9 @@ export interface TestQuestion {
  * deck's preTestQuizId, recorded for pre/post comparison only); `practice`
  * is a module's self-check Evaluasi, scored locally and never recorded.
  * The DRIVE team's rule is that Pre and Post Test share one question set,
- * so only the post page carries `questions` — any test page without its
- * own falls back to the post test's.
+ * so only the post page carries `questions`; a `practice` page may carry
+ * its own module-specific set, and any test page without one falls back to
+ * the post test's.
  */
 export interface TestPage extends BasePage {
   type: "test"

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react"
 import { Link } from "@tanstack/react-router"
 import { ArrowLeft, Check, Clock, Lock, Play } from "lucide-react"
 
@@ -22,6 +23,14 @@ import type { CourseDefinition } from "@/lib/content/course-types"
  */
 export function DeckSteps({ course }: { course: CourseDefinition }) {
   const deck = usePlayerDeck()
+  const navRef = useRef<HTMLElement>(null)
+  const activeId = deck?.activeModuleId
+
+  // The outline is taller than the screen, so keep the current step in view.
+  useEffect(() => {
+    navRef.current?.querySelector('[aria-current="step"]')?.scrollIntoView({ block: "nearest" })
+  }, [activeId])
+
   if (!deck) return null
   const { modules, activeModuleId, furthestModuleIdx, requestJump } = deck
 
@@ -59,7 +68,7 @@ export function DeckSteps({ course }: { course: CourseDefinition }) {
         </div>
         <h2 className="mt-2.5 line-clamp-3 text-[15px] leading-snug font-bold">{course.title}</h2>
       </div>
-      <nav aria-label="Langkah modul" className="flex-1 overflow-y-auto">
+      <nav ref={navRef} aria-label="Langkah modul" className="flex-1 overflow-y-auto">
         <ol>
           {rows.map((row, rowIdx) => {
             if (!row.group) {
@@ -130,6 +139,7 @@ function StepButton({
     <button
       type="button"
       disabled={disabled}
+      aria-current={active ? "step" : undefined}
       onClick={onClick}
       title={
         step.placeholder

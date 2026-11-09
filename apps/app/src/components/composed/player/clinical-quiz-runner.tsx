@@ -241,6 +241,9 @@ export function ClinicalQuizRunner({
                     <p className="font-semibold">
                       {idx + 1}. {q.question}
                     </p>
+                    {q.image ? (
+                      <img src={q.image} alt="Foto fundus untuk soal ini" className="my-1.5 size-28 object-contain" />
+                    ) : null}
                     <p className="opacity-90">
                       Jawaban Anda: <strong>{userAns || "Belum dijawab"}</strong>
                       {showKey ? (
@@ -338,6 +341,13 @@ export function ClinicalQuizRunner({
       {/* Question Text */}
       <div className="space-y-3">
         <h4 className="text-base leading-relaxed font-semibold text-foreground">{currentQ.question}</h4>
+        {currentQ.image ? (
+          <img
+            src={currentQ.image}
+            alt="Foto fundus untuk soal ini"
+            className="mx-auto h-auto max-h-80 object-contain"
+          />
+        ) : null}
       </div>
 
       {/* Options List */}
