@@ -141,6 +141,7 @@ export function AudioNarrationBar({
   function handleReplay() {
     setProgress(0)
     onTimeUpdate?.(0)
+    if (audioRef.current) audioRef.current.currentTime = 0
     handlePlay()
   }
 

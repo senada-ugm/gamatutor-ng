@@ -54,6 +54,10 @@ export function speak(
   if (!isSupported()) return null
   const lang = opts.lang ?? "id-ID"
   window.speechSynthesis.cancel()
+  // A device with voices but none in this language would read the Indonesian
+  // text in an English voice, which is unintelligible. Stay silent instead;
+  // the transcript is still on the page.
+  if (window.speechSynthesis.getVoices().length > 0 && !resolveVoice(lang)) return null
   const utterance = new SpeechSynthesisUtterance(text)
   utterance.lang = lang
   utterance.rate = opts.rate ?? 1

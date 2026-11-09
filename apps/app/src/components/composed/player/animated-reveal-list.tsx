@@ -9,6 +9,7 @@ interface AnimatedRevealListProps {
   intro?: string
   currentTime?: number
   autoPlayIntervalMs?: number
+  columns?: 2 | 3
   onComplete?: () => void
   className?: string
 }
@@ -18,39 +19,27 @@ export function AnimatedRevealList({
   intro,
   currentTime,
   autoPlayIntervalMs = 1200,
+  columns = 2,
   onComplete,
   className = "",
 }: AnimatedRevealListProps) {
   const hasCues = steps.some((s) => s.cue !== undefined)
-  // Start with 1 step visible, or let cue/timer reveal the rest
-  const [revealedCount, setRevealedCount] = useState<number>(hasCues ? 0 : 2)
+  const [timerCount, setRevealedCount] = useState<number>(2)
   const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(!hasCues)
+  const [showAll, setShowAll] = useState<boolean>(false)
 
   const totalSteps = steps.length
+
+  // With cues the narration drives the list, so replaying or scrubbing it
+  // rewinds the list too. The first step is always shown: audio can be
+  // blocked until the learner interacts, and the slide must not sit empty.
+  let cueCount = 1
+  for (let i = 0; i < totalSteps; i++) {
+    const cue = steps[i]?.cue
+    if (cue !== undefined && cue <= (currentTime ?? 0)) cueCount = i + 1
+  }
+  const revealedCount = showAll ? totalSteps : hasCues ? cueCount : timerCount
   const isAllRevealed = revealedCount >= totalSteps
-
-  // Sync with audio currentTime cues if available
-  useEffect(() => {
-    if (currentTime === undefined || !hasCues) return
-
-    let cueMatches = 0
-    for (let i = 0; i < steps.length; i++) {
-      const step = steps[i]
-      if (step && step.cue !== undefined && step.cue <= currentTime) {
-        cueMatches = i + 1
-      }
-    }
-
-    if (cueMatches > 0) {
-      setRevealedCount((prev) => {
-        const next = Math.max(prev, cueMatches)
-        if (next >= totalSteps) {
-          onComplete?.()
-        }
-        return next
-      })
-    }
-  }, [currentTime, hasCues, steps, totalSteps, onComplete])
 
   useEffect(() => {
     // If cues are present and audio is driving, don't run the blind interval timer
@@ -72,12 +61,14 @@ export function AnimatedRevealList({
   }, [hasCues, isAutoPlaying, isAllRevealed, totalSteps, autoPlayIntervalMs, onComplete])
 
   function handleRevealAll() {
+    setShowAll(true)
     setRevealedCount(totalSteps)
     setIsAutoPlaying(false)
     onComplete?.()
   }
 
   function handleReset() {
+    setShowAll(false)
     setRevealedCount(1)
     setIsAutoPlaying(true)
   }
@@ -85,7 +76,7 @@ export function AnimatedRevealList({
   return (
     <div className={`space-y-4 ${className}`}>
       {/* Intro and Controls Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border bg-muted/20 p-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border bg-muted/20 p-3 sm:min-h-[58px]">
         <div>
           {intro ? <p className="text-sm font-semibold text-foreground">{intro}</p> : null}
           <div className="mt-0.5 flex items-center gap-2">
@@ -102,7 +93,7 @@ export function AnimatedRevealList({
         </div>
 
         <div className="flex items-center gap-1.5">
-          {!isAllRevealed && (
+          {!isAllRevealed && !hasCues && (
             <Button
               size="sm"
               variant={isAutoPlaying ? "secondary" : "outline"}
@@ -128,7 +119,7 @@ export function AnimatedRevealList({
               <Eye className="h-3.5 w-3.5" />
               Tampilkan Semua
             </Button>
-          ) : (
+          ) : hasCues && !showAll ? null : (
             <Button
               size="sm"
               variant="ghost"
@@ -143,21 +134,32 @@ export function AnimatedRevealList({
       </div>
 
       {/* 2-Column Responsive Grid (Reviews #5 & #6) */}
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+      <div className={`grid grid-cols-1 gap-3 ${columns === 3 ? "md:grid-cols-3" : "md:grid-cols-2"}`}>
         {steps.map((step, idx) => {
           const isRevealed = idx < revealedCount
-          if (!isRevealed) return null
+          // Narration-driven cards hold their place while hidden, so whatever
+          // sits below the list (a photo, the transcript) never jumps.
+          if (!isRevealed && !hasCues) return null
+          const entrance = isRevealed ? "animate-in fade-in slide-in-from-bottom-2" : "invisible"
+          // An odd last card sits centred under the pair above it, not left.
+          const lone =
+            columns === 2 && totalSteps % 2 === 1 && idx === totalSteps - 1
+              ? "md:col-span-2 md:mx-auto md:w-[calc(50%-0.375rem)]"
+              : ""
 
           if ("texts" in step) {
             return (
               <div
                 key={idx}
-                className="group relative flex animate-in items-start gap-3 rounded-xl border bg-card p-4 shadow-xs transition-all duration-300 fade-in slide-in-from-bottom-2 hover:border-primary/40 hover:shadow-sm"
+                className={`group relative flex items-start gap-3 rounded-xl border bg-card p-4 shadow-xs transition-all duration-300 hover:border-primary/40 hover:shadow-sm ${entrance} ${lone}`}
               >
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-xs font-bold text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                  {String.fromCharCode(97 + idx)}
-                </div>
+                {step.title ? null : (
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-xs font-bold text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                    {String.fromCharCode(97 + idx)}
+                  </div>
+                )}
                 <div className="flex-1 space-y-1">
+                  {step.title ? <h4 className="text-sm font-bold text-primary">{step.title}</h4> : null}
                   {step.texts.map((t, tIdx) => (
                     <p key={tIdx} className="text-sm leading-snug font-medium text-foreground">
                       {t.replace(/^[a-z]\.\s*/, "")}
@@ -170,11 +172,8 @@ export function AnimatedRevealList({
 
           if ("image" in step) {
             return (
-              <div
-                key={idx}
-                className="animate-in overflow-hidden rounded-xl border bg-card shadow-xs fade-in slide-in-from-bottom-2"
-              >
-                <img src={step.image} alt={step.title || ""} className="h-48 w-full bg-white object-contain" />
+              <div key={idx} className={`overflow-hidden rounded-xl border bg-card shadow-xs ${entrance} ${lone}`}>
+                <img src={step.image} alt={step.title || ""} className="h-60 w-full bg-white object-contain" />
                 {step.title || step.body ? (
                   <div className="p-3">
                     {step.title && <h4 className="text-sm font-semibold">{step.title}</h4>}

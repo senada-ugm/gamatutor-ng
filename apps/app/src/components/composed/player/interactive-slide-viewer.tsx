@@ -98,6 +98,16 @@ export function InteractiveSlideViewer({
     // course render.
   }, [jumpNonce])
 
+  // Fetch the next slide's narration ahead of time, so it starts the moment
+  // the learner moves on instead of after a network round trip.
+  const nextAudio = allSlides[currentIndex + 1]?.page.audio
+  useEffect(() => {
+    if (!nextAudio) return
+    const preload = new Audio()
+    preload.preload = "auto"
+    preload.src = nextAudio
+  }, [nextAudio])
+
   useSlideTelemetry({
     courseId: course.id,
     moduleId: currentItem?.moduleId || "",
@@ -177,8 +187,10 @@ export function InteractiveSlideViewer({
       >
         {page.type === "hero" && <HeroSlide page={page} onStart={handleNext} />}
         {page.type === "divider" && <DividerSlide page={page} onProceed={handleNext} />}
-        {page.type === "content" && <ContentSlide page={page} currentTime={currentPlaybackTime} />}
-        {page.type === "cards" && <CardsSlide page={page} />}
+        {/* Keyed by page: consecutive content slides must not share a reveal
+            list's state, and each one replays its entrance animation. */}
+        {page.type === "content" && <ContentSlide key={page.id} page={page} currentTime={currentPlaybackTime} />}
+        {page.type === "cards" && <CardsSlide key={page.id} page={page} />}
         {page.type === "hotspot" && <HotspotSlide key={page.id} page={page} />}
         {page.type === "match" && <MatchSlide key={page.id} page={page} onDone={handleNext} />}
         {/* Keyed by page so the previous case's selection never carries over. */}
@@ -421,7 +433,7 @@ function ContentSlide({ page, currentTime }: { page: ContentPage; currentTime?: 
 
       {/* Slide 7 Auto-Reveal 2-Column List with Audio Cue Sync (Reviews #5 & #6) */}
       {page.reveal_steps && page.reveal_steps.length > 0 && (
-        <AnimatedRevealList steps={page.reveal_steps} currentTime={currentTime} />
+        <AnimatedRevealList steps={page.reveal_steps} currentTime={currentTime} columns={page.revealColumns} />
       )}
 
       {page.imageLayout !== "side" && <SlideMedia page={page} />}
@@ -564,7 +576,14 @@ function MatchSlide({ page, onDone }: { page: MatchPage; onDone: () => void }) {
           {page.kicker}
         </Badge>
       )}
-      <MatchingPairGame pairs={page.pairs} title={page.title} intro={page.intro} onContinue={onDone} />
+      <MatchingPairGame
+        pairs={page.pairs}
+        title={page.title}
+        intro={page.intro}
+        leftTitle={page.leftTitle}
+        rightTitle={page.rightTitle}
+        onContinue={onDone}
+      />
     </div>
   )
 }

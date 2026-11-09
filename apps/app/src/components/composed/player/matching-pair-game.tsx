@@ -8,6 +8,8 @@ interface MatchingPairGameProps {
   pairs: MatchPair[]
   title?: string
   intro?: string
+  leftTitle?: string
+  rightTitle?: string
   onComplete?: (score: number) => void
   /** Shown after verifying, so the learner reads the per-pair result before
    *  moving on instead of the slide changing under them. */
@@ -19,6 +21,8 @@ export function MatchingPairGame({
   pairs,
   title = "Cocokkan faktor risiko dengan penjelasannya",
   intro,
+  leftTitle = "Faktor Risiko",
+  rightTitle = "Penjelasan Klinis",
   onComplete,
   onContinue,
   className = "",
@@ -140,7 +144,7 @@ export function MatchingPairGame({
       <div className="grid gap-6 md:grid-cols-2">
         {/* Left Column: Risk Factor Terms */}
         <div className="space-y-3">
-          <h4 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">Faktor Risiko</h4>
+          <h4 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">{leftTitle}</h4>
           <div className="space-y-2.5">
             {pairs.map((pair, pIdx) => {
               const isSelected = selectedLeft === pair.id
@@ -214,7 +218,7 @@ export function MatchingPairGame({
 
         {/* Right Column: Explanations */}
         <div className="space-y-3">
-          <h4 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">Penjelasan Klinis</h4>
+          <h4 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">{rightTitle}</h4>
           <div className="space-y-2.5">
             {shuffledRights.map((pair) => {
               // Find which left item is linked to this right item
