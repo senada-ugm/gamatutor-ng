@@ -1,4 +1,6 @@
 export interface RevealStepText {
+  /** Card heading; a titled card drops the a/b/c list letter. */
+  title?: string
   texts: string[]
   narration?: string
   cue?: number
@@ -64,6 +66,9 @@ export interface ContentPage extends BasePage {
   figures?: ContentFigure[]
   table?: ContentTable
   reveal_steps?: RevealStep[]
+  /** Grid columns for `reveal_steps` from `md` up; 3 suits a set of three
+   *  or six. Defaults to 2 (DRIVE review: list items in two columns). */
+  revealColumns?: 2 | 3
 }
 
 export interface ContentFigure {
@@ -118,6 +123,8 @@ export interface HotspotPage extends BasePage {
   intro?: string
   image: string
   imageCaption?: string
+  /** Narrower stage for a square photo, so it fits on one screen. */
+  compact?: boolean
   points: HotspotPoint[]
   masks?: HotspotMask[]
 }
@@ -133,6 +140,9 @@ export interface MatchPage extends BasePage {
   kicker?: string
   title: string
   intro?: string
+  /** Column headings; default to the Modul 1 risk-factor exercise. */
+  leftTitle?: string
+  rightTitle?: string
   pairs: MatchPair[]
 }
 

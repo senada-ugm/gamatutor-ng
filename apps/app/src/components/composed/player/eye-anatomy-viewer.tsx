@@ -86,7 +86,9 @@ export function EyeAnatomyViewer({ page, onPointSelect, className = "" }: EyeAna
       {/* 2D Interactive Stage */}
       <div className="grid items-start gap-6 lg:grid-cols-12">
         <div className="flex flex-col items-center lg:col-span-8">
-          <div className="relative w-full max-w-2xl overflow-hidden rounded-xl border bg-black/5 shadow-inner select-none">
+          <div
+            className={`relative w-full overflow-hidden rounded-xl border bg-black/5 shadow-inner select-none ${page.compact ? "max-w-md" : "max-w-2xl"}`}
+          >
             <img
               src={page.image}
               alt={page.imageCaption || page.title}

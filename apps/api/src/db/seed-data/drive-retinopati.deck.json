@@ -72,7 +72,8 @@
           "references": [
             "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 5 (RD sebagai penyakit pembuluh darah mikro retina yang dikaitkan dengan hiperglikemia berkepanjangan pada DM)."
           ],
-          "abbreviations": ["DRIVE, Diabetic Retinopathy Initiative", "RD, retinopati diabetika"]
+          "abbreviations": ["DRIVE, Diabetic Retinopathy Initiative", "RD, retinopati diabetika"],
+          "audio": "/content/drive-retinopati/assets/audio-neural/pengantar-p2.mp3"
         }
       ]
     },
@@ -103,7 +104,8 @@
             "Perkumpulan Endokrinologi Indonesia (PERKENI). Pedoman Pengelolaan dan Pencegahan Diabetes Melitus Tipe 2 Dewasa di Indonesia 2021. Jakarta: PB PERKENI; 2021. hlm. 6 (definisi dan patogenesis DM tipe 2), hlm. 7–10 (Gambar 1 dan uraian egregious eleven).",
             "Schwartz SS, Epstein S, Corkey BE, Grant SFA, Gavin JR 3rd, Aguilar RB. The time is right for a new classification system for diabetes: rationale and implications of the β-cell-centric classification schema. Diabetes Care. 2016;39(2):179–186. doi:10.2337/dc15-1585"
           ],
-          "abbreviations": ["DM, diabetes mellitus", "PERKENI, Perkumpulan Endokrinologi Indonesia"]
+          "abbreviations": ["DM, diabetes mellitus", "PERKENI, Perkumpulan Endokrinologi Indonesia"],
+          "audio": "/content/drive-retinopati/assets/audio-neural/modul1-p2.mp3"
         },
         {
           "id": "modul1-p3",
@@ -139,7 +141,8 @@
           ],
           "references": [
             "International Diabetes Federation (IDF). IDF Diabetes Atlas. 11th ed. Brussels: IDF; 2025. ISBN 978-2-930229-96-6. Tersedia di: https://diabetesatlas.org (588,7 juta penyandang DM usia 20–79 tahun pada 2024; proyeksi 852,5 juta pada 2050; Indonesia ±20,4 juta, prevalensi 11,3%, peringkat 5 dunia)."
-          ]
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/modul1-p3.mp3"
         },
         {
           "id": "modul1-p4",
@@ -156,7 +159,8 @@
             "Perkumpulan Endokrinologi Indonesia (PERKENI). Pedoman Pengelolaan dan Pencegahan Diabetes Melitus Tipe 2 Dewasa di Indonesia 2021. Jakarta: PB PERKENI; 2021. hlm. 10 (Tabel 2. Klasifikasi Etiologi Diabetes Melitus).",
             "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 100 (klasifikasi DM)."
           ],
-          "abbreviations": ["DM, diabetes mellitus", "MODY, maturity-onset diabetes of the young"]
+          "abbreviations": ["DM, diabetes mellitus", "MODY, maturity-onset diabetes of the young"],
+          "audio": "/content/drive-retinopati/assets/audio-neural/modul1-p4.mp3"
         },
         {
           "id": "modul1-p5",
@@ -169,43 +173,53 @@
           "reveal_steps": [
             {
               "texts": ["a. Aktivitas fisik kurang"],
-              "narration": "Satu, aktivitas fisik yang kurang, yang dapat memperburuk resistensi insulin."
+              "narration": "Satu, aktivitas fisik yang kurang, yang dapat memperburuk resistensi insulin.",
+              "cue": 14.4
             },
             {
               "texts": ["b. Riwayat keluarga (keturunan) DM"],
-              "narration": "Dua, riwayat keluarga dengan diabetes, terutama keluarga derajat pertama seperti orang tua atau saudara kandung."
+              "narration": "Dua, riwayat keluarga dengan diabetes, terutama keluarga derajat pertama seperti orang tua atau saudara kandung.",
+              "cue": 21.1
             },
             {
               "texts": ["c. Ras/etnis tertentu"],
-              "narration": "Tiga, ras atau etnis tertentu yang memang lebih rentan."
+              "narration": "Tiga, ras atau etnis tertentu yang memang lebih rentan.",
+              "cue": 30.9
             },
             {
               "texts": ["d. Riwayat bayi lahir > 4 kg / DM gestasional"],
-              "narration": "Empat, perempuan dengan riwayat melahirkan bayi dengan berat lahir lebih dari 4 kg atau pernah didiagnosis DM gestasional."
+              "narration": "Empat, perempuan dengan riwayat melahirkan bayi dengan berat lahir lebih dari 4 kg atau pernah didiagnosis DM gestasional.",
+              "cue": 35.7
             },
             {
               "texts": ["e. Hipertensi (≥ 140/90 mmHg)"],
-              "narration": "Lima, hipertensi, yaitu tekanan darah 140/90 mmHg atau lebih, atau sedang dalam pengobatan antihipertensi."
+              "narration": "Lima, hipertensi, yaitu tekanan darah 140/90 mmHg atau lebih, atau sedang dalam pengobatan antihipertensi.",
+              "cue": 46.3
             },
             {
               "texts": ["f. HDL < 35 atau trigliserida > 250 mg/dL"],
-              "narration": "Enam, dislipidemia, yaitu HDL kurang dari 35 mg/dL dan/atau trigliserida lebih dari 250 mg/dL."
+              "narration": "Enam, dislipidemia, yaitu HDL kurang dari 35 mg/dL dan/atau trigliserida lebih dari 250 mg/dL.",
+              "cue": 55.5
             },
             {
               "texts": ["g. Sindrom ovarium polikistik (PCOS)"],
-              "narration": "Tujuh, perempuan dengan sindrom ovarium polikistik atau PCOS."
+              "narration": "Tujuh, perempuan dengan sindrom ovarium polikistik atau PCOS.",
+              "cue": 63.7
             },
             {
               "texts": ["h. Riwayat prediabetes"],
-              "narration": "Delapan, memiliki riwayat prediabetes, yaitu toleransi glukosa terganggu atau glukosa darah puasa terganggu."
+              "narration": "Delapan, memiliki riwayat prediabetes, yaitu toleransi glukosa terganggu atau glukosa darah puasa terganggu.",
+              "cue": 69.1
             },
             {
               "texts": ["i. Obesitas berat + akantosis nigrikans"],
-              "narration": "Sembilan, obesitas berat dan akantosis nigrikans, yaitu kulit yang menebal dan menggelap di lipatan leher atau ketiak sebagai tanda resistensi insulin."
+              "narration": "Sembilan, obesitas berat dan akantosis nigrikans, yaitu kulit yang menebal dan menggelap di lipatan leher atau ketiak sebagai tanda resistensi insulin.",
+              "cue": 78.5
             },
             {
               "texts": ["j. Riwayat penyakit kardiovaskular"],
-              "narration": "Sepuluh, memiliki riwayat penyakit kardiovaskular."
+              "narration": "Sepuluh, memiliki riwayat penyakit kardiovaskular.",
+              "cue": 91.6
             }
           ],
           "references": [
@@ -217,7 +231,8 @@
             "HDL, high-density lipoprotein",
             "PCOS, polycystic ovary syndrome (sindrom ovarium polikistik)",
             "PERKENI, Perkumpulan Endokrinologi Indonesia"
-          ]
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/modul1-p5.mp3"
         },
         {
           "id": "modul1-p6",
@@ -233,7 +248,8 @@
           "references": [
             "Perkumpulan Endokrinologi Indonesia (PERKENI). Pedoman Pengelolaan dan Pencegahan Diabetes Melitus Tipe 2 Dewasa di Indonesia 2021. Jakarta: PB PERKENI; 2021. hlm. 11 (Tabel 3. Kriteria Diagnosis Diabetes Melitus; keluhan klasik), hlm. 12 (Gambar 2. Cara Pelaksanaan TTGO)."
           ],
-          "abbreviations": ["HbA1c, hemoglobin A1c"]
+          "abbreviations": ["HbA1c, hemoglobin A1c"],
+          "audio": "/content/drive-retinopati/assets/audio-neural/modul1-p6.mp3"
         },
         {
           "id": "modul1-p7",
@@ -249,7 +265,8 @@
           "references": [
             "Perkumpulan Endokrinologi Indonesia (PERKENI). Pedoman Pengelolaan dan Pencegahan Diabetes Melitus Tipe 2 Dewasa di Indonesia 2021. Jakarta: PB PERKENI; 2021. hlm. 11 (kondisi yang membuat HbA1c tidak valid), hlm. 11–12 (prediabetes; Tabel 4. Kadar Tes Laboratorium Darah untuk Diagnosis Diabetes dan Prediabetes)."
           ],
-          "abbreviations": ["HbA1c, hemoglobin A1c", "TTGO, tes toleransi glukosa oral"]
+          "abbreviations": ["HbA1c, hemoglobin A1c", "TTGO, tes toleransi glukosa oral"],
+          "audio": "/content/drive-retinopati/assets/audio-neural/modul1-p7.mp3"
         },
         {
           "id": "modul1-p8",
@@ -265,7 +282,8 @@
           "references": [
             "Perkumpulan Endokrinologi Indonesia (PERKENI). Pedoman Pengelolaan dan Pencegahan Diabetes Melitus Tipe 2 Dewasa di Indonesia 2021. Jakarta: PB PERKENI; 2021. hlm. 56 (penyulit menahun: makroangiopati dan mikroangiopati).",
             "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 6 (RD ditemukan pada 75% pasien yang telah menderita DM selama 20 tahun)."
-          ]
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/modul1-p8.mp3"
         }
       ]
     },
@@ -452,7 +470,8 @@
             "ICDRS, International Clinical Diabetic Retinopathy Severity Scale",
             "NPDR, non-proliferative diabetic retinopathy",
             "PDR, proliferative diabetic retinopathy"
-          ]
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/modul2-p3.mp3"
         },
         {
           "id": "modul2-p4",
@@ -471,7 +490,8 @@
             "Sasongko MB, Agni AN, Wardhana FS, et al. Rationale and methodology for a community-based study of diabetic retinopathy in an Indonesian population with type 2 diabetes mellitus: the Jogjakarta Eye Diabetic Study in the Community. Ophthalmic Epidemiol. 2017;24(1):48–56. doi:10.1080/09286586.2016.1255763",
             "Sasongko MB, Febryanto GA, Widyaputri F, et al. Incidence and progression of diabetic retinopathy and blindness in Indonesian adults with type 2 diabetes. PLoS One. 2025. PMCID: PMC12396671.",
             "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 6 (prevalensi RD pada penyandang DM tipe 2 di Indonesia 43,1%)."
-          ]
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/modul2-p4.mp3"
         },
         {
           "id": "modul2-p5",
@@ -635,7 +655,8 @@
             "Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162. hlm. P93 (studi Joslin: pasien tidak menyadari penyakit matanya), hlm. P99 (RD dapat asimtomatik selama bertahun-tahun, bahkan pada stadium lanjut).",
             "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 76 (metamorfopsia atau distorsi penglihatan pada kelainan makula), hlm. 365 (perdarahan vitreus sebagai penyebab penurunan penglihatan mendadak; PDR sebagai penyebab tersering pada dewasa), hlm. 370 (floaters akibat darah atau kekeruhan vitreus).",
             "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3. hlm. 506–507 (pasien sering tidak menyadari retinopatinya)."
-          ]
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/modul2-p6.mp3"
         },
         {
           "id": "modul2-p7",
@@ -649,37 +670,43 @@
               "image": "/content/drive-retinopati/assets/slide17_28.png",
               "title": "Durasi diabetes",
               "body": "Makin lama DM, makin tinggi risiko.",
-              "narration": "Pertama, durasi diabetes. Makin lama pasien menderita diabetes semakin tinggi risiko mengalami kerusakan mikrovaskular retina."
+              "narration": "Pertama, durasi diabetes. Makin lama pasien menderita diabetes semakin tinggi risiko mengalami kerusakan mikrovaskular retina.",
+              "cue": 9.9
             },
             {
               "image": "/content/drive-retinopati/assets/slide17_29.png",
               "title": "Kontrol glikemik",
               "body": "HbA1c tinggi menaikkan risiko.",
-              "narration": "Kedua, kontrol glikemik. Semakin tinggi kadar HbA1c meningkatkan risiko terjadinya retinopati diabetika dan progresifitasnya."
+              "narration": "Kedua, kontrol glikemik. Semakin tinggi kadar HbA1c meningkatkan risiko terjadinya retinopati diabetika dan progresifitasnya.",
+              "cue": 20.2
             },
             {
               "image": "/content/drive-retinopati/assets/slide17_30.png",
               "title": "Hipertensi",
               "body": "Memperburuk mikrovaskuler retina.",
-              "narration": "Ketiga, hipertensi. Tekanan darah tinggi memperberat kerusakan mikrovaskular retina dan mempercepat kebocoran plasma."
+              "narration": "Ketiga, hipertensi. Tekanan darah tinggi memperberat kerusakan mikrovaskular retina dan mempercepat kebocoran plasma.",
+              "cue": 30.5
             },
             {
               "image": "/content/drive-retinopati/assets/slide17_31.png",
               "title": "Dislipidemia",
               "body": "Memicu eksudat keras retina.",
-              "narration": "Keempat, dislipidemia. Kondisi dislipidemia berhubungan dengan pembentukan eksudat keras atau hard exudate di retina dan meningkatkan risiko penurunan penglihatan akibat edema makula."
+              "narration": "Keempat, dislipidemia. Kondisi dislipidemia berhubungan dengan pembentukan eksudat keras atau hard exudate di retina dan meningkatkan risiko penurunan penglihatan akibat edema makula.",
+              "cue": 40.1
             },
             {
               "image": "/content/drive-retinopati/assets/slide17_32.png",
               "title": "Kehamilan",
               "body": "Mempercepat progresi RD.",
-              "narration": "Kelima, kehamilan. Perubahan hormonal saat masa kehamilan pada pasien yang sebelumnya sudah menderita diabetes dapat mempercepat progresifitas retinopati diabetika."
+              "narration": "Kelima, kehamilan. Perubahan hormonal saat masa kehamilan pada pasien yang sebelumnya sudah menderita diabetes dapat mempercepat progresifitas retinopati diabetika.",
+              "cue": 55.0
             },
             {
               "image": "/content/drive-retinopati/assets/slide17_33.png",
               "title": "Faktor genetik",
               "body": "Riwayat keluarga menambah risiko.",
-              "narration": "Terakhir, faktor genetik. Adanya riwayat keluarga dengan komplikasi mikrovaskular serupa meningkatkan kerentanan terjadinya retinopati diabetika."
+              "narration": "Terakhir, faktor genetik. Adanya riwayat keluarga dengan komplikasi mikrovaskular serupa meningkatkan kerentanan terjadinya retinopati diabetika.",
+              "cue": 68.4
             }
           ],
           "references": [
@@ -691,7 +718,8 @@
             "UK Prospective Diabetes Study Group. Tight blood pressure control and risk of macrovascular and microvascular complications in type 2 diabetes: UKPDS 38. BMJ. 1998;317(7160):703–713. doi:10.1136/bmj.317.7160.703",
             "Chew EY, Mills JL, Metzger BE, et al. Metabolic control and progression of retinopathy: the Diabetes in Early Pregnancy Study. Diabetes Care. 1995;18(5):631–637. doi:10.2337/diacare.18.5.631"
           ],
-          "abbreviations": ["HbA1c, hemoglobin A1c"]
+          "abbreviations": ["HbA1c, hemoglobin A1c"],
+          "audio": "/content/drive-retinopati/assets/audio-neural/modul2-p7.mp3"
         },
         {
           "id": "modul2-p8",
@@ -789,7 +817,8 @@
             "World Health Organization (WHO). Guide to cancer early diagnosis. Geneva: WHO; 2017. ISBN 978-92-4-151194-0. hlm. 8–9 (definisi early diagnosis dan screening).",
             "WHO Regional Office for Europe. Diabetic retinopathy screening: a short guide. Increase effectiveness, maximize benefits and minimize harm. Copenhagen: WHO Regional Office for Europe; 2020. ISBN 978-92-890-5532-1. hlm. 7 (tujuan skrining RD pada penyandang DM yang asimtomatik; pasien dengan gejala dikelola di layanan mata, bukan melalui program skrining)."
           ],
-          "abbreviations": ["WHO, World Health Organization"]
+          "abbreviations": ["WHO, World Health Organization"],
+          "audio": "/content/drive-retinopati/assets/audio-neural/modul3-p2.mp3"
         },
         {
           "id": "modul3-p3",
@@ -805,7 +834,8 @@
             "Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162. hlm. P99–P100 (RD dapat asimtomatik selama bertahun-tahun; tujuan program skrining; efektivitas terapi).",
             "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3. hlm. 507 (skrining retina teratur menurunkan risiko kehilangan penglihatan berat)."
           ],
-          "abbreviations": ["PDR, proliferative diabetic retinopathy"]
+          "abbreviations": ["PDR, proliferative diabetic retinopathy"],
+          "audio": "/content/drive-retinopati/assets/audio-neural/modul3-p3.mp3"
         },
         {
           "id": "modul3-p4",
@@ -825,7 +855,8 @@
             "ECIM, Eye Care Indicator Menu",
             "VEGF, vascular endothelial growth factor",
             "WHO, World Health Organization"
-          ]
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/modul3-p4.mp3"
         },
         {
           "id": "modul3-p5",
@@ -842,7 +873,8 @@
             "Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162. hlm. P100 (sistem kecerdasan buatan otonom untuk skrining di layanan primer).",
             "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 104 (telemedisin dan kecerdasan buatan untuk skrining RD).",
             "Sadikin IS, Lestari YD, Victor AA. The role of cadre in the community on diabetic retinopathy management and its challenges in low-middle income countries: a scoping review. BMC Public Health. 2024;24:177. doi:10.1186/s12889-024-17652-5"
-          ]
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/modul3-p5.mp3"
         },
         {
           "id": "modul3-p6",
@@ -867,7 +899,8 @@
             "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 19 (rekomendasi waktu skrining pertama), hlm. 36 (follow-up minimal 1 kali setahun pada DM tanpa RD; follow-up RD sesuai derajat keparahan).",
             "Primary Care and Eye Health (Med Learning Group). Screening and diagnosing DR [internet]. Tersedia di: https://pcp.vision-relief.com/educational-resources/screening-and-diagnosing-dr/ (diakses Oktober 2026) (sumber tabel “Recommended Frequency of Dilated Eye Exams for Patients with Diabetes” yang diadaptasi ke dalam bahasa Indonesia; tabel asli merujuk AAO PPP Diabetic Retinopathy 2025)."
           ],
-          "abbreviations": ["DM, diabetes mellitus"]
+          "abbreviations": ["DM, diabetes mellitus"],
+          "audio": "/content/drive-retinopati/assets/audio-neural/modul3-p6.mp3"
         },
         {
           "id": "modul3-p7",
@@ -912,7 +945,8 @@
             "PRP, panretinal photocoagulation",
             "RD, retinopati diabetika",
             "VEGF, vascular endothelial growth factor"
-          ]
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/modul3-p7.mp3"
         },
         {
           "id": "modul3-p8",
@@ -932,7 +966,8 @@
             "DM, diabetes mellitus",
             "PNPK, Pedoman Nasional Pelayanan Kedokteran",
             "RD, retinopati diabetika"
-          ]
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/modul3-p8.mp3"
         },
         {
           "id": "modul3-p9",
@@ -940,7 +975,8 @@
           "type": "divider",
           "kicker": "MODUL 1 SELESAI",
           "title": "Terima Kasih",
-          "transcript": "Selamat, Anda telah menyelesaikan Modul 1, Pengenalan Diabetes dan Retinopati Diabetika. Selanjutnya, silakan mengerjakan soal evaluasi berikut untuk menilai pemahaman Anda terhadap materi yang telah dibahas."
+          "transcript": "Selamat, Anda telah menyelesaikan Modul 1, Pengenalan Diabetes dan Retinopati Diabetika. Selanjutnya, silakan mengerjakan soal evaluasi berikut untuk menilai pemahaman Anda terhadap materi yang telah dibahas.",
+          "audio": "/content/drive-retinopati/assets/audio-neural/modul3-p9.mp3"
         }
       ]
     },
@@ -1016,7 +1052,8 @@
             "DRIVE, Diabetic Retinopathy Initiative",
             "EMD, edema makula diabetika",
             "STDR, sight-threatening diabetic retinopathy"
-          ]
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s2.mp3"
         }
       ]
     },
@@ -1031,55 +1068,92 @@
           "type": "divider",
           "kicker": "BAB 1",
           "title": "PENGENALAN FOTO FUNDUS",
-          "transcript": "Bab satu, Pengenalan Foto Fundus"
+          "transcript": "Bab satu, Pengenalan Foto Fundus",
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s3.mp3"
         },
         {
           "id": "m3-s4",
           "slide": 4,
           "type": "content",
           "kicker": "Pengambilan Foto Fundus",
-          "title": "Standar Cakupan Area Retina di Foto Fundus",
+          "title": "Seberapa Luas Retina yang Terekam?",
           "image": "/content/drive-retinopati/assets/m3_s4_1.webp",
-          "imageLayout": "side",
+          "imageLayout": "below",
           "imageCaption": "Cakupan area retina: single-field, two-field, dan seven-field (standar ETDRS) pada contoh mata kanan (OD)",
           "transcript": "Teknik pengambilan foto fundus dapat dilakukan dengan tiga pendekatan, yaitu\nSatu, mencakup satu bidang foto atau single-field photography yaitu foto fundus yang berfokus pada makula saja atau pada diskus optikus saja.\nDua, mencakup dua bidang foto atau two-field photography yaitu foto fundus yang menggabungkan dua bidang foto sekaligus yaitu berfokus pada makula dan diskus optikus. Ini merupakan standar yang direkomendasikan untuk skrining retinopati diabetika karena efisiensinya.\nTiga, mencakup tujuh bidang foto atau seven-field photography yaitu foto fundus standar baku emas yang mencakup tujuh bidang retina secara komprehensif, mencapai penilaian retina pada area perifer.\n\nHasil evaluasi retina dengan foto fundus ini digunakan sebagai dasar penegakan diagnosis retinopati diabetika.",
           "references": [
             "Early Treatment Diabetic Retinopathy Study Research Group. Grading diabetic retinopathy from stereoscopic color fundus photographs—an extension of the modified Airlie House classification. ETDRS report number 10. Ophthalmology. 1991;98(5 Suppl):786–806. doi:10.1016/S0161-6420(13)38012-9.",
             "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025."
           ],
-          "abbreviations": ["ETDRS, Early Treatment Diabetic Retinopathy Study", "OD, oculi dextra"]
+          "abbreviations": ["ETDRS, Early Treatment Diabetic Retinopathy Study", "OD, oculi dextra"],
+          "body": "Ada tiga pendekatan pengambilan foto fundus, dari yang paling sempit hingga yang paling menyeluruh.",
+          "reveal_steps": [
+            {
+              "title": "Single-field",
+              "texts": ["Satu bidang foto, berfokus pada makula saja atau diskus optikus saja."],
+              "cue": 5.8
+            },
+            {
+              "title": "Two-field",
+              "texts": [
+                "Dua bidang foto sekaligus: makula dan diskus optikus. Standar yang direkomendasikan untuk skrining RD karena efisien."
+              ],
+              "cue": 16.5
+            },
+            {
+              "title": "Seven-field",
+              "texts": ["Tujuh bidang foto: standar baku emas yang menjangkau retina hingga area perifer."],
+              "cue": 36.5
+            }
+          ],
+          "revealColumns": 3,
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s4.mp3"
         },
         {
           "id": "m3-s5",
           "slide": 5,
-          "type": "content",
+          "type": "hotspot",
           "kicker": "Gambaran Klinis · Normal",
           "title": "Foto Fundus Normal",
-          "figures": [
-            {
-              "image": "/content/drive-retinopati/assets/m3_s5_1.webp",
-              "caption": "Foto fundus normal mata kanan (OD)"
-            },
-            {
-              "image": "/content/drive-retinopati/assets/m3_s5_2.webp",
-              "caption": "Foto fundus normal mata kiri (OS)"
-            }
-          ],
-          "transcript": "Berikut adalah gambaran foto fundus normal. Pada foto fundus, retina tampak sebagai jaringan tipis transparan dengan latar belakang berwarna merah jingga yang homogen. Terdapat tiga struktur penting yang harus diperhatikan dalam mengevaluasi foto fundus:\nYang pertama, papil saraf optik atau diskus optikus, merupakan tempat berkumpulnya seluruh saraf retina yang keluar dari bola mata untuk membentuk saraf optik menuju ke otak. Pada papil ini juga menjadi jalur keluar-masuk pembuluh darah utama arteri dan vena retina. Papil normal berwarna merah muda cerah, berbentuk bulat atau oval, dan memiliki batas tepi tegas. Di bagian tengah terdapat lekukan fisiologis yang disebut optic cup. Perbandingan ukuran lekukan dengan ukuran keseluruhan papil atau diskus disebut sebagai cup:disc ratio, yang normalnya berkisar antara 0.3 – 0.5.\nYang kedua, makula, merupakan area berbentuk bulat di bagian tengah retina yang bertanggung jawab sebagai pusat tajam penglihatan. Pada pusat makula terdapat struktur yang disebut fovea, pada area ini hanya terdapat sel fotoreseptor jenis kerucut sebagai titik pusat ketajaman visual tertinggi.\nYang ketiga, pembuluh darah retina yang terdiri dari arteri dan vena. Arteri memiliki kaliber lebih kecil dari vena dan berwarna merah terang, sedangkan vena yang berjalan berdampingan dengan cabang-cabang arteri berukuran lebih besar dan berwarna lebih gelap. Rasio ukuran kaliber arteri:vena secara normal adalah 2:3.",
           "references": [
             "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3.",
             "Wilkinson CP, Ferris FL 3rd, Klein RE, et al; Global Diabetic Retinopathy Project Group. Proposed international clinical diabetic retinopathy and diabetic macular edema disease severity scales. Ophthalmology. 2003;110(9):1677–1682. doi:10.1016/S0161-6420(03)00475-5."
           ],
           "abbreviations": ["OD, oculi dextra", "OS, oculi sinistra"],
-          "body": "Gambaran foto fundus normal:\n• Papil saraf optik\n• Makula\n• Pembuluh darah retina",
-          "imageLayout": "side"
+          "intro": "Retina tampak sebagai jaringan tipis transparan dengan latar merah jingga yang homogen. Klik nomor 1–3 untuk mengenali tiga struktur penting pada foto.",
+          "image": "/content/drive-retinopati/assets/m3_s5_1.webp",
+          "imageCaption": "Foto fundus normal mata kanan (OD).",
+          "points": [
+            {
+              "x": 78.8,
+              "y": 45.4,
+              "label": "Papil saraf optik (diskus optikus)",
+              "body": "Tempat berkumpulnya seluruh saraf retina yang keluar dari bola mata, sekaligus jalur keluar-masuk arteri dan vena retina. Papil normal berwarna merah muda cerah, bulat atau oval, dengan tepi tegas. Lekukan di bagian tengahnya disebut optic cup; cup:disc ratio normal berkisar 0,3–0,5.",
+              "audio": "/content/drive-retinopati/assets/audio-neural/m3-s5-1.mp3"
+            },
+            {
+              "x": 47.6,
+              "y": 43.7,
+              "label": "Makula",
+              "body": "Area bulat di bagian tengah retina yang menjadi pusat tajam penglihatan. Di pusatnya terdapat fovea, yang hanya berisi fotoreseptor kerucut, titik ketajaman visual tertinggi.",
+              "audio": "/content/drive-retinopati/assets/audio-neural/m3-s5-2.mp3"
+            },
+            {
+              "x": 74.1,
+              "y": 20.2,
+              "label": "Pembuluh darah retina",
+              "body": "Terdiri dari arteri dan vena. Arteri lebih kecil dan merah terang; vena berjalan berdampingan, lebih besar, dan lebih gelap. Rasio kaliber arteri:vena normal adalah 2:3.",
+              "audio": "/content/drive-retinopati/assets/audio-neural/m3-s5-3.mp3"
+            }
+          ],
+          "compact": true
         },
         {
           "id": "m3-s6",
           "slide": 6,
           "type": "content",
           "kicker": "Kontrol Kualitas Gambar",
-          "title": "Standar Foto Fundus yang dapat Dinilai (Gradable)",
+          "title": "Kapan Foto Fundus Dapat Dinilai?",
           "figures": [
             {
               "image": "/content/drive-retinopati/assets/m3_s6_1.webp"
@@ -1094,58 +1168,87 @@
             "Bascaran C. Key considerations when choosing a retinal camera for diabetic retinopathy screening. Community Eye Health J South Asia. 2023;36(119):S1–S2. (spesifikasi minimal gambar: lapang pandang, resolusi, warna, identitas).",
             "WHO Regional Office for Europe. Diabetic retinopathy screening: a short guide. Increase effectiveness, maximize benefits and minimize harm (WHO short guide 2020). Copenhagen: WHO Regional Office for Europe; 2020. ISBN 978-92-890-5532-1. hlm. 41 (kendali mutu kualitas gambar dalam program skrining)."
           ],
-          "body": "1. Fokus & Ketajaman\n• Pembuluh darah tajam hingga cabang sekunder, tidak kabur (blur) akibat defocus / gerakan\n\n2. Pencahayaan & Kontras\n• Tidak under/overexposed → lesi mikro dapat dibedakan dari latar retina\n\n3. Artefak Minimal\n• Tidak tertutup refleks cahaya, debu, lensa kotor, bayangan kelopak & bulu mata\n• Media refrakta (kornea, bilik mata depan, lensa, vitreus) jernih",
-          "imageLayout": "side",
-          "imageCaption": "Contoh foto fundus Gradable: detail pada foto fundus tampak jelas, dengan pencahayaan yang cukup tanpa adanya artefak"
+          "body": "Foto disebut gradable bila memenuhi tiga kriteria berikut.",
+          "imageCaption": "Contoh foto fundus Gradable: detail pada foto fundus tampak jelas, dengan pencahayaan yang cukup tanpa adanya artefak",
+          "reveal_steps": [
+            {
+              "title": "Fokus & ketajaman",
+              "texts": ["Pembuluh darah tajam hingga cabang sekunder, tanpa blur akibat defocus atau gerakan."],
+              "cue": 7.3
+            },
+            {
+              "title": "Pencahayaan & kontras",
+              "texts": [
+                "Tidak terlalu gelap atau terlalu terang, sehingga lesi kecil dapat dibedakan dari latar retina."
+              ],
+              "cue": 19.3
+            },
+            {
+              "title": "Artefak minimal",
+              "texts": [
+                "Bebas refleks cahaya, debu, lensa kotor, dan bayangan kelopak atau bulu mata. Media refrakta juga harus jernih."
+              ],
+              "cue": 32.3
+            }
+          ],
+          "revealColumns": 3,
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s6.mp3"
         },
         {
           "id": "m3-s7",
           "slide": 7,
           "type": "content",
           "kicker": "Kontrol Kualitas Gambar",
-          "title": "Standar Foto Fundus yang tidak dapat Dinilai (Ungradable)",
-          "figures": [
-            {
-              "image": "/content/drive-retinopati/assets/m3_s7_1.webp",
-              "caption": "(a) Media refrakta keruh"
-            },
-            {
-              "image": "/content/drive-retinopati/assets/m3_s7_2.webp",
-              "caption": "(b) Tidak sentral"
-            },
-            {
-              "image": "/content/drive-retinopati/assets/m3_s7_3.webp",
-              "caption": "(c) Overexposure"
-            },
-            {
-              "image": "/content/drive-retinopati/assets/m3_s7_4.webp",
-              "caption": "(d) Underexposure"
-            },
-            {
-              "image": "/content/drive-retinopati/assets/m3_s7_5.webp",
-              "caption": "(e) Artefak pantulan cahaya"
-            },
-            {
-              "image": "/content/drive-retinopati/assets/m3_s7_6.webp",
-              "caption": "(f) Artefak bulu mata"
-            }
-          ],
+          "title": "Kapan Foto Fundus Tidak Dapat Dinilai?",
           "transcript": "Penyebab utama foto fundus tidak dapat dinilai yaitu foto tidak fokus atau buram, tidak sentral, terhalang kekeruhan media refrakta, overexposure atau pencahayaan berlebih, underexposure atau pencahayaan kurang, adanya artefak, dan lapang pandang yang sempit.\nSekitar 5–20% foto fundus gagal untuk dinilai, dan angka ini dapat ditekan dengan teknik pengambilan foto yang tepat.\nFoto fundus yang tidak dapat dinilai dapat menyebabkan peningkatan waktu dan biaya pemeriksaan karena diperlukan pengambilan gambar ulang, atau rujukan pasien untuk pemeriksaan secara langsung.\n\nBerikut contoh foto fundus yang tidak dapat dinilai, disebabkan oleh media refrakta yang keruh, foto tidak sentral, overexposure, underexposure, artefak pantulan cahaya, dan artefak bulu mata.",
           "references": [
             "NHS England. Diabetic eye screening: guidance on fundus image quality and when adequate images cannot be taken (NHS Diabetic Eye Screening Programme/DESP). London: GOV.UK; 2021 (diperbarui 2026). Tersedia di: https://www.gov.uk/government/publications/diabetic-eye-screening-pathway-for-images-and-where-images-cannot-be-taken (standar kualitas foto dan tindakan bila foto adekuat tidak dapat diambil).",
             "Scanlon PH, Foy C, Malhotra R, Aldington SJ. The influence of age, duration of diabetes, cataract, and pupil size on image quality in digital photographic retinal screening. Diabetes Care. 2005;28(10):2448–2453. doi:10.2337/diacare.28.10.2448 (proporsi foto tidak dapat dinilai 3,7% dengan midriasis dan 19,7% tanpa midriasis).",
             "Murgatroyd H, Cox A, Ellingford A, Ellis JD, MacEwen CJ, Leese GP. Can we predict which patients are at risk of having an ungradeable digital image for screening for diabetic retinopathy? Eye (Lond). 2008;22(3):344–348. doi:10.1038/sj.eye.6702611"
           ],
-          "body": "Penyebab utama\n• Tidak fokus/buram\n• Tidak sentral\n• Kekeruhan media refrakta\n• Over/underexposure\n• Artefak\n• Lapang pandang sempit\n\nTingkat kegagalan\n5–20% gambar gagal dinilai → teknik yang tepat sangat meminimalkan angka ini\n\nDampak\n• Menambah waktu & biaya (pemeriksaan ulang)\n• Pasien dirujuk untuk pemeriksaan langsung",
-          "imageLayout": "side",
-          "imageCaption": "Contoh foto fundus tidak dapat dinilai"
+          "body": "Sekitar 5–20% foto gagal dinilai, dan angka ini dapat ditekan dengan teknik yang tepat. Akibatnya, waktu dan biaya bertambah karena foto harus diulang, atau pasien dirujuk untuk pemeriksaan langsung. Penyebab lainnya: foto tidak fokus atau lapang pandang sempit.",
+          "imageLayout": "below",
+          "reveal_steps": [
+            {
+              "image": "/content/drive-retinopati/assets/m3_s7_1.webp",
+              "title": "(a) Media refrakta keruh",
+              "cue": 0
+            },
+            {
+              "image": "/content/drive-retinopati/assets/m3_s7_2.webp",
+              "title": "(b) Tidak sentral",
+              "cue": 6.0
+            },
+            {
+              "image": "/content/drive-retinopati/assets/m3_s7_3.webp",
+              "title": "(c) Overexposure",
+              "cue": 9.8
+            },
+            {
+              "image": "/content/drive-retinopati/assets/m3_s7_4.webp",
+              "title": "(d) Underexposure",
+              "cue": 12.7
+            },
+            {
+              "image": "/content/drive-retinopati/assets/m3_s7_5.webp",
+              "title": "(e) Artefak pantulan cahaya",
+              "cue": 15.6
+            },
+            {
+              "image": "/content/drive-retinopati/assets/m3_s7_6.webp",
+              "title": "(f) Artefak bulu mata",
+              "cue": 17.0
+            }
+          ],
+          "revealColumns": 3,
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s7.mp3"
         },
         {
           "id": "m3-s8",
           "slide": 8,
           "type": "cards",
           "kicker": "Kontrol Kualitas Gambar",
-          "title": "Faktor Penyebab Foto Fundus tidak dapat Dinilai (Ungradable)",
+          "title": "Mengapa Foto Bisa Gagal Dinilai?",
           "columns": 2,
           "cards": [
             {
@@ -1162,7 +1265,34 @@
             "Scanlon PH, Foy C, Malhotra R, Aldington SJ. The influence of age, duration of diabetes, cataract, and pupil size on image quality in digital photographic retinal screening. Diabetes Care. 2005;28(10):2448–2453. doi:10.2337/diacare.28.10.2448 (usia, durasi DM, katarak, dan ukuran pupil sebagai faktor penyebab foto tidak dapat dinilai).",
             "Murgatroyd H, Cox A, Ellingford A, Ellis JD, MacEwen CJ, Leese GP. Can we predict which patients are at risk of having an ungradeable digital image for screening for diabetic retinopathy? Eye (Lond). 2008;22(3):344–348. doi:10.1038/sj.eye.6702611 (usia dan katarak subkapsular posterior sebagai prediktor foto tidak dapat dinilai).",
             "WHO Regional Office for Europe. Diabetic retinopathy screening: a short guide. Increase effectiveness, maximize benefits and minimize harm (WHO short guide 2020). Copenhagen: WHO Regional Office for Europe; 2020. ISBN 978-92-890-5532-1. hlm. 16, 51 (katarak sebagai penyebab utama kegagalan foto; standar peralatan)."
-          ]
+          ],
+          "body": "Penyebabnya datang dari dua arah: pasien dan peralatan.",
+          "reveal_steps": [
+            {
+              "title": "Faktor pasien",
+              "texts": [
+                "• Pupil kecil (< 3 mm)",
+                "• Media refrakta keruh: opasitas kornea, hifema, hipopion, uveitis, katarak, perdarahan vitreus",
+                "• Fiksasi buruk atau gerakan kepala berlebihan",
+                "• Tidak kooperatif",
+                "• Mata kering"
+              ],
+              "cue": 8.0
+            },
+            {
+              "title": "Faktor peralatan",
+              "texts": [
+                "• Pemeliharaan dan kalibrasi kamera",
+                "• Akurasi penjajaran optik",
+                "• Intensitas flash",
+                "• Kebersihan dan kualitas lensa",
+                "• Resolusi sensor digital",
+                "• Algoritma pemrosesan perangkat lunak"
+              ],
+              "cue": 28.5
+            }
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s8.mp3"
         }
       ]
     },
@@ -1177,7 +1307,8 @@
           "type": "divider",
           "kicker": "BAB 2",
           "title": "PENGENALAN LESI RETINOPATI DIABETIKA",
-          "transcript": "Bab dua, Pengenalan Lesi Retinopati Diabetika"
+          "transcript": "Bab dua, Pengenalan Lesi Retinopati Diabetika",
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s9.mp3"
         },
         {
           "id": "m3-s10",
@@ -1185,16 +1316,29 @@
           "type": "content",
           "kicker": "Identifikasi Lesi",
           "title": "Mikroaneurisma (MA)",
-          "body": "• Gambaran: Lesi paling awal pada retinopati diabetika, tampak sebagai titik merah kecil\n\n• Mekanisme: Dilatasi sakular (outpouching) dinding kapiler akibat hilangnya perisit",
+          "body": "Lesi paling awal yang dapat ditemukan pada retinopati diabetika.",
           "image": "/content/drive-retinopati/assets/m3_s10_1.webp",
-          "imageLayout": "side",
+          "imageLayout": "below",
           "imageCaption": "Mikroaneurisma (panah hitam)",
           "transcript": "Mikroaneurisma.\nMikroaneurisma adalah lesi paling awal yang dapat ditemukan pada retinopati diabetika yang tampak sebagai titik merah kecil. Mikroaneurisma merupakan dilatasi sakular atau outpouching dinding kapiler akibat hilangnya perisit.",
           "references": [
             "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025.",
             "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3."
           ],
-          "abbreviations": ["MA, mikroaneurisma"]
+          "abbreviations": ["MA, mikroaneurisma"],
+          "reveal_steps": [
+            {
+              "title": "Seperti apa tampaknya?",
+              "texts": ["Titik merah kecil."],
+              "cue": 0
+            },
+            {
+              "title": "Mengapa terjadi?",
+              "texts": ["Dinding kapiler menggelembung (dilatasi sakular) akibat hilangnya perisit."],
+              "cue": 11.0
+            }
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s10.mp3"
         },
         {
           "id": "m3-s11",
@@ -1202,48 +1346,92 @@
           "type": "content",
           "kicker": "Identifikasi Lesi",
           "title": "Perdarahan Dot dan Blot",
-          "body": "Dot\n• Gambaran: bintik merah kecil\n• Mekanisme: berasal dari ruptur mikroaneurisma\n\nBlot\n• Gambaran: bercak merah bulat lebih luas, bentuk ireguler, tepi relatif kurang tegas\n• Mekanisme: terjadi akibat ruptur pembuluh darah kapiler",
+          "body": "Keduanya perdarahan intraretina. Bedakan dari ukuran dan bentuknya.",
           "image": "/content/drive-retinopati/assets/m3_s11_1.webp",
-          "imageLayout": "side",
+          "imageLayout": "below",
           "imageCaption": "Dot (panah hitam), Blot (panah putih)",
           "transcript": "Perdarahan dot dan blot.\nDot, merupakan bercak perdarahan intraretina yang berbentuk bintik merah kecil. Dot berasal dari ruptur mikroaneurisma. Sedangkan blot, merupakan bercak perdarahan intraretina yang lebih luas dibandingkan dot, bentuknya ireguler dengan tepi relatif kurang tegas. Blot berasal dari ruptur pembuluh darah kapiler.",
           "references": [
             "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025.",
             "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3."
-          ]
+          ],
+          "reveal_steps": [
+            {
+              "title": "Dot",
+              "texts": ["Bintik merah kecil.", "Berasal dari ruptur mikroaneurisma."],
+              "cue": 2.0
+            },
+            {
+              "title": "Blot",
+              "texts": [
+                "Bercak lebih luas, bentuk ireguler, tepi relatif kurang tegas.",
+                "Berasal dari ruptur pembuluh darah kapiler."
+              ],
+              "cue": 11.7
+            }
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s11.mp3"
         },
         {
           "id": "m3-s12",
           "slide": 12,
           "type": "content",
           "kicker": "Identifikasi Lesi",
-          "title": "Eksudat Keras / Hard Exudate",
-          "body": "• Gambaran: Deposit kuning terang berbatas tegas. Dapat berbentuk bintik kecil terpisah / plak konfluen / tersusun melingkar konsentris mengelilingi mikroaneurisma yang bocor, membentuk pola sirsinata / cincin\n\n• Mekanisme: Deposit lipid & lipoprotein yang terbentuk akibat kebocoran kapiler",
+          "title": "Eksudat Keras (Hard Exudate)",
+          "body": "Warna kuning terangnya membuat lesi ini mudah dikenali.",
           "image": "/content/drive-retinopati/assets/m3_s12_1.webp",
-          "imageLayout": "side",
+          "imageLayout": "below",
           "imageCaption": "Eksudat keras (panah hitam)",
           "transcript": "Eksudat keras.\nEksudat keras atau hard exudate tampak sebagai deposit berwarna kuning terang dan berbatas tegas. Eksudat keras dapat berbentuk bintik bintik kecil terpisah, plak konfluen, atau tersusun melingkar konsentris mengelilingi mikroaneurisma yang bocor, membentuk pola sirsinata atau cincin. Eksudat keras merupakan deposit lipid dan lipoprotein yang terbentuk akibat kebocoran kapiler.",
           "references": [
             "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025.",
             "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3."
-          ]
+          ],
+          "reveal_steps": [
+            {
+              "title": "Seperti apa tampaknya?",
+              "texts": [
+                "Deposit kuning terang berbatas tegas: bintik kecil terpisah, plak konfluen, atau melingkar mengelilingi mikroaneurisma yang bocor (pola sirsinata)."
+              ],
+              "cue": 1.1
+            },
+            {
+              "title": "Mengapa terjadi?",
+              "texts": ["Deposit lipid dan lipoprotein akibat kebocoran kapiler."],
+              "cue": 23.0
+            }
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s12.mp3"
         },
         {
           "id": "m3-s13",
           "slide": 13,
           "type": "content",
           "kicker": "Identifikasi Lesi",
-          "title": "Eksudat Lunak / Soft Exudate / Cotton-wool Spots (CWS)",
-          "body": "• Gambaran: Bercak bulat / oval berwarna putih-keabuan, bertekstur halus seperti gumpalan kapas, batas tepi kabur\n\n• Mekanisme: menggambarkan iskemia fokal & infark pada lapisan serabut saraf retina",
+          "title": "Eksudat Lunak (Cotton-wool Spots)",
+          "body": "Disebut juga soft exudate, tampak seperti gumpalan kapas.",
           "image": "/content/drive-retinopati/assets/m3_s13_1.webp",
-          "imageLayout": "side",
+          "imageLayout": "below",
           "imageCaption": "Eksudat lunak (panah hitam)",
           "transcript": "Eksudat lunak.\nEksudat lunak atau disebut juga soft exudate atau cotton-wool spots, tampak sebagai bercak bulat atau oval berwarna putih-keabuan, bertekstur halus seperti gumpalan kapas dengan batas tepi kabur. Eksudat lunak menggambarkan iskemia fokal dan infark pada lapisan serabut saraf retina.",
           "references": [
             "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025.",
             "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3."
           ],
-          "abbreviations": ["CWS, cotton-wool spots"]
+          "abbreviations": ["CWS, cotton-wool spots"],
+          "reveal_steps": [
+            {
+              "title": "Seperti apa tampaknya?",
+              "texts": ["Bercak bulat atau oval putih-keabuan, bertekstur halus, tepi kabur."],
+              "cue": 1.2
+            },
+            {
+              "title": "Mengapa terjadi?",
+              "texts": ["Menggambarkan iskemia fokal dan infark pada lapisan serabut saraf retina."],
+              "cue": 16.4
+            }
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s13.mp3"
         },
         {
           "id": "m3-s14",
@@ -1265,9 +1453,22 @@
             "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3."
           ],
           "abbreviations": ["IRMA, intraretinal microvascular abnormalities"],
-          "body": "• Gambaran: segmen pembuluh darah halus, berkelok-kelok mendatar mengikuti bidang retina\n\n• Mekanisme: pembuluh darah kapiler yang mengalami dilatasi hipertrofik & adaptasi struktural untuk mengalirkan darah dari arteriol ke venular retina melewati zona kapiler yang mengalami oklusi",
-          "imageLayout": "side",
-          "imageCaption": "IRMA (panah hitam)"
+          "imageCaption": "IRMA (panah hitam)",
+          "reveal_steps": [
+            {
+              "title": "Seperti apa tampaknya?",
+              "texts": ["Segmen pembuluh darah halus, berkelok-kelok mendatar mengikuti bidang retina."],
+              "cue": 3.0
+            },
+            {
+              "title": "Mengapa terjadi?",
+              "texts": [
+                "Kapiler mengalami dilatasi hipertrofik dan adaptasi struktural untuk mengalirkan darah dari arteriol ke venula, melewati zona kapiler yang tersumbat."
+              ],
+              "cue": 13.8
+            }
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s14.mp3"
         },
         {
           "id": "m3-s15",
@@ -1275,33 +1476,73 @@
           "type": "content",
           "kicker": "Identifikasi Lesi",
           "title": "Venous Beading",
-          "body": "• Gambaran: tampak pada cabang-cabang vena retina utama berupa segmen vena yang menyempit lalu menggelembung secara bergantian → tampak seperti rangkaian manik-manik (beaded appearance)\n\n• Mekanisme: menggambarkan kelemahan struktural dinding vena akibat hilangnya perisit & sel otot vaskular secara fokal berselingan dengan segmen dinding vena yang masih rigid",
+          "body": "Vena retina yang tampak seperti rangkaian manik-manik.",
           "image": "/content/drive-retinopati/assets/m3_s15_1.webp",
-          "imageLayout": "side",
+          "imageLayout": "below",
           "imageCaption": "Venous beading (panah hitam)",
           "transcript": "Venous beading.\nVenous beading tampak pada cabang-cabang vena retina utama berupa segmen vena yang menyempit lalu menggelembung secara bergantian sehingga tampak seperti rangkaian manik-manik atau beaded appearance. Venous beading menggambarkan kelemahan struktural dinding vena akibat hilangnya perisit dan sel otot vaskular secara fokal berselingan dengan segmen dinding vena yang masih relatif rigid.",
           "references": [
             "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025.",
             "Early Treatment Diabetic Retinopathy Study Research Group. Grading diabetic retinopathy from stereoscopic color fundus photographs—an extension of the modified Airlie House classification. ETDRS report number 10. Ophthalmology. 1991;98(5 Suppl):786–806. doi:10.1016/S0161-6420(13)38012-9.",
             "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3."
-          ]
+          ],
+          "reveal_steps": [
+            {
+              "title": "Seperti apa tampaknya?",
+              "texts": [
+                "Segmen vena menyempit lalu menggelembung secara bergantian (beaded appearance) pada cabang-cabang vena retina utama."
+              ],
+              "cue": 1.1
+            },
+            {
+              "title": "Mengapa terjadi?",
+              "texts": [
+                "Dinding vena melemah akibat hilangnya perisit dan sel otot vaskular secara fokal, berselingan dengan segmen yang masih rigid."
+              ],
+              "cue": 14.9
+            }
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s15.mp3"
         },
         {
           "id": "m3-s16",
           "slide": 16,
           "type": "content",
           "kicker": "Identifikasi Lesi",
-          "title": "Neovascularization of the Disc (NVD) / Neovaskularisasi Diskus",
-          "body": "• Gambaran: anyaman vaskular halus, ireguler, menyerupai pola renda yang tumbuh di atas permukaan papil saraf optik dalam batas 1 diameter papil dari tepi diskus optikus.\n\n• Mekanisme: proliferasi pembuluh darah baru abnormal akibat ↑ sitokin proangiogenik, terutama Vascular Endothelial Growth Factor (VEGF), sebagai respon iskemia retina yang luas\n\nNVD → lesi patognomonis retinopati diabetika proliferatif / PDR",
+          "title": "Neovascularization of the Disc (NVD)",
+          "body": "Neovaskularisasi di diskus optikus.",
           "image": "/content/drive-retinopati/assets/m3_s16_1.webp",
-          "imageLayout": "side",
+          "imageLayout": "below",
           "imageCaption": "NVD (panah hitam)",
           "transcript": "Neovascularization of the disc.\nNeovascularization of the disc atau NVD tampak sebagai anyaman vaskular halus, ireguler, menyerupai pola renda yang tumbuh di atas permukaan papil saraf optik dalam batas 1 diameter papil dari tepi diskus optikus. NVD merupakan proliferasi pembuluh darah baru abnormal yang tumbuh akibat peningkatan sitokin proangiogenik, terutama Vascular Endothelial Growth Factor atau VEGF, sebagai respon iskemia retina yang luas. NVD adalah lesi patognomonis retinopati diabetika proliferatif.",
           "references": [
             "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025.",
             "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3."
           ],
-          "abbreviations": ["NVD, neovascularization of the disc", "VEGF, vascular endothelial growth factor"]
+          "abbreviations": ["NVD, neovascularization of the disc", "VEGF, vascular endothelial growth factor"],
+          "reveal_steps": [
+            {
+              "title": "Seperti apa tampaknya?",
+              "texts": [
+                "Anyaman vaskular halus dan ireguler seperti renda, di atas papil saraf optik, dalam batas 1 diameter papil dari tepi diskus."
+              ],
+              "cue": 2.5
+            },
+            {
+              "title": "Mengapa terjadi?",
+              "texts": [
+                "Pembuluh darah baru abnormal tumbuh akibat peningkatan sitokin proangiogenik, terutama VEGF, sebagai respons iskemia retina yang luas."
+              ],
+              "cue": 19.5
+            },
+            {
+              "title": "Perlu diingat",
+              "texts": ["NVD adalah lesi patognomonis retinopati diabetika proliferatif (PDR)."],
+              "cue": 35.7
+            }
+          ],
+          "revealColumns": 3,
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s16.mp3"
         },
         {
           "id": "m3-s17",
@@ -1309,9 +1550,9 @@
           "type": "content",
           "kicker": "Identifikasi Lesi",
           "title": "Neovascularization Elsewhere (NVE)",
-          "body": "• Gambaran: anyaman pembuluh darah halus yang tumbuh di atas permukaan retina / memasuki kavum vitreus\n\n• Mekanisme: proliferasi pembuluh darah baru abnormal akibat ↑ sitokin proangiogenik, terutama Vascular Endothelial Growth Factor (VEGF), sebagai respon iskemia retina yang luas.\n\nNVE → lesi patognomonis retinopati diabetika proliferatif / PDR",
+          "body": "Mekanismenya sama dengan NVD, tetapi lokasinya di luar diskus.",
           "image": "/content/drive-retinopati/assets/m3_s17_1.webp",
-          "imageLayout": "side",
+          "imageLayout": "below",
           "imageCaption": "NVE (panah hitam)",
           "transcript": "Neovascularization Elsewhere.\nNeovascularization Elsewhere atau NVE tampak sebagai anyaman pembuluh darah halus yang tumbuh di atas permukaan retina atau memasuki kavum vitreus. NVE, seperti halnya NVD, merupakan proliferasi pembuluh darah baru abnormal yang tumbuh akibat peningkatan sitokin proangiogenik, terutama Vascular Endothelial Growth Factor atau VEGF, sebagai respon iskemia retina yang luas. NVE dan NVD adalah lesi patognomonis retinopati diabetika proliferatif.",
           "references": [
@@ -1323,34 +1564,66 @@
             "NVD, neovascularization of the disc",
             "PDR, proliferative diabetic retinopathy",
             "VEGF, vascular endothelial growth factor"
-          ]
+          ],
+          "reveal_steps": [
+            {
+              "title": "Seperti apa tampaknya?",
+              "texts": ["Anyaman pembuluh darah halus di atas permukaan retina atau memasuki kavum vitreus."],
+              "cue": 2.5
+            },
+            {
+              "title": "Mengapa terjadi?",
+              "texts": [
+                "Pembuluh darah baru abnormal tumbuh akibat peningkatan sitokin proangiogenik, terutama VEGF, sebagai respons iskemia retina yang luas."
+              ],
+              "cue": 14.6
+            },
+            {
+              "title": "Perlu diingat",
+              "texts": ["NVE dan NVD adalah lesi patognomonis retinopati diabetika proliferatif (PDR)."],
+              "cue": 33.1
+            }
+          ],
+          "revealColumns": 3,
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s17.mp3"
         },
         {
           "id": "m3-s18",
           "slide": 18,
           "type": "content",
           "kicker": "Identifikasi Lesi",
-          "title": "Perdarahan Preretina / Preretinal Hemorrhage",
-          "body": "• Gambaran: akumulasi darah yang berbatas tegas di permukaan retina → menutupi pembuluh darah di bawahnya\n\n• Mekanisme: berasal dari neovaskular yang pecah, darah terakumulasi pada ruang antara permukaan retina & badan vitreus",
+          "title": "Perdarahan Preretina (Preretinal Hemorrhage)",
           "image": "/content/drive-retinopati/assets/m3_s18_1.webp",
-          "imageLayout": "side",
+          "imageLayout": "below",
           "imageCaption": "Perdarahan preretina (panah hitam)",
           "transcript": "Perdarahan preretina\nPerdarahan preretina atau Preretinal hemorrhage tampak sebagai akumulasi darah yang berbatas tegas di permukaan retina, sehingga menutupi pembuluh darah di bawahnya. Perdarahan preretina berasal dari neovaskular yang pecah, dan darah terakumulasi pada ruang antara permukaan retina dan badan vitreus.",
           "references": [
             "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025.",
             "Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162.",
             "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3."
-          ]
+          ],
+          "reveal_steps": [
+            {
+              "title": "Seperti apa tampaknya?",
+              "texts": ["Akumulasi darah berbatas tegas di permukaan retina yang menutupi pembuluh darah di bawahnya."],
+              "cue": 1.7
+            },
+            {
+              "title": "Mengapa terjadi?",
+              "texts": ["Neovaskular pecah, lalu darah terakumulasi di antara permukaan retina dan badan vitreus."],
+              "cue": 14.2
+            }
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s18.mp3"
         },
         {
           "id": "m3-s19",
           "slide": 19,
           "type": "content",
           "kicker": "Identifikasi Lesi",
-          "title": "Perdarahan Vitreus / Vitreous Hemorrhage (VH)",
-          "body": "• Gambaran: dispersi darah pada rongga vitreus → mengaburkan gambaran retina\n\n• Mekanisme: berasal dari pecahnya neovaskular yang sudah menembus badan vitreus",
+          "title": "Perdarahan Vitreus (Vitreous Hemorrhage)",
           "image": "/content/drive-retinopati/assets/m3_s19_1.webp",
-          "imageLayout": "side",
+          "imageLayout": "below",
           "imageCaption": "Perdarahan vitreus — media keruh, refleks merah menurun",
           "transcript": "Perdarahan vitreus\nPerdarahan vitreus atau vitreous hemorrhage tampak sebagai dispersi darah pada rongga vitreus sehingga mengaburkan gambaran retina. Perdarahan vitreus berasal dari pecahnya neovaskular yang sudah menembus badan vitreus.",
           "references": [
@@ -1358,40 +1631,123 @@
             "Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162.",
             "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3."
           ],
-          "abbreviations": ["VH, vitreous hemorrhage"]
+          "abbreviations": ["VH, vitreous hemorrhage"],
+          "reveal_steps": [
+            {
+              "title": "Seperti apa tampaknya?",
+              "texts": ["Darah menyebar di rongga vitreus sehingga gambaran retina menjadi kabur."],
+              "cue": 1.6
+            },
+            {
+              "title": "Mengapa terjadi?",
+              "texts": ["Neovaskular yang sudah menembus badan vitreus pecah."],
+              "cue": 12.3
+            }
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s19.mp3"
         },
         {
           "id": "m3-s20",
           "slide": 20,
           "type": "content",
           "kicker": "Identifikasi Lesi",
-          "title": "Membran Fibrovaskular / Fibrovascular Membrane",
-          "body": "• Gambaran: jaringan semi-transparan hingga berwarna putih-keabuan, membentang di sepanjang arkade vaskular / di atas diskus optikus. Bentuk bervariasi → anyaman jaringan dengan vaskular aktif hingga lempeng fibrotik avaskular kaku & tebal\n\n• Mekanisme: terbentuk dari jaringan neovaskular yang mengalami regresi → jaringan fibrotik",
+          "title": "Membran Fibrovaskular",
+          "body": "Terbentang di sepanjang arkade vaskular atau di atas diskus optikus.",
           "image": "/content/drive-retinopati/assets/m3_s20_1.webp",
-          "imageLayout": "side",
+          "imageLayout": "below",
           "imageCaption": "Membran fibrovaskular (panah hitam)",
           "transcript": "Membran fibrovaskular.\nMembran fibrovaskular atau fibrovascular membrane tampak sebagai jaringan semi-transparan hingga berwarna putih-keabuan yang membentang di sepanjang arkade vaskular atau di atas diskus optikus. Membran fibrovaskular dapat bervariasi dari anyaman jaringan dengan vaskular aktif hingga lempeng fibrotik avaskular yang kaku dan tebal. Membran fibrovaskular terbentuk dari jaringan neovaskular yang mengalami regresi yang kemudian berubah menjadi jaringan fibrotik.",
           "references": [
             "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025.",
             "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3."
-          ]
+          ],
+          "reveal_steps": [
+            {
+              "title": "Seperti apa tampaknya?",
+              "texts": [
+                "Jaringan semi-transparan hingga putih-keabuan, dari anyaman dengan vaskular aktif sampai lempeng fibrotik avaskular yang kaku dan tebal."
+              ],
+              "cue": 1.6
+            },
+            {
+              "title": "Mengapa terjadi?",
+              "texts": ["Jaringan neovaskular mengalami regresi, lalu berubah menjadi jaringan fibrotik."],
+              "cue": 25.3
+            }
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s20.mp3"
         },
         {
           "id": "m3-s21",
           "slide": 21,
           "type": "content",
           "kicker": "Identifikasi Lesi",
-          "title": "Ablasio Retina Traksional / Tractional Retinal Detachment (TRD)",
-          "body": "• Gambaran: retina terangkat ke arah kavum vitreus, permukaan retina tampak tegang. Terlihat jaringan fibrotik membentang di atas permukaan retina & tampakan tarikan pembuluh darah\n\n• Mekanisme: terjadi akibat tarikan mekanis pada lapisan retina oleh membran fibrovaskular di permukaan retina yang bersifat kontraktil",
+          "title": "Ablasio Retina Traksional (TRD)",
           "image": "/content/drive-retinopati/assets/m3_s21_1.webp",
-          "imageLayout": "side",
+          "imageLayout": "below",
           "imageCaption": "Ablasio retina traksional (panah hitam)",
           "transcript": "Ablasio retina traksional.\nAblasio retina traksional atau tractional retinal detachment tampak sebagai retina yang terangkat ke arah kavum vitreus dengan permukaan retina tampak tegang, terlihat jaringan fibrotik membentang di atas permukaan retina dan tampakan tarikan pembuluh darah retina. Ablasio retina traksional terjadi akibat adanya tarikan mekanis pada lapisan retina oleh membran fibrovaskular di permukaan retina yang bersifat kontraktil.",
           "references": [
             "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025.",
             "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3."
           ],
-          "abbreviations": ["TRD, tractional retinal detachment"]
+          "abbreviations": ["TRD, tractional retinal detachment"],
+          "reveal_steps": [
+            {
+              "title": "Seperti apa tampaknya?",
+              "texts": [
+                "Retina terangkat ke arah kavum vitreus dan tampak tegang, dengan jaringan fibrotik dan tarikan pembuluh darah di permukaannya."
+              ],
+              "cue": 1.9
+            },
+            {
+              "title": "Mengapa terjadi?",
+              "texts": ["Membran fibrovaskular yang kontraktil menarik lapisan retina secara mekanis."],
+              "cue": 20.6
+            }
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s21.mp3"
+        },
+        {
+          "id": "m3-latihan-lesi",
+          "type": "match",
+          "kicker": "LATIHAN",
+          "title": "Cocokkan lesi dengan gambarannya",
+          "intro": "Pasangkan setiap lesi di kiri dengan gambarannya di kanan: seret kartu ke kotak yang sesuai, atau klik kartu lalu klik kotaknya.",
+          "pairs": [
+            {
+              "id": "ma",
+              "left": "Mikroaneurisma",
+              "right": "Titik merah kecil, lesi paling awal"
+            },
+            {
+              "id": "he",
+              "left": "Eksudat keras",
+              "right": "Deposit kuning terang berbatas tegas"
+            },
+            {
+              "id": "cws",
+              "left": "Eksudat lunak",
+              "right": "Bercak putih-keabuan seperti gumpalan kapas"
+            },
+            {
+              "id": "vb",
+              "left": "Venous beading",
+              "right": "Vena tampak seperti rangkaian manik-manik"
+            },
+            {
+              "id": "nvd",
+              "left": "NVD",
+              "right": "Anyaman vaskular halus di atas papil saraf optik"
+            },
+            {
+              "id": "pr",
+              "left": "Perdarahan preretina",
+              "right": "Darah berbatas tegas yang menutupi pembuluh darah"
+            }
+          ],
+          "leftTitle": "Lesi",
+          "rightTitle": "Gambaran"
         }
       ]
     },
@@ -1406,24 +1762,15 @@
           "type": "divider",
           "kicker": "BAB 3",
           "title": "GRADING RETINOPATI DIABETIKA",
-          "transcript": "Bab tiga, Grading Retinopati Diabetika"
+          "transcript": "Bab tiga, Grading Retinopati Diabetika",
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s22.mp3"
         },
         {
           "id": "m3-s23",
           "slide": 23,
           "type": "content",
           "kicker": "Grading RD",
-          "title": "International Clinical Diabetic Retinopathy (ICDR) Severity Scale",
-          "table": {
-            "head": ["Derajat Keparahan (Grading)", "Temuan pada Oftalmoskopi Dilatasi"],
-            "rows": [
-              ["Tidak ada RD", "Tidak ada kelainan"],
-              ["NPDR Ringan", "Hanya mikroaneurisma"],
-              ["NPDR Sedang", "Lebih dari sekadar mikroaneurisma, < NPDR berat"],
-              ["NPDR Berat", "Aturan 4-2-1 (perdarahan intraretina / venous beading / IRMA)"],
-              ["PDR", "Neovaskularisasi (NVD/NVE) dan/atau perdarahan vitreus, ablasio retina traksional"]
-            ]
-          },
+          "title": "Lima Derajat Keparahan Retinopati Diabetika",
           "image": "/content/drive-retinopati/assets/m3_s23_1.webp",
           "transcript": "Berdasarkan International Clinical Diabetic Retinopathy Severity Scale atau ICDR Severity Scale, retinopati diabetika dibagi menjadi lima derajat keparahan sesuai temuan pemeriksaan oftalmoskopi.\nPada pasien dengan diabetes, dapat ditemukan kondisi retina normal tanpa ada kelainan.\nDikatakan mengalami non-proliferative diabetic retinopathy atau NPDR ringan jika mulai ditemukan mikroaneurisma pada retina.\nDikatakan mengalami NPDR sedang apabila ditemukan lesi retina lebih dari sekadar mikroaneurisma, seperti adanya eksudat lunak atau eksudat keras, tetapi belum memenuhi kriteria NPDR berat.\nDikatakan mengalami NPDR berat apabila ditemukan lesi dengan kriteria 4-2-1, yaitu bila ditemukan salah satu atau lebih tanda-tanda berikut: perdarahan intraretina pada 4 kuadran, pelebaran vena atau venous beading pada minimal 2 kuadran, kelainan mikrovaskular intraretinal atau IRMA pada minimal 1 kuadran.\nTahap puncak adalah proliferative diabetic retinopathy atau PDR. Dikatakan PDR apabila ditemukan neovaskularisasi baik pada papil saraf optik atau NVD maupun tempat lain di retina atau NVE. Tanda lain PDR yaitu perdarahan vitreus dan ablasio retina traksional yang bersumber dari neovaskularisasi.",
           "references": [
@@ -1441,34 +1788,70 @@
             "NVE, neovascularization elsewhere",
             "PDR, proliferative diabetic retinopathy",
             "RD, retinopati diabetika"
-          ]
+          ],
+          "body": "Berdasarkan International Clinical Diabetic Retinopathy (ICDR) Severity Scale, sesuai temuan pada oftalmoskopi dilatasi.",
+          "reveal_steps": [
+            {
+              "title": "Tidak ada RD",
+              "texts": ["Tidak ada kelainan."],
+              "cue": 15.3
+            },
+            {
+              "title": "NPDR Ringan",
+              "texts": ["Hanya mikroaneurisma."],
+              "cue": 22.2
+            },
+            {
+              "title": "NPDR Sedang",
+              "texts": ["Lebih dari sekadar mikroaneurisma, tetapi belum memenuhi NPDR berat."],
+              "cue": 31.9
+            },
+            {
+              "title": "NPDR Berat",
+              "texts": ["Aturan 4-2-1: perdarahan intraretina, venous beading, atau IRMA."],
+              "cue": 46.7
+            },
+            {
+              "title": "PDR",
+              "texts": ["Neovaskularisasi (NVD/NVE) dan/atau perdarahan vitreus, ablasio retina traksional."],
+              "cue": 70.9
+            }
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s23.mp3"
         },
         {
           "id": "m3-s24",
           "slide": 24,
           "type": "content",
           "kicker": "Gambaran Klinis · NPDR Ringan",
-          "title": "NPDR Ringan",
-          "body": "• Hanya mikroaneurisma (titik merah kecil).",
+          "title": "NPDR Ringan: Hanya Mikroaneurisma",
           "image": "/content/drive-retinopati/assets/m3_s24_1.webp",
-          "imageLayout": "side",
+          "imageLayout": "below",
           "imageCaption": "NPDR Ringan",
           "transcript": "Berikut adalah contoh foto fundus NPDR ringan. Pada foto fundus ditemukan lesi mikroaneurisma minimal yang berupa titik merah kecil berbatas tegas.",
           "references": [
             "Wilkinson CP, Ferris FL 3rd, Klein RE, et al; Global Diabetic Retinopathy Project Group. Proposed international clinical diabetic retinopathy and diabetic macular edema disease severity scales. Ophthalmology. 2003;110(9):1677–1682. doi:10.1016/S0161-6420(03)00475-5 hlm. 1679.",
             "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 11."
           ],
-          "abbreviations": ["NPDR, non-proliferative diabetic retinopathy"]
+          "abbreviations": ["NPDR, non-proliferative diabetic retinopathy"],
+          "reveal_steps": [
+            {
+              "title": "Yang ditemukan",
+              "texts": ["Mikroaneurisma minimal, berupa titik merah kecil berbatas tegas."],
+              "cue": 0
+            }
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s24.mp3"
         },
         {
           "id": "m3-s25",
           "slide": 25,
           "type": "content",
           "kicker": "Gambaran Klinis · NPDR Sedang",
-          "title": "NPDR Sedang",
-          "body": "• Lebih dari sekadar mikroaneurisma, tetapi kurang dari kriteria NPDR berat.\n• Dapat ditemukan: perdarahan intraretina dot/blot; eksudat keras (hard exudates), eksudat lunak (soft exudates/cotton-wool spots).",
+          "title": "NPDR Sedang: Lebih dari Sekadar Mikroaneurisma",
+          "body": "Belum memenuhi kriteria NPDR berat.",
           "image": "/content/drive-retinopati/assets/m3_s25_1.webp",
-          "imageLayout": "side",
+          "imageLayout": "below",
           "imageCaption": "NPDR Sedang",
           "transcript": "Berikut adalah contoh foto fundus NPDR sedang. Pada foto fundus dapat ditemukan lesi berupa mikroaneurisma multiple yang tersebar, perdarahan intraretina dot atau blot, eksudat keras atau hard exudates, dan eksudat lunak disebut juga soft exudates atau cotton-wool spots, tetapi tidak memenuhi kriteria NPDR berat.",
           "references": [
@@ -1478,17 +1861,30 @@
             "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 108.",
             "Wilkinson CP, Ferris FL 3rd, Klein RE, et al; Global Diabetic Retinopathy Project Group. Proposed international clinical diabetic retinopathy and diabetic macular edema disease severity scales. Ophthalmology. 2003;110(9):1677–1682. doi:10.1016/S0161-6420(03)00475-5 hlm. 1679."
           ],
-          "abbreviations": ["NPDR, non-proliferative diabetic retinopathy"]
+          "abbreviations": ["NPDR, non-proliferative diabetic retinopathy"],
+          "reveal_steps": [
+            {
+              "title": "Yang dapat ditemukan",
+              "texts": [
+                "• Mikroaneurisma multipel yang tersebar",
+                "• Perdarahan intraretina dot atau blot",
+                "• Eksudat keras (hard exudates)",
+                "• Eksudat lunak (cotton-wool spots)"
+              ],
+              "cue": 0
+            }
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s25.mp3"
         },
         {
           "id": "m3-s26",
           "slide": 26,
           "type": "content",
           "kicker": "Gambaran Klinis · NPDR Sedang",
-          "title": "NPDR Sedang",
-          "body": "• Lebih dari sekadar mikroaneurisma, tetapi kurang dari kriteria NPDR berat.\n• Dapat ditemukan: perdarahan intraretina dot/blot; eksudat keras (hard exudates), eksudat lunak (soft exudates/cotton-wool spots).",
+          "title": "NPDR Sedang: Contoh Lain",
+          "body": "Latih mata Anda: cari lesinya pada foto ini.",
           "image": "/content/drive-retinopati/assets/m3_s26_1.webp",
-          "imageLayout": "side",
+          "imageLayout": "below",
           "imageCaption": "NPDR Sedang",
           "transcript": "Berikut adalah contoh lain foto fundus NPDR sedang.",
           "references": [
@@ -1498,17 +1894,25 @@
             "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 108–109.",
             "Wilkinson CP, Ferris FL 3rd, Klein RE, et al; Global Diabetic Retinopathy Project Group. Proposed international clinical diabetic retinopathy and diabetic macular edema disease severity scales. Ophthalmology. 2003;110(9):1677–1682. doi:10.1016/S0161-6420(03)00475-5 hlm. 1679."
           ],
-          "abbreviations": ["NPDR, non-proliferative diabetic retinopathy"]
+          "abbreviations": ["NPDR, non-proliferative diabetic retinopathy"],
+          "reveal_steps": [
+            {
+              "title": "Ingat kriterianya",
+              "texts": ["Lebih dari sekadar mikroaneurisma, tetapi kurang dari kriteria NPDR berat."],
+              "cue": 0
+            }
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s26.mp3"
         },
         {
           "id": "m3-s27",
           "slide": 27,
           "type": "content",
           "kicker": "Gambaran Klinis · NPDR Berat",
-          "title": "NPDR Berat",
-          "body": "NPDR Berat (kriteria 4-2-1 minimal salah satu dari 3 kriteria)\n• Perdarahan banyak di 4 kuadran (>20 perdarahan intraretina).\n• Venous beading jelas pada ≥2 kuadran.\n• IRMA pada ≥1 kuadran.",
+          "title": "NPDR Berat: Aturan 4-2-1",
+          "body": "Cukup satu atau lebih tanda berikut. Eksudat lunak maupun keras juga dapat ditemukan.",
           "image": "/content/drive-retinopati/assets/m3_s27_1.webp",
-          "imageLayout": "side",
+          "imageLayout": "below",
           "imageCaption": "NPDR Berat",
           "transcript": "Berikut adalah contoh foto fundus NPDR berat. Pada foto fundus dapat ditemukan lesi dengan kriteria 4-2-1 yaitu bila ditemukan salah satu atau lebih tanda-tanda berikut: perdarahan intraretina pada 4 kuadran, pelebaran vena atau venous beading pada minimal 2 kuadran, kelainan mikrovaskular intraretinal atau IRMA pada minimal 1 kuadran. Pada NPDR berat dapat ditemukan eksudat lunak maupun keras.",
           "references": [
@@ -1521,17 +1925,36 @@
           "abbreviations": [
             "IRMA, intraretinal microvascular abnormalities",
             "NPDR, non-proliferative diabetic retinopathy"
-          ]
+          ],
+          "reveal_steps": [
+            {
+              "title": "4 kuadran",
+              "texts": ["Perdarahan banyak di 4 kuadran (>20 perdarahan intraretina)."],
+              "cue": 13.7
+            },
+            {
+              "title": "2 kuadran",
+              "texts": ["Venous beading jelas pada minimal 2 kuadran."],
+              "cue": 16.9
+            },
+            {
+              "title": "1 kuadran",
+              "texts": ["IRMA pada minimal 1 kuadran."],
+              "cue": 21.6
+            }
+          ],
+          "revealColumns": 3,
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s27.mp3"
         },
         {
           "id": "m3-s28",
           "slide": 28,
           "type": "content",
           "kicker": "Gambaran Klinis · PDR",
-          "title": "Retinopati Diabetika Proliferatif / Proliferative Diabetic Retinopathy (PDR)",
-          "body": "Ditemukan salah satu atau kombinasi dari ketiga kondisi berikut:\n• Neovaskularisasi (NVD/NVE)\n• Perdarahan preretina / vitreus\n• Ablasio retina traksional",
+          "title": "Retinopati Diabetika Proliferatif (PDR)",
+          "body": "Ditemukan salah satu atau kombinasi dari tiga kondisi berikut.",
           "image": "/content/drive-retinopati/assets/m3_s28_1.webp",
-          "imageLayout": "side",
+          "imageLayout": "below",
           "imageCaption": "PDR dengan NVD, NVE, perdarahan preretina, perdarahan vitreus, dan ablasio retina traksional",
           "transcript": "Pada retinopati diabetika proliferatif, dapat ditemukan salah satu atau kombinasi dari ketiga kondisi yaitu neovaskularisasi diskus atau di manapun pada retina, perdarahan preretina atau vitreus, dan ablasio retina traksional.\nBerikut adalah contoh foto fundus PDR. Pada foto fundus dapat ditemukan lesi neovaskularisasi yang berupa neovascularization of the disc atau NVD, neovascularization elsewhere atau NVE, perdarahan preretina, perdarahan vitreus, dan ablasio retina traksional.",
           "references": [
@@ -1545,7 +1968,26 @@
             "NVD, neovascularization of the disc",
             "NVE, neovascularization elsewhere",
             "PDR, proliferative diabetic retinopathy"
-          ]
+          ],
+          "reveal_steps": [
+            {
+              "title": "Neovaskularisasi",
+              "texts": ["NVD atau NVE."],
+              "cue": 8.8
+            },
+            {
+              "title": "Perdarahan",
+              "texts": ["Perdarahan preretina atau vitreus."],
+              "cue": 13.1
+            },
+            {
+              "title": "Ablasio retina traksional",
+              "texts": ["Retina tertarik oleh jaringan fibrovaskular."],
+              "cue": 15.9
+            }
+          ],
+          "revealColumns": 3,
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s28.mp3"
         }
       ]
     },
@@ -1561,7 +2003,8 @@
           "kicker": "BAB 4",
           "title": "EDEMA MAKULA DIABETIKA (EMD)",
           "transcript": "Bab empat, Edema Makula Diabetika",
-          "abbreviations": ["EMD, edema makula diabetika"]
+          "abbreviations": ["EMD, edema makula diabetika"],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s29.mp3"
         },
         {
           "id": "m3-s30",
@@ -1590,9 +2033,21 @@
             "NPDR, non-proliferative diabetic retinopathy",
             "PDR, proliferative diabetic retinopathy"
           ],
-          "body": "• Eksudat atau penebalan retina dalam jarak 1 diameter diskus (DD) dari fovea\n• Dapat menyertai NPDR maupun PDR",
-          "imageLayout": "side",
-          "imageCaption": "Edema makula diabetika"
+          "body": "Pembengkakan area makula akibat diabetes.",
+          "imageCaption": "Edema makula diabetika",
+          "reveal_steps": [
+            {
+              "title": "Tandanya",
+              "texts": ["Eksudat keras atau penebalan retina dalam jarak 1 diameter diskus (DD) dari fovea."],
+              "cue": 8.0
+            },
+            {
+              "title": "Perlu diingat",
+              "texts": ["EMD dapat ditemukan pada seluruh derajat keparahan RD, baik NPDR maupun PDR."],
+              "cue": 15.5
+            }
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s30.mp3"
         }
       ]
     },
@@ -1608,28 +2063,15 @@
           "kicker": "BAB 5",
           "title": "SIGHT-THREATENING DIABETIC RETINOPATHY (STDR)",
           "transcript": "Bab lima, Sight-threatening Diabetic Retinopathy",
-          "abbreviations": ["STDR, sight-threatening diabetic retinopathy"]
+          "abbreviations": ["STDR, sight-threatening diabetic retinopathy"],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s31.mp3"
         },
         {
           "id": "m3-s32",
           "slide": 32,
           "type": "content",
           "kicker": "STDR",
-          "title": "Sight-threatening Diabetic Retinopathy (STDR)",
-          "figures": [
-            {
-              "image": "/content/drive-retinopati/assets/m3_s32_1.webp",
-              "caption": "NPDR Berat"
-            },
-            {
-              "image": "/content/drive-retinopati/assets/m3_s32_2.webp",
-              "caption": "PDR"
-            },
-            {
-              "image": "/content/drive-retinopati/assets/m3_s32_3.webp",
-              "caption": "EMD (RD derajat apapun)"
-            }
-          ],
+          "title": "Kapan Retinopati Mengancam Penglihatan?",
           "transcript": "Sight-threatening diabetic retinopathy atau STDR merupakan kondisi retinopati diabetika yang secara langsung dapat mengancam fungsi penglihatan pasien. Kondisi ini merupakan ambang kritis di mana pasien membutuhkan rujukan segera ke dokter spesialis mata untuk mendapatkan tatalaksana lebih lanjut. Yang termasuk dalam kategori STDR adalah NPDR berat, PDR, atau edema makula dengan retinopati diabetika derajat apapun.\n\nJika pasien dengan STDR tidak segera mendapatkan tatalaksana dapat mengakibatkan kebutaan permanen pada pasien.",
           "references": [
             "WHO Regional Office for Europe. Diabetic retinopathy screening: a short guide. Increase effectiveness, maximize benefits and minimize harm (WHO short guide 2020). Copenhagen: WHO Regional Office for Europe; 2020. ISBN 978-92-890-5532-1. hlm. 74.",
@@ -1642,7 +2084,27 @@
             "PDR, proliferative diabetic retinopathy",
             "STDR, sight-threatening diabetic retinopathy"
           ],
-          "body": "STDR mencakup NPDR berat, PDR, atau edema makula diabetika (EMD) dengan retinopati diabetika derajat apapun → mengancam penglihatan → rujukan segera"
+          "body": "Sight-threatening Diabetic Retinopathy (STDR) adalah ambang kritis: pasien butuh rujukan segera ke dokter spesialis mata. Tanpa tatalaksana segera, kebutaan permanen dapat terjadi.",
+          "reveal_steps": [
+            {
+              "image": "/content/drive-retinopati/assets/m3_s32_1.webp",
+              "title": "NPDR Berat",
+              "cue": 22.6
+            },
+            {
+              "image": "/content/drive-retinopati/assets/m3_s32_2.webp",
+              "title": "PDR",
+              "cue": 26.6
+            },
+            {
+              "image": "/content/drive-retinopati/assets/m3_s32_3.webp",
+              "title": "EMD",
+              "body": "Dengan RD derajat apa pun",
+              "cue": 27.3
+            }
+          ],
+          "revealColumns": 3,
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s32.mp3"
         }
       ]
     },
@@ -1657,128 +2119,162 @@
           "type": "divider",
           "kicker": "BAB 6",
           "title": "KELAINAN RETINA LAIN",
-          "transcript": "Bab enam, Kelainan Retina Lain"
+          "transcript": "Bab enam, Kelainan Retina Lain",
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s33.mp3"
         },
         {
           "id": "m3-s34",
           "slide": 34,
           "type": "content",
           "kicker": "Diagnosis Banding",
-          "title": "Kelainan Retina Lain pada Foto Fundus",
-          "figures": [
-            {
-              "image": "/content/drive-retinopati/assets/m3_s34_1.webp",
-              "caption": "CRVO"
-            },
-            {
-              "image": "/content/drive-retinopati/assets/m3_s34_2.webp",
-              "caption": "BRVO"
-            }
-          ],
+          "title": "Oklusi Vena Retina",
           "transcript": "Pada saat kita memeriksa retina pada pasien diabetes menggunakan oftalmoskopi maupun kamera fundus, dapat juga ditemukan beberapa kelainan retina selain retinopati diabetika yang memerlukan penanganan lebih lanjut oleh dokter spesialis mata. Berikut memperlihatkan beberapa gambaran kelainan retina\nOklusi vena retina sentral atau CRVO ditandai dengan vena yang melebar dan berkelok disertai perdarahan retina luas di keempat kuadran.\nOklusi cabang vena retina atau BRVO memiliki gambaran serupa CRVO, tetapi terbatas pada area vena yang tersumbat.",
           "references": [
             "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025.",
             "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3."
           ],
-          "abbreviations": ["BRVO, branch retinal vein occlusion", "CRVO, central retinal vein occlusion"]
+          "abbreviations": ["BRVO, branch retinal vein occlusion", "CRVO, central retinal vein occlusion"],
+          "body": "Saat memeriksa retina pasien diabetes, Anda juga bisa menemukan kelainan selain RD yang perlu ditangani dokter spesialis mata.",
+          "reveal_steps": [
+            {
+              "image": "/content/drive-retinopati/assets/m3_s34_1.webp",
+              "title": "CRVO (Oklusi Vena Retina Sentral)",
+              "body": "Vena melebar dan berkelok, perdarahan retina luas di keempat kuadran.",
+              "cue": 22.0
+            },
+            {
+              "image": "/content/drive-retinopati/assets/m3_s34_2.webp",
+              "title": "BRVO (Oklusi Cabang Vena Retina)",
+              "body": "Serupa CRVO, tetapi terbatas pada area vena yang tersumbat.",
+              "cue": 32.0
+            }
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s34.mp3"
         },
         {
           "id": "m3-s35",
           "slide": 35,
           "type": "content",
           "kicker": "Diagnosis Banding",
-          "title": "Kelainan Retina Lain pada Foto Fundus",
-          "figures": [
-            {
-              "image": "/content/drive-retinopati/assets/m3_s35_1.webp",
-              "caption": "CRAO"
-            },
-            {
-              "image": "/content/drive-retinopati/assets/m3_s35_2.webp",
-              "caption": "BRAO"
-            }
-          ],
+          "title": "Oklusi Arteri Retina",
           "transcript": "Oklusi arteri retina sentral atau CRAO ditandai dengan gambaran retina pucat dan tampakan cherry-red spot di fovea.\nOklusi arteri retina cabang atau BRAO ditandai dengan gambaran retina pucat hanya pada cabang arteri yang tersumbat.",
           "references": [
             "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025.",
             "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3."
           ],
-          "abbreviations": ["BRAO, branch retinal artery occlusion", "CRAO, central retinal artery occlusion"]
+          "abbreviations": ["BRAO, branch retinal artery occlusion", "CRAO, central retinal artery occlusion"],
+          "body": "Kuncinya: retina tampak pucat.",
+          "reveal_steps": [
+            {
+              "image": "/content/drive-retinopati/assets/m3_s35_1.webp",
+              "title": "CRAO (Oklusi Arteri Retina Sentral)",
+              "body": "Retina pucat dengan cherry-red spot di fovea.",
+              "cue": 0
+            },
+            {
+              "image": "/content/drive-retinopati/assets/m3_s35_2.webp",
+              "title": "BRAO (Oklusi Arteri Retina Cabang)",
+              "body": "Retina pucat hanya pada cabang arteri yang tersumbat.",
+              "cue": 9.0
+            }
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s35.mp3"
         },
         {
           "id": "m3-s36",
           "slide": 36,
           "type": "content",
           "kicker": "Diagnosis Banding",
-          "title": "Kelainan Retina Lain pada Foto Fundus",
-          "figures": [
-            {
-              "image": "/content/drive-retinopati/assets/m3_s36_1.webp",
-              "caption": "Hypertensive Retinopathy"
-            },
-            {
-              "image": "/content/drive-retinopati/assets/m3_s36_2.webp",
-              "caption": "Wet AMD"
-            },
-            {
-              "image": "/content/drive-retinopati/assets/m3_s36_3.webp",
-              "caption": "Macular Hole"
-            }
-          ],
+          "title": "Retinopati Hipertensi, Wet AMD, dan Lubang Makula",
           "transcript": "Retinopati hipertensi atau hypertensive retinopathy ditandai dengan penyempitan arteriol, perdarahan retina, cotton-wool spot, dan eksudat.\nDegenerasi makula terkait usia tipe neovaskular atau wet AMD ditandai dengan perdarahan disertai eksudat di daerah makula. Kondisi ini biasa terjadi pada pasien usia di atas 60 tahun.\nLubang makula atau macular hole tampak sebagai bulatan merah gelap berbatas tegas di pusat makula.",
           "references": [
             "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025.",
             "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3."
           ],
-          "abbreviations": ["AMD, age-related macular degeneration"]
+          "abbreviations": ["AMD, age-related macular degeneration"],
+          "reveal_steps": [
+            {
+              "image": "/content/drive-retinopati/assets/m3_s36_1.webp",
+              "title": "Retinopati Hipertensi",
+              "body": "Arteriol menyempit, perdarahan retina, cotton-wool spot, dan eksudat.",
+              "cue": 0
+            },
+            {
+              "image": "/content/drive-retinopati/assets/m3_s36_2.webp",
+              "title": "Wet AMD",
+              "body": "Perdarahan disertai eksudat di makula, biasanya pada pasien di atas 60 tahun.",
+              "cue": 11.0
+            },
+            {
+              "image": "/content/drive-retinopati/assets/m3_s36_3.webp",
+              "title": "Lubang Makula (Macular Hole)",
+              "body": "Bulatan merah gelap berbatas tegas di pusat makula.",
+              "cue": 25.6
+            }
+          ],
+          "revealColumns": 3,
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s36.mp3"
         },
         {
           "id": "m3-s37",
           "slide": 37,
           "type": "content",
           "kicker": "Diagnosis Banding",
-          "title": "Kelainan Retina Lain pada Foto Fundus",
-          "figures": [
-            {
-              "image": "/content/drive-retinopati/assets/m3_s37_1.webp",
-              "caption": "Retinitis Pigmentosa"
-            },
-            {
-              "image": "/content/drive-retinopati/assets/m3_s37_2.webp",
-              "caption": "Korioretinitis Toksoplasma"
-            },
-            {
-              "image": "/content/drive-retinopati/assets/m3_s37_3.webp",
-              "caption": "Sikatrik Makula"
-            }
-          ],
+          "title": "Retinitis Pigmentosa, Toksoplasma, dan Sikatrik Makula",
           "transcript": "Retinitis pigmentosa ditandai dengan pigmen berbentuk bone spicule di retina perifer, arteriol yang menyempit, dan papil yang pucat.\nKorioretinitis toksoplasma ditandai dengan fokus putih kekuningan dan peradangan vitreus, yang dikenal sebagai gambaran headlight in the fog.\nSikatrik makula adalah kondisi terbentuknya jaringan parut atau fibrosis pada bagian makula.",
           "references": [
             "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025.",
             "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3."
-          ]
+          ],
+          "reveal_steps": [
+            {
+              "image": "/content/drive-retinopati/assets/m3_s37_1.webp",
+              "title": "Retinitis Pigmentosa",
+              "body": "Pigmen bone spicule di retina perifer, arteriol menyempit, papil pucat.",
+              "cue": 0
+            },
+            {
+              "image": "/content/drive-retinopati/assets/m3_s37_2.webp",
+              "title": "Korioretinitis Toksoplasma",
+              "body": "Fokus putih kekuningan dengan peradangan vitreus: headlight in the fog.",
+              "cue": 9.7
+            },
+            {
+              "image": "/content/drive-retinopati/assets/m3_s37_3.webp",
+              "title": "Sikatrik Makula",
+              "body": "Jaringan parut atau fibrosis pada makula.",
+              "cue": 20.1
+            }
+          ],
+          "revealColumns": 3,
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s37.mp3"
         },
         {
           "id": "m3-s38",
           "slide": 38,
           "type": "content",
           "kicker": "Diagnosis Banding",
-          "title": "Kelainan Retina Lain pada Foto Fundus",
-          "figures": [
-            {
-              "image": "/content/drive-retinopati/assets/m3_s38_1.webp",
-              "caption": "Ablasio Retina Rhegmatogen"
-            },
-            {
-              "image": "/content/drive-retinopati/assets/m3_s38_2.webp",
-              "caption": "Glaukoma"
-            }
-          ],
+          "title": "Ablasio Retina Rhegmatogen dan Glaukoma",
           "transcript": "Ablasio retina rhegmatogen ditandai dengan terangkatnya lapisan retina dari posisi normalnya di dinding belakang bola mata.\nGlaukoma ditandai dengan adanya peningkatan cup:disc ratio, nasalisasi pembuluh darah retina di area papil, dan pembesaran cekungan papil.",
           "references": [
             "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025.",
             "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3."
-          ]
+          ],
+          "reveal_steps": [
+            {
+              "image": "/content/drive-retinopati/assets/m3_s38_1.webp",
+              "title": "Ablasio Retina Rhegmatogen",
+              "body": "Lapisan retina terangkat dari posisi normalnya di dinding belakang bola mata.",
+              "cue": 0
+            },
+            {
+              "image": "/content/drive-retinopati/assets/m3_s38_2.webp",
+              "title": "Glaukoma",
+              "body": "Cup:disc ratio meningkat, nasalisasi pembuluh darah di area papil, cekungan papil membesar.",
+              "cue": 9.2
+            }
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s38.mp3"
         }
       ]
     },
@@ -1793,14 +2289,15 @@
           "type": "divider",
           "kicker": "BAB 7",
           "title": "KRITERIA RUJUKAN RETINOPATI DIABETIKA",
-          "transcript": "Bab tujuh, Kriteria Rujukan Retinopati Diabetika"
+          "transcript": "Bab tujuh, Kriteria Rujukan Retinopati Diabetika",
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s39.mp3"
         },
         {
           "id": "m3-s40",
           "slide": 40,
           "type": "content",
           "kicker": "Kesimpulan Pemeriksaan Skrining Retinopati Diabetika",
-          "title": "Kriteria Rujukan Retinopati Diabetika",
+          "title": "Kapan Cukup Observasi, Kapan Harus Dirujuk?",
           "table": {
             "head": ["Derajat Keparahan Retinopati Diabetika (RD)", "Tatalaksana", "Jadwal Evaluasi Berkala"],
             "rows": [
@@ -1831,7 +2328,9 @@
             "PDR, proliferative diabetic retinopathy",
             "RD, retinopati diabetika",
             "STDR, sight-threatening diabetic retinopathy"
-          ]
+          ],
+          "body": "Inilah kesimpulan skrining: hasil foto fundus menentukan apakah pasien cukup diobservasi atau perlu dirujuk ke dokter spesialis mata.",
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s40.mp3"
         },
         {
           "id": "m3-s41",
@@ -1839,7 +2338,8 @@
           "type": "divider",
           "kicker": "MODUL 3 SELESAI",
           "title": "Terima Kasih",
-          "transcript": "Selamat Anda telah menyelesaikan Modul 3, Penilaian Derajat Keparahan atau Grading Retinopati Diabetika. Selanjutnya, silakan mengerjakan soal evaluasi berikut untuk menilai pemahaman Anda terhadap materi yang telah dibahas."
+          "transcript": "Selamat Anda telah menyelesaikan Modul 3, Penilaian Derajat Keparahan atau Grading Retinopati Diabetika. Selanjutnya, silakan mengerjakan soal evaluasi berikut untuk menilai pemahaman Anda terhadap materi yang telah dibahas.",
+          "audio": "/content/drive-retinopati/assets/audio-neural/m3-s41.mp3"
         }
       ]
     },
@@ -2349,5 +2849,5 @@
       ]
     }
   ],
-  "credits": "Suara narasi sementara: sintesis suara Meta MMS-TTS Bahasa Indonesia (facebook/mms-tts-ind), lisensi CC BY-NC 4.0, untuk penggunaan nonkomersial. Akan diganti rekaman voiceover Tim DRIVE."
+  "credits": "Suara narasi contoh: suara sintetis neural Microsoft (id-ID-GadisNeural). Akan diganti rekaman voiceover Tim DRIVE."
 }
