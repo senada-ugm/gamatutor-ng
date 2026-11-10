@@ -149,6 +149,20 @@ export function EyeAnatomyViewer({ page, onPointSelect, className = "" }: EyeAna
               Dijelajahi: {visitedCount} / {totalCount}
             </span>
           </div>
+
+          {page.figures?.map((figure) => (
+            <figure key={figure.image} className={`mt-4 w-full space-y-2 ${page.compact ? "max-w-md" : "max-w-2xl"}`}>
+              <img
+                src={figure.image}
+                alt={figure.caption || page.title}
+                className="block h-auto w-full rounded-xl border object-contain"
+                loading="lazy"
+              />
+              {figure.caption ? (
+                <figcaption className="px-1 text-xs text-muted-foreground italic">{figure.caption}</figcaption>
+              ) : null}
+            </figure>
+          ))}
         </div>
 
         {/* Structure Detail Sidebar */}
