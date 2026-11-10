@@ -125,6 +125,8 @@ export interface HotspotPage extends BasePage {
   imageCaption?: string
   /** Narrower stage for a square photo, so it fits on one screen. */
   compact?: boolean
+  /** Plain photos shown under the interactive one, e.g. the other eye. */
+  figures?: ContentFigure[]
   points: HotspotPoint[]
   masks?: HotspotMask[]
 }
