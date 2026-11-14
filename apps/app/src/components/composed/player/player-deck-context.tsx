@@ -32,9 +32,10 @@ const PlayerDeckContext = createContext<PlayerDeckContextValue | null>(null)
 // The saved value is a step index, so the version goes up whenever the
 // outline is renumbered; an old index would unlock the wrong steps.
 // v2: the 29 Okt 2026 restructure. v3: Modul 3 grew from placeholders to
-// its seven BAB.
+// its seven BAB. v4: the 14 Nov 2026 front matter (Halaman Muka … Capaian
+// Pembelajaran) ahead of the Pre Test.
 function storageKey(courseId: string) {
-  return `lms.deck-progress.v3.${courseId}`
+  return `lms.deck-progress.v4.${courseId}`
 }
 
 export function PlayerDeckProvider({

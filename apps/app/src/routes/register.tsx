@@ -200,7 +200,7 @@ export function RegisterPage() {
 
           <div className="grid gap-4 sm:grid-cols-2">
             <Field>
-              <FieldLabel htmlFor="password">Kata sandi</FieldLabel>
+              <FieldLabel htmlFor="password">Buat kata sandi</FieldLabel>
               <Input
                 ref={passwordRef}
                 id="password"

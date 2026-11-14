@@ -76,9 +76,19 @@ export interface ContentFigure {
   caption?: string
 }
 
+/** A cell that spans several rows ("Sesuai penilaian Dokter Spesialis
+ *  Mata" across every Rujuk row); the rows it covers omit that column. */
+export interface ContentTableCell {
+  text: string
+  rowSpan?: number
+}
+
 export interface ContentTable {
   head: string[]
-  rows: string[][]
+  rows: Array<Array<string | ContentTableCell>>
+  /** Per-row shade, 0 (lightest) to 3, so a table can grade from
+   *  observation to referral. */
+  rowTones?: number[]
   caption?: string
 }
 

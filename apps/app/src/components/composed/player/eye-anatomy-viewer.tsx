@@ -55,12 +55,12 @@ export function EyeAnatomyViewer({ page, onPointSelect, className = "" }: EyeAna
       const audio = new Audio(point.audio)
       audioRef.current = audio
       audio.play().catch(() => {
-        fallbackSpeak(`${point.label}. ${point.body}`)
+        fallbackSpeak(point.body ? `${point.label}. ${point.body}` : point.label)
       })
       return
     }
 
-    fallbackSpeak(`${point.label}. ${point.body}`)
+    fallbackSpeak(point.body ? `${point.label}. ${point.body}` : point.label)
   }
 
   function fallbackSpeak(text: string) {
@@ -171,13 +171,16 @@ export function EyeAnatomyViewer({ page, onPointSelect, className = "" }: EyeAna
                 </Button>
               </div>
 
-              <p className="text-sm leading-relaxed text-foreground/85">{activePoint.body}</p>
+              {activePoint.body ? (
+                <p className="text-sm leading-relaxed text-foreground/85">{activePoint.body}</p>
+              ) : null}
 
-              {/* DR Relevance highlight */}
-              {activePoint.label.toLowerCase().includes("retina") ||
-              activePoint.label.toLowerCase().includes("fovea") ||
-              activePoint.label.toLowerCase().includes("makula") ||
-              activePoint.label.toLowerCase().includes("arteri") ? (
+              {/* DR Relevance highlight — only beside a described structure;
+                  a names-only diagram (retina layers) has no description. */}
+              {!activePoint.body ? null : activePoint.label.toLowerCase().includes("retina") ||
+                activePoint.label.toLowerCase().includes("fovea") ||
+                activePoint.label.toLowerCase().includes("makula") ||
+                activePoint.label.toLowerCase().includes("arteri") ? (
                 <div className="flex items-start gap-2 rounded-lg border border-teal-500/20 bg-teal-500/10 p-2.5 text-xs text-teal-800 dark:text-teal-300">
                   <Info className="mt-0.5 h-4 w-4 shrink-0 text-teal-600" />
                   <span>

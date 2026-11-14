@@ -412,18 +412,31 @@ function ContentSlide({ page, currentTime }: { page: ContentPage; currentTime?: 
                 </tr>
               </thead>
               <tbody>
-                {page.table.rows.map((row, r) => (
-                  <tr key={r} className="border-t">
-                    {row.map((cell, c) => (
-                      <td
-                        key={c}
-                        className={`px-4 py-2.5 align-top leading-relaxed ${c === 0 ? "bg-primary/5 font-semibold text-foreground" : "text-foreground/90"}`}
-                      >
-                        {cell}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
+                {page.table.rows.map((row, r) => {
+                  const tone = page.table?.rowTones?.[r]
+                  return (
+                    <tr key={r} className={`border-t ${tone !== undefined ? TABLE_TONES[tone] : ""}`}>
+                      {row.map((cell, c) => {
+                        const spanned = typeof cell !== "string"
+                        return (
+                          <td
+                            key={c}
+                            rowSpan={spanned ? cell.rowSpan : undefined}
+                            className={`px-4 py-2.5 leading-relaxed ${
+                              spanned
+                                ? `border-l text-center align-middle font-semibold text-foreground ${TABLE_TONES[(tone ?? 0) + 1] ?? ""}`
+                                : c === 0
+                                  ? `align-top font-semibold text-foreground ${tone === undefined ? "bg-primary/5" : ""}`
+                                  : "align-top text-foreground/90"
+                            }`}
+                          >
+                            {spanned ? cell.text : cell}
+                          </td>
+                        )
+                      })}
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>
@@ -443,6 +456,16 @@ function ContentSlide({ page, currentTime }: { page: ContentPage; currentTime?: 
     </div>
   )
 }
+
+/** Row shades for `table.rowTones`, lightest (observation) to darkest
+ *  (referral); index 4 is the merged cell beside the darkest rows. */
+const TABLE_TONES = [
+  "bg-[#173a5e]/[0.03]",
+  "bg-[#173a5e]/[0.07]",
+  "bg-[#173a5e]/[0.12]",
+  "bg-[#173a5e]/[0.2]",
+  "bg-[#173a5e]/[0.3]",
+]
 
 /** A content page's image or labelled photo set. imageLayout "below" (v4.3)
  *  keeps a single image at reading width instead of the full-width default. */

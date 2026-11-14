@@ -144,7 +144,7 @@ export async function seedDatabase() {
           title: (p.title as string) || (p.kicker as string) || (p.id as string),
           contentType: "text" as const,
           textContent: (p.transcript as string) || (p.body as string) || (p.title as string) || (p.id as string),
-          isPreview: m.id === "pengantar-umum",
+          isPreview: ["halaman-muka", "daftar-isi", "petunjuk-penggunaan"].includes(m.id as string),
         })),
       }))
 
