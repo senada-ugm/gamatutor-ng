@@ -12,10 +12,7 @@ export function SiteFooter() {
         <div className="space-y-1 text-center sm:text-left">
           <p className="leading-relaxed">
             <span className="font-bold text-[#0f2a44] dark:text-white">DRIVE Learn</span> · Pelatihan Skrining
-            Retinopati Diabetika · Diselenggarakan di platform GamaTutor FKKMK UGM
-          </p>
-          <p className="text-[11px] text-[#6b8196] dark:text-slate-500">
-            SENADA UGM · Disajikan oleh GamaTutor · Juga tersedia sebagai paket SCORM 1.2 untuk LMS lain.
+            Retinopati Diabetika
           </p>
         </div>
         <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold">

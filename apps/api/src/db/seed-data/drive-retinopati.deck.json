@@ -33,8 +33,15 @@
     {
       "id": "kata-pengantar",
       "label": "Kata Pengantar",
-      "placeholder": true,
-      "pages": []
+      "pages": [
+        {
+          "id": "kata-pengantar-p1",
+          "type": "content",
+          "kicker": "DRIVE — DIABETIC RETINOPATHY INITIATIVE",
+          "title": "Kata Pengantar",
+          "body": "Selamat datang di Pelatihan Skrining Retinopati Diabetika dalam program DRIVE, Diabetic Retinopathy Initiative.\n\nDiabetes melitus terus mengalami peningkatan prevalensi secara global maupun nasional. Seiring dengan peningkatan tersebut, ancaman komplikasi mikrovaskular, khususnya retinopati diabetika, menjadi salah satu tantangan terbesar di bidang kesehatan mata. Retinopati diabetika merupakan salah satu penyebab utama gangguan penglihatan berat dan kebutaan permanen pada populasi usia produktif. Yang kerap menjadi masalah, fase awal penyakit ini sering kali berjalan tanpa keluhan. Ketika pasien datang dengan penurunan tajam penglihatan yang nyata, kerusakan struktural retina kerap telah berada pada stadium lanjut yang memerlukan intervensi kompleks dengan prognosis visual yang kurang baik.\n\nDalam sistem kesehatan di Indonesia, dokter layanan primer memegang peranan penting sebagai garda terdepan pelayanan kesehatan. Keberhasilan pencegahan kebutaan akibat diabetes sangat bertumpu pada kompetensi dokter layanan primer dalam melakukan skrining berkala, deteksi dini, dan tata laksana tepat waktu, termasuk ketepatan menentukan rujukan terencana ke fasilitas rujukan tingkat lanjutan sebelum kerusakan permanen terjadi.\n\nSeiring perkembangan teknologi informasi di bidang pendidikan kedokteran berkelanjutan, kami telah menyusun sebuah modul pelatihan digital yang dirancang agar lebih fleksibel, interaktif, dan aplikatif. Untuk memaksimalkan pengalaman belajar, modul ini secara khusus dipermudah dengan integrasi fitur voice over yang menyertai setiap materi, sehingga Anda diharapkan dapat lebih memahami isi modul secara lebih komprehensif dan mendalam.\n\nKami berharap pelatihan ini dapat menjadi bekal bagi dokter umum dalam meningkatkan kualitas layanan kesehatan mata dan berkontribusi dalam upaya pencegahan kebutaan akibat retinopati diabetika.\n\nSelamat mengikuti pelatihan.\n\nTim Penyusun"
+        }
+      ]
     },
     {
       "id": "daftar-isi",
@@ -43,9 +50,9 @@
         {
           "id": "daftar-isi-p1",
           "type": "content",
-          "kicker": "DAFTAR ISI",
+          "kicker": "DRIVE — DIABETIC RETINOPATHY INITIATIVE",
           "title": "Daftar Isi",
-          "body": "Halaman Muka\nKata Pengantar\nDaftar Isi\nPetunjuk Penggunaan Modul\nCapaian Pembelajaran\nPre Test\n\nModul 1. Pengenalan Diabetes dan Retinopati Diabetika\n•  Pengantar\n•  BAB 1 – Diabetes Mellitus\n•  BAB 2 – Retinopati Diabetika (RD)\n•  BAB 3 – Skrining & Tatalaksana Retinopati Diabetika\n•  Evaluasi\n\nModul 2 (segera hadir)\n•  Pengantar\n•  BAB 1\n•  BAB 2\n•  BAB 3\n•  Evaluasi\n\nModul 3. Penilaian Derajat Keparahan (Grading) Retinopati Diabetika\n•  Pengantar\n•  BAB 1 – Pengenalan Foto Fundus\n•  BAB 2 – Pengenalan Lesi Retinopati Diabetika\n•  BAB 3 – Grading Retinopati Diabetika\n•  BAB 4 – Edema Makula Diabetika (EMD)\n•  BAB 5 – Sight-threatening Diabetic Retinopathy (STDR)\n•  BAB 6 – Kelainan Retina Lain\n•  BAB 7 – Kriteria Rujukan Retinopati Diabetika\n•  Evaluasi\n\nModul 4. Simulasi Grading Retinopati Diabetika\n•  Pengantar\n•  Simulasi Grading Retinopati Diabetika\nPost Test\nSelesai"
+          "body": "Empat modul berurutan, dari pengenalan penyakit hingga simulasi grading foto fundus.\n\nMODUL 1 — Pengenalan Diabetes dan Retinopati Diabetika\n•  Bab 1: Diabetes Mellitus\n•  Bab 2: Retinopati Diabetika (RD)\n•  Bab 3: Skrining dan Tatalaksana Retinopati Diabetika\n•  Evaluasi\n\nMODUL 2 — Pemeriksaan Mata Dasar pada Skrining Retinopati Diabetika\n•  Bab 1: Pemeriksaan Tajam Penglihatan (Visus)\n•  Bab 2: Pemeriksaan Segmen Anterior\n•  Bab 3: Pemeriksaan Segmen Posterior\n•  Evaluasi\n\nMODUL 3 — Penilaian Derajat Keparahan (Grading) Retinopati Diabetika\n•  Bab 1: Pengenalan Foto Fundus\n•  Bab 2: Pengenalan Lesi Retinopati Diabetika\n•  Bab 3: Grading Retinopati Diabetika\n•  Bab 4: Edema Makula Diabetika (EMD)\n•  Bab 5: Sight-threatening Diabetic Retinopathy (STDR)\n•  Bab 6: Kelainan Retina Lain\n•  Bab 7: Kriteria Rujukan Retinopati Diabetika\n•  Evaluasi\n\nMODUL 4 — Simulasi Grading Retinopati Diabetika\n•  Level 1: Membedakan Foto Fundus Normal vs Retinopati Diabetika\n•  Level 2: Menentukan Keputusan Rujukan Retinopati Diabetika"
         }
       ]
     },
@@ -56,17 +63,24 @@
         {
           "id": "pengantar-umum-p2",
           "type": "content",
-          "kicker": "PETUNJUK",
+          "kicker": "DRIVE — DIABETIC RETINOPATHY INITIATIVE",
           "title": "Petunjuk Penggunaan Modul",
-          "body": "Urutan belajar:\n1. Kerjakan Pre Test untuk mengukur pemahaman awal. Nilainya tidak menentukan kelulusan.\n2. Pelajari Modul 1 sampai Modul 4 secara berurutan. Evaluasi di akhir setiap modul adalah latihan mandiri.\n3. Kerjakan Post Test di akhir pelatihan. Nilai minimal kelulusan 70; Post Test boleh diulang tanpa batas.\n4. Setelah lulus Post Test, sertifikat dapat diklaim atas nama akun Anda.\n\nCara menggunakan halaman materi:\n•  Pindah halaman dengan tombol panah, atau pilih bagian pada daftar di sisi kiri.\n•  Setiap halaman materi dilengkapi narasi suara. Tekan tombol putar pada bilah narasi, dan buka Transkrip Narasi untuk membaca teksnya.\n•  Daftar Referensi dan Daftar Singkatan tersedia di bawah setiap halaman materi.\n•  Pada gambar interaktif, klik nomor pada gambar untuk menampilkan nama strukturnya."
+          "body": "Modul digital ini dirancang untuk memfasilitasi pelatihan secara mandiri yang fleksibel dan aplikatif. Agar proses pelatihan berjalan optimal, mohon cermati petunjuk teknis berikut ini:\n\nA. Ketentuan Teknis dan Akses Sistem\n•  Perangkat yang disarankan: Gunakan PC, laptop, atau tablet dengan sistem operasi Windows, MacOS, Android, atau iPadOS.\n•  Browser: Gunakan Google Chrome, Safari, atau Mozilla Firefox dengan versi terbaru.\n•  Koneksi internet: Diperlukan koneksi internet stabil (minimal 2 Mbps).\n•  Perangkat audio: Gunakan speaker dari perangkat atau earphone.\n\nB. Alur Pembelajaran Sistematis\nModul ini menerapkan alur linear bertahap yang harus diselesaikan sebelum memasuki tahap selanjutnya. Progres pelatihan akan terlihat pada panel navigasi. Pelatihan dimulai dari pre-test, modul, post-test, dan diakhiri dengan klaim sertifikat.\n\nC. Fitur Modul\n•  Audio (voice over): Membantu penjelasan pada materi modul. Tersedia tombol play atau pause dan pengatur kecepatan pada setiap halaman materi.\n•  Video: Menampilkan praktik materi modul.\n•  Tombol interaktif: Digunakan untuk menampilkan detail pada materi dan mengerjakan bagian evaluasi."
         }
       ]
     },
     {
       "id": "capaian-pembelajaran",
       "label": "Capaian Pembelajaran",
-      "placeholder": true,
-      "pages": []
+      "pages": [
+        {
+          "id": "capaian-pembelajaran-p1",
+          "type": "content",
+          "kicker": "DRIVE — DIABETIC RETINOPATHY INITIATIVE",
+          "title": "Capaian Pembelajaran",
+          "body": "Setelah menyelesaikan pelatihan ini, Peserta diharapkan mampu:\n1. Memahami konsep dasar retinopati diabetika yang terdiri dari definisi, epidemiologi, faktor risiko, patofisiologi, skrining, dan tatalaksana.\n2. Menentukan jadwal skrining retina dan evaluasi berkala pada pasien DM.\n3. Memahami prosedur pemeriksaan skrining retinopati diabetika.\n4. Mengidentifikasi lesi retinopati diabetika dan kelainan lain pada foto fundus.\n5. Menentukan derajat keparahan retinopati diabetika.\n6. Menentukan tindak lanjut dan indikasi rujukan ke dokter spesialis mata."
+        }
+      ]
     },
     {
       "id": "pre-test",
