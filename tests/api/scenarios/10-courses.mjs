@@ -95,14 +95,14 @@ export async function run(ctx) {
     200
   )
 
-  // course reviews: user upserts review, reads summary & list
+  // course reviews: admin upserts review, reads summary & list
   status(
-    "user submits a course review",
-    await user.put(`/v1/courses/${ids.course}/reviews/mine`, {
+    "admin submits a course review",
+    await admin.put(`/v1/courses/${ids.course}/reviews/mine`, {
       json: { rating: 5, review: "Materi sangat jelas", suggestion: "Tambahkan studi kasus" },
     }),
     200
   )
-  status("user reads course review summary", await user.get(`/v1/courses/${ids.course}/reviews/summary`), 200)
-  status("user lists course reviews", await user.get(`/v1/courses/${ids.course}/reviews`), 200)
+  status("admin reads course review summary", await admin.get(`/v1/courses/${ids.course}/reviews/summary`), 200)
+  status("admin lists course reviews", await admin.get(`/v1/courses/${ids.course}/reviews`), 200)
 }
