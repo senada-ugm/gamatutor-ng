@@ -545,6 +545,30 @@ export type CourseReportParticipant = {
     certificateId?: CommonResourceId;
 };
 
+export type CourseReview = {
+    id: string;
+    courseId: string;
+    userId: string;
+    userName: string;
+    rating: number;
+    review?: string;
+    suggestion?: string;
+    createdAt: string;
+    updatedAt: string;
+};
+
+export type CourseReviewSummary = {
+    averageRating: number;
+    totalReviews: number;
+    myReview?: CourseReview;
+};
+
+export type CourseReviewUpsert = {
+    rating: number;
+    review?: string;
+    suggestion?: string;
+};
+
 export const CourseStatus = {
     DRAFT: 'draft',
     PUBLISHED: 'published',
@@ -2774,6 +2798,139 @@ export type CourseReportsApiGetResponses = {
 };
 
 export type CourseReportsApiGetResponse = CourseReportsApiGetResponses[keyof CourseReportsApiGetResponses];
+
+export type CourseReviewsApiListData = {
+    body?: never;
+    path: {
+        courseId: string;
+    };
+    query?: {
+        /**
+         * The page index to retrieve (default: 1).
+         */
+        page?: number;
+        /**
+         * The maximum number of records to return on a page (default: 50).
+         */
+        pageSize?: number;
+    };
+    url: '/courses/{courseId}/reviews';
+};
+
+export type CourseReviewsApiListErrors = {
+    /**
+     * An unexpected error response.
+     */
+    default: CommonErrorResponse;
+};
+
+export type CourseReviewsApiListError = CourseReviewsApiListErrors[keyof CourseReviewsApiListErrors];
+
+export type CourseReviewsApiListResponses = {
+    /**
+     * Standard page-based paginated response envelope.
+     */
+    200: {
+        /**
+         * The list of resources for the current page.
+         */
+        data: Array<CourseReview>;
+        /**
+         * Pagination details and navigation links.
+         */
+        pagination: CommonPagePagination;
+        /**
+         * Response tracing metadata.
+         */
+        meta: CommonResponseMeta;
+        /**
+         * Minor warning list.
+         */
+        warnings?: Array<CommonWarning>;
+    };
+};
+
+export type CourseReviewsApiListResponse = CourseReviewsApiListResponses[keyof CourseReviewsApiListResponses];
+
+export type CourseReviewsApiUpsertMineData = {
+    body: CourseReviewUpsert;
+    path: {
+        courseId: string;
+    };
+    query?: never;
+    url: '/courses/{courseId}/reviews/mine';
+};
+
+export type CourseReviewsApiUpsertMineErrors = {
+    /**
+     * An unexpected error response.
+     */
+    default: CommonErrorResponse;
+};
+
+export type CourseReviewsApiUpsertMineError = CourseReviewsApiUpsertMineErrors[keyof CourseReviewsApiUpsertMineErrors];
+
+export type CourseReviewsApiUpsertMineResponses = {
+    /**
+     * Standard single resource response envelope.
+     */
+    200: {
+        /**
+         * The raw payload representation.
+         */
+        data: CourseReview;
+        /**
+         * Trace metadata.
+         */
+        meta: CommonResponseMeta;
+        /**
+         * Minor warning list.
+         */
+        warnings?: Array<CommonWarning>;
+    };
+};
+
+export type CourseReviewsApiUpsertMineResponse = CourseReviewsApiUpsertMineResponses[keyof CourseReviewsApiUpsertMineResponses];
+
+export type CourseReviewsApiSummaryData = {
+    body?: never;
+    path: {
+        courseId: string;
+    };
+    query?: never;
+    url: '/courses/{courseId}/reviews/summary';
+};
+
+export type CourseReviewsApiSummaryErrors = {
+    /**
+     * An unexpected error response.
+     */
+    default: CommonErrorResponse;
+};
+
+export type CourseReviewsApiSummaryError = CourseReviewsApiSummaryErrors[keyof CourseReviewsApiSummaryErrors];
+
+export type CourseReviewsApiSummaryResponses = {
+    /**
+     * Standard single resource response envelope.
+     */
+    200: {
+        /**
+         * The raw payload representation.
+         */
+        data: CourseReviewSummary;
+        /**
+         * Trace metadata.
+         */
+        meta: CommonResponseMeta;
+        /**
+         * Minor warning list.
+         */
+        warnings?: Array<CommonWarning>;
+    };
+};
+
+export type CourseReviewsApiSummaryResponse = CourseReviewsApiSummaryResponses[keyof CourseReviewsApiSummaryResponses];
 
 export type CourseSlideDecksApiGetData = {
     body?: never;

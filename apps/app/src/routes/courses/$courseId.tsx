@@ -10,6 +10,7 @@ import { EmptyState } from "@/components/composed/_shared/empty-state"
 import { ErrorState } from "@/components/composed/_shared/error-state"
 import { PageHeader } from "@/components/composed/_shared/page-header"
 import { EnrollPanel } from "@/components/composed/student/enroll-panel"
+import { CourseReviewsSection } from "@/components/composed/courses/course-reviews-section"
 import { useSession } from "@/lib/session"
 import { apiGet } from "@/lib/api"
 import { COURSE_TYPE_LABELS, LEVEL_LABELS } from "@/lib/labels"
@@ -128,6 +129,8 @@ export function CourseDetailPage() {
           <EnrollPanel course={c} enrollment={myEnrollment.data ?? null} />
         </div>
       </div>
+
+      <CourseReviewsSection courseId={c.id} />
     </div>
   )
 }

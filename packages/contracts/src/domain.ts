@@ -105,6 +105,9 @@ import type {
   TelemetryDailyPoint,
   TelemetryParticipantRow,
   CourseTelemetrySummary,
+  CourseReview,
+  CourseReviewSummary,
+  CourseReviewUpsert,
 } from "../gen/types.gen.js"
 
 /** Global account role — ownership is a join, not a role (see institutions.tsp). */
@@ -118,6 +121,9 @@ export type ContractInstitutionProfileUpdate = InstitutionProfileUpdate
 export type ContractInstitutionCreate = InstitutionCreate
 export type ContractInstitutionOwnership = InstitutionOwnership
 export type ContractInstitutionOwnershipGrant = InstitutionOwnershipGrant
+export type ContractCourseReview = CourseReview
+export type ContractCourseReviewSummary = CourseReviewSummary
+export type ContractCourseReviewUpsert = CourseReviewUpsert
 
 /** The canonical account identity — see users.tsp. */
 export type ContractAccountStatus = AccountStatus

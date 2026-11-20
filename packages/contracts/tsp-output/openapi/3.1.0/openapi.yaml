@@ -22,6 +22,7 @@ tags:
     description: "Module and lesson authoring inside a course, plus learner lesson-progress tracking."
   - name: Course Instructors
     description: "Per-course instructor roster: invites, roles, and removal."
+  - name: CourseReviews
   - name: Enrollments
     description: "Learner enrollment lifecycle (registered → interviewed → selected → graduated) and participant profiles."
   - name: Quizzes
@@ -1106,6 +1107,143 @@ paths:
                 $ref: '#/components/schemas/Common.ErrorResponse'
       tags:
         - Reports
+  /courses/{courseId}/reviews:
+    get:
+      operationId: CourseReviewsApi_list
+      summary: List course reviews
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/Common.PageParams.page'
+        - $ref: '#/components/parameters/Common.PageParams.pageSize'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                  - pagination
+                  - meta
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CourseReview'
+                    description: The list of resources for the current page.
+                  pagination:
+                    $ref: '#/components/schemas/Common.PagePagination'
+                    description: Pagination details and navigation links.
+                  meta:
+                    $ref: '#/components/schemas/Common.ResponseMeta'
+                    description: Response tracing metadata.
+                  warnings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Common.Warning'
+                    description: Minor warning list.
+                description: Standard page-based paginated response envelope.
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Common.ErrorResponse'
+      tags:
+        - CourseReviews
+  /courses/{courseId}/reviews/mine:
+    put:
+      operationId: CourseReviewsApi_upsertMine
+      summary: Create or update the signed-in user's course review
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                  - meta
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CourseReview'
+                    description: The raw payload representation.
+                  meta:
+                    $ref: '#/components/schemas/Common.ResponseMeta'
+                    description: Trace metadata.
+                  warnings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Common.Warning'
+                    description: Minor warning list.
+                description: Standard single resource response envelope.
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Common.ErrorResponse'
+      tags:
+        - CourseReviews
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseReviewUpsert'
+  /courses/{courseId}/reviews/summary:
+    get:
+      operationId: CourseReviewsApi_summary
+      summary: Get course review summary
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                  - meta
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CourseReviewSummary'
+                    description: The raw payload representation.
+                  meta:
+                    $ref: '#/components/schemas/Common.ResponseMeta'
+                    description: Trace metadata.
+                  warnings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Common.Warning'
+                    description: Minor warning list.
+                description: Standard single resource response envelope.
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Common.ErrorResponse'
+      tags:
+        - CourseReviews
   /courses/{courseId}/slide-deck:
     get:
       operationId: CourseSlideDecksApi_get
@@ -4681,6 +4819,70 @@ components:
           format: int32
         certificateId:
           $ref: '#/components/schemas/Common.ResourceId'
+    CourseReview:
+      type: object
+      required:
+        - id
+        - courseId
+        - userId
+        - userName
+        - rating
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+        courseId:
+          type: string
+        userId:
+          type: string
+        userName:
+          type: string
+        rating:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 5
+        review:
+          type: string
+        suggestion:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    CourseReviewSummary:
+      type: object
+      required:
+        - averageRating
+        - totalReviews
+      properties:
+        averageRating:
+          type: number
+          format: double
+        totalReviews:
+          type: integer
+          format: int32
+        myReview:
+          $ref: '#/components/schemas/CourseReview'
+    CourseReviewUpsert:
+      type: object
+      required:
+        - rating
+      properties:
+        rating:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 5
+        review:
+          type: string
+          maxLength: 2000
+        suggestion:
+          type: string
+          maxLength: 2000
     CourseStatus:
       type: string
       enum:

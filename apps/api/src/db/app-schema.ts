@@ -533,3 +533,25 @@ export const platformSettings = pgTable("platform_settings", {
   certificateValidityMonths: integer("certificate_validity_months").notNull().default(24),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
+
+/** User ratings, reviews, and suggestions for a course. One row per (course, user). */
+export const courseReviews = pgTable(
+  "course_reviews",
+  {
+    id: text("id").primaryKey(),
+    courseId: text("course_id")
+      .notNull()
+      .references(() => courses.id, { onDelete: "cascade" }),
+    userId: text("user_id").notNull(),
+    rating: integer("rating").notNull(),
+    review: text("review"),
+    suggestion: text("suggestion"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("course_reviews_course_user_idx").on(table.courseId, table.userId),
+    index("course_reviews_course_idx").on(table.courseId),
+    check("course_reviews_rating_check", sql`${table.rating} >= 1 and ${table.rating} <= 5`),
+  ]
+)

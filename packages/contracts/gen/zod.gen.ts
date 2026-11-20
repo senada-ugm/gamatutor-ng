@@ -309,6 +309,30 @@ export const zCourseLevel = z.enum([
     'expert'
 ]);
 
+export const zCourseReview = z.object({
+    id: z.string(),
+    courseId: z.string(),
+    userId: z.string(),
+    userName: z.string(),
+    rating: z.int().gte(1).lte(5),
+    review: z.string().optional(),
+    suggestion: z.string().optional(),
+    createdAt: z.iso.datetime(),
+    updatedAt: z.iso.datetime()
+});
+
+export const zCourseReviewSummary = z.object({
+    averageRating: z.number(),
+    totalReviews: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    myReview: zCourseReview.optional()
+});
+
+export const zCourseReviewUpsert = z.object({
+    rating: z.int().gte(1).lte(5),
+    review: z.string().max(2000).optional(),
+    suggestion: z.string().max(2000).optional()
+});
+
 export const zCourseStatus = z.enum([
     'draft',
     'published',
@@ -1762,6 +1786,53 @@ export const zCourseReportsApiGetPath = z.object({
  */
 export const zCourseReportsApiGetResponse = z.object({
     data: zCourseReport,
+    meta: zCommonResponseMeta,
+    warnings: z.array(zCommonWarning).optional()
+});
+
+export const zCourseReviewsApiListPath = z.object({
+    courseId: z.string()
+});
+
+export const zCourseReviewsApiListQuery = z.object({
+    page: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(1),
+    pageSize: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }).optional().default(50)
+});
+
+/**
+ * Standard page-based paginated response envelope.
+ */
+export const zCourseReviewsApiListResponse = z.object({
+    data: z.array(zCourseReview),
+    pagination: zCommonPagePagination,
+    meta: zCommonResponseMeta,
+    warnings: z.array(zCommonWarning).optional()
+});
+
+export const zCourseReviewsApiUpsertMineBody = zCourseReviewUpsert;
+
+export const zCourseReviewsApiUpsertMinePath = z.object({
+    courseId: z.string()
+});
+
+/**
+ * Standard single resource response envelope.
+ */
+export const zCourseReviewsApiUpsertMineResponse = z.object({
+    data: zCourseReview,
+    meta: zCommonResponseMeta,
+    warnings: z.array(zCommonWarning).optional()
+});
+
+export const zCourseReviewsApiSummaryPath = z.object({
+    courseId: z.string()
+});
+
+/**
+ * Standard single resource response envelope.
+ */
+export const zCourseReviewsApiSummaryResponse = z.object({
+    data: zCourseReviewSummary,
     meta: zCommonResponseMeta,
     warnings: z.array(zCommonWarning).optional()
 });

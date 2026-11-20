@@ -6,6 +6,7 @@ import "./health.tsp";
 import "./courses.tsp";
 import "./course-content.tsp";
 import "./course-instructors.tsp";
+import "./course-reviews.tsp";
 import "./enrollments.tsp";
 import "./quizzes.tsp";
 import "./certificates.tsp";

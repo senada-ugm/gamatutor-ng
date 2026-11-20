@@ -15,6 +15,7 @@ import type {
   TestPage,
 } from "@/lib/content/course-types"
 import { AudioNarrationBar } from "./audio-narration-bar"
+import { CourseReviewsSection } from "@/components/composed/courses/course-reviews-section"
 import { TranscriptViewer } from "./transcript-viewer"
 import { EyeAnatomyViewer } from "./eye-anatomy-viewer"
 import { SequentialHotspotViewer } from "./sequential-hotspot-viewer"
@@ -223,12 +224,15 @@ export function InteractiveSlideViewer({
           />
         )}
         {page.type === "completion" && (
-          <CompletionSlide
-            page={page}
-            body={course.completion?.body}
-            postTestPassed={postTestPassed}
-            onClaimCertificate={onClaimCertificate}
-          />
+          <div className="space-y-6">
+            <CompletionSlide
+              page={page}
+              body={course.completion?.body}
+              postTestPassed={postTestPassed}
+              onClaimCertificate={onClaimCertificate}
+            />
+            {course.id && <CourseReviewsSection courseId={course.id} compact />}
+          </div>
         )}
       </div>
 
