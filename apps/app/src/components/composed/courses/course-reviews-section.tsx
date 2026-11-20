@@ -183,7 +183,9 @@ export function CourseReviewsSection({ courseId, compact = false }: CourseReview
               </div>
             </form>
           ) : (
-            <p className="text-sm text-muted-foreground">Masuk ke akun Anda untuk memberikan rating, ulasan, dan saran.</p>
+            <p className="text-sm text-muted-foreground">
+              Masuk ke akun Anda untuk memberikan rating, ulasan, dan saran.
+            </p>
           )}
 
           {!compact && (
