@@ -16,7 +16,7 @@ function isSupported(): boolean {
 function pickVoice(lang: string): SpeechSynthesisVoice | null {
   const voices = window.speechSynthesis.getVoices()
   if (voices.length === 0) return null
-  const prefix = lang.split("-")[0]!.toLowerCase()
+  const prefix = lang.split("-")[0].toLowerCase()
   const matching = voices
     .filter((v) => v.lang.replace("_", "-").toLowerCase().startsWith(prefix))
     // Local voices first: Chrome's online voices stop after ~15 seconds of

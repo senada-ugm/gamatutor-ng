@@ -1,4 +1,5 @@
-import { useEffect, useState, type DragEvent } from "react"
+import { useEffect, useState } from "react"
+import type { DragEvent } from "react"
 import { ArrowRight, CheckCircle2, RotateCcw, XCircle, Award } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
