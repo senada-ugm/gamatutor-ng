@@ -1260,36 +1260,550 @@
       "id": "modul2-pengantar",
       "group": "Modul 2",
       "label": "Pengantar",
-      "placeholder": true,
-      "pages": []
+      "pages": [
+        {
+          "id": "m2-s1",
+          "type": "hero",
+          "kicker": "MODUL 2",
+          "title": "Pemeriksaan Mata Dasar pada Skrining Retinopati Diabetika",
+          "body": "Pemeriksaan Tajam Penglihatan (Visus), Segmen Anterior & Posterior"
+        },
+        {
+          "id": "m2-s2",
+          "slide": 2,
+          "type": "content",
+          "kicker": "Pengantar",
+          "title": "Cakupan Modul",
+          "body": "BAB 1. Pemeriksaan Tajam Penglihatan (Visus)\nBAB 2. Pemeriksaan Segmen Anterior\nBAB 3. Pemeriksaan Segmen Posterior\nEvaluasi",
+          "transcript": "Selamat datang di Modul 2, Pemeriksaan Mata Dasar pada Skrining Retinopati Diabetika: Pemeriksaan Tajam Penglihatan atau Visus, Segmen Anterior dan Posterior, pada Pelatihan Skrining Retinopati Diabetika dalam program DRIVE, Diabetic Retinopathy Initiative.\n\nDalam modul ini, kita membahas:\nPertama, pemeriksaan tajam penglihatan atau visus.\nKedua, pemeriksaan segmen anterior, yang mencakup pemeriksaan kornea, bilik mata depan, dan lensa.\nKetiga, pemeriksaan segmen posterior, yang mencakup pemeriksaan vitreus, retina, dan papil atau nervus optikus.\nDan terakhir, berisi evaluasi untuk menguji pemahaman Anda.",
+          "references": [
+            "WHO Regional Office for Europe. Diabetic retinopathy screening: a short guide. Increase effectiveness, maximize benefits and minimize harm (WHO short guide 2020). Copenhagen: WHO Regional Office for Europe; 2020. ISBN 978-92-890-5532-1. hlm. 34 (komponen pemeriksaan pada skrining: tajam penglihatan, pemeriksaan retina dengan dilatasi, dan pedoman bila retina tidak dapat difoto)."
+          ],
+          "abbreviations": ["DRIVE, Diabetic Retinopathy Initiative"],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m2-s2.mp3"
+        },
+        {
+          "id": "m2-s3",
+          "slide": 3,
+          "type": "cards",
+          "kicker": "Pengantar",
+          "title": "Komponen Penting Skrining Retinopati Diabetika",
+          "columns": 3,
+          "cards": [
+            {
+              "big": "1",
+              "title": "Anamnesis",
+              "body": "Riwayat penyakit sistemik:\n• Riwayat DM\n• Riwayat hipertensi\n• Komorbid\n• Status kehamilan\n• Komplikasi DM\n• Riwayat merokok\n\nRiwayat gangguan mata:\n• Keluhan visual\n• Riwayat penyakit mata pasien & keluarga\n• Riwayat operasi/tindakan mata"
+            },
+            {
+              "big": "2",
+              "title": "Pemeriksaan Fisik",
+              "body": "Pemeriksaan antropometri:\n• Berat badan\n• Tinggi badan\n• IMT\n• Tekanan darah"
+            },
+            {
+              "big": "3",
+              "title": "Pemeriksaan Mata",
+              "body": "• Pemeriksaan visus\n• Pemeriksaan segmen anterior\n• Pemeriksaan segmen posterior",
+              "dark": true
+            }
+          ],
+          "transcript": "Pada skrining retinopati diabetika, penting untuk memperoleh informasi yang komprehensif, baik melalui anamnesis maupun pemeriksaan mata.\nDari anamnesis, beberapa informasi yang perlu digali meliputi riwayat diabetes, hipertensi, penyakit lain atau komorbid, status kehamilan, komplikasi diabetes melitus yang sudah dialami, dan riwayat merokok pada pasien. Selain itu, juga digali riwayat gangguan mata pada pasien, termasuk keluhan pandangan, riwayat penyakit mata sebelumnya baik pada pasien maupun keluarga, dan riwayat operasi atau tindakan mata.\nSelanjutnya, dilakukan pemeriksaan fisik, yaitu pemeriksaan antropometri yang mencakup berat badan, tinggi badan, indeks massa tubuh atau IMT, dan tekanan darah, sebagai upaya skrining faktor risiko retinopati diabetika.\nKomponen utama dalam skrining retinopati diabetika adalah pemeriksaan mata, yang meliputi pemeriksaan tajam penglihatan atau visus untuk menilai fungsi penglihatan, serta pemeriksaan segmen anterior dan segmen posterior untuk mendeteksi kelainan mata akibat diabetes.\n\nPada modul ini, kita akan fokus mempelajari cara pemeriksaan mata yang diperlukan saat skrining retinopati diabetika.",
+          "references": [
+            "Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162. hlm. P94 (komponen anamnesis dan pemeriksaan awal pasien DM).",
+            "Kementerian Kesehatan RI. Keputusan Menteri Kesehatan Nomor HK.01.07/MENKES/1914/2023 tentang Pedoman Nasional Pelayanan Kedokteran (PNPK) Tata Laksana Retinopati Diabetika. Jakarta: Kemenkes RI; 2023. hlm. 15–17 (anamnesis, gejala klinis, pemeriksaan awal, foto fundus, dan OCT)."
+          ],
+          "abbreviations": ["DM, diabetes mellitus", "IMT, indeks massa tubuh"],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m2-s3.mp3"
+        }
+      ]
     },
     {
       "id": "modul2-bab1",
       "group": "Modul 2",
-      "label": "BAB 1",
-      "placeholder": true,
-      "pages": []
+      "label": "BAB 1 – Pemeriksaan Tajam Penglihatan (Visus)",
+      "pages": [
+        {
+          "id": "m2-s4",
+          "slide": 4,
+          "type": "divider",
+          "kicker": "BAB 1",
+          "title": "PEMERIKSAAN TAJAM PENGLIHATAN (VISUS)",
+          "transcript": "Bab satu, Pemeriksaan Tajam Penglihatan atau Visus",
+          "audio": "/content/drive-retinopati/assets/audio-neural/m2-s4.mp3"
+        },
+        {
+          "id": "m2-s5",
+          "slide": 5,
+          "type": "content",
+          "kicker": "BAB 1 – Pemeriksaan Tajam Penglihatan (Visus)",
+          "title": "Pemeriksaan Tajam Penglihatan",
+          "body": "Video pemeriksaan tajam penglihatan sedang disiapkan dan akan segera ditambahkan.\n\n• Menggunakan bagan Snellen atau bagan E.\n• Menilai visus jarak jauh dan dekat, tiap mata secara terpisah, dengan atau tanpa kacamata.\n• Urutan: visus tanpa koreksi → visus dengan pinhole atau kacamata pasien → visus terkoreksi terbaik (bila memungkinkan).",
+          "transcript": "Pemeriksaan tajam penglihatan atau visus dilakukan menggunakan bagan Snellen atau bagan E. Pemeriksaan dilakukan untuk mengevaluasi visus jarak jauh dan dekat pada pasien. Pemeriksaan ini dilakukan untuk tiap mata secara terpisah dengan atau tanpa kacamata.\n\nPemeriksaan dimulai dengan pengukuran visus tanpa koreksi, dilanjutkan pemeriksaan visus dengan pinhole atau kacamata pasien, dan bila memungkinkan, visus terkoreksi terbaik.",
+          "references": [
+            "Blomquist PH, executive ed. Practical Ophthalmology: A Manual for Beginning Residents. 8th ed. San Francisco: American Academy of Ophthalmology; 2021. ISBN 978-1-68104-405-7. hlm. 27–31 (notasi Snellen, optotipe, tumbling E, pemeriksaan visus jauh, pinhole, dan dekat).",
+            "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3. hlm. 2–4 (Snellen, best-corrected visual acuity, pinhole, dan visus dekat)."
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m2-s5.mp3"
+        },
+        {
+          "id": "m2-s6",
+          "slide": 6,
+          "type": "content",
+          "kicker": "BAB 1 – Pemeriksaan Tajam Penglihatan (Visus)",
+          "title": "Interpretasi Hasil Pemeriksaan",
+          "body": "Pinhole digunakan bila visus tanpa koreksi kurang dari 6/6. Pinhole mengurangi efek kelainan refraksi, sehingga membantu membedakan penurunan visus akibat kelainan refraksi dan kelainan organik.",
+          "table": {
+            "head": ["Hasil pemeriksaan", "Interpretasi"],
+            "rows": [
+              ["Visus tanpa koreksi 6/6", "Tajam penglihatan normal"],
+              ["Visus < 6/6, membaik dengan pinhole", "Mengarah pada kelainan refraksi"],
+              [
+                "Visus < 6/6, tidak membaik dengan pinhole",
+                "Mengarah pada kelainan organik, seperti katarak atau kelainan retina"
+              ]
+            ]
+          },
+          "transcript": "Pinhole digunakan bila visus tanpa koreksi kurang dari 6/6.\nPinhole mengurangi efek kelainan refraksi sehingga membantu membedakan penurunan visus akibat kelainan refraksi dan kelainan organik, seperti katarak atau kelainan retina.\nVisus yang membaik dengan pinhole mengarah pada kelainan refraksi, sedangkan visus yang tidak membaik mengarah pada kelainan organik.",
+          "references": [
+            "Blomquist PH, executive ed. Practical Ophthalmology: A Manual for Beginning Residents. 8th ed. San Francisco: American Academy of Ophthalmology; 2021. ISBN 978-1-68104-405-7. hlm. 31 (prinsip pinhole; perbaikan visus menunjukkan kelainan refraksi), hlm. 42 (Clinical Protocol 4-2: Testing Pinhole Visual Acuity).",
+            "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3. hlm. 2 (pinhole mengompensasi efek kelainan refraksi).",
+            "Allen RC, Harper RA, eds. Basic Ophthalmology: Essentials for Medical Students. 10th ed. San Francisco: American Academy of Ophthalmology; 2016. ISBN 978-1-61525-804-8. Bab 1 The Eye Examination (pinhole memperkecil apertur pupil dan mengurangi kabur akibat kelainan refraksi)."
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m2-s6.mp3"
+        }
+      ]
     },
     {
       "id": "modul2-bab2",
       "group": "Modul 2",
-      "label": "BAB 2",
-      "placeholder": true,
-      "pages": []
+      "label": "BAB 2 – Pemeriksaan Segmen Anterior",
+      "pages": [
+        {
+          "id": "m2-s7",
+          "slide": 7,
+          "type": "divider",
+          "kicker": "BAB 2",
+          "title": "PEMERIKSAAN SEGMEN ANTERIOR",
+          "transcript": "Bab dua, Pemeriksaan Segmen Anterior",
+          "audio": "/content/drive-retinopati/assets/audio-neural/m2-s7.mp3"
+        },
+        {
+          "id": "m2-s8",
+          "slide": 8,
+          "type": "content",
+          "kicker": "BAB 2 – Pemeriksaan Segmen Anterior",
+          "title": "Pemeriksaan Segmen Anterior",
+          "body": "Tujuan: mengidentifikasi kelainan struktur mata bagian depan yang dapat memengaruhi kualitas pencitraan fundus atau mengindikasikan adanya penyakit mata.\n\nAlat pemeriksaan: penlight / senter.",
+          "reveal_steps": [
+            {
+              "title": "A. Kornea",
+              "texts": ["Kejernihan kornea."]
+            },
+            {
+              "title": "B. Bilik Mata Depan",
+              "texts": ["Kejernihan dan kedalaman."]
+            },
+            {
+              "title": "C. Lensa",
+              "texts": ["Kejernihan."]
+            },
+            {
+              "title": "D. Pupil",
+              "texts": ["Ukuran dan refleks."]
+            }
+          ],
+          "image": "/content/drive-retinopati/assets/m2_s8_1.webp",
+          "imageLayout": "below",
+          "imageCaption": "Ilustrasi pemeriksaan segmen anterior dengan penlight",
+          "transcript": "Pemeriksaan segmen anterior secara sistematis membantu mengidentifikasi kondisi yang dapat memengaruhi kualitas pencitraan fundus atau menunjukkan penyakit lanjut.\nStruktur penting yang dinilai meliputi kejernihan kornea, kejernihan dan kedalaman bilik mata depan, kejernihan lensa, serta ukuran dan refleks pupil.",
+          "references": [
+            "Allen RC, Harper RA, eds. Basic Ophthalmology: Essentials for Medical Students. 10th ed. San Francisco: American Academy of Ophthalmology; 2016. ISBN 978-1-61525-804-8. Bab 1 The Eye Examination (inspeksi eksternal dengan penlight; pemeriksaan refleks pupil; penilaian kedalaman bilik mata depan).",
+            "Blomquist PH, executive ed. Practical Ophthalmology: A Manual for Beginning Residents. 8th ed. San Francisco: American Academy of Ophthalmology; 2021. ISBN 978-1-68104-405-7. hlm. 108–109 (pemeriksaan pupil dan refleks cahaya), hlm. 137 (Tabel 9-1: kegunaan penlight dalam pemeriksaan eksternal).",
+            "Kang K, Rosenblatt M. Clinical examination and diagnostic testing. In: Albert DM, Miller JW, Azar DT, Young LH, eds. Albert and Jakobiec's Principles and Practice of Ophthalmology. 4th ed. Cham: Springer; 2022. ISBN 978-3-030-42633-0. hlm. 106 (penlight examination pada pemeriksaan segmen anterior)."
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m2-s8.mp3"
+        },
+        {
+          "id": "m2-s9",
+          "slide": 9,
+          "type": "content",
+          "kicker": "BAB 2 – Pemeriksaan Segmen Anterior",
+          "title": "A. Pemeriksaan Segmen Anterior",
+          "body": "Tujuan: menilai kejernihan kornea, kejernihan bilik mata depan, iris, refleks pupil, dan kejernihan lensa.\n\nLangkah pemeriksaan:\n1. Pemeriksa berhadapan dengan pasien.\n2. Pasien menatap lurus.\n3. Sorot senter dari arah samping (sudut 45°), 3–5 cm di depan mata pasien.\n4. Nilai kejernihan kornea, kejernihan bilik mata depan, iris, refleks pupil, dan kejernihan lensa.",
+          "image": "/content/drive-retinopati/assets/m2_s9_1.webp",
+          "imageLayout": "below",
+          "imageCaption": "Senter diarahkan dari samping (sudut 45°)",
+          "transcript": "Pemeriksaan segmen anterior bertujuan untuk menilai kejernihan kornea dan bilik mata depan, menilai iris, refleks pupil, serta kejernihan lensa.\nLangkah pemeriksaan dimulai dengan memosisikan pasien berhadapan dengan pemeriksa. Kemudian, minta pasien untuk menatap lurus ke depan, dan arahkan senter dari samping dengan sudut 45 derajat, pada jarak 3 hingga 5 sentimeter di depan mata pasien. Lalu nilai kejernihan kornea, kejernihan bilik mata depan, iris, refleks pupil, dan kejernihan lensa.",
+          "references": [
+            "Kang K, Rosenblatt M. Clinical examination and diagnostic testing. In: Albert DM, Miller JW, Azar DT, Young LH, eds. Albert and Jakobiec's Principles and Practice of Ophthalmology. 4th ed. Cham: Springer; 2022. ISBN 978-3-030-42633-0. hlm. 106 (penlight examination pada kornea: kekeruhan, vaskularisasi, pantulan cahaya yang tidak rata pada abrasi).",
+            "Allen RC, Harper RA, eds. Basic Ophthalmology: Essentials for Medical Students. 10th ed. San Francisco: American Academy of Ophthalmology; 2016. ISBN 978-1-61525-804-8. Bab 1 The Eye Examination (penlight membantu inspeksi kornea dan iris).",
+            "Blomquist PH, executive ed. Practical Ophthalmology: A Manual for Beginning Residents. 8th ed. San Francisco: American Academy of Ophthalmology; 2021. ISBN 978-1-68104-405-7. hlm. 137 (Tabel 9-1: alat pemeriksaan eksternal)."
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m2-s9.mp3"
+        },
+        {
+          "id": "m2-s10",
+          "slide": 10,
+          "type": "content",
+          "kicker": "BAB 2 – Pemeriksaan Segmen Anterior",
+          "title": "Gambaran Segmen Anterior Normal & Abnormal",
+          "image": "/content/drive-retinopati/assets/m2_s10_1.webp",
+          "imageCaption": "Dari kiri: normal, kekeruhan (leukoma) kornea, neovaskularisasi iris, dan katarak",
+          "transcript": "Berikut ini adalah gambaran dari hasil pemeriksaan segmen anterior dalam kondisi normal, ditunjukkan pada gambar paling kiri. Namun, kita bisa juga menemukan beberapa kondisi segmen anterior dengan kelainan, seperti kekeruhan atau leukoma kornea, neovaskularisasi iris, dan katarak, yang akan menyulitkan pemeriksaan segmen posterior.",
+          "references": [
+            "Kang K, Rosenblatt M. Clinical examination and diagnostic testing. In: Albert DM, Miller JW, Azar DT, Young LH, eds. Albert and Jakobiec's Principles and Practice of Ophthalmology. 4th ed. Cham: Springer; 2022. ISBN 978-3-030-42633-0. hlm. 106 (penlight examination pada kornea: kekeruhan, vaskularisasi, pantulan cahaya yang tidak rata pada abrasi).",
+            "Allen RC, Harper RA, eds. Basic Ophthalmology: Essentials for Medical Students. 10th ed. San Francisco: American Academy of Ophthalmology; 2016. ISBN 978-1-61525-804-8. Bab 1 The Eye Examination (penlight membantu inspeksi kornea dan iris).",
+            "Blomquist PH, executive ed. Practical Ophthalmology: A Manual for Beginning Residents. 8th ed. San Francisco: American Academy of Ophthalmology; 2021. ISBN 978-1-68104-405-7. hlm. 137 (Tabel 9-1: alat pemeriksaan eksternal)."
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m2-s10.mp3"
+        },
+        {
+          "id": "m2-s11",
+          "slide": 11,
+          "type": "content",
+          "kicker": "BAB 2 – Pemeriksaan Segmen Anterior",
+          "title": "B. Pemeriksaan Kedalaman Bilik Mata Depan (BMD)",
+          "body": "Tujuan: menilai kedalaman bilik mata depan untuk membantu menapis risiko glaukoma sudut tertutup sebelum dilatasi.\n\nLangkah pemeriksaan:\n1. Pemeriksa berhadapan dengan pasien.\n2. Pasien menatap lurus.\n3. Sorot senter dari arah samping (sudut 90°), 3–5 cm di samping mata pasien.\n4. Nilai kedalaman bilik mata depan dengan memperhatikan pola iris.",
+          "image": "/content/drive-retinopati/assets/m2_s11_1.webp",
+          "imageLayout": "below",
+          "imageCaption": "Senter diarahkan dari samping (sudut 90°)",
+          "reveal_steps": [
+            {
+              "image": "/content/drive-retinopati/assets/m2_s11_2.webp",
+              "title": "Bilik Mata Depan Dalam",
+              "body": "Iris terang merata. Aman untuk dilatasi pupil."
+            },
+            {
+              "image": "/content/drive-retinopati/assets/m2_s11_3.webp",
+              "title": "Bilik Mata Depan Dangkal",
+              "body": "Hanya iris sisi temporal yang tersinari. Hati-hati: pemberian obat tetes midriatikum berisiko memicu glaukoma!"
+            }
+          ],
+          "transcript": "Pemeriksaan kedalaman bilik mata depan bertujuan untuk membantu menapis risiko glaukoma sudut tertutup sebelum dilatasi.\nLangkah pemeriksaan dimulai dengan memosisikan pasien berhadapan dengan pemeriksa. Minta pasien untuk menatap lurus ke depan, dan gunakan senter dari arah samping dengan sudut 90 derajat, pada jarak 3 hingga 5 sentimeter di samping mata pasien untuk mengevaluasi bilik mata depan. Lalu tentukan kedalaman bilik mata depan dengan memperhatikan pola sinar yang jatuh pada iris. Bilik mata depan dalam ditandai dengan iris terang merata. Sebaliknya, apabila hanya iris sisi temporal yang tersinari, dapat dicurigai kondisi bilik mata depan dangkal. Hati-hati dalam pemberian obat tetes midriatikum pada bilik mata depan dangkal karena berisiko memicu glaukoma.",
+          "references": [
+            "Kang K, Rosenblatt M. Clinical examination and diagnostic testing. In: Albert DM, Miller JW, Azar DT, Young LH, eds. Albert and Jakobiec's Principles and Practice of Ophthalmology. 4th ed. Cham: Springer; 2022. ISBN 978-3-030-42633-0. hlm. 106 (penlight examination pada kornea: kekeruhan, vaskularisasi, pantulan cahaya yang tidak rata pada abrasi).",
+            "Allen RC, Harper RA, eds. Basic Ophthalmology: Essentials for Medical Students. 10th ed. San Francisco: American Academy of Ophthalmology; 2016. ISBN 978-1-61525-804-8. Bab 1 The Eye Examination (penlight membantu inspeksi kornea dan iris).",
+            "Blomquist PH, executive ed. Practical Ophthalmology: A Manual for Beginning Residents. 8th ed. San Francisco: American Academy of Ophthalmology; 2021. ISBN 978-1-68104-405-7. hlm. 137 (Tabel 9-1: alat pemeriksaan eksternal)."
+          ],
+          "abbreviations": ["BMD, bilik mata depan"],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m2-s11.mp3"
+        }
+      ]
     },
     {
       "id": "modul2-bab3",
       "group": "Modul 2",
-      "label": "BAB 3",
-      "placeholder": true,
-      "pages": []
+      "label": "BAB 3 – Pemeriksaan Segmen Posterior",
+      "pages": [
+        {
+          "id": "m2-s12",
+          "slide": 12,
+          "type": "divider",
+          "kicker": "BAB 3",
+          "title": "PEMERIKSAAN SEGMEN POSTERIOR",
+          "transcript": "Bab tiga, Pemeriksaan Segmen Posterior",
+          "audio": "/content/drive-retinopati/assets/audio-neural/m2-s12.mp3"
+        },
+        {
+          "id": "m2-s13",
+          "slide": 13,
+          "type": "content",
+          "kicker": "BAB 3 – Pemeriksaan Segmen Posterior",
+          "title": "Pemeriksaan Segmen Posterior",
+          "body": "Menilai vitreus, papil, makula, dan retina untuk mendeteksi retinopati diabetika atau kelainan retina lain.\nPemeriksaan menggunakan alat oftalmoskop direk / indirek, dan kamera fundus.",
+          "figures": [
+            {
+              "image": "/content/drive-retinopati/assets/m2_s13_1.webp",
+              "caption": "Segmen posterior normal mata kanan (OD)"
+            },
+            {
+              "image": "/content/drive-retinopati/assets/m2_s13_2.webp",
+              "caption": "Segmen posterior normal mata kiri (OS)"
+            }
+          ],
+          "reveal_steps": [
+            {
+              "title": "Papil saraf optik",
+              "texts": ["Merah muda cerah, bulat atau oval, batas tegas. Cup:disc ratio normal 0,3–0,5."]
+            },
+            {
+              "title": "Makula",
+              "texts": ["Pusat tajam penglihatan; di tengahnya terdapat fovea yang hanya berisi sel kerucut."]
+            },
+            {
+              "title": "Pembuluh darah retina",
+              "texts": [
+                "Arteri lebih kecil dan merah terang; vena lebih besar dan gelap. Rasio arteri:vena normal 2:3."
+              ]
+            }
+          ],
+          "revealColumns": 3,
+          "transcript": "Pemeriksaan segmen posterior bertujuan mengevaluasi vitreus, papil, makula, dan retina untuk mendeteksi retinopati diabetika atau kelainan retina lain. Pemeriksaan dapat dilakukan menggunakan alat oftalmoskop direk atau indirek, dan kamera fundus.\nBerikut adalah gambaran segmen posterior normal. Pada pemeriksaan, retina tampak sebagai jaringan tipis transparan dengan latar belakang berwarna merah jingga yang homogen. Terdapat tiga struktur penting yang harus diperhatikan dalam mengevaluasi segmen posterior.\nYang pertama, papil saraf optik atau diskus optikus, merupakan tempat berkumpulnya seluruh saraf retina yang keluar dari bola mata untuk membentuk saraf optik menuju ke otak. Papil ini juga menjadi jalur keluar-masuk pembuluh darah utama arteri dan vena retina. Papil normal berwarna merah muda cerah, berbentuk bulat atau oval, dan memiliki batas tepi tegas. Di bagian tengah terdapat lekukan fisiologis yang disebut optic cup. Perbandingan ukuran lekukan dengan ukuran keseluruhan papil atau diskus disebut sebagai cup:disc ratio, yang normalnya berkisar antara 0,3 hingga 0,5.\nYang kedua, makula, merupakan area berbentuk bulat di bagian tengah retina yang bertanggung jawab sebagai pusat tajam penglihatan. Pada pusat makula terdapat struktur yang disebut fovea; pada area ini hanya terdapat sel fotoreseptor jenis kerucut sebagai titik pusat ketajaman visual tertinggi.\nYang ketiga, pembuluh darah retina yang terdiri dari arteri dan vena. Arteri memiliki kaliber lebih kecil dari vena dan berwarna merah terang, sedangkan vena yang berjalan berdampingan dengan cabang-cabang arteri berukuran lebih besar dan berwarna lebih gelap. Rasio ukuran kaliber arteri:vena secara normal adalah 2:3.",
+          "references": [
+            "Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162. hlm. P94 (pemeriksaan dengan pupil dilatasi lebih dianjurkan).",
+            "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 21–22 (pemeriksaan retina sentral dan perifer; oftalmoskopi direk dan indirek).",
+            "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3. hlm. 21–23 (teknik oftalmoskopi; struktur fundus)."
+          ],
+          "abbreviations": ["OD, oculi dextra", "OS, oculi sinistra"],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m2-s13.mp3"
+        },
+        {
+          "id": "m2-s14",
+          "slide": 14,
+          "type": "content",
+          "kicker": "BAB 3 – Pemeriksaan Segmen Posterior",
+          "title": "Dengan atau Tanpa Dilatasi Pupil",
+          "reveal_steps": [
+            {
+              "title": "Dengan dilatasi pupil",
+              "texts": [
+                "Menggunakan obat tetes midriatikum (tropicamide 1%).",
+                "Standar baku skrining komprehensif: pandangan 3D (dengan oftalmoskop indirek), lapang pandang luas, detail baik."
+              ]
+            },
+            {
+              "title": "Tanpa dilatasi pupil",
+              "texts": [
+                "Alternatif untuk bilik mata depan dangkal. Kelemahan: lapang pandang perifer sempit.",
+                "Beberapa kamera fundus memiliki fitur pengambilan gambar untuk pupil tanpa dilatasi."
+              ]
+            }
+          ],
+          "image": "/content/drive-retinopati/assets/m2_s14_1.webp",
+          "imageLayout": "below",
+          "imageCaption": "Pemeriksaan segmen posterior dengan alat oftalmoskop direk",
+          "transcript": "Pemeriksaan segmen posterior dapat dilakukan dengan atau tanpa dilatasi pupil.\nPemeriksaan dengan dilatasi pupil dilakukan menggunakan obat tetes midriatikum, dengan kandungan tropicamide 1% yang berfungsi untuk melebarkan pupil mata. Pemeriksaan ini merupakan standar baku skrining komprehensif karena memberikan pandangan tiga dimensi bila menggunakan alat oftalmoskop indirek, lapang pandang luas, dan detail yang baik. Sedangkan pemeriksaan tanpa dilatasi merupakan alternatif pada bilik mata depan yang dangkal, dengan kelemahan lapang pandang perifer yang sempit. Untungnya, saat ini tersedia beberapa kamera fundus yang memiliki fitur pengambilan gambar untuk pupil tanpa dilatasi.",
+          "references": [
+            "Lim JI, Kim SJ, Bailey ST, Kovach JL, Vemulakonda GA, Ying GS, Flaxel CJ; American Academy of Ophthalmology Retina/Vitreous Preferred Practice Pattern Panel. Diabetic Retinopathy Preferred Practice Pattern® (AAO PPP Diabetic Retinopathy). Ophthalmology. 2025;132:P75–P162. hlm. P94 (pemeriksaan dengan pupil dilatasi lebih dianjurkan).",
+            "American Academy of Ophthalmology (AAO). AAO 12 Retina and Vitreous (2025-2026). Basic and Clinical Science Course (BCSC) Section 12. San Francisco: AAO; 2025. hlm. 21–22 (pemeriksaan retina sentral dan perifer; oftalmoskopi direk dan indirek).",
+            "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3. hlm. 21–23 (teknik oftalmoskopi; struktur fundus)."
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m2-s14.mp3"
+        },
+        {
+          "id": "m2-s15",
+          "slide": 15,
+          "type": "cards",
+          "kicker": "BAB 3 – Pemeriksaan Segmen Posterior",
+          "title": "Efek Samping & Kontraindikasi Obat Tetes Midriatikum",
+          "columns": 3,
+          "cards": [
+            {
+              "title": "Efek samping sering",
+              "body": "• Terasa pedih di mata\n• Fotofobia\n• Pandangan kabur sementara (~4 jam)"
+            },
+            {
+              "title": "Efek samping jarang",
+              "body": "• Alergi\n• Mulut kering\n• Jantung berdebar\n• Glaukoma sudut tertutup\n• Peningkatan TIO"
+            },
+            {
+              "title": "Kontraindikasi",
+              "body": "• Alergi obat tetes midriatikum\n• Riwayat glaukoma sudut tertutup",
+              "dark": true
+            }
+          ],
+          "trailingNote": "Catatan: pasien disarankan tidak menyetir minimal 2–4 jam setelah penetesan obat.",
+          "transcript": "Efek samping penggunaan obat tetes mata midriatikum yang sering terjadi adalah rasa pedih, fotofobia, dan pandangan kabur sementara sekitar 4 jam.\nEfek samping yang jarang meliputi alergi, mulut kering, jantung berdebar, glaukoma sudut tertutup, dan peningkatan TIO atau tekanan intraokular.\nKontraindikasi obat tetes midriatikum adalah alergi obat tetes midriatikum dan riwayat glaukoma sudut tertutup.\nPasien disarankan tidak menyetir minimal 2 hingga 4 jam setelah penetesan obat.",
+          "references": [
+            "Blomquist PH, executive ed. Practical Ophthalmology: A Manual for Beginning Residents. 8th ed. San Francisco: American Academy of Ophthalmology; 2021. ISBN 978-1-68104-405-7. hlm. 68–69 (Tabel 5-3: efek sistemik obat sikloplegik), hlm. 237 (kondisi yang perlu menghindari dilatasi).",
+            "Allen RC, Harper RA, eds. Basic Ophthalmology: Essentials for Medical Students. 10th ed. San Francisco: American Academy of Ophthalmology; 2016. ISBN 978-1-61525-804-8. Bab 1 The Eye Examination (kondisi yang tidak boleh didilatasi; pandangan kabur dan silau beberapa jam), Bab 10 Drugs and the Eye (mydriatics).",
+            "American Academy of Ophthalmology (AAO). AAO 10 Glaucoma (2025-2026). Basic and Clinical Science Course (BCSC) Section 10. San Francisco: AAO; 2025. hlm. 153 (obat yang melebarkan pupil dapat mencetuskan sudut tertutup akut).",
+            "WHO Regional Office for Europe. Diabetic retinopathy screening: a short guide. Increase effectiveness, maximize benefits and minimize harm (WHO short guide 2020). Copenhagen: WHO Regional Office for Europe; 2020. ISBN 978-92-890-5532-1. hlm. 16 (efek dilatasi dapat berlangsung 2–24 jam; pasien disarankan tidak menyetir setelah dilatasi)."
+          ],
+          "abbreviations": ["TIO, tekanan intraokular"],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m2-s15.mp3"
+        },
+        {
+          "id": "m2-s16",
+          "slide": 16,
+          "type": "content",
+          "kicker": "BAB 3 – Pemeriksaan Segmen Posterior",
+          "title": "Cara Meneteskan Obat Tetes Midriatikum",
+          "body": "A. Pasien menengadahkan kepala 30–45°.\nB. Pasien melirik ke atas.\nC. Kelopak mata bawah ditarik perlahan, lalu obat diteteskan ke kantong palpebra bawah tanpa menyentuhkan ujung botol ke mata.\nSetelah ditetesi, pasien memejamkan mata dengan lembut (tidak dipicingkan).",
+          "figures": [
+            {
+              "image": "/content/drive-retinopati/assets/m2_s16_1.webp",
+              "caption": "Teknik penetesan obat tetes mata: A → B → C"
+            },
+            {
+              "image": "/content/drive-retinopati/assets/m2_s16_2.webp",
+              "caption": "Contoh cara penetesan obat tetes mata"
+            }
+          ],
+          "transcript": "Teknik meneteskan obat mata dilatasi atau midriatik terdiri atas tiga langkah, yaitu:\nLangkah A, pasien menengadahkan kepala sekitar 30 hingga 45 derajat.\nLangkah B, pasien melirik ke atas.\nLangkah C, kelopak mata bawah ditarik perlahan, kemudian obat diteteskan ke kantong palpebra bawah tanpa menyentuhkan ujung botol ke mata.\nSetelah ditetesi, pasien memejamkan mata dengan lembut dan jangan dipicingkan.",
+          "references": [
+            "Allen RC, Harper RA, eds. Basic Ophthalmology: Essentials for Medical Students. 10th ed. San Francisco: American Academy of Ophthalmology; 2016. ISBN 978-1-61525-804-8. Bab 10 Drugs and the Eye (langkah meneteskan obat mata topikal ke forniks konjungtiva bawah).",
+            "Blomquist PH, executive ed. Practical Ophthalmology: A Manual for Beginning Residents. 8th ed. San Francisco: American Academy of Ophthalmology; 2021. ISBN 978-1-68104-405-7. hlm. 237 (memejamkan mata setelah ditetesi), hlm. 305 (Video 15-1: Instilling Eyedrops)."
+          ],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m2-s16.mp3"
+        },
+        {
+          "id": "m2-s17",
+          "slide": 17,
+          "type": "divider",
+          "kicker": "MODUL 2 SELESAI",
+          "title": "Terima Kasih",
+          "body": "Modul 2 – Pemeriksaan Mata Dasar pada Skrining Retinopati Diabetika",
+          "transcript": "Terima kasih telah mengikuti Modul 2, Pemeriksaan Mata Dasar pada Skrining Retinopati Diabetika. Selanjutnya, silakan mengerjakan soal evaluasi berikut untuk menilai pemahaman Anda terhadap materi yang telah dibahas.",
+          "audio": "/content/drive-retinopati/assets/audio-neural/m2-s17.mp3"
+        }
+      ]
     },
     {
       "id": "modul2-evaluasi",
       "group": "Modul 2",
       "label": "Evaluasi",
-      "placeholder": true,
-      "pages": []
+      "pages": [
+        {
+          "id": "modul2-evaluasi-p1",
+          "type": "test",
+          "mode": "practice",
+          "title": "Evaluasi Modul 2",
+          "intro": "Latihan mandiri untuk menguji pemahaman Modul 2. Nilainya tidak menentukan kelulusan.",
+          "questions": [
+            {
+              "id": "m2-q1",
+              "question": "Seorang pasien diabetes mellitus menjalani pemeriksaan tajam penglihatan menggunakan bagan Snellen. Pasien tidak dapat membaca huruf terbesar pada bagan Snellen. Apa pemeriksaan selanjutnya yang perlu dilakukan?",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Pemeriksaan dengan pinhole"
+                },
+                {
+                  "letter": "B",
+                  "text": "Pemeriksaan hitung jari"
+                },
+                {
+                  "letter": "C",
+                  "text": "Pemeriksaan persepsi cahaya (light perception)"
+                },
+                {
+                  "letter": "D",
+                  "text": "Pemeriksaan lambaian tangan"
+                },
+                {
+                  "letter": "E",
+                  "text": "Pemeriksaan segmen anterior"
+                }
+              ],
+              "correct": "B",
+              "explanation": "Apabila pasien tidak dapat membaca huruf terbesar pada bagan Snellen, pemeriksaan dilanjutkan dengan pemeriksaan hitung jari. Jika pasien tidak dapat menghitung jari pada jarak 1 meter, pemeriksaan dilanjutkan dengan lambaian tangan, kemudian persepsi cahaya apabila pasien tidak dapat melihat gerakan tangan."
+            },
+            {
+              "id": "m2-q2",
+              "question": "Pada skrining, visus pasien 6/12 dan membaik menjadi 6/6 saat diperiksa dengan pinhole. Apa makna temuan ini?",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Kelainan organik retina yang berat"
+                },
+                {
+                  "letter": "B",
+                  "text": "Kelainan refraksi yang belum terkoreksi"
+                },
+                {
+                  "letter": "C",
+                  "text": "Katarak matur"
+                },
+                {
+                  "letter": "D",
+                  "text": "Kerusakan saraf optik"
+                },
+                {
+                  "letter": "E",
+                  "text": "Perdarahan vitreus yang menghalangi visus"
+                }
+              ],
+              "correct": "B",
+              "explanation": "Perbaikan visus dengan pinhole menunjukkan bahwa penurunan visus disebabkan oleh kelainan refraksi, bukan kelainan organik."
+            },
+            {
+              "id": "m2-q3",
+              "question": "Pada pemeriksaan segmen anterior menggunakan penlight, seorang dokter menemukan kekeruhan pada kornea pasien. Mengapa temuan ini penting diperhatikan dalam skrining retinopati diabetika?",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Menandakan adanya peningkatan tekanan intraokular"
+                },
+                {
+                  "letter": "B",
+                  "text": "Menunjukkan adanya kerusakan saraf optik"
+                },
+                {
+                  "letter": "C",
+                  "text": "Dapat mengganggu kualitas pencitraan fundus"
+                },
+                {
+                  "letter": "D",
+                  "text": "Menandakan adanya perdarahan retina"
+                },
+                {
+                  "letter": "E",
+                  "text": "Merupakan tanda spesifik retinopati diabetika"
+                }
+              ],
+              "correct": "C",
+              "explanation": "Kejernihan kornea merupakan salah satu komponen penting yang dinilai pada pemeriksaan segmen anterior. Kekeruhan kornea dapat menghambat masuknya cahaya sehingga mengganggu visualisasi segmen posterior dan kualitas pencitraan fundus."
+            },
+            {
+              "id": "m2-q4",
+              "question": "Manakah yang merupakan KONTRAINDIKASI pemberian tetes dilatasi pupil pada skrining?",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Rasa pedih sesaat setelah ditetesi"
+                },
+                {
+                  "letter": "B",
+                  "text": "Fotofobia sementara"
+                },
+                {
+                  "letter": "C",
+                  "text": "Pandangan kabur sementara"
+                },
+                {
+                  "letter": "D",
+                  "text": "Riwayat glaukoma sudut tertutup"
+                },
+                {
+                  "letter": "E",
+                  "text": "Pasien harus menunggu 2–4 jam sebelum menyetir"
+                }
+              ],
+              "correct": "D",
+              "explanation": "Obat pelebar pupil dapat mencetuskan serangan glaukoma sudut tertutup. Pilihan A, B, dan C merupakan efek samping sementara."
+            },
+            {
+              "id": "m2-q5",
+              "question": "Seorang pasien diabetes mellitus akan menjalani pemeriksaan fundus dengan dilatasi pupil. Pada pemeriksaan bilik mata depan menggunakan penlight, ditemukan bahwa hanya bagian iris sisi temporal yang tersinari. Bagaimana interpretasi temuan tersebut dan tindakan yang tepat?",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Bilik mata depan dalam; pemeriksaan fundus tanpa dilatasi lebih dianjurkan"
+                },
+                {
+                  "letter": "B",
+                  "text": "Bilik mata depan dalam; dilatasi pupil dapat dilakukan"
+                },
+                {
+                  "letter": "C",
+                  "text": "Bilik mata depan dangkal; dilatasi pupil harus segera dilakukan"
+                },
+                {
+                  "letter": "D",
+                  "text": "Bilik mata depan normal; tidak diperlukan pemeriksaan lebih lanjut"
+                },
+                {
+                  "letter": "E",
+                  "text": "Bilik mata depan dangkal; pemberian midriatikum perlu diwaspadai karena berisiko memicu glaukoma sudut tertutup"
+                }
+              ],
+              "correct": "E",
+              "explanation": "Pada pemeriksaan kedalaman bilik mata depan dengan penlight dari arah temporal (sudut 90°), bilik mata depan yang dangkal ditandai dengan hanya bagian iris sisi temporal yang tersinari. Kondisi ini perlu diwaspadai sebelum pemberian obat tetes midriatikum karena dapat meningkatkan risiko terjadinya glaukoma sudut tertutup."
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "modul3-pengantar",
@@ -2798,130 +3312,811 @@
       ]
     },
     {
-      "id": "modul4-simulasi",
-      "label": "Simulasi Grading Retinopati Diabetika",
+      "id": "modul4-contoh",
       "group": "Modul 4",
+      "label": "Contoh Simulasi",
       "pages": [
         {
-          "id": "modul4-p2",
+          "id": "m4-s4",
+          "slide": 4,
+          "type": "image-grading",
+          "title": "Contoh Simulasi Level 1",
+          "level": "Contoh Level 1",
+          "image": "/content/drive-retinopati/assets/m4_s4.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Contoh: pilih diagnosis yang tepat untuk pasien ini berdasarkan temuan pada foto fundus.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Normal",
+          "grade": "Normal",
+          "reasoning": "Foto fundus menunjukkan gambaran retina normal tanpa adanya lesi retinopati diabetika.",
+          "lesions": []
+        },
+        {
+          "id": "m4-s5",
+          "slide": 5,
+          "type": "image-grading",
+          "title": "Contoh Simulasi Level 1",
+          "level": "Contoh Level 1",
+          "image": "/content/drive-retinopati/assets/m4_s5.webp",
+          "answerImage": "/content/drive-retinopati/assets/m4_s5_ans.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Contoh: pilih diagnosis yang tepat untuk pasien ini berdasarkan temuan pada foto fundus.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Retinopati Diabetika",
+          "grade": "NPDR Berat",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR berat dengan adanya lesi mikroaneurisma, perdarahan dot dan blot, eksudat keras, venous beading, serta IRMA.",
+          "lesions": []
+        },
+        {
+          "id": "m4-s6",
+          "slide": 6,
+          "type": "image-grading",
+          "title": "Contoh Simulasi Level 2",
+          "level": "Contoh Level 2",
+          "image": "/content/drive-retinopati/assets/m4_s6.webp",
+          "answerImage": "/content/drive-retinopati/assets/m4_s6_ans.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Contoh: pilih tatalaksana yang tepat untuk pasien ini berdasarkan temuan pada foto fundus.",
+          "options": ["Observasi Berkala", "Rujuk"],
+          "correct": "Observasi Berkala",
+          "grade": "NPDR Sedang",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR sedang dengan adanya lesi mikroaneurisma, perdarahan dot dan blot, serta eksudat lunak. Tatalaksana yang tepat adalah observasi berkala tiap 3–6 bulan.",
+          "lesions": []
+        },
+        {
+          "id": "m4-s7",
+          "slide": 7,
+          "type": "image-grading",
+          "title": "Contoh Simulasi Level 2",
+          "level": "Contoh Level 2",
+          "image": "/content/drive-retinopati/assets/m4_s5.webp",
+          "answerImage": "/content/drive-retinopati/assets/m4_s7_ans.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Contoh: pilih tatalaksana yang tepat untuk pasien ini berdasarkan temuan pada foto fundus.",
+          "options": ["Observasi Berkala", "Rujuk"],
+          "correct": "Rujuk",
+          "grade": "NPDR Berat",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR berat dengan adanya lesi mikroaneurisma, perdarahan dot dan blot, eksudat keras, venous beading, serta IRMA. Tatalaksana yang tepat adalah rujuk ke dokter spesialis mata.",
+          "lesions": []
+        }
+      ]
+    },
+    {
+      "id": "modul4-level1",
+      "group": "Modul 4",
+      "label": "Level 1 – Normal vs Retinopati Diabetika",
+      "pages": [
+        {
+          "id": "m4-s8",
+          "slide": 8,
+          "type": "divider",
+          "kicker": "LEVEL 1",
+          "title": "Membedakan Foto Fundus Normal vs Retinopati Diabetika",
+          "body": "20 foto fundus. Jawaban Anda disimpan; skor, kunci jawaban, dan penjelasan ditampilkan di akhir level.",
+          "transcript": "Level 1, Membedakan Foto Fundus Normal versus Retinopati Diabetika.",
+          "audio": "/content/drive-retinopati/assets/audio-neural/m4-s8.mp3"
+        },
+        {
+          "id": "m4-s9",
+          "slide": 9,
+          "type": "image-grading",
+          "title": "Simulasi Level 1 – Kasus 1",
+          "level": "Level 1",
+          "case": 1,
+          "image": "/content/drive-retinopati/assets/m4_s9.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Amati foto fundus, lalu pilih gambaran yang tepat: normal atau retinopati diabetika.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Retinopati Diabetika",
+          "grade": "NPDR Berat",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR berat. Tampak adanya lesi mikroaneurisma, perdarahan dot dan blot, eksudat lunak, eksudat keras pada area makula, serta IRMA.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s10",
+          "slide": 10,
+          "type": "image-grading",
+          "title": "Simulasi Level 1 – Kasus 2",
+          "level": "Level 1",
+          "case": 2,
+          "image": "/content/drive-retinopati/assets/m4_s10.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Amati foto fundus, lalu pilih gambaran yang tepat: normal atau retinopati diabetika.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Normal",
+          "grade": "Normal",
+          "reasoning": "Papil, pembuluh darah, dan makula tampak normal tanpa lesi retinopati diabetika.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s11",
+          "slide": 11,
+          "type": "image-grading",
+          "title": "Simulasi Level 1 – Kasus 3",
+          "level": "Level 1",
+          "case": 3,
+          "image": "/content/drive-retinopati/assets/m4_s11.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Amati foto fundus, lalu pilih gambaran yang tepat: normal atau retinopati diabetika.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Retinopati Diabetika",
+          "grade": "NPDR Sedang",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR sedang dengan adanya lesi mikroaneurisma, perdarahan dot, serta eksudat keras.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s12",
+          "slide": 12,
+          "type": "image-grading",
+          "title": "Simulasi Level 1 – Kasus 4",
+          "level": "Level 1",
+          "case": 4,
+          "image": "/content/drive-retinopati/assets/m4_s12.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Amati foto fundus, lalu pilih gambaran yang tepat: normal atau retinopati diabetika.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Normal",
+          "grade": "Normal",
+          "reasoning": "Papil, pembuluh darah, dan makula tampak normal tanpa lesi retinopati diabetika.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s13",
+          "slide": 13,
+          "type": "image-grading",
+          "title": "Simulasi Level 1 – Kasus 5",
+          "level": "Level 1",
+          "case": 5,
+          "image": "/content/drive-retinopati/assets/m4_s13.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Amati foto fundus, lalu pilih gambaran yang tepat: normal atau retinopati diabetika.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Retinopati Diabetika",
+          "grade": "PDR",
+          "reasoning": "Foto fundus menunjukkan gambaran PDR dengan adanya lesi mikroaneurisma, perdarahan dot dan blot, eksudat keras, IRMA, NVD, serta NVE.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s14",
+          "slide": 14,
+          "type": "image-grading",
+          "title": "Simulasi Level 1 – Kasus 6",
+          "level": "Level 1",
+          "case": 6,
+          "image": "/content/drive-retinopati/assets/m4_s14.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Amati foto fundus, lalu pilih gambaran yang tepat: normal atau retinopati diabetika.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Normal",
+          "grade": "Normal",
+          "reasoning": "Papil, pembuluh darah, dan makula tampak normal tanpa lesi retinopati diabetika.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s15",
+          "slide": 15,
+          "type": "image-grading",
+          "title": "Simulasi Level 1 – Kasus 7",
+          "level": "Level 1",
+          "case": 7,
+          "image": "/content/drive-retinopati/assets/m4_s15.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Amati foto fundus, lalu pilih gambaran yang tepat: normal atau retinopati diabetika.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Normal",
+          "grade": "Normal",
+          "reasoning": "Papil, pembuluh darah, dan makula tampak normal tanpa lesi retinopati diabetika.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s16",
+          "slide": 16,
+          "type": "image-grading",
+          "title": "Simulasi Level 1 – Kasus 8",
+          "level": "Level 1",
+          "case": 8,
+          "image": "/content/drive-retinopati/assets/m4_s16.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Amati foto fundus, lalu pilih gambaran yang tepat: normal atau retinopati diabetika.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Retinopati Diabetika",
+          "grade": "PDR",
+          "reasoning": "Foto fundus menunjukkan gambaran PDR dengan adanya lesi mikroaneurisma, perdarahan dot dan blot, eksudat keras, eksudat lunak, IRMA, NVD, serta NVE. Tampak juga adanya jejas laser pada sisi superonasal.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s17",
+          "slide": 17,
+          "type": "image-grading",
+          "title": "Simulasi Level 1 – Kasus 9",
+          "level": "Level 1",
+          "case": 9,
+          "image": "/content/drive-retinopati/assets/m4_s17.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Amati foto fundus, lalu pilih gambaran yang tepat: normal atau retinopati diabetika.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Normal",
+          "grade": "Normal",
+          "reasoning": "Papil, pembuluh darah, dan makula tampak normal tanpa lesi retinopati diabetika.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s18",
+          "slide": 18,
+          "type": "image-grading",
+          "title": "Simulasi Level 1 – Kasus 10",
+          "level": "Level 1",
+          "case": 10,
+          "image": "/content/drive-retinopati/assets/m4_s18.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Amati foto fundus, lalu pilih gambaran yang tepat: normal atau retinopati diabetika.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Retinopati Diabetika",
+          "grade": "PDR",
+          "reasoning": "Foto fundus menunjukkan gambaran PDR dengan adanya lesi mikroaneurisma, perdarahan dot dan blot, eksudat keras, perdarahan preretina, serta perdarahan vitreus.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s19",
+          "slide": 19,
+          "type": "image-grading",
+          "title": "Simulasi Level 1 – Kasus 11",
+          "level": "Level 1",
+          "case": 11,
+          "image": "/content/drive-retinopati/assets/m4_s19.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Amati foto fundus, lalu pilih gambaran yang tepat: normal atau retinopati diabetika.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Retinopati Diabetika",
+          "grade": "NPDR Berat",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR berat dengan adanya lesi mikroaneurisma, perdarahan dot dan blot, eksudat keras, venous beading, serta IRMA.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s20",
+          "slide": 20,
+          "type": "image-grading",
+          "title": "Simulasi Level 1 – Kasus 12",
+          "level": "Level 1",
+          "case": 12,
+          "image": "/content/drive-retinopati/assets/m4_s20.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Amati foto fundus, lalu pilih gambaran yang tepat: normal atau retinopati diabetika.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Normal",
+          "grade": "Normal",
+          "reasoning": "Papil, pembuluh darah, dan makula tampak normal tanpa lesi retinopati diabetika.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s21",
           "slide": 21,
           "type": "image-grading",
+          "title": "Simulasi Level 1 – Kasus 13",
           "level": "Level 1",
-          "image": "/content/drive-retinopati/assets/slide21_9_nodate.png",
-          "options": ["Tidak ada retinopati diabetika", "Retinopati diabetika"],
-          "correct": "Tidak ada retinopati diabetika",
-          "reasoning": "Tidak ada retinopati diabetika.",
+          "case": 13,
+          "image": "/content/drive-retinopati/assets/m4_s21.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Amati foto fundus, lalu pilih gambaran yang tepat: normal atau retinopati diabetika.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Retinopati Diabetika",
+          "grade": "PDR",
+          "reasoning": "Foto fundus menunjukkan gambaran PDR dengan adanya lesi mikroaneurisma, perdarahan dot dan blot, eksudat keras, NVD, NVE, perdarahan preretina, membran fibrovaskular, serta ablasio retina traksional.",
           "lesions": [],
-          "title": "Simulasi Grading Retinopati Diabetika",
-          "instruction": "Amati foto fundus, lalu klik pilihan yang tepat: adakah retinopati diabetika?"
+          "feedback": "summary"
         },
         {
-          "id": "modul4-p3",
+          "id": "m4-s22",
           "slide": 22,
           "type": "image-grading",
+          "title": "Simulasi Level 1 – Kasus 14",
           "level": "Level 1",
-          "image": "/content/drive-retinopati/assets/slide22_4_nodate.png",
-          "options": ["Tidak ada retinopati diabetika", "Retinopati diabetika"],
-          "correct": "Retinopati diabetika",
-          "reasoning": "Ada hard exudate dan perdarahan dot/blot.",
-          "lesions": [
-            {
-              "x": 37.3,
-              "y": 22.8,
-              "label": "Perdarahan dot/blot"
-            },
-            {
-              "x": 57.1,
-              "y": 30.4,
-              "label": "Perdarahan dot/blot"
-            },
-            {
-              "x": 34.7,
-              "y": 50.9,
-              "label": "Hard exudate"
-            }
-          ],
-          "title": "Simulasi Grading Retinopati Diabetika",
-          "instruction": "Amati foto fundus, lalu klik pilihan yang tepat: adakah retinopati diabetika?"
+          "case": 14,
+          "image": "/content/drive-retinopati/assets/m4_s22.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Amati foto fundus, lalu pilih gambaran yang tepat: normal atau retinopati diabetika.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Normal",
+          "grade": "Normal",
+          "reasoning": "Papil, pembuluh darah, dan makula tampak normal tanpa lesi retinopati diabetika.",
+          "lesions": [],
+          "feedback": "summary"
         },
         {
-          "id": "modul4-p4",
+          "id": "m4-s23",
           "slide": 23,
           "type": "image-grading",
-          "level": "Level 2",
-          "image": "/content/drive-retinopati/assets/slide23_3_nodate.png",
-          "options": ["Observasi", "Rujuk"],
-          "correct": "Observasi",
-          "reasoning": "Tidak ada retinopati diabetika.",
+          "title": "Simulasi Level 1 – Kasus 15",
+          "level": "Level 1",
+          "case": 15,
+          "image": "/content/drive-retinopati/assets/m4_s23.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Amati foto fundus, lalu pilih gambaran yang tepat: normal atau retinopati diabetika.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Normal",
+          "grade": "Normal",
+          "reasoning": "Papil, pembuluh darah, dan makula tampak normal tanpa lesi retinopati diabetika.",
           "lesions": [],
-          "title": "Simulasi Grading Retinopati Diabetika",
-          "instruction": "Amati foto fundus, lalu klik tindak lanjut yang tepat: observasi atau rujuk."
+          "feedback": "summary"
         },
         {
-          "id": "modul4-p5",
+          "id": "m4-s24",
           "slide": 24,
           "type": "image-grading",
-          "level": "Level 2",
-          "image": "/content/drive-retinopati/assets/slide24_3_nodate.png",
-          "options": ["Observasi", "Rujuk"],
-          "correct": "Rujuk",
-          "reasoning": "PDR, dengan adanya lesi berupa perdarahan dot, hard exudate, neovascular elsewhere, dan neovascular disc.",
-          "lesions": [
-            {
-              "x": 20.7,
-              "y": 37.5,
-              "label": "Hard exudate",
-              "dx": -8,
-              "dy": 14
-            },
-            {
-              "x": 39.1,
-              "y": 33.3,
-              "label": "Perdarahan dot",
-              "dx": -8,
-              "dy": -15
-            },
-            {
-              "x": 38.1,
-              "y": 44.4,
-              "label": "Neovascular elsewhere",
-              "dx": 4,
-              "dy": 16
-            },
-            {
-              "x": 79.7,
-              "y": 44.4,
-              "label": "Neovascular disc",
-              "dx": 4,
-              "dy": 14
-            }
-          ],
-          "title": "Simulasi Grading Retinopati Diabetika",
-          "instruction": "Amati foto fundus, lalu klik tindak lanjut yang tepat: observasi atau rujuk."
+          "title": "Simulasi Level 1 – Kasus 16",
+          "level": "Level 1",
+          "case": 16,
+          "image": "/content/drive-retinopati/assets/m4_s24.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Amati foto fundus, lalu pilih gambaran yang tepat: normal atau retinopati diabetika.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Retinopati Diabetika",
+          "grade": "NPDR Berat",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR berat dengan adanya lesi mikroaneurisma, perdarahan dot dan blot, eksudat keras, serta IRMA. Tampak juga adanya jejas laser pada sisi superior, nasal, dan inferior.",
+          "lesions": [],
+          "feedback": "summary"
         },
         {
-          "id": "modul4-p6",
+          "id": "m4-s25",
           "slide": 25,
           "type": "image-grading",
+          "title": "Simulasi Level 1 – Kasus 17",
+          "level": "Level 1",
+          "case": 17,
+          "image": "/content/drive-retinopati/assets/m4_s25.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Amati foto fundus, lalu pilih gambaran yang tepat: normal atau retinopati diabetika.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Normal",
+          "grade": "Normal",
+          "reasoning": "Papil, pembuluh darah, dan makula tampak normal tanpa lesi retinopati diabetika.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s26",
+          "slide": 26,
+          "type": "image-grading",
+          "title": "Simulasi Level 1 – Kasus 18",
+          "level": "Level 1",
+          "case": 18,
+          "image": "/content/drive-retinopati/assets/m4_s26.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Amati foto fundus, lalu pilih gambaran yang tepat: normal atau retinopati diabetika.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Retinopati Diabetika",
+          "grade": "NPDR Berat",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR berat dengan adanya lesi perdarahan dot dan blot, eksudat keras, cotton-wool spot, serta IRMA.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s27",
+          "slide": 27,
+          "type": "image-grading",
+          "title": "Simulasi Level 1 – Kasus 19",
+          "level": "Level 1",
+          "case": 19,
+          "image": "/content/drive-retinopati/assets/m4_s27.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Amati foto fundus, lalu pilih gambaran yang tepat: normal atau retinopati diabetika.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Normal",
+          "grade": "Normal",
+          "reasoning": "Papil, pembuluh darah, dan makula tampak normal tanpa lesi retinopati diabetika.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s28",
+          "slide": 28,
+          "type": "image-grading",
+          "title": "Simulasi Level 1 – Kasus 20",
+          "level": "Level 1",
+          "case": 20,
+          "image": "/content/drive-retinopati/assets/m4_s28.webp",
+          "question": "Gambaran Foto Fundus:",
+          "instruction": "Amati foto fundus, lalu pilih gambaran yang tepat: normal atau retinopati diabetika.",
+          "options": ["Normal", "Retinopati Diabetika"],
+          "correct": "Retinopati Diabetika",
+          "grade": "NPDR Berat + EMD",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR berat dengan EMD. Tampak adanya lesi mikroaneurisma, perdarahan dot dan blot, IRMA, serta eksudat keras di area makula.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s29",
+          "slide": 29,
+          "type": "grading-summary",
+          "title": "Hasil Evaluasi Simulasi Level 1",
+          "level": "Level 1"
+        }
+      ]
+    },
+    {
+      "id": "modul4-level2",
+      "group": "Modul 4",
+      "label": "Level 2 – Keputusan Rujukan",
+      "pages": [
+        {
+          "id": "m4-s30",
+          "slide": 30,
+          "type": "divider",
+          "kicker": "LEVEL 2",
+          "title": "Menentukan Keputusan Rujukan Retinopati Diabetika",
+          "body": "20 foto fundus. Jawaban Anda disimpan; skor, kunci jawaban, dan penjelasan ditampilkan di akhir level.",
+          "transcript": "Level 2, Menentukan Keputusan Rujukan Retinopati Diabetika.",
+          "audio": "/content/drive-retinopati/assets/audio-neural/m4-s30.mp3"
+        },
+        {
+          "id": "m4-s31",
+          "slide": 31,
+          "type": "image-grading",
+          "title": "Simulasi Level 2 – Kasus 1",
           "level": "Level 2",
-          "image": "/content/drive-retinopati/assets/slide25_3_nodate.png",
-          "options": ["Observasi", "Rujuk"],
+          "case": 1,
+          "image": "/content/drive-retinopati/assets/m4_s31.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Amati foto fundus, lalu pilih keputusan tatalaksana yang tepat: observasi berkala atau rujuk.",
+          "options": ["Observasi Berkala", "Rujuk"],
           "correct": "Rujuk",
-          "reasoning": "NPDR sedang, dengan adanya lesi berupa perdarahan blot dan hard exudate.",
-          "lesions": [
-            {
-              "x": 48.8,
-              "y": 52.2,
-              "label": "Hard exudate"
-            },
-            {
-              "x": 56.9,
-              "y": 71.7,
-              "label": "Perdarahan blot"
-            }
-          ],
-          "title": "Simulasi Grading Retinopati Diabetika",
-          "instruction": "Amati foto fundus, lalu klik tindak lanjut yang tepat: observasi atau rujuk."
+          "grade": "PDR",
+          "reasoning": "Foto fundus menunjukkan gambaran PDR (STDR) dengan adanya lesi mikroaneurisma, perdarahan dot dan blot, eksudat keras, eksudat lunak, IRMA, NVD, serta membran fibrovaskular di atas diskus optikus. Tatalaksana yang tepat adalah rujuk ke dokter spesialis mata.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s32",
+          "slide": 32,
+          "type": "image-grading",
+          "title": "Simulasi Level 2 – Kasus 2",
+          "level": "Level 2",
+          "case": 2,
+          "image": "/content/drive-retinopati/assets/m4_s32.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Amati foto fundus, lalu pilih keputusan tatalaksana yang tepat: observasi berkala atau rujuk.",
+          "options": ["Observasi Berkala", "Rujuk"],
+          "correct": "Observasi Berkala",
+          "grade": "NPDR Sedang",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR sedang dengan adanya lesi mikroaneurisma dan perdarahan dot. Tatalaksana yang tepat adalah observasi berkala tiap 6–12 bulan.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s33",
+          "slide": 33,
+          "type": "image-grading",
+          "title": "Simulasi Level 2 – Kasus 3",
+          "level": "Level 2",
+          "case": 3,
+          "image": "/content/drive-retinopati/assets/m4_s33.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Amati foto fundus, lalu pilih keputusan tatalaksana yang tepat: observasi berkala atau rujuk.",
+          "options": ["Observasi Berkala", "Rujuk"],
+          "correct": "Observasi Berkala",
+          "grade": "NPDR Sedang",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR sedang dengan adanya lesi mikroaneurisma, perdarahan dot, dan eksudat keras. Tatalaksana yang tepat adalah observasi berkala tiap 3–6 bulan.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s34",
+          "slide": 34,
+          "type": "image-grading",
+          "title": "Simulasi Level 2 – Kasus 4",
+          "level": "Level 2",
+          "case": 4,
+          "image": "/content/drive-retinopati/assets/m4_s34.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Amati foto fundus, lalu pilih keputusan tatalaksana yang tepat: observasi berkala atau rujuk.",
+          "options": ["Observasi Berkala", "Rujuk"],
+          "correct": "Rujuk",
+          "grade": "NPDR Sedang + EMD",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR sedang dengan EMD (STDR). Tampak adanya lesi mikroaneurisma, perdarahan dot dan blot, serta eksudat keras di area makula. Tatalaksana yang tepat adalah rujuk ke dokter spesialis mata.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s35",
+          "slide": 35,
+          "type": "image-grading",
+          "title": "Simulasi Level 2 – Kasus 5",
+          "level": "Level 2",
+          "case": 5,
+          "image": "/content/drive-retinopati/assets/m4_s35.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Amati foto fundus, lalu pilih keputusan tatalaksana yang tepat: observasi berkala atau rujuk.",
+          "options": ["Observasi Berkala", "Rujuk"],
+          "correct": "Observasi Berkala",
+          "grade": "NPDR Ringan",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR ringan dengan adanya lesi mikroaneurisma. Tatalaksana yang tepat adalah observasi berkala tiap 6–12 bulan.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s36",
+          "slide": 36,
+          "type": "image-grading",
+          "title": "Simulasi Level 2 – Kasus 6",
+          "level": "Level 2",
+          "case": 6,
+          "image": "/content/drive-retinopati/assets/m4_s36.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Amati foto fundus, lalu pilih keputusan tatalaksana yang tepat: observasi berkala atau rujuk.",
+          "options": ["Observasi Berkala", "Rujuk"],
+          "correct": "Observasi Berkala",
+          "grade": "NPDR Ringan",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR ringan dengan adanya lesi mikroaneurisma. Tatalaksana yang tepat adalah observasi berkala tiap 6–12 bulan.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s37",
+          "slide": 37,
+          "type": "image-grading",
+          "title": "Simulasi Level 2 – Kasus 7",
+          "level": "Level 2",
+          "case": 7,
+          "image": "/content/drive-retinopati/assets/m4_s16.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Amati foto fundus, lalu pilih keputusan tatalaksana yang tepat: observasi berkala atau rujuk.",
+          "options": ["Observasi Berkala", "Rujuk"],
+          "correct": "Rujuk",
+          "grade": "PDR",
+          "reasoning": "Foto fundus menunjukkan gambaran PDR (STDR) dengan adanya lesi mikroaneurisma, perdarahan dot dan blot, eksudat keras, eksudat lunak, serta NVE. Tampak juga adanya jejas laser pada sisi superonasal. Tatalaksana yang tepat adalah rujuk ke dokter spesialis mata.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s38",
+          "slide": 38,
+          "type": "image-grading",
+          "title": "Simulasi Level 2 – Kasus 8",
+          "level": "Level 2",
+          "case": 8,
+          "image": "/content/drive-retinopati/assets/m4_s38.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Amati foto fundus, lalu pilih keputusan tatalaksana yang tepat: observasi berkala atau rujuk.",
+          "options": ["Observasi Berkala", "Rujuk"],
+          "correct": "Observasi Berkala",
+          "grade": "NPDR Ringan",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR ringan dengan adanya lesi mikroaneurisma. Tatalaksana yang tepat adalah observasi berkala tiap 6–12 bulan.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s39",
+          "slide": 39,
+          "type": "image-grading",
+          "title": "Simulasi Level 2 – Kasus 9",
+          "level": "Level 2",
+          "case": 9,
+          "image": "/content/drive-retinopati/assets/m4_s39.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Amati foto fundus, lalu pilih keputusan tatalaksana yang tepat: observasi berkala atau rujuk.",
+          "options": ["Observasi Berkala", "Rujuk"],
+          "correct": "Observasi Berkala",
+          "grade": "NPDR Sedang",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR sedang dengan adanya lesi mikroaneurisma, perdarahan dot dan blot, serta eksudat keras. Tatalaksana yang tepat adalah observasi berkala tiap 3–6 bulan.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s40",
+          "slide": 40,
+          "type": "image-grading",
+          "title": "Simulasi Level 2 – Kasus 10",
+          "level": "Level 2",
+          "case": 10,
+          "image": "/content/drive-retinopati/assets/m4_s40.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Amati foto fundus, lalu pilih keputusan tatalaksana yang tepat: observasi berkala atau rujuk.",
+          "options": ["Observasi Berkala", "Rujuk"],
+          "correct": "Rujuk",
+          "grade": "NPDR Berat",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR berat (STDR) dengan adanya lesi mikroaneurisma, eksudat lunak, perdarahan dot dan blot pada empat kuadran retina, serta IRMA. Tatalaksana yang tepat adalah rujuk ke dokter spesialis mata.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s41",
+          "slide": 41,
+          "type": "image-grading",
+          "title": "Simulasi Level 2 – Kasus 11",
+          "level": "Level 2",
+          "case": 11,
+          "image": "/content/drive-retinopati/assets/m4_s11.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Amati foto fundus, lalu pilih keputusan tatalaksana yang tepat: observasi berkala atau rujuk.",
+          "options": ["Observasi Berkala", "Rujuk"],
+          "correct": "Observasi Berkala",
+          "grade": "NPDR Sedang",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR sedang dengan adanya lesi mikroaneurisma, perdarahan dot, serta eksudat keras. Tatalaksana yang tepat adalah observasi berkala tiap 3–6 bulan.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s42",
+          "slide": 42,
+          "type": "image-grading",
+          "title": "Simulasi Level 2 – Kasus 12",
+          "level": "Level 2",
+          "case": 12,
+          "image": "/content/drive-retinopati/assets/m4_s42.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Amati foto fundus, lalu pilih keputusan tatalaksana yang tepat: observasi berkala atau rujuk.",
+          "options": ["Observasi Berkala", "Rujuk"],
+          "correct": "Observasi Berkala",
+          "grade": "NPDR Sedang",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR sedang dengan adanya lesi mikroaneurisma, perdarahan blot, dan eksudat keras. Tatalaksana yang tepat adalah observasi berkala tiap 3–6 bulan.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s43",
+          "slide": 43,
+          "type": "image-grading",
+          "title": "Simulasi Level 2 – Kasus 13",
+          "level": "Level 2",
+          "case": 13,
+          "image": "/content/drive-retinopati/assets/m4_s43.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Amati foto fundus, lalu pilih keputusan tatalaksana yang tepat: observasi berkala atau rujuk.",
+          "options": ["Observasi Berkala", "Rujuk"],
+          "correct": "Rujuk",
+          "grade": "NPDR Berat + EMD",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR berat dengan EMD (STDR). Tampak adanya lesi mikroaneurisma, perdarahan dot dan blot, IRMA, serta eksudat keras di area makula. Tatalaksana yang tepat adalah rujuk ke dokter spesialis mata.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s44",
+          "slide": 44,
+          "type": "image-grading",
+          "title": "Simulasi Level 2 – Kasus 14",
+          "level": "Level 2",
+          "case": 14,
+          "image": "/content/drive-retinopati/assets/m4_s44.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Amati foto fundus, lalu pilih keputusan tatalaksana yang tepat: observasi berkala atau rujuk.",
+          "options": ["Observasi Berkala", "Rujuk"],
+          "correct": "Rujuk",
+          "grade": "NPDR Berat",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR berat (STDR). Tampak adanya lesi mikroaneurisma, perdarahan dot dan blot, eksudat keras, serta IRMA. Tatalaksana yang tepat adalah rujuk ke dokter spesialis mata.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s45",
+          "slide": 45,
+          "type": "image-grading",
+          "title": "Simulasi Level 2 – Kasus 15",
+          "level": "Level 2",
+          "case": 15,
+          "image": "/content/drive-retinopati/assets/m4_s45.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Amati foto fundus, lalu pilih keputusan tatalaksana yang tepat: observasi berkala atau rujuk.",
+          "options": ["Observasi Berkala", "Rujuk"],
+          "correct": "Observasi Berkala",
+          "grade": "NPDR Sedang",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR sedang dengan adanya lesi mikroaneurisma dan eksudat keras. Tatalaksana yang tepat adalah observasi berkala tiap 3–6 bulan.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s46",
+          "slide": 46,
+          "type": "image-grading",
+          "title": "Simulasi Level 2 – Kasus 16",
+          "level": "Level 2",
+          "case": 16,
+          "image": "/content/drive-retinopati/assets/m4_s12.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Amati foto fundus, lalu pilih keputusan tatalaksana yang tepat: observasi berkala atau rujuk.",
+          "options": ["Observasi Berkala", "Rujuk"],
+          "correct": "Observasi Berkala",
+          "grade": "Normal",
+          "reasoning": "Foto fundus menunjukkan gambaran normal. Tatalaksana yang tepat adalah observasi berkala tiap 1 tahun.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s47",
+          "slide": 47,
+          "type": "image-grading",
+          "title": "Simulasi Level 2 – Kasus 17",
+          "level": "Level 2",
+          "case": 17,
+          "image": "/content/drive-retinopati/assets/m4_s47.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Amati foto fundus, lalu pilih keputusan tatalaksana yang tepat: observasi berkala atau rujuk.",
+          "options": ["Observasi Berkala", "Rujuk"],
+          "correct": "Rujuk",
+          "grade": "PDR",
+          "reasoning": "Foto fundus menunjukkan gambaran PDR (STDR) dengan adanya lesi mikroaneurisma, perdarahan dot dan blot, eksudat keras, eksudat lunak, IRMA, NVE, perdarahan preretina, perdarahan vitreus, serta membran fibrovaskular. Tatalaksana yang tepat adalah rujuk ke dokter spesialis mata.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s48",
+          "slide": 48,
+          "type": "image-grading",
+          "title": "Simulasi Level 2 – Kasus 18",
+          "level": "Level 2",
+          "case": 18,
+          "image": "/content/drive-retinopati/assets/m4_s48.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Amati foto fundus, lalu pilih keputusan tatalaksana yang tepat: observasi berkala atau rujuk.",
+          "options": ["Observasi Berkala", "Rujuk"],
+          "correct": "Rujuk",
+          "grade": "NPDR Berat",
+          "reasoning": "Foto fundus menunjukkan gambaran NPDR berat (STDR) dengan adanya lesi mikroaneurisma, eksudat keras, perdarahan dot dan blot pada empat kuadran retina, serta IRMA. Tatalaksana yang tepat adalah rujuk ke dokter spesialis mata.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s49",
+          "slide": 49,
+          "type": "image-grading",
+          "title": "Simulasi Level 2 – Kasus 19",
+          "level": "Level 2",
+          "case": 19,
+          "image": "/content/drive-retinopati/assets/m4_s49.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Amati foto fundus, lalu pilih keputusan tatalaksana yang tepat: observasi berkala atau rujuk.",
+          "options": ["Observasi Berkala", "Rujuk"],
+          "correct": "Rujuk",
+          "grade": "PDR + EMD",
+          "reasoning": "Foto fundus menunjukkan gambaran PDR dengan EMD (STDR) dengan adanya lesi mikroaneurisma, perdarahan dot dan blot, eksudat keras di area makula, IRMA, serta NVD. Tatalaksana yang tepat adalah rujuk ke dokter spesialis mata.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s50",
+          "slide": 50,
+          "type": "image-grading",
+          "title": "Simulasi Level 2 – Kasus 20",
+          "level": "Level 2",
+          "case": 20,
+          "image": "/content/drive-retinopati/assets/m4_s50.webp",
+          "question": "Keputusan Tatalaksana:",
+          "instruction": "Amati foto fundus, lalu pilih keputusan tatalaksana yang tepat: observasi berkala atau rujuk.",
+          "options": ["Observasi Berkala", "Rujuk"],
+          "correct": "Rujuk",
+          "grade": "PDR",
+          "reasoning": "Foto fundus menunjukkan gambaran PDR (STDR) dengan adanya lesi NVE, membran fibrovaskular, perdarahan preretina, serta perdarahan vitreus. Tatalaksana yang tepat adalah rujuk ke dokter spesialis mata.",
+          "lesions": [],
+          "feedback": "summary"
+        },
+        {
+          "id": "m4-s51",
+          "slide": 51,
+          "type": "grading-summary",
+          "title": "Hasil Evaluasi Simulasi Level 2",
+          "level": "Level 2"
+        },
+        {
+          "id": "m4-s52",
+          "slide": 52,
+          "type": "divider",
+          "kicker": "MODUL 4 SELESAI",
+          "title": "Terima Kasih",
+          "body": "Modul 4 – Simulasi Grading Retinopati Diabetika",
+          "transcript": "Terima kasih telah mengikuti Modul 4, Simulasi Grading Retinopati Diabetika. Modul ini sekaligus menutup rangkaian Pelatihan Skrining Retinopati Diabetika dalam program DRIVE.",
+          "abbreviations": ["DRIVE, Diabetic Retinopathy Initiative"],
+          "audio": "/content/drive-retinopati/assets/audio-neural/m4-s52.mp3"
         }
       ]
     },

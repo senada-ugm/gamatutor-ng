@@ -33,9 +33,10 @@ const PlayerDeckContext = createContext<PlayerDeckContextValue | null>(null)
 // outline is renumbered; an old index would unlock the wrong steps.
 // v2: the 29 Okt 2026 restructure. v3: Modul 3 grew from placeholders to
 // its seven BAB. v4: the 14 Nov 2026 front matter (Halaman Muka … Capaian
-// Pembelajaran) ahead of the Pre Test.
+// Pembelajaran) ahead of the Pre Test. v5: Modul 2's BAB written (19 Nov
+// 2026) and Modul 4's simulation split into Contoh, Level 1 and Level 2.
 function storageKey(courseId: string) {
-  return `lms.deck-progress.v4.${courseId}`
+  return `lms.deck-progress.v5.${courseId}`
 }
 
 export function PlayerDeckProvider({

@@ -6,39 +6,57 @@ import type { ImageGradingPage, LesionCoordinate } from "@/lib/content/course-ty
 
 interface ClinicalFundusGradingProps {
   page: ImageGradingPage
-  onGraded?: (isCorrect: boolean, selected: string) => void
+  /** The learner's earlier answer to this case, so returning to it keeps
+   *  the choice (summary-feedback cases are scored later from these). */
+  savedAnswer?: string
+  /** Called with the chosen option: on submit for immediate-feedback pages,
+   *  on every click for summary-feedback pages. */
+  onAnswer?: (option: string) => void
   onNext?: () => void
   className?: string
 }
 
-export function ClinicalFundusGrading({ page, onGraded, onNext, className = "" }: ClinicalFundusGradingProps) {
-  const [selectedOption, setSelectedOption] = useState<string | null>(null)
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
+export function ClinicalFundusGrading({
+  page,
+  savedAnswer,
+  onAnswer,
+  onNext,
+  className = "",
+}: ClinicalFundusGradingProps) {
+  // Modul 4 v5.1: Level 1/2 cases only record the answer; the level's
+  // "Hasil Evaluasi" page shows the score, key and explanations.
+  const deferred = page.feedback === "summary"
+  const [selectedOption, setSelectedOption] = useState<string | null>(savedAnswer ?? null)
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(!deferred && savedAnswer != null)
   const [showLesions, setShowLesions] = useState<boolean>(true)
   const [isZoomed, setIsZoomed] = useState<boolean>(false)
 
   const isCorrect = selectedOption === page.correct
+  const revealed = !deferred && isSubmitted
+  const photo = revealed && page.answerImage ? page.answerImage : page.image
 
   function handleSelect(option: string) {
-    if (isSubmitted) return
+    if (revealed) return
     setSelectedOption(option)
+    if (deferred) onAnswer?.(option)
   }
 
   function handleSubmit() {
     if (!selectedOption) return
     setIsSubmitted(true)
-    onGraded?.(selectedOption === page.correct, selectedOption)
+    onAnswer?.(selectedOption)
   }
 
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Header Banner */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3">
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="border-primary/20 bg-primary/5 text-primary">
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="outline" className="border-primary/20 bg-primary/5 text-primary uppercase">
             SIMULASI • {page.level || "GRADING KLINIS"}
+            {page.case ? ` • KASUS ${page.case}` : ""}
           </Badge>
-          <h2 className="text-xl font-bold tracking-tight">Evaluasi Klinis Foto Fundus</h2>
+          <h2 className="text-xl font-bold tracking-tight">{page.title || "Evaluasi Klinis Foto Fundus"}</h2>
         </div>
 
         <div className="flex items-center gap-2">
@@ -47,7 +65,7 @@ export function ClinicalFundusGrading({ page, onGraded, onNext, className = "" }
             {isZoomed ? "Ukuran Normal" : "Perbesar 1.5x"}
           </Button>
 
-          {isSubmitted && page.lesions.length > 0 && (
+          {revealed && page.lesions.length > 0 && (
             <Button
               size="sm"
               variant={showLesions ? "secondary" : "outline"}
@@ -73,30 +91,31 @@ export function ClinicalFundusGrading({ page, onGraded, onNext, className = "" }
               className={`relative transition-transform duration-300 select-none ${isZoomed ? "z-20 scale-125 cursor-move" : ""}`}
             >
               <img
-                src={page.image}
+                src={photo}
                 alt="Foto fundus retina"
                 className="block h-auto max-h-[500px] w-auto max-w-full"
                 loading="eager"
               />
 
-              {isSubmitted && showLesions && page.lesions.length > 0 && <LesionArrows lesions={page.lesions} />}
+              {revealed && showLesions && page.lesions.length > 0 && <LesionArrows lesions={page.lesions} />}
             </div>
           </div>
 
-          <div className="mt-2 flex w-full items-center justify-between px-1 text-xs text-muted-foreground">
-            <span>Foto fundus standar 45° berpusat di makula</span>
-            {isSubmitted && page.lesions.length > 0 && (
-              <span className="font-medium text-red-500">{page.lesions.length} lesi ditandai</span>
-            )}
-          </div>
+          {revealed && (page.lesions.length > 0 || page.answerImage) && (
+            <div className="mt-2 flex w-full items-center justify-end px-1 text-xs">
+              <span className="font-medium text-red-500">
+                {page.answerImage ? "Lesi ditandai dengan panah" : `${page.lesions.length} lesi ditandai`}
+              </span>
+            </div>
+          )}
         </div>
 
-        {/* Diagnostic Options & Rationale Panel */}
+        {/* Options & Rationale Panel */}
         <div className="space-y-4 lg:col-span-4">
           <div className="space-y-1">
-            <h3 className="text-sm font-bold text-foreground">Pilihan Diagnosis Klinis:</h3>
+            <h3 className="text-sm font-bold text-foreground">{page.question || "Pilihan Diagnosis Klinis:"}</h3>
             <p className="text-xs text-muted-foreground">
-              Pilih diagnosis yang tepat untuk pasien ini berdasarkan temuan mikrovaskular retina.
+              {page.instruction || "Pilih diagnosis yang tepat untuk pasien ini berdasarkan temuan pada foto fundus."}
             </p>
           </div>
 
@@ -105,9 +124,9 @@ export function ClinicalFundusGrading({ page, onGraded, onNext, className = "" }
               const isSelected = selectedOption === opt
 
               let btnBorder = "border-border hover:border-primary/60 bg-card"
-              if (isSelected && !isSubmitted) {
+              if (isSelected && !revealed) {
                 btnBorder = "border-primary bg-primary/10 ring-2 ring-primary/40 font-semibold"
-              } else if (isSubmitted) {
+              } else if (revealed) {
                 if (opt === page.correct) {
                   // Correct answer: Vivid green styling
                   btnBorder =
@@ -126,23 +145,34 @@ export function ClinicalFundusGrading({ page, onGraded, onNext, className = "" }
                   key={idx}
                   type="button"
                   onClick={() => handleSelect(opt)}
-                  disabled={isSubmitted}
-                  className={`flex w-full cursor-pointer items-center justify-between gap-3 rounded-xl border p-3.5 text-left text-xs leading-relaxed shadow-xs transition-all ${btnBorder}`}
+                  disabled={revealed}
+                  className={`flex w-full cursor-pointer items-center justify-between gap-3 rounded-xl border p-3.5 text-left text-sm leading-relaxed shadow-xs transition-all ${btnBorder}`}
                 >
                   <span className="flex-1">{opt}</span>
-                  {isSubmitted && opt === page.correct && (
-                    <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-600" />
-                  )}
-                  {isSubmitted && isSelected && !isCorrect && <XCircle className="h-5 w-5 shrink-0 text-red-600" />}
+                  {revealed && opt === page.correct && <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-600" />}
+                  {revealed && isSelected && !isCorrect && <XCircle className="h-5 w-5 shrink-0 text-red-600" />}
                 </button>
               )
             })}
           </div>
 
-          {/* Submission and Feedback Banner */}
-          {!isSubmitted ? (
+          {deferred ? (
+            <div className="space-y-3">
+              <p className="rounded-xl border bg-muted/30 p-3 text-xs leading-relaxed text-muted-foreground">
+                {selectedOption
+                  ? "Jawaban tersimpan. Anda masih dapat mengubahnya sebelum melihat Hasil Evaluasi di akhir level."
+                  : "Skor, kunci jawaban, dan penjelasan ditampilkan pada Hasil Evaluasi di akhir level."}
+              </p>
+              {onNext && (
+                <Button onClick={onNext} disabled={!selectedOption} className="w-full gap-2 shadow-sm">
+                  <span>Lanjut</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+          ) : !isSubmitted ? (
             <Button onClick={handleSubmit} disabled={!selectedOption} className="w-full font-semibold shadow-sm">
-              Periksa Diagnosis
+              Periksa Jawaban
             </Button>
           ) : (
             <div className="animate-in space-y-3 fade-in">
@@ -158,25 +188,28 @@ export function ClinicalFundusGrading({ page, onGraded, onNext, className = "" }
                   {isCorrect ? (
                     <>
                       <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-                      <span>Diagnosis Tepat!</span>
+                      <span>Jawaban Tepat!</span>
                     </>
                   ) : (
                     <>
                       <XCircle className="h-5 w-5 text-red-600" />
-                      <span className="text-red-700 dark:text-red-400">Diagnosis Kurang Tepat</span>
+                      <span className="text-red-700 dark:text-red-400">Jawaban Kurang Tepat</span>
                     </>
                   )}
                 </div>
 
                 <div className="space-y-1">
-                  <span className="font-semibold text-foreground">Alasan Klinis:</span>
+                  <span className="font-semibold text-foreground">
+                    Jawaban: {page.correct}
+                    {page.grade ? ` (${page.grade})` : ""}
+                  </span>
                   <p>{page.reasoning}</p>
                 </div>
               </div>
 
               {onNext && (
                 <Button onClick={onNext} className="w-full gap-2 shadow-sm">
-                  <span>Lanjut ke Kasus Berikutnya</span>
+                  <span>Lanjut</span>
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               )}

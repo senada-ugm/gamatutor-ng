@@ -10,10 +10,12 @@ import type {
   DividerPage,
   HeroPage,
   HotspotPage,
+  ImageGradingPage,
   MatchPage,
   SlidePage,
   TestPage,
 } from "@/lib/content/course-types"
+import { GradingSummary } from "./grading-summary"
 import { AudioNarrationBar } from "./audio-narration-bar"
 import { CourseReviewsSection } from "@/components/composed/courses/course-reviews-section"
 import { TranscriptViewer } from "./transcript-viewer"
@@ -66,6 +68,7 @@ export function InteractiveSlideViewer({
   // by the post test page; any test page without its own uses it.
   const postTestPage = allSlides.map((s) => s.page).find((p): p is TestPage => p.type === "test" && p.mode === "post")
   const [postTestPassed, setPostTestPassed] = useState(false)
+  const [gradingAnswers, setGradingAnswers] = useGradingAnswers(course.id)
 
   const [currentIndex, setCurrentIndex] = useState<number>(initialSlideIndex)
   const [currentPlaybackTime, setCurrentPlaybackTime] = useState<number>(0)
@@ -195,7 +198,40 @@ export function InteractiveSlideViewer({
         {page.type === "hotspot" && <HotspotSlide key={page.id} page={page} />}
         {page.type === "match" && <MatchSlide key={page.id} page={page} onDone={handleNext} />}
         {/* Keyed by page so the previous case's selection never carries over. */}
-        {page.type === "image-grading" && <ClinicalFundusGrading key={page.id} page={page} onNext={handleNext} />}
+        {page.type === "image-grading" && (
+          <ClinicalFundusGrading
+            key={page.id}
+            page={page}
+            savedAnswer={gradingAnswers[page.id]}
+            onAnswer={(option) => setGradingAnswers({ ...gradingAnswers, [page.id]: option })}
+            onNext={handleNext}
+          />
+        )}
+        {page.type === "grading-summary" &&
+          (() => {
+            const cases = allSlides
+              .map((s) => s.page)
+              .filter(
+                (p): p is ImageGradingPage =>
+                  p.type === "image-grading" && p.feedback === "summary" && p.level === page.level
+              )
+            return (
+              <GradingSummary
+                key={page.id}
+                page={page}
+                cases={cases}
+                answers={gradingAnswers}
+                onNext={handleNext}
+                onRetake={() => {
+                  const next = { ...gradingAnswers }
+                  for (const c of cases) delete next[c.id]
+                  setGradingAnswers(next)
+                  const first = allSlides.findIndex((s) => s.page.id === cases[0]?.id)
+                  if (first !== -1) goToSlide(first)
+                }}
+              />
+            )
+          })()}
         {page.type === "test" && (
           <ClinicalQuizRunner
             key={page.id}
@@ -651,4 +687,32 @@ function CompletionSlide({
       </div>
     </div>
   )
+}
+
+/**
+ * The learner's Modul 4 simulation answers (page id -> option), kept in this
+ * browser per course so a reload or a detour through the sidebar doesn't
+ * lose a half-finished level. Like a module Evaluasi they are scored locally
+ * and never sent to the server; storage failures (private mode) just leave
+ * them in memory.
+ */
+function useGradingAnswers(courseId: string) {
+  const key = `lms.grading-answers.v1.${courseId}`
+  const [answers, setAnswers] = useState<Record<string, string>>(() => {
+    try {
+      const raw = window.localStorage.getItem(key)
+      return raw ? (JSON.parse(raw) as Record<string, string>) : {}
+    } catch {
+      return {}
+    }
+  })
+  function update(next: Record<string, string>) {
+    setAnswers(next)
+    try {
+      window.localStorage.setItem(key, JSON.stringify(next))
+    } catch {
+      // Storage unavailable: keep the answers for this session only.
+    }
+  }
+  return [answers, update] as const
 }

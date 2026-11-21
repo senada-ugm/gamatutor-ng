@@ -170,11 +170,33 @@ export interface LesionCoordinate {
 export interface ImageGradingPage extends BasePage {
   type: "image-grading"
   level?: string
+  /** Case number within its level ("Kasus 3"). */
+  case?: number
   image: string
+  /** The same photo with the deck's drawn arrows and labels, shown once
+   *  the answer is revealed (the Contoh Simulasi slides). */
+  answerImage?: string
+  /** Heading over the options ("Keputusan Tatalaksana:"). */
+  question?: string
+  instruction?: string
   options: string[]
   correct: string
+  /** The photo's grade ("NPDR Berat + EMD"), shown with the answer key. */
+  grade?: string
   reasoning: string
   lesions: LesionCoordinate[]
+  /** "immediate" (default) reveals the key on the page; "summary" only
+   *  records the answer, and the level's grading-summary page scores it
+   *  (Modul 4 v5.1: "Hasil Evaluasi Simulasi Level 1/2"). */
+  feedback?: "immediate" | "summary"
+}
+
+/** Score, answer key and explanations for every `feedback: "summary"`
+ *  image-grading case of one level. */
+export interface GradingSummaryPage extends BasePage {
+  type: "grading-summary"
+  title: string
+  level: string
 }
 
 export interface QuizOption {
@@ -226,6 +248,7 @@ export type SlidePage =
   | HotspotPage
   | MatchPage
   | ImageGradingPage
+  | GradingSummaryPage
   | TestPage
   | CompletionPage
 
