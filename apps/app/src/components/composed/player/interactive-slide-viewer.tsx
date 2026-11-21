@@ -41,6 +41,9 @@ interface InteractiveSlideViewerProps {
    *  the Pre Test (recorded only) — attempts go through the quiz engine. */
   postTestQuizId?: string
   preTestQuizId?: string
+  /** The LMS course id (crs_…). `course.id` is the deck's own id
+   *  ("drive-retinopati"), which the API's course routes don't know. */
+  courseId?: string
   className?: string
 }
 
@@ -52,6 +55,7 @@ export function InteractiveSlideViewer({
   onClaimCertificate,
   postTestQuizId,
   preTestQuizId,
+  courseId,
   className = "",
 }: InteractiveSlideViewerProps) {
   // Flatten all pages across all modules into a linear slide sequence
@@ -267,7 +271,7 @@ export function InteractiveSlideViewer({
               postTestPassed={postTestPassed}
               onClaimCertificate={onClaimCertificate}
             />
-            {course.id && <CourseReviewsSection courseId={course.id} compact />}
+            {courseId && <CourseReviewsSection courseId={courseId} compact />}
           </div>
         )}
       </div>
@@ -612,6 +616,14 @@ function CardsSlide({ page }: { page: CardsPage }) {
           {page.trailingCaption && (
             <p className="text-center text-xs text-muted-foreground italic">{page.trailingCaption}</p>
           )}
+        </div>
+      )}
+
+      {/* The slide's closing note ("Catatan: pasien disarankan tidak
+          menyetir…"); it was typed and authored but never rendered. */}
+      {page.trailingNote && (
+        <div className="rounded-lg border-l-4 border-[#173a5e] bg-muted/40 px-4 py-3 text-sm leading-relaxed text-foreground/90 italic">
+          {page.trailingNote}
         </div>
       )}
 

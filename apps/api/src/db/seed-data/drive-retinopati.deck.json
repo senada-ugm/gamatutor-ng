@@ -3698,7 +3698,7 @@
           "options": ["Normal", "Retinopati Diabetika"],
           "correct": "Retinopati Diabetika",
           "grade": "NPDR Berat",
-          "reasoning": "Foto fundus menunjukkan gambaran NPDR berat dengan adanya lesi perdarahan dot dan blot, eksudat keras, cotton-wool spot, serta IRMA.",
+          "reasoning": "Foto fundus menunjukkan gambaran PDR dengan adanya lesi perdarahan dot dan blot, eksudat keras, cotton-wool spot, serta IRMA.",
           "lesions": [],
           "feedback": "summary"
         },

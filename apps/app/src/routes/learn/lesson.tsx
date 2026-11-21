@@ -158,6 +158,7 @@ export function LessonPage() {
             course={deckCourse}
             postTestQuizId={slideDeck.data?.postTestQuizId}
             preTestQuizId={slideDeck.data?.preTestQuizId}
+            courseId={course.id}
             onCompleteModule={() => {
               if (!isCompleted) {
                 completeAndAdvance.mutate()
