@@ -276,18 +276,22 @@ export function InteractiveSlideViewer({
         )}
       </div>
 
-      {/* Persistent Audio Narration Bar on Content & Cards with Voiceover Audio */}
-      {!isHero && (("audio" in page && page.audio) || ("transcript" in page && page.transcript)) && (
-        <div className="shrink-0 border-t bg-card/80 p-3">
-          <AudioNarrationBar
-            key={page.id}
-            autoPlay={true}
-            audioUrl={"audio" in page && page.audio ? page.audio : undefined}
-            transcript={"transcript" in page && page.transcript ? page.transcript : undefined}
-            onTimeUpdate={setCurrentPlaybackTime}
-          />
-        </div>
-      )}
+      {/* Persistent Audio Narration Bar on Content & Cards with Voiceover Audio.
+          Not on a video page: the video has its own sound, and the bar's
+          browser-speech fallback would read the transcript over it. */}
+      {!isHero &&
+        !(page.type === "content" && page.video) &&
+        (("audio" in page && page.audio) || ("transcript" in page && page.transcript)) && (
+          <div className="shrink-0 border-t bg-card/80 p-3">
+            <AudioNarrationBar
+              key={page.id}
+              autoPlay={true}
+              audioUrl={"audio" in page && page.audio ? page.audio : undefined}
+              transcript={"transcript" in page && page.transcript ? page.transcript : undefined}
+              onTimeUpdate={setCurrentPlaybackTime}
+            />
+          </div>
+        )}
 
       {/* Daftar Referensi + Daftar Singkatan, under the player */}
       {!isHero && (page.references?.length || page.abbreviations?.length) ? (
@@ -517,6 +521,24 @@ function SlideMedia({ page }: { page: ContentPage }) {
   const caption = page.imageCaption && (
     <p className="text-center text-xs text-muted-foreground italic">{page.imageCaption}</p>
   )
+
+  if (page.video) {
+    return (
+      <div className="mx-auto w-full max-w-3xl space-y-2">
+        <div className="overflow-hidden rounded-xl border bg-black shadow-inner">
+          <video
+            src={page.video.src}
+            poster={page.video.poster}
+            controls
+            playsInline
+            preload="metadata"
+            className="aspect-video h-auto w-full"
+          />
+        </div>
+        {caption}
+      </div>
+    )
+  }
 
   if (page.figures?.length) {
     const count = page.figures.length

@@ -1337,13 +1337,17 @@
           "type": "content",
           "kicker": "BAB 1 – Pemeriksaan Tajam Penglihatan (Visus)",
           "title": "Pemeriksaan Tajam Penglihatan",
-          "body": "Video pemeriksaan tajam penglihatan sedang disiapkan dan akan segera ditambahkan.\n\n• Menggunakan bagan Snellen atau bagan E.\n• Menilai visus jarak jauh dan dekat, tiap mata secara terpisah, dengan atau tanpa kacamata.\n• Urutan: visus tanpa koreksi → visus dengan pinhole atau kacamata pasien → visus terkoreksi terbaik (bila memungkinkan).",
+          "body": "• Menggunakan bagan Snellen atau bagan E.\n• Menilai visus jarak jauh dan dekat, tiap mata secara terpisah, dengan atau tanpa kacamata.\n• Urutan: visus tanpa koreksi → visus dengan pinhole atau kacamata pasien → visus terkoreksi terbaik (bila memungkinkan).",
           "transcript": "Pemeriksaan tajam penglihatan atau visus dilakukan menggunakan bagan Snellen atau bagan E. Pemeriksaan dilakukan untuk mengevaluasi visus jarak jauh dan dekat pada pasien. Pemeriksaan ini dilakukan untuk tiap mata secara terpisah dengan atau tanpa kacamata.\n\nPemeriksaan dimulai dengan pengukuran visus tanpa koreksi, dilanjutkan pemeriksaan visus dengan pinhole atau kacamata pasien, dan bila memungkinkan, visus terkoreksi terbaik.",
           "references": [
             "Blomquist PH, executive ed. Practical Ophthalmology: A Manual for Beginning Residents. 8th ed. San Francisco: American Academy of Ophthalmology; 2021. ISBN 978-1-68104-405-7. hlm. 27–31 (notasi Snellen, optotipe, tumbling E, pemeriksaan visus jauh, pinhole, dan dekat).",
             "Salmon JF. Kanski's Clinical Ophthalmology: A Systematic Approach. 10th ed. Elsevier; 2025. ISBN 978-0-443-11099-3. hlm. 2–4 (Snellen, best-corrected visual acuity, pinhole, dan visus dekat)."
           ],
-          "audio": "/content/drive-retinopati/assets/audio-neural/m2-s5.mp3"
+          "video": {
+            "src": "/content/drive-retinopati/assets/m2-s5-visus.mp4",
+            "poster": "/content/drive-retinopati/assets/m2-s5-visus-poster.jpg"
+          },
+          "imageCaption": "Video demonstrasi pemeriksaan tajam penglihatan (visus): bagan Snellen, bagan E, dan pinhole."
         },
         {
           "id": "m2-s6",
@@ -1351,15 +1355,44 @@
           "type": "content",
           "kicker": "BAB 1 – Pemeriksaan Tajam Penglihatan (Visus)",
           "title": "Interpretasi Hasil Pemeriksaan",
-          "body": "Pinhole digunakan bila visus tanpa koreksi kurang dari 6/6. Pinhole mengurangi efek kelainan refraksi, sehingga membantu membedakan penurunan visus akibat kelainan refraksi dan kelainan organik.",
           "table": {
-            "head": ["Hasil pemeriksaan", "Interpretasi"],
+            "head": ["Hasil Pemeriksaan", "Interpretasi Visus", "Keterangan"],
             "rows": [
-              ["Visus tanpa koreksi 6/6", "Tajam penglihatan normal"],
-              ["Visus < 6/6, membaik dengan pinhole", "Mengarah pada kelainan refraksi"],
+              ["Dapat membaca baris terbawah Bagan Snellen", "6/6", "Tajam penglihatan normal"],
               [
-                "Visus < 6/6, tidak membaik dengan pinhole",
-                "Mengarah pada kelainan organik, seperti katarak atau kelainan retina"
+                "Hanya dapat membaca sampai baris tertentu",
+                "6/x (contoh: 6/12, 6/30, 6/60)",
+                "x merupakan angka pada baris terakhir yang dapat dibaca dengan benar"
+              ],
+              [
+                "Tidak dapat membaca huruf terbesar pada Bagan Snellen, tetapi mampu menghitung jari",
+                "x/60 (contoh: 5/60, 4/60, 3/60, 2/60, 1/60)",
+                "x menunjukkan jarak terjauh (dalam meter) di mana pasien mampu menghitung jari"
+              ],
+              [
+                "Tidak dapat menghitung jari, tetapi mampu mengenali lambaian tangan",
+                "1/300 (Hand Movement atau HM)",
+                "Mampu mengenali gerakan lambaian tangan pada jarak 1 meter"
+              ],
+              [
+                "Tidak dapat mengenali lambaian tangan, tetapi mampu membedakan terang & gelap",
+                "LP (Light Perception) atau 1/~ (1 per tak hingga)",
+                "Masih terdapat persepsi cahaya"
+              ],
+              [
+                "Tidak dapat mengenali cahaya sama sekali",
+                "NLP (No Light Perception) / visus 0 (nol)",
+                "Tidak terdapat persepsi cahaya"
+              ],
+              [
+                "Visus membaik setelah pemeriksaan pinhole",
+                "Contoh: dari 6/30 menjadi 6/9",
+                "Mengarah pada adanya komponen kelainan refraksi"
+              ],
+              [
+                "Visus tidak membaik setelah pemeriksaan pinhole",
+                "Contoh: 6/30 tetap 6/30",
+                "Mengarah pada kemungkinan penyebab nonrefraktif (kelainan organik)"
               ]
             ]
           },
