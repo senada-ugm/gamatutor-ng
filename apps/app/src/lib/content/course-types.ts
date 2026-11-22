@@ -65,6 +65,13 @@ export interface ContentPage extends BasePage {
   /** Several photos shown together, each with its own label. */
   figures?: ContentFigure[]
   table?: ContentTable
+  /** A demonstration video, shown centred under the text with `imageCaption`
+   *  beneath it. It carries its own sound, so the page should have no
+   *  `audio` narration competing with it. */
+  video?: {
+    src: string
+    poster?: string
+  }
   reveal_steps?: RevealStep[]
   /** Grid columns for `reveal_steps` from `md` up; 3 suits a set of three
    *  or six. Defaults to 2 (DRIVE review: list items in two columns). */
