@@ -534,9 +534,10 @@ export function LandingPage() {
                 </p>
               </div>
               <div className="border-t-2 border-[#5bb4b2] bg-white p-6 shadow-xs dark:bg-background">
-                <h2 className="text-base font-bold text-[#0f2a44] dark:text-white">Sertifikat atas nama Anda</h2>
+                <h2 className="text-base font-bold text-[#0f2a44] dark:text-white">Evaluasi Pre &amp; Post Test</h2>
                 <p className="mt-2 text-sm leading-relaxed text-[#46607a] dark:text-slate-300">
-                  Diterbitkan otomatis setelah lulus evaluasi, sesuai nama di akun, dan bisa diverifikasi.
+                  Ukur peningkatan pemahaman Anda melalui Pre Test di awal dan Post Test dengan pembahasan di akhir
+                  pelatihan.
                 </p>
               </div>
             </div>
@@ -585,12 +586,13 @@ export function LandingPage() {
                   1
                 </span>
                 <div>
-                  <h3 className="pt-2 text-lg font-bold text-[#0f2a44] dark:text-white">Diabetes mellitus</h3>
-                  <p className="text-xs text-[#6b8196] dark:text-slate-400">8 halaman</p>
+                  <h3 className="pt-2 text-lg font-bold text-[#0f2a44] dark:text-white">
+                    Pengenalan Diabetes dan Retinopati Diabetika
+                  </h3>
                 </div>
                 <p className="desc text-sm leading-relaxed text-[#46607a] dark:text-slate-300">
-                  Definisi, epidemiologi, etiologi, faktor risiko, kriteria diagnosis, klasifikasi glukosa dan HbA1c,
-                  serta komplikasinya.
+                  Diabetes mellitus, pengenalan retinopati diabetika (RD), serta skrining dan tatalaksana retinopati
+                  diabetika.
                 </p>
               </li>
               <li>
@@ -598,12 +600,12 @@ export function LandingPage() {
                   2
                 </span>
                 <div>
-                  <h3 className="pt-2 text-lg font-bold text-[#0f2a44] dark:text-white">Retinopati diabetika</h3>
-                  <p className="text-xs text-[#6b8196] dark:text-slate-400">8 halaman</p>
+                  <h3 className="pt-2 text-lg font-bold text-[#0f2a44] dark:text-white">
+                    Pemeriksaan Mata Dasar pada Skrining Retinopati Diabetika
+                  </h3>
                 </div>
                 <p className="desc text-sm leading-relaxed text-[#46607a] dark:text-slate-300">
-                  Anatomi mata dan patofisiologi yang bisa ditekan titik demi titik, gejala klinis, faktor risiko, dan
-                  latihan mencocokkan.
+                  Pemeriksaan tajam penglihatan (visus), pemeriksaan segmen anterior, dan pemeriksaan segmen posterior.
                 </p>
               </li>
               <li>
@@ -611,11 +613,13 @@ export function LandingPage() {
                   3
                 </span>
                 <div>
-                  <h3 className="pt-2 text-lg font-bold text-[#0f2a44] dark:text-white">Skrining dan tatalaksana</h3>
-                  <p className="text-xs text-[#6b8196] dark:text-slate-400">2 halaman, dengan video</p>
+                  <h3 className="pt-2 text-lg font-bold text-[#0f2a44] dark:text-white">
+                    Penilaian Derajat Keparahan (Grading) Retinopati Diabetika
+                  </h3>
                 </div>
                 <p className="desc text-sm leading-relaxed text-[#46607a] dark:text-slate-300">
-                  Pemeriksaan ketajaman visual dengan bagan Snellen, langkah demi langkah.
+                  Pengenalan foto fundus, lesi retinopati diabetika, grading ICDR, Edema Makula Diabetika (EMD), STDR,
+                  kelainan retina lain, dan kriteria rujukan.
                 </p>
               </li>
               <li className="key">
@@ -623,12 +627,13 @@ export function LandingPage() {
                   4
                 </span>
                 <div>
-                  <h3 className="pt-2 text-lg font-bold text-[#0f2a44] dark:text-white">Simulasi grading</h3>
-                  <p className="text-xs text-[#6b8196] dark:text-slate-400">5 kasus fundus</p>
+                  <h3 className="pt-2 text-lg font-bold text-[#0f2a44] dark:text-white">
+                    Simulasi Grading Retinopati Diabetika
+                  </h3>
                 </div>
                 <p className="desc text-sm leading-relaxed text-[#46607a] dark:text-slate-300">
-                  Foto fundus pasien diabetes. Anda memutuskan, lalu kursus menunjukkan setiap lesi yang seharusnya
-                  terlihat dan alasannya.
+                  Membedakan foto fundus normal vs retinopati diabetika dan menentukan keputusan rujukan retinopati
+                  diabetika.
                 </p>
               </li>
               <li>
@@ -637,7 +642,6 @@ export function LandingPage() {
                 </span>
                 <div>
                   <h3 className="pt-2 text-lg font-bold text-[#0f2a44] dark:text-white">Evaluasi</h3>
-                  <p className="text-xs text-[#6b8196] dark:text-slate-400">5 soal</p>
                 </div>
                 <p className="desc text-sm leading-relaxed text-[#46607a] dark:text-slate-300">
                   Pre test di awal dan post test di akhir pelatihan, dengan pembahasan setiap pilihan. Nilai lulus post
@@ -693,12 +697,6 @@ export function LandingPage() {
                       <div>
                         <div className="mb-2 flex flex-wrap items-center gap-2">
                           <Badge
-                            variant="secondary"
-                            className="border-[#5bb4b2]/30 bg-[#eaf5f5] text-[11px] font-bold text-[#137a77] dark:bg-teal-950/40 dark:text-teal-300"
-                          >
-                            4 SKP IDI
-                          </Badge>
-                          <Badge
                             variant="outline"
                             className="border-slate-200 text-[11px] text-slate-600 dark:border-slate-700 dark:text-slate-300"
                           >
@@ -722,7 +720,7 @@ export function LandingPage() {
 
                       <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4 dark:border-slate-800">
                         <span className="text-xs font-semibold text-[#6b8196] dark:text-slate-400">
-                          {c.modules?.length ?? 1} Modul · Tersertifikasi
+                          {c.modules?.length ?? 1} Modul
                         </span>
                         <Button
                           size="sm"
@@ -750,8 +748,7 @@ export function LandingPage() {
               Siap membaca fundus pertama Anda?
             </h2>
             <p className="mt-4 max-w-[46ch] text-base leading-relaxed text-[#e6f2fb]">
-              Daftar sekali, lalu belajar di peramban kapan saja. Kemajuan dan nilai Anda tersimpan, dan sertifikat
-              terbit atas nama di akun Anda setelah lulus.
+              Daftar sekali, lalu belajar di peramban kapan saja. Kemajuan dan nilai Anda tersimpan otomatis.
             </p>
             <div className="mt-8">
               <Button

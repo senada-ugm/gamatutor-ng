@@ -276,7 +276,7 @@ export function ClinicalQuizRunner({
             </div>
             <p className="text-xs text-muted-foreground">
               {passed
-                ? "Anda sudah lulus. Jika ingin memperbaiki nilai, Anda boleh mengulang Post Test atau mempelajari ulang modul terlebih dahulu. Sertifikat dapat diklaim di halaman Selesai."
+                ? "Anda sudah lulus. Jika ingin memperbaiki nilai, Anda boleh mengulang Post Test atau mempelajari ulang modul terlebih dahulu."
                 : `Nilai Anda belum mencapai ${Math.round(passingScore * 100)}. Anda boleh mengulang Post Test tanpa batas, atau mempelajari ulang modul terlebih dahulu.`}
             </p>
             <div className="flex flex-wrap gap-2">

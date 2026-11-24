@@ -80,8 +80,8 @@ await expect("landing header renders DRIVE Learn brand and eye icon mark", async
   await page.locator("header svg").first().waitFor({ timeout: 8000 })
 })
 
-await expect("landing header contains Verifikasi Sertifikat link", async () => {
-  const link = page.getByRole("link", { name: "Verifikasi Sertifikat" }).first()
+await expect("landing header contains Kursus link", async () => {
+  const link = page.getByRole("link", { name: "Kursus" }).first()
   await link.waitFor({ timeout: 8000 })
 })
 
@@ -108,7 +108,7 @@ await expect("hero action has Daftar sebagai peserta and Masuk is only in header
 await expect("features section displays 3 GamaTutor clinical benefit cards", async () => {
   await page.getByText("Belajar sesuai waktu Anda").first().waitFor({ timeout: 8000 })
   await page.getByText("Simulasi grading").first().waitFor({ timeout: 8000 })
-  await page.getByText("Sertifikat atas nama Anda").first().waitFor({ timeout: 8000 })
+  await page.getByText("Evaluasi Pre & Post Test").first().waitFor({ timeout: 8000 })
 })
 
 await expect("hero fundus lens allows interactive pin inspection", async () => {
@@ -178,8 +178,7 @@ await expect("close banner offers Daftar & mulai kursus with no arrow and square
 
 // ================= PUBLIC CERTIFICATE VERIFICATION =================
 
-await page.getByRole("link", { name: "Verifikasi Sertifikat" }).first().click()
-await page.waitForURL("**/certificates/verify", { timeout: 8000 })
+await page.goto(`${BASE}/certificates/verify`, { timeout: 30000 })
 
 await expect("public certificate verify page renders without authentication", async () => {
   await page.getByText("Verifikasi Sertifikat Resmi").first().waitFor({ timeout: 8000 })

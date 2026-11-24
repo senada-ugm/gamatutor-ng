@@ -32,12 +32,6 @@ export function SiteHeader() {
           >
             Kursus
           </Link>
-          <Link
-            to="/certificates/verify"
-            className="text-[#46607a] transition-colors hover:text-[#137a77] hover:underline hover:decoration-[#5bb4b2] hover:decoration-2 hover:underline-offset-4 dark:text-slate-300 dark:hover:text-teal-400"
-          >
-            Verifikasi Sertifikat
-          </Link>
 
           {user ? (
             <Button size="sm" nativeButton={false} render={<Link to="/dashboard" />}>

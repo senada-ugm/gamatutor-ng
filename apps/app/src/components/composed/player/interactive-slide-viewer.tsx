@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { ArrowLeft, ArrowRight, Award, FileText, ShieldCheck, Volume2 } from "lucide-react"
+import { ArrowLeft, ArrowRight, Award, FileText, Volume2 } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
 import type {
@@ -688,8 +688,6 @@ function MatchSlide({ page, onDone }: { page: MatchPage; onDone: () => void }) {
 function CompletionSlide({
   page,
   body,
-  postTestPassed,
-  onClaimCertificate,
 }: {
   page: CompletionPage
   body?: string
@@ -704,20 +702,6 @@ function CompletionSlide({
       <div className="space-y-2">
         <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">{page.title}</h2>
         {body && <p className="text-sm leading-relaxed text-muted-foreground">{body}</p>}
-      </div>
-      <div className="space-y-3 rounded-xl border bg-muted/20 p-5 text-left text-sm">
-        <p className="font-semibold text-foreground">Sertifikat</p>
-        <p className="text-muted-foreground">
-          {postTestPassed
-            ? "Selamat, Anda lulus Post Test. Klaim sertifikat Anda di bawah; nama pada sertifikat mengikuti nama akun Anda."
-            : "Sertifikat dapat diklaim setelah Anda lulus Post Test (nilai minimal 70). Nama pada sertifikat mengikuti nama akun Anda."}
-        </p>
-        {onClaimCertificate && (
-          <Button onClick={onClaimCertificate} className="gap-2 font-semibold">
-            <ShieldCheck className="size-4" />
-            Klaim Sertifikat
-          </Button>
-        )}
       </div>
     </div>
   )

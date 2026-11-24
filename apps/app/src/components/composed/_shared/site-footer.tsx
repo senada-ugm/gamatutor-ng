@@ -19,12 +19,6 @@ export function SiteFooter() {
           <Link to="/courses" className="text-[#46607a] hover:text-[#137a77] hover:underline dark:text-slate-300">
             Kursus
           </Link>
-          <Link
-            to="/certificates/verify"
-            className="text-[#46607a] hover:text-[#137a77] hover:underline dark:text-slate-300"
-          >
-            Verifikasi Sertifikat
-          </Link>
           <Link to="/login" className="text-[#46607a] hover:text-[#137a77] hover:underline dark:text-slate-300">
             Masuk
           </Link>
